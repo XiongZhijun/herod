@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="build-common" xmlns:ivy="antlib:org.apache.ivy.ant"
+	xmlns:bear="http://fpi-inc.com/bear">
+	<import file="init.xml" />
+
+	<target name="start-appserver" depends="init">
+		<groovy>
+					<![CDATA[
+						date = new java.text.SimpleDateFormat("HH:mm:ss").format(new Date(System.currentTimeMillis() + 60000));
+						properties["next-ten-second"] = date
+						def projectDir = properties["project.dir"];
+						command = properties["runtime.start.command"];
+						if (command != null) {
+							command = command.replace("START_DATE", date)
+							process = command.execute()
+						}
+						
+					]]>
+		</groovy>
+
+	</target>
+
+</project>

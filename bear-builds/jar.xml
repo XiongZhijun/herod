@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="build-common" xmlns:ivy="antlib:org.apache.ivy.ant"
+	xmlns:bear="http://fpi-inc.com/bear">
+
+	<import file="release-version.xml" />
+	<import file="resolve.xml" />
+
+	<target name="clean-build" depends="init">
+		<delete dir="${build.dir}" />
+		<mkdir dir="${build.dir}" />
+	</target>
+
+	<target name="compile" depends="init" if="srcDirExist">
+		<ivy:cachepath pathid="compile.classpath" conf="compile" />
+		<bear:compile />
+		<bear:hbmBuild pattern="${hbm.build.pattern}" />
+	</target>
+
+	<target name="jar" depends="clean-build, compile, release-version"
+		if="srcDirExist">
+		<bear:jar version="${version}" svnVersion="${svn.info.rev}" />
+	</target>
+
+</project>

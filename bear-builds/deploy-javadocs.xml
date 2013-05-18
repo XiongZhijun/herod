@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="bear-info-builder" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<import file="build-artifacts.xml" />
+
+	<property name="javadoc.deploy.dir" value="E:/javadocs-server/webapps/ROOT/javadocs" />
+
+	<target name="deploy-javadoc" depends="build-javadoc-and-sources">
+		<condition property="needDeployJavaDoc">
+			<and>
+				<available file="${javadoc.deploy.dir}" property="javadocsDeployDestDirExist" />
+				<available file="${build.dir}/doc" property="javadocExist" />
+			</and>
+		</condition>
+		<antcall target="deploy-javadoc-to-server" />
+	</target>
+
+	<target name="deploy-javadoc-to-server" if="needDeployJavaDoc">
+		<delete dir="${javadoc.deploy.dir}/${ant.project.name}" />
+		<mkdir dir="${javadoc.deploy.dir}/${ant.project.name}" />
+		<copy todir="${javadoc.deploy.dir}/${ant.project.name}"
+			overwrite="true">
+			<fileset dir="${build.dir}/doc" excludes="**/.svn" />
+		</copy>
+	</target>
+</project>

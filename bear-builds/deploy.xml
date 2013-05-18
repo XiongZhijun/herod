@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="bear-info-builder" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<import file="jar.xml" />
+	<import file="build-artifacts.xml" />
+
+	<property file="${bear.build.dir}/deploy.properties" />
+
+	<target name="clean-application-deploy-dir" depends="init"
+		description="clean-application-deploy-dir">
+		<delete dir="${application.deploy.dir}" />
+	</target>
+
+	<target name="clean-web-deploy-dir" depends="init"
+		description="clean web deploy dir">
+		<delete dir="${web.deploy.dir}" />
+	</target>
+
+	<target name="deploy-dependency-dwr-spring-hibernate-component-files"
+		depends="resolve" description="deploy-dependency-dwr-spring-hibernate-files">
+		<ivy:retrieve pattern="${spring.deploy.dir}/[artifact](-[classifier]).[ext]"
+			conf="spring" />
+		<ivy:retrieve pattern="${dwr.deploy.dir}/[artifact](-[classifier]).[ext]"
+			conf="dwr" />
+		<ivy:retrieve
+			pattern="${hibernate.deploy.dir}/[artifact](-[classifier]).[ext]"
+			conf="hibernate" />
+		<ivy:retrieve
+			pattern="${components.deploy.dir}/[artifact](-[classifier]).[ext]"
+			conf="component" />
+	</target>
+
+	<target name="deploy-local-dwr-spring-hibernate-component-config"
+		depends="copy-artifacts-to-build-dir, generate-component-xml">
+		<copy toDir="${spring.deploy.dir}" overwrite="true">
+			<fileset dir="${build.dir}" includes="*.spring.xml" />
+		</copy>
+		<copy toDir="${dwr.deploy.dir}" overwrite="true">
+			<fileset dir="${build.dir}" includes="*.dwr.xml" />
+		</copy>
+		<copy toDir="${hibernate.deploy.dir}" overwrite="true">
+			<fileset dir="${build.dir}" includes="*.mapping.xml" />
+		</copy>
+		<copy toDir="${components.deploy.dir}" overwrite="true">
+			<fileset dir="${build.dir}" includes="*.component.xml" />
+		</copy>
+	</target>
+
+	<target name="deploy-dependency-runtime-lib" depends="resolve">
+		<ivy:retrieve pattern="${lib.deploy.dir}/[artifact](-[classifier]).[ext]"
+			conf="runtime" />
+	</target>
+
+	<target name="deploy-dependency-test-lib" depends="resolve"
+		description="deploy ivy test config jars to /WEB-INF/lib">
+		<ivy:retrieve pattern="${lib.deploy.dir}/[artifact](-[classifier]).[ext]"
+			conf="test" />
+	</target>
+
+	<target name="deploy-local-lib" depends="jar, resolve" if="srcDirExist"
+		description="deploy local jar to /WEB-INF/lib">
+		<copy todir="${lib.deploy.dir}" overwrite="true">
+			<fileset dir="${build.dir}" includes="*.jar"
+				excludes="*-sources.jar,*-javadoc.jar">
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="deploy-dependency-web-zip" depends="resolve"
+		description="unzip all denpendency web.zip file to webapps/ROOT">
+		<delete dir="${lib.dir}/web" />
+		<mkdir dir="${lib.dir}/web" />
+		<ivy:retrieve pattern="${lib.dir}/[conf]/[artifact](-[classifier]).[ext]"
+			conf="web" />
+		<unzip dest="${web.deploy.dir}" encoding="GBK">
+			<fileset dir="${lib.dir}/web">
+				<include name="*.web.zip" />
+			</fileset>
+		</unzip>
+	</target>
+
+	<target name="deploy-local-web" depends="init, generate-component-xml"
+		if="webDirExist" description="deploy local webapp dir to webapps/ROOT">
+		<copy todir="${web.deploy.dir}" overwrite="true">
+			<fileset dir="${web.dir}" excludes="**/.svn" />
+		</copy>
+	</target>
+
+	<target name="deploy-dependency-conf-zip" depends="resolve, generate-component-xml"
+		description="deploy ivy conf config to WEB-INF/classes">
+		<delete dir="${lib.dir}/conf" />
+		<mkdir dir="${lib.dir}/conf" />
+		<ivy:retrieve pattern="${lib.dir}/[conf]/[artifact](-[classifier]).[ext]"
+			conf="conf" />
+		<unzip dest="${conf.deploy.dir}" encoding="GBK">
+			<fileset dir="${lib.dir}/conf">
+				<include name="*.conf.zip" />
+			</fileset>
+		</unzip>
+	</target>
+
+	<target name="deploy-local-conf" depends="init" if="confDirExist"
+		description="deploy local conf dir to WEB-INF/classes">
+		<copy todir="${conf.deploy.dir}" overwrite="true">
+			<fileset dir="${conf.dir}" excludes="**/.svn" />
+		</copy>
+	</target>
+
+	<target name="deploy-dependency-sql-zip" depends="resolve"
+		description="deploy sql files to WEB-INF/sqls">
+		<delete dir="${lib.dir}/sql" />
+		<mkdir dir="${lib.dir}/sql" />
+		<ivy:retrieve pattern="${lib.dir}/sql/[artifact](-[classifier]).[ext]"
+			conf="sql" />
+		<unzip dest="${sql.deploy.dir}" encoding="GBK">
+			<fileset dir="${lib.dir}/sql">
+				<include name="*.sql.zip" />
+			</fileset>
+		</unzip>
+	</target>
+
+	<target name="deploy-local-sql" depends="init" if="sqlDirExist"
+		description="deploy sql files to WEB-INF/sqls">
+		<copy todir="${sql.deploy.dir}" overwrite="true">
+			<fileset dir="${sql.dir}" excludes="**/.svn" />
+		</copy>
+	</target>
+
+	<target name="deploy-server" depends="resolve" description="deploy server">
+		<delete dir="${lib.dir}/server" />
+		<mkdir dir="${lib.dir}/server" />
+		<mkdir dir="${application.deploy.dir}" />
+		<ivy:retrieve pattern="${lib.dir}/[conf]/[artifact](-[classifier]).[ext]"
+			conf="server" />
+		<unzip dest="${application.deploy.dir}" encoding="GBK">
+			<fileset dir="${lib.dir}/server">
+				<include name="*.server.zip" />
+			</fileset>
+		</unzip>
+	</target>
+
+	<target name="deploy-local-server" depends="init" if="serverDirExist"
+		description="deploy local server dir to ">
+		<copy todir="${application.deploy.dir}" overwrite="true">
+			<fileset dir="${server.dir}" excludes="**/.svn" />
+		</copy>
+	</target>
+
+	<target name="deploy-runtime"
+		depends="resolve, jar, deploy-dependency-runtime-lib, deploy-dependency-dwr-spring-hibernate-component-files, deploy-dependency-conf-zip, deploy-dependency-web-zip, deploy-dependency-sql-zip, deploy-all-artifacts">
+	</target>
+
+	<target name="deploy-test"
+		depends="resolve, jar, deploy-dependency-test-lib, deploy-dependency-dwr-spring-hibernate-component-files, deploy-dependency-conf-zip, deploy-dependency-web-zip, deploy-dependency-sql-zip, deploy-all-artifacts"
+		description="deploy app to webapps/ROOT">
+	</target>
+
+	<target name="deploy-all" depends="deploy-server, deploy-test"
+		description="create and deploy server">
+	</target>
+
+	<target name="deploy-all-artifacts"
+		depends="build-artifacts, deploy-local-lib, deploy-local-web, deploy-local-conf, deploy-local-dwr-spring-hibernate-component-config, deploy-local-sql, deploy-local-server"
+		description="deploy all artifacts.">
+	</target>
+</project>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="build-common" xmlns:ivy="antlib:org.apache.ivy.ant"
+	xmlns:bear="http://fpi-inc.com/bear">
+
+	<import file="jar.xml" />
+
+	<!-- 编译测试代码 -->
+	<target name="compile-test" depends="init, clean-build, compile"
+		if="testDirExist">
+		<ivy:cachepath pathid="test.lib.path.id" conf="test" />
+		<path id="test.compile.classpath">
+			<path refid="compile.classpath" />
+			<path path="${classes.dir}" />
+			<path refid="test.lib.path.id" />
+		</path>
+		<bear:compile srcDir="${test.dir}" classDir="${test.classes.dir}"
+			classpath="test.compile.classpath" />
+	</target>
+
+	<!-- 单元测试 -->
+	<target name="test" depends="init, resolve, compile-test" if="testDirExist"
+		description="test all junit">
+
+		<path id="test.classpath">
+			<path path="${test.classes.dir}" />
+			<path refid="test.compile.classpath" />
+		</path>
+		<bear:junit classpath="test.classpath" />
+	</target>
+
+
+</project>

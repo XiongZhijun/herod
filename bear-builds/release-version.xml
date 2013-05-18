@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="build-common" xmlns:ivy="antlib:org.apache.ivy.ant"
+	xmlns:bear="http://fpi-inc.com/bear">
+
+	<import file="resolve.xml" />
+
+	<target name="release-version" depends="init, resolve" unless="version">
+		<bear:release-version resolver="shared" />
+	</target>
+
+</project>

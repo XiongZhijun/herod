@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="build-common" xmlns:ivy="antlib:org.apache.ivy.ant"
+	xmlns:bear="http://fpi-inc.com/bear">
+
+	<import file="jar.xml" />
+	<import file="test.xml" />
+	<import file="build-artifacts.xml" />
+
+	<!-- 发布到local repository -->
+	<target name="publish-local"
+		depends="init, resolve, clean-build, local-version, compile, test, build-artifacts"
+		description="publish to ivy local repository">
+		<bear:publish resolver="local" />
+	</target>
+
+
+	<target name="local-version" depends="init">
+		<bear:local-version resolver="shared" />
+	</target>
+
+</project>

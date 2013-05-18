@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="build-common" xmlns:ivy="antlib:org.apache.ivy.ant"
+	xmlns:bear="http://fpi-inc.com/bear">
+
+	<import file="init.xml" />
+
+	<target name="resolve" depends="init" description="resolve all dependency modules.">
+		<bear:resolve />
+	</target>
+
+</project>

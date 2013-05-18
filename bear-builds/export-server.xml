@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="compile" xmlns:ivy="antlib:org.apache.ivy.ant"
+	xmlns:bear="http://fpi-inc.com/bear">
+
+	<import file="init.xml" />
+
+	<property name="runtime.to.export.server.dir"
+		value="${project.dir}/../runtime/server/${to.export.server.name}" />
+	<property name="export.dest.root.dir" value="D:/workspace/06third-party" />
+	<available file="${runtime.appserver.publish.dir}" property="runtimePublishDirExist" />
+
+	<target name="export" depends="init, release-version">
+		<delete dir="${export.dest.root.dir}/${to.export.server.name}-${version}"
+			includeemptydirs="true" />
+		<mkdir dir="${export.dest.root.dir}/${to.export.server.name}-${version}" />
+		<copy todir="${export.dest.root.dir}/${to.export.server.name}-${version}"
+			includeEmptyDirs="false">
+			<fileset dir="${runtime.to.export.server.dir}" excludes="**/.svn/**/*,**/*.log,**/*.log.*" />
+		</copy>
+	</target>
+
+	<target name="deploy-and-export" depends="init, release-version, deploy-all, export">
+	</target>
+
+	<target name="publish-appserver-zip" if="runtimePublishDirExist"
+		depends="release-version, deploy-and-export" description="publish appserver with zip file">
+		<delete
+			file="${runtime.appserver.publish.dir}/${to.export.server.name}-${version}.zip" />
+		<zip
+			destfile="${runtime.appserver.publish.dir}/${to.export.server.name}-${version}.zip"
+			encoding="GBK">
+			<fileset
+				dir="${export.dest.root.dir}/${to.export.server.name}-${version}"
+				includes="**" />
+		</zip>
+	</target>
+
+	<target name="publish-and-deploy-and-export" depends="publish, publish-appserver-zip">
+	</target>
+</project>

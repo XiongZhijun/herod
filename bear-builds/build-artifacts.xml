@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="compile" xmlns:ivy="antlib:org.apache.ivy.ant"
+	xmlns:bear="http://fpi-inc.com/bear">
+
+	<import file="init.xml" />
+	<import file="jar.xml" />
+	<import file="compress.xml" />
+
+	<target name="copy-artifacts-to-build-dir" depends="init" if="srcDirExist">
+		<copy toDir="${build.dir}">
+			<fileset dir="${src.dir}" includes="*.dwr.xml" />
+		</copy>
+		<copy toDir="${build.dir}">
+			<fileset dir="${src.dir}" includes="*.mapping.xml" />
+		</copy>
+		<copy toDir="${build.dir}">
+			<fileset dir="${src.dir}" includes="*.spring.xml" />
+		</copy>
+	</target>
+
+	<target name="generate-component-xml" depends="init" if="webDirExist">
+		<comoponentlibbuilder srcDir="${component.web.dir}"
+			dstPath="${component.dst.path}" />
+	</target>
+
+	<target name="build-javadoc-and-sources" depends="init" if="srcDirExist">
+		<ivy:cachepath pathid="javadoc.classpath" conf="compile" />
+		<bear:javadoc version="${version}" svnVersion="${svn.info.rev}"
+			classpath="javadoc.classpath" />
+		<bear:jar srcDir="${src.dir}" destFile="${build.dir}/${jar.file}-sources.jar"
+			version="${version}" svnVersion="${svn.info.rev}" />
+	</target>
+
+	<target name="zip-web" if="webDirExist" depends="init, release-version">
+		<mkdir dir="${build.dir}" />
+		<antcall target="compress-all" />
+		<zip destfile="${build.dir}/${jar.file}.web.zip" encoding="GBK">
+			<fileset dir="${web.dir}" excludes="test/**" />
+			<fileset dir="${classes.dir}" includes="${ant.project.name}.properties" />
+		</zip>
+		<antcall target="clear-compress-all" />
+	</target>
+
+	<target name="zip-conf" if="confDirExist" depends="init, release-version">
+		<mkdir dir="${build.dir}" />
+		<zip destfile="${build.dir}/${jar.file}.conf.zip" encoding="GBK">
+			<fileset dir="${conf.dir}" excludes="**/*.svn" />
+			<fileset dir="${classes.dir}" includes="${ant.project.name}.properties" />
+		</zip>
+	</target>
+
+	<target name="zip-sql" if="sqlDirExist" depends="init, release-version">
+		<mkdir dir="${build.dir}" />
+		<zip destfile="${build.dir}/${jar.file}.sql.zip" encoding="GBK">
+			<fileset dir="${sql.dir}" excludes="**/*.svn" />
+			<fileset dir="${classes.dir}" includes="${ant.project.name}.properties" />
+		</zip>
+	</target>
+
+	<target name="create-server" if="serverDirExist">
+	</target>
+
+	<target name="zip-server" if="serverDirExist"
+		depends="init, clean-build, release-version, create-server">
+		<mkdir dir="${build.dir}" />
+		<zip destfile="${build.dir}/${jar.file}.server.zip" encoding="GBK">
+			<fileset dir="${server.dir}" excludes="test/**" />
+			<fileset dir="${classes.dir}" includes="${ant.project.name}.properties" />
+		</zip>
+	</target>
+
+	<target name="build-artifacts"
+		depends="init, jar, copy-artifacts-to-build-dir, generate-component-xml, zip-web, zip-conf, zip-server, zip-sql, build-javadoc-and-sources"
+		description="创建所有publish需要的制品，比如：jar、sources、zip文件等等，将这些制品都保存在build目录下。">
+	</target>
+</project>

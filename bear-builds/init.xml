@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="build-common" xmlns:ivy="antlib:org.apache.ivy.ant"
+	xmlns:bear="http://fpi-inc.com/bear">
+
+	<mkdir dir="${user.home}/.ant" />
+	<property file="${user.home}/.ant/user.properties" />
+	<property name="project.dir" value="${basedir}" />
+	<property name="bear.build.dir" value="${project.dir}/../bear-builds" />
+	<property name="bear.build.lib.dir" value="${bear.build.dir}/lib" />
+	<import file="fpi-ant-macro.xml" />
+	<property file="${project.dir}/build.properties" />
+	<property file="${bear.build.dir}/user.properties" />
+
+	<available file="${src.dir}" property="srcDirExist" />
+	<available file="${test.dir}" property="testDirExist" />
+	<available file="${conf.dir}" property="confDirExist" />
+	<available file="${web.dir}" property="webDirExist" />
+	<available file="${server.dir}" property="serverDirExist" />
+	<available file="${sql.dir}" property="sqlDirExist" />
+
+	<target name="init">
+		<bear:init />
+		<mkdir dir="${build.dir}" />
+	</target>
+
+	<target name="create-project-env">
+		<mkdir dir="${src.dir}" />
+		<mkdir dir="${test.dir}" />
+		<mkdir dir="${web.dir}" />
+		<mkdir dir="${conf.dir}" />
+		<echoxml file="${project.dir}/.classpath">
+			<classpath>
+				<classpathentry kind="src" path="src" />
+				<classpathentry kind="src" path="test" />
+				<classpathentry kind="src" path="conf" />
+				<classpathentry kind="con"
+					path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6" />
+				<classpathentry kind="output" path="bin" />
+			</classpath>
+		</echoxml>
+		<echo file="${project.dir}/ivy.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd"
+	xmlns:m="http://ant.apache.org/ivy/maven">
+	<info organisation="com.fpi.bear" module="${ant.project.name}"
+		revision="1.6.0" />
+	<configurations>
+		<conf name="compile" visibility="public" />
+		<conf name="runtime" visibility="public" extends="compile" />
+		<conf name="test" visibility="private" extends="runtime" />
+		<conf name="master" visibility="public" />
+		<conf name="sources" visibility="public" />
+		<conf name="javadoc" visibility="public" />
+		<conf name="spring" visibility="public" />
+		<conf name="hibernate" visibility="public" />
+		<conf name="dwr" visibility="public" />
+		<conf name="web" visibility="public" />
+		<conf name="component" visibility="public" />
+		<conf name="conf" visibility="public" />
+		<conf name="server" visibility="public" />
+		<conf name="sql" visibility="public" />
+	</configurations>
+	<publications>
+		<artifact conf="master" />
+		<artifact type="javadoc" ext="jar" conf="javadoc"
+			m:classifier="javadoc" />
+		<artifact type="source" ext="jar" conf="sources"
+			m:classifier="sources" />
+		<artifact type="spring" ext="spring.xml" conf="spring" />
+		<artifact type="dwr" ext="dwr.xml" conf="dwr" />
+		<artifact type="web" ext="web.zip" conf="web" />
+		<artifact type="component" ext="component.xml" conf="component" />
+	</publications>
+	<dependencies>
+		<dependency name="bear-test" rev="1.6.0+" conf="test->master,runtime" />
+	</dependencies>
+</ivy-module>]]>
+		</echo>
+	</target>
+
+</project>

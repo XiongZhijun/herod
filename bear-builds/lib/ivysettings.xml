@@ -1,0 +1,58 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	you under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<ivysettings>
+	<property name="publisher" value="zhijun_xiong" />
+	<property name="password" value="123456" />
+
+	<typedef name="svn" classname="fm.last.ivy.plugins.svnresolver.SvnResolver" />
+
+	<property name="bear.ivy.shared.ivy.pattern"
+		value="[organisation]/[type]s/[module]/[branch]/[revision]/[artifact].[ext]"
+		override="false" />
+	<property name="bear.ivy.shared.artifact.pattern"
+		value="[organisation]/[type]s/[module]/[branch]/[revision]/[artifact](-[classifier]).[ext]"
+		override="false" />
+
+	<property name="ivy.local.default.root" value="${ivy.default.ivy.user.dir}/local"
+		override="false" />
+		
+	<property name="ivy.local.default.ivy.pattern"
+		value="[organisation]/[module]/[branch]/[revision]/[type]s/[artifact].[ext]"
+		override="false" />
+	<property name="ivy.local.default.artifact.pattern"
+		value="[organisation]/[module]/[branch]/[revision]/[type]s/[artifact](-[classifier]).[ext]"
+		override="false" />
+		
+
+	<settings defaultResolver="default" defaultLatestStrategy="latest-time"
+		defaultBranch="trunk" />
+
+	<resolvers>
+		<chain name="default" dual="true" checkmodified="true"
+			changingPattern=".*SNAPSHOT">
+			<filesystem name="local" checkmodified="true"
+				changingPattern=".*SNAPSHOT">
+				<ivy pattern="${ivy.local.default.root}/${ivy.local.default.ivy.pattern}" />
+				<artifact
+					pattern="${ivy.local.default.root}/${ivy.local.default.artifact.pattern}" />
+			</filesystem>
+			<svn name="shared" repositoryRoot="https://svn.mobi-inf.com/svn/mobi/ivy-repository"
+				userName="${publisher}" userPassword="${password}" binaryDiff="true"
+				checkmodified="true" changingPattern=".*SNAPSHOT">
+				<ivy pattern="${bear.ivy.shared.ivy.pattern}" />
+				<artifact pattern="${bear.ivy.shared.artifact.pattern}" />
+			</svn>
+			<ibiblio name="public" m2compatible="true" usepoms="true"
+				root="http://test.mobi-inf.com:9999/nexus/content/groups/public/"
+				pattern="[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
+		</chain>
+	</resolvers>
+</ivysettings>

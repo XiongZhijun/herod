@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="build-common" xmlns:ivy="antlib:org.apache.ivy.ant"
+	xmlns:bear="http://fpi-inc.com/bear">
+
+	<property name="yuicompressor.jar" location="${bear.build.dir}/lib/yuicompressor-2.4.2.jar" />
+
+	<property name="compress.package.dest.dir" value="${web.dir}/compress" />
+
+	<target name="common-compress">
+<!-- 
+		<apply executable="java" parallel="false" verbose="true"
+			failonerror="true" dest="${compress.dest.dir}">
+			<fileset dir="${compress.src.dir}">
+				<include name="${compress.src.include.pattern}" />
+				<exclude name="${compress.src.exclude.pattern}" />
+			</fileset>
+			<arg line="-jar" />
+			<arg path="${yuicompressor.jar}" />
+			<arg line="- -type ${compress.type}" />
+			<arg line="- -charset utf-8" />
+			<arg line="-o" />
+			<mapper type="glob" from="*.${compress.suffix}" to="*-min.${compress.suffix}" />
+			<targetfile />
+		</apply>
+
+		<mkdir dir="${compress.package.dest.dir}/${compress.type}" />
+		<concat
+			destfile="${compress.package.dest.dir}/${compress.type}/${ant.project.name}.${compress.suffix}"
+			fixlastline="true" encoding="UTF-8">
+			<fileset dir="${compress.dest.dir}">
+				<include name="${compress.package.include.pattern}" />
+				<exclude name="${compress.package.exclude.pattern}" />
+			</fileset>
+		</concat>
+ -->
+	</target>
+
+	<target name="common-clear-compress">
+		<delete includeemptydirs="true" quiet="true">
+			<fileset dir="${compress.dest.dir}" includes="**/*-min.${compress.suffix}" />
+			<fileset dir="${compress.package.dest.dir}/${compress.type}" />
+		</delete>
+	</target>
+
+	<target name="compress-js" depends="clear-compress-js">
+		<antcall target="common-compress">
+			<param name="compress.src.dir" value="${web.dir}" />
+			<param name="compress.dest.dir" value="${web.dir}" />
+			<param name="compress.src.include.pattern" value="${js.compress.include.pattern}" />
+			<param name="compress.src.exclude.pattern" value="${js.compress.exclude.pattern}" />
+			<param name="compress.type" value="js" />
+			<param name="compress.suffix" value="js" />
+			<param name="compress.package.include.pattern" value="**/*-min.js" />
+			<param name="compress.package.exclude.pattern" value="**/config/**/*-min.js" />
+		</antcall>
+	</target>
+
+	<target name="clear-compress-js">
+		<antcall target="common-clear-compress">
+			<param name="compress.dest.dir" value="${web.dir}" />
+			<param name="compress.type" value="js" />
+			<param name="compress.suffix" value="js" />
+		</antcall>
+	</target>
+
+
+	<target name="compress-css" depends="clear-compress-css">
+		<antcall target="common-compress">
+			<param name="compress.src.dir" value="${web.dir}" />
+			<param name="compress.dest.dir" value="${web.dir}" />
+			<param name="compress.src.include.pattern" value="${css.compress.include.pattern}" />
+			<param name="compress.src.exclude.pattern" value="${css.compress.exclude.pattern}" />
+			<param name="compress.type" value="css" />
+			<param name="compress.suffix" value="css" />
+			<param name="compress.package.include.pattern" value="**/*-min.css" />
+			<param name="compress.package.exclude.pattern" value="**/config/**/*-min.css" />
+		</antcall>
+	</target>
+
+	<target name="clear-compress-css">
+		<antcall target="common-clear-compress">
+			<param name="compress.dest.dir" value="${web.dir}" />
+			<param name="compress.type" value="css" />
+			<param name="compress.suffix" value="css" />
+		</antcall>
+	</target>
+
+	<target name="compress-all">
+		<antcall target="compress-js">
+		</antcall>
+		<antcall target="compress-css">
+		</antcall>
+	</target>
+
+	<target name="clear-compress-all">
+		<antcall target="clear-compress-js">
+		</antcall>
+		<antcall target="clear-compress-css">
+		</antcall>
+		<delete includeemptydirs="true" dir="${compress.package.dest.dir}">
+		</delete>
+	</target>
+</project>

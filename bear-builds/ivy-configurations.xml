@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurations>
+	<conf name="compile" visibility="public" />
+	<conf name="runtime" visibility="public" extends="compile" />
+	<conf name="test" visibility="private" extends="runtime" />
+	<conf name="master" visibility="public" />
+	<conf name="sources" visibility="public" />
+	<conf name="javadoc" visibility="public" />
+	<conf name="spring" visibility="public" />
+	<conf name="hibernate" visibility="public" />
+	<conf name="dwr" visibility="public" />
+	<conf name="web" visibility="public" />
+	<conf name="component" visibility="public" />
+	<conf name="conf" visibility="public" />
+	<conf name="server" visibility="public" />
+	<conf name="sql" visibility="public" />
+</configurations>

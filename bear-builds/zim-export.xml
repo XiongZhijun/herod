@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="build-common" xmlns:ivy="antlib:org.apache.ivy.ant"
+	xmlns:bear="http://fpi-inc.com/bear">
+
+	<import file="init.xml" />
+
+	<property name="outputDir" value="${project.dir}/output" />
+	<available file="${outputDir}" property="zimOutputDirExist" />
+
+	<target name="clean-zim-output-dir" if="zimOutputDirExist">
+		<delete includeemptydirs="true">
+			<fileset dir="${outputDir}" includes="**/*" />
+		</delete>
+	</target>
+
+	<target name="zim-export" depends="init,clean-zim-output-dir">
+
+		<mkdir dir="${outputDir}" />
+		<groovy>
+					<![CDATA[					
+						def date = new java.text.SimpleDateFormat("HH:mm:ss").format(new Date(System.currentTimeMillis() + 60000));
+						def projectDir = properties['project.dir'];
+						def zimdHome = projectDir + '/../bear-builds/zim'
+						def commandPath = projectDir + '/../bear-builds/zim-export.bat'
+						def outputDir = properties['outputDir'];
+						command = """schtasks /create /tn export-zim-notes /tr "${commandPath} ${projectDir} ${outputDir} ${zimdHome} " /sc ONCE /st ${date} /ru fpihz/zhijun_xiong /rp juguangkj"""
+						println command
+						process = command.execute()
+					]]>
+		</groovy>
+
+	</target>
+
+</project>

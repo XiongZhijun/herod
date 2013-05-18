@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="build-common" xmlns:ivy="antlib:org.apache.ivy.ant"
+	xmlns:bear="http://fpi-inc.com/bear">
+
+	<import file="jar.xml" />
+	<import file="test.xml" />
+	<import file="build-artifacts.xml" />
+	<import file="svn-update.xml" />
+	<import file="findbugs.xml" />
+	<import file="deploy-javadocs.xml" />
+
+	<!-- 发布到share repository -->
+	<target name="publish"
+		depends="init, svnCheck, resolve, clean-build, compile, test, build-artifacts, deploy-javadoc">
+		<bear:publish resolver="shared" />
+	</target>
+
+
+</project>

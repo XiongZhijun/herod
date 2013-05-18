@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="fpi-ant-macro" xmlns:ivy="antlib:org.apache.ivy.ant"
+	xmlns:bear="http://fpi-inc.com/bear">
+
+	<!-- 定义compile命令 -->
+	<macrodef name="compile" uri="http://fpi-inc.com/bear">
+		<attribute name="srcDir" default="${src.dir}" />
+		<attribute name="classDir" default="${classes.dir}" />
+		<attribute name="classpath" default="compile.classpath" />
+		<sequential>
+			<mkdir dir="@{classDir}" />
+			<javac srcdir="@{srcDir}" destdir="@{classDir}" classpathref="@{classpath}"
+				compiler="modern" debug="on" deprecation="off" fork="true"
+				memoryMaximumSize="256m" nowarn="on" encoding="utf-8" />
+			<copy todir="@{classDir}">
+				<fileset dir="@{srcDir}" excludes="**/.svn,**/*.java" />
+			</copy>
+		</sequential>
+	</macrodef>
+
+	<!-- 定义打包命令 -->
+	<macrodef name="jar" uri="http://fpi-inc.com/bear">
+		<attribute name="srcDir" default="${classes.dir}" />
+		<attribute name="destFile" default="${build.dir}/${jar.file}.jar" />
+		<attribute name="publisher" default="${publisher.name}" />
+		<attribute name="version" default="${version}" />
+		<attribute name="svnVersion" default="" />
+		<sequential>
+			<tstamp>
+				<format property="buildTime" pattern="yyyy-MM-dd HH:mm:ss"
+					timezone="GMT+8:00" />
+			</tstamp>
+			<jar basedir="@{srcDir}" jarfile="@{destFile}">
+				<manifest>
+					<attribute name="Built-By" value="@{publisher}" />
+					<attribute name="Built-Time" value="${buildTime}" />
+					<attribute name="Build-Version" value="@{version}" />
+					<attribute name="SVN-Version" value="@{svnVersion}" />
+				</manifest>
+			</jar>
+		</sequential>
+	</macrodef>
+
+	<!-- 定义生成javadoc的命令 -->
+	<macrodef name="javadoc" uri="http://fpi-inc.com/bear">
+		<attribute name="srcDir" default="${src.dir}" />
+		<attribute name="destDir" default="${build.dir}/doc" />
+		<attribute name="destFile" default="${build.dir}/${jar.file}-javadoc.jar" />
+		<attribute name="version" default="${version}" />
+		<attribute name="svnVersion" default="" />
+		<attribute name="classpath" default="javadoc.classpath" />
+		<sequential>
+			<javadoc sourcepath="@{srcDir}" destdir="@{destDir}"
+				docencoding="utf-8" Encoding="utf-8" charset="utf-8" Windowtitle="${ant.project.name}"
+				Header="BEAR 1.6" Locale="zh_CN" classpathref="@{classpath}">
+				<doctitle>
+					<![CDATA[
+						<h1>${ant.project.name}</h1>
+				<p>${project.description}</p>
+					]]>
+				</doctitle>
+				<bottom>
+				<![CDATA[<i>
+				<a href="http://www.fpi-inc.com" target="_blank">聚光科技杭州（股份）有限公司</a> 版权所有</i>]]></bottom>
+			</javadoc>
+
+			<bear:jar srcDir="@{destDir}" destFile="@{destFile}"
+				version="@{version}" svnVersion="@{svnVersion}" />
+		</sequential>
+	</macrodef>
+
+	<!-- 定义根据xdoclet创建hbm文件的命令 -->
+	<macrodef name="hbmBuild" uri="http://fpi-inc.com/bear">
+		<attribute name="srcDir" default="${src.dir}" />
+		<attribute name="destDir" default="${classes.dir}" />
+		<attribute name="pattern" />
+		<sequential>
+			<hibernatedoclet excludedTags="@version,@author,@todo,@see"
+				destDir="@{destDir}"
+				addedTags="@xdoclet-generated at ${TODAY},@copyright The XDoclet Team,@author XDoclet,@version ${version}">
+				<fileset dir="@{srcDir}" includes="@{pattern}" />
+				<hibernate version="3.0" destDir="@{destDir}" />
+			</hibernatedoclet>
+		</sequential>
+	</macrodef>
+
+	<!-- 定义单元测试的命令 -->
+	<macrodef name="junit" uri="http://fpi-inc.com/bear">
+		<attribute name="testDir" default="${test.dir}" />
+		<attribute name="reportDir" default="${junit.report.dir}" />
+		<attribute name="classpath" />
+		<sequential>
+			<delete dir="@{reportDir}" />
+			<mkdir dir="@{reportDir}" />
+			<mkdir dir="@{reportDir}/testsuite" />
+
+			<record name="@{reportDir}/test-output.txt" append="no"
+				action="start" />
+			<junit printsummary="on" errorProperty="test.failed"
+				failureProperty="test.failed" fork="yes">
+				<jvmarg value="-Dfile.encoding=UTF-8" />
+				<classpath refid="@{classpath}" />
+				<formatter type="xml" />
+				<batchtest fork="yes" todir="@{reportDir}/testsuite">
+					<fileset dir="@{testDir}">
+						<include name="**/*Test.java" />
+						<exclude name="**/*AbstractTest.java" />
+					</fileset>
+				</batchtest>
+			</junit>
+			<testng outputdir="@{reportDir}/testsuite" classpathref="@{classpath}"
+				failureProperty="test.failed">
+				<jvmarg value="-Dfile.encoding=UTF-8" />
+				<classfileset dir="${test.classes.dir}" includes="**/*.class" />
+			</testng>
+			
+			<junitreport todir="@{reportDir}">
+				<fileset dir="@{reportDir}/testsuite">
+					<include name="**/TEST-*.xml" />
+				</fileset>
+				<report format="noframes" styledir="${bear.build.lib.dir}"
+					todir="@{reportDir}" />
+			</junitreport>
+			<record name="@{reportDir}/test-output.txt" action="stop" />
+			<fail if="test.failed" message="Test failed. Check @{reportDir}" />
+		</sequential>
+	</macrodef>
+
+	<!-- 定义单元测试的命令 -->
+	<macrodef name="testng" uri="http://fpi-inc.com/bear">
+		<attribute name="testDir" default="${test.dir}" />
+		<attribute name="reportDir" default="${junit.report.dir}" />
+		<attribute name="classpath" />
+		<sequential>
+			<delete dir="@{reportDir}" />
+			<mkdir dir="@{reportDir}" />
+			<mkdir dir="@{reportDir}/testsuite-testng" />
+
+
+			<fail if="test.failed" message="Test failed. Check @{reportDir}" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="init" uri="http://fpi-inc.com/bear">
+		<attribute name="dir" default="${bear.build.lib.dir}" />
+		<sequential>
+			<path id="lib.path">
+				<fileset dir="@{dir}" includes="*.jar" />
+			</path>
+
+			<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant"
+				classpathref="lib.path" onerror="report" loaderref="bear.classloader" />
+
+			<ivy:settings file="@{dir}/ivysettings.xml" />
+
+			<typedef resource="org/tigris/subversion/svnant/svnantlib.xml"
+				classpathref="lib.path" loaderref="bear.classloader" />
+			<typedef name="groovy" classname="org.codehaus.groovy.ant.Groovy"
+				classpathref="lib.path" loaderref="bear.classloader" />
+			<typedef resource="net/sf/antcontrib/antcontrib.properties"
+				classpathref="lib.path" loaderref="bear.classloader" />
+			<typedef name="classpathbuilder" classname="com.fpi.bear.ant.task.IvyClassPathBuilder"
+				classpathref="lib.path" loaderref="bear.classloader" />
+			<typedef name="comoponentlibbuilder" classname="com.fpi.bear.ant.task.ComponentLibBuilder"
+				classpathref="lib.path" loaderref="bear.classloader" />
+			<typedef name="hibernatedoclet" classname="xdoclet.modules.hibernate.HibernateDocletTask"
+				classpathref="lib.path" loaderref="bear.classloader" />
+			<typedef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask"
+				classpathref="lib.path" loaderref="bear.classloader" />
+			<taskdef resource="testngtasks" classpathref="lib.path"
+				loaderref="bear.classloader" />
+
+		</sequential>
+	</macrodef>
+
+	<macrodef name="resolve" uri="http://fpi-inc.com/bear">
+		<attribute name="ivyFile" default="${ivy.file}" />
+		<attribute name="conf" default="test,sources" />
+		<sequential>
+			<ivy:resolve file="@{ivyFile}" />
+			<classpathbuilder conf="@{conf}" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="publish" uri="http://fpi-inc.com/bear">
+		<attribute name="artifactspattern"
+			default="${build.dir}/[artifact](-[classifier]).[ext]" />
+		<attribute name="version" default="${version}" />
+		<attribute name="resolver" />
+		<sequential>
+			<tstamp>
+				<format property="pubdate" pattern="yyyyMMddHHmmss" timezone="GMT+8:00" />
+			</tstamp>
+			<ivy:publish artifactspattern="@{artifactspattern}"
+				resolver="@{resolver}" pubrevision="@{version}" pubdate="${pubdate}"
+				status="${project.status}" forcedeliver="true" overwrite="true" />
+			<echo
+				message="project ${ant.project.name} published @{resolver} with version @{version}" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="local-version" uri="http://fpi-inc.com/bear">
+		<attribute name="ivyFile" default="${ivy.file}" />
+		<attribute name="versionSaveDir" default="${classes.dir}" />
+		<attribute name="resolver" />
+		<sequential>
+			<mkdir dir="@{versionSaveDir}" />
+			<ivy:info file="@{ivyFile}" />
+			<ivy:buildnumber organisation="${ivy.organisation}"
+				module="${ivy.module}" revision="${project.version}"
+				defaultBuildNumber="1" revSep="." resolver="shared" />
+			<echo message="version=${ivy.new.revision}-SNAPSHOT" file="@{versionSaveDir}/${ant.project.name}.properties"
+				append="false" />
+			<property file="@{versionSaveDir}/${ant.project.name}.properties" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="release-version" uri="http://fpi-inc.com/bear">
+		<attribute name="ivyFile" default="${ivy.file}" />
+		<attribute name="versionSaveDir" default="${classes.dir}" />
+		<attribute name="resolver" />
+		<sequential>
+			<mkdir dir="@{versionSaveDir}" />
+			<ivy:info file="${ivy.file}" />
+			<switch value="${project.status}">
+				<case value="release">
+					<echo message="version=${project.version}"
+						file="@{versionSaveDir}/${ant.project.name}.properties" append="false" />
+				</case>
+				<default>
+					<ivy:buildnumber organisation="${ivy.organisation}"
+						module="${ivy.module}" revision="${project.version}"
+						defaultBuildNumber="1" revSep="." resolver="shared" />
+					<echo message="version=${ivy.new.revision}-SNAPSHOT"
+						file="@{versionSaveDir}/${ant.project.name}.properties" append="false" />
+				</default>
+			</switch>
+			<property file="@{versionSaveDir}/${ant.project.name}.properties" />
+		</sequential>
+	</macrodef>
+</project>

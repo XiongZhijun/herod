@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="build-common" xmlns:ivy="antlib:org.apache.ivy.ant"
+	xmlns:bear="http://fpi-inc.com/bear">
+
+	<target name="findbugs" depends="init" if="srcDirExist">
+		<findbugs home="${project.dir}/../bear-builds/findbugs-1.3.9"
+			output="html" outputFile="${junit.report.dir}/findbugs.html">
+			<sourcePath path="${src.dir}" />
+			<class location="${classes.dir}" />
+		</findbugs>
+	</target>
+</project>

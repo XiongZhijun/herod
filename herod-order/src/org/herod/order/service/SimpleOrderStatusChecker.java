@@ -53,6 +53,10 @@ public class SimpleOrderStatusChecker implements OrderStatusChecker {
 		return Collections.emptyList();
 	}
 
+	public void setOrderStatusFinder(OrderStatusFinder orderStatusFinder) {
+		this.orderStatusFinder = orderStatusFinder;
+	}
+
 	public static interface OrderStatusFinder {
 		OrderStatus findOrderStatus(String serialNumber);
 	}

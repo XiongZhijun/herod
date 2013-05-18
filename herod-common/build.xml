@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="herod-common" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<import file="../bear-builds/publish.xml" />
+	<import file="../bear-builds/publish-local.xml" />
+	<import file="../bear-builds/deploy.xml" />
+</project>

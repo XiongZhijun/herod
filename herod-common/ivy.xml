@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd"
+	xmlns:m="http://ant.apache.org/ivy/maven">
+	<info organisation="org.herod" module="herod-common" />
+	<configurations>
+		<include file="../bear-builds/ivy-configurations.xml" />
+	</configurations>
+	<publications>
+		<artifact conf="master" />
+		<artifact type="javadoc" ext="jar" conf="javadoc"
+			m:classifier="javadoc" />
+		<artifact type="source" ext="jar" conf="sources"
+			m:classifier="sources" />
+	</publications>
+	<dependencies>
+		<dependency org="com.fpi.bear" name="bear-common-third-web"
+			rev="1.6.1.6" conf="compile->compile;sources->sources" />
+		<dependency org="com.fpi.bear" name="bear-common-rest" rev="1.6.1.6"
+			conf="compile->master;spring->spring;sources->sources" />
+		<dependency org="com.google.code.gson" name="gson" rev="1.7.1" />
+		<dependency org="com.fpi.bear" name="bear-common-database"
+			rev="1.6.1.6"
+			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
+
+		<dependency org="commons-configuration" name="commons-configuration"
+			rev="1.6" conf="compile->master;sources->sources" />
+		<dependency org="freemarker" name="freemarker" rev="2.3.8"
+			conf="compile->master;sources->sources" />
+
+
+		<dependency org="org.testng" name="testng" rev="6.1.1"
+			conf="test->master,runtime;sources->sources" />
+		<dependency org="com.fpi.bear" name="bear-test" rev="1.6.1+"
+			conf="test->master,runtime" />
+	</dependencies>
+</ivy-module>

@@ -8,8 +8,12 @@ import org.herod.framework.widget.ActionBar.IntentAction;
 import org.herod.framework.widget.TitlePageIndicator;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+
 /**
  * 
  * 
@@ -19,7 +23,7 @@ import android.support.v4.view.ViewPager;
  */
 public class StoresActivity extends FragmentActivity {
 
-	private org.herod.buyer.phone.TestFragmentAdapter mAdapter;
+	private TestFragmentAdapter mAdapter;
 	private ViewPager mPager;
 	private TitlePageIndicator mIndicator;
 
@@ -32,17 +36,51 @@ public class StoresActivity extends FragmentActivity {
 		actionBar.setHomeAction(new IntentAction(this, HomeActivity
 				.createIntent(this), R.drawable.ic_title_home_default));
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		
 
-        mAdapter = new TestFragmentAdapter(getSupportFragmentManager());
+		mAdapter = new TestFragmentAdapter(getSupportFragmentManager());
 
-        mPager = (ViewPager)findViewById(R.id.pager);
-        mPager.setAdapter(mAdapter);
+		mPager = (ViewPager) findViewById(R.id.pager);
+		mPager.setAdapter(mAdapter);
 
-        mIndicator = (TitlePageIndicator)findViewById(R.id.indicator);
-        mIndicator.setViewPager(mPager);
+		mIndicator = (TitlePageIndicator) findViewById(R.id.indicator);
+		mIndicator.setViewPager(mPager);
+
+		int position = getIntent().getIntExtra("position", 0);
+		mPager.setCurrentItem(position);
+
 	}
-	
-	
+
+	static class TestFragmentAdapter extends FragmentPagerAdapter {
+		protected static final String[] CONTENT = new String[] { "外卖", "便利店",
+				"蔬菜水果", "其它" };
+
+		private int mCount = CONTENT.length;
+
+		public TestFragmentAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			return new ShopListFragment();
+		}
+
+		@Override
+		public int getCount() {
+			return mCount;
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+			return TestFragmentAdapter.CONTENT[position % CONTENT.length];
+		}
+
+		public void setCount(int count) {
+			if (count > 0 && count <= 10) {
+				mCount = count;
+				notifyDataSetChanged();
+			}
+		}
+	}
 
 }

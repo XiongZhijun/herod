@@ -9,11 +9,13 @@
         android:id="@+id/actionbar"
         style="@style/ActionBar" />
 
-    <com.viewpagerindicator.TitlePageIndicator
+    <org.herod.framework.widget.TitlePageIndicator
         android:id="@+id/indicator"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="10dip" />
+        android:padding="10dip"
+        android:textColor="#000"
+        herod:selectedColor="#000" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"

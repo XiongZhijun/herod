@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.herod.vpi;
+package org.herod.framework.widget;
 
 import android.support.v4.view.ViewPager;
 

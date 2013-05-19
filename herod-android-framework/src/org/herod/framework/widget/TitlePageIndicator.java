@@ -15,9 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.herod.vpi;
+package org.herod.framework.widget;
 
 import java.util.ArrayList;
+
+import org.herod.framework.R;
 
 import android.content.Context;
 import android.content.res.Resources;

@@ -5,6 +5,7 @@ package org.herod.buyer.phone;
 
 import org.herod.framework.widget.ActionBar;
 import org.herod.framework.widget.ActionBar.IntentAction;
+import org.herod.framework.widget.TitlePageIndicator;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;

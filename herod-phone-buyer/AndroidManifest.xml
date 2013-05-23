@@ -26,6 +26,10 @@
         </activity>
         <activity android:name="org.herod.buyer.phone.StoresActivity" >
         </activity>
+        <activity
+            android:name="org.herod.buyer.phone.GoodsListActivity"
+            android:theme="@style/Theme.PageIndicatorDefaults" >
+        </activity>
     </application>
 
 </manifest>

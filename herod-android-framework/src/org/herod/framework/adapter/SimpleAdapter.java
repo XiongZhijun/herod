@@ -96,7 +96,7 @@ public class SimpleAdapter extends BaseAdapter {
 	}
 
 	private void bindView(int position, View view) {
-		final Map<?, ?> dataSet = mData.get(position);
+		final Map<String, ?> dataSet = mData.get(position);
 		if (dataSet == null) {
 			return;
 		}
@@ -117,7 +117,8 @@ public class SimpleAdapter extends BaseAdapter {
 
 				boolean bound = false;
 				if (binder != null) {
-					bound = binder.setViewValue(v, data, text);
+					bound = binder.setViewValue(view, dataSet, v, from[i],
+							to[i], position, data, text);
 				}
 
 				if (!bound) {
@@ -150,10 +151,6 @@ public class SimpleAdapter extends BaseAdapter {
 							setViewImage((ImageView) v, text);
 						}
 					} else {
-						throw new IllegalStateException(
-								v.getClass().getName()
-										+ " is not a "
-										+ " view that can be bounds by this SimpleAdapter");
 					}
 				}
 			}
@@ -185,7 +182,9 @@ public class SimpleAdapter extends BaseAdapter {
 	}
 
 	public static interface ViewBinder {
-		boolean setViewValue(View view, Object data, String textRepresentation);
+		boolean setViewValue(View dataSetView, Map<String, ?> dataSet,
+				View view, String from, int to, int position, Object data,
+				String textRepresentation);
 	}
 
 }

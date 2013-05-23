@@ -2,13 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal" >
+
+    <LinearLayout
+        android:id="@+id/deleteItem"
+        android:layout_width="28dip"
+        android:layout_height="50dip" >
+
+        <ImageButton
+            android:layout_width="20dip"
+            android:layout_height="20dip"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="3dip"
+            android:background="@drawable/delete_image"
+            android:contentDescription="@null"
+            android:focusable="false"
+            android:src="@drawable/delete_image"
+            android:visibility="visible" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/image"
         android:layout_width="50dip"
         android:layout_height="50dip"
-        android:layout_marginLeft="20dip"
+        android:contentDescription="@null"
         android:src="@drawable/test_goods" />
 
     <TextView
@@ -51,9 +70,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|right"
-        android:layout_marginRight="30dip"
         android:text="瓶"
         android:textColor="#000"
         android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/quantity"
+        android:layout_width="25dip"
+        android:layout_height="25dip"
+        android:layout_gravity="center"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:background="@drawable/quantity_background"
+        android:gravity="center"
+        android:textColor="#F0F"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="invisible" />
 
 </LinearLayout>

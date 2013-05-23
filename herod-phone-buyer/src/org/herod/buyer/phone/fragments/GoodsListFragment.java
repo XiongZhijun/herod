@@ -4,6 +4,7 @@
 package org.herod.buyer.phone.fragments;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.herod.buyer.phone.HerodTask;
 import org.herod.buyer.phone.HerodTask.AsyncTaskable;
 import org.herod.buyer.phone.R;
 import org.herod.framework.adapter.SimpleAdapter;
+import org.herod.framework.adapter.SimpleAdapter.ViewBinder;
 import org.herod.framework.widget.XListView;
 import org.herod.framework.widget.XListView.IXListViewListener;
 
@@ -19,9 +21,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 
 /**
  * @author Xiong Zhijun
@@ -30,11 +34,12 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class GoodsListFragment extends Fragment implements
 		AsyncTaskable<Long, List<Map<String, Object>>>, OnItemClickListener,
-		IXListViewListener {
+		IXListViewListener, ViewBinder {
 	private XListView goodsListView;
 	private Map<String, Object> goodsType;
 	private long latestGoodsId = 0;
 	private SimpleAdapter adapter;
+	private Map<Long, Integer> goodsQuantityMap = new HashMap<Long, Integer>();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +54,9 @@ public class GoodsListFragment extends Fragment implements
 		adapter = new SimpleAdapter(getActivity(),
 				Collections.<Map<String, Object>> emptyList(),
 				R.layout.fragment_goods_list_item, new String[] { "name",
-						"price" }, new int[] { R.id.name, R.id.price });
+						"price", "name", "name" }, new int[] { R.id.name,
+						R.id.price, R.id.quantity, R.id.deleteItem });
+		adapter.setViewBinder(this);
 		goodsListView.setAdapter(adapter);
 		return view;
 	}
@@ -75,7 +82,71 @@ public class GoodsListFragment extends Fragment implements
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+	public boolean setViewValue(final View dataSetView,
+			final Map<String, ?> dataSet, final View view, String from, int to,
+			int position, Object data, String textRepresentation) {
+		if (to == R.id.quantity) {
+			decreaseQuantity((Long) dataSet.get("id"), view,
+					dataSetView.findViewById(R.id.deleteItem));
+			return true;
+		}
+		if (to == R.id.deleteItem) {
+			view.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					decreaseQuantity((Long) dataSet.get("id"),
+							dataSetView.findViewById(R.id.quantity), view);
+				}
+			});
+		}
+		return false;
+	}
+
+	private void decreaseQuantity(long id, View quantityView,
+			View decreaseButton) {
+		int quantity = 0;
+		if (goodsQuantityMap.containsKey(id)) {
+			quantity = goodsQuantityMap.get(id);
+			quantity--;
+		}
+		if (quantity > 0) {
+			((TextView) quantityView).setText(quantity + "");
+			quantityView.setVisibility(View.VISIBLE);
+			decreaseButton.setVisibility(View.VISIBLE);
+		} else {
+			quantity = 0;
+			quantityView.setVisibility(View.INVISIBLE);
+			decreaseButton.setVisibility(View.INVISIBLE);
+		}
+		goodsQuantityMap.put(id, quantity);
+	}
+
+	private void increaseQuantity(long id, View quantityView,
+			View decreaseButton) {
+		int quantity = 1;
+		if (goodsQuantityMap.containsKey(id)) {
+			quantity = goodsQuantityMap.get(id);
+			quantity++;
+		}
+		if (quantity > 0) {
+			((TextView) quantityView).setText(quantity + "");
+			quantityView.setVisibility(View.VISIBLE);
+			decreaseButton.setVisibility(View.VISIBLE);
+		} else {
+			quantity = 0;
+			quantityView.setVisibility(View.INVISIBLE);
+			decreaseButton.setVisibility(View.INVISIBLE);
+		}
+		goodsQuantityMap.put(id, quantity);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> adapterView, View view,
+			int position, long itemId) {
+		Map<String, Object> item = (Map<String, Object>) adapterView
+				.getItemAtPosition(position);
+		long id = (Long) item.get("id");
+		increaseQuantity(id, view.findViewById(R.id.quantity),
+				view.findViewById(R.id.deleteItem));
 
 	}
 

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFF"
+    android:orientation="vertical"
+    android:padding="10dip" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/shopName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="外婆家"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/shopTips"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_weight="1"
+            android:text="消费满50免跑腿费"
+            android:textColor="#888"
+            android:textSize="12sp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@drawable/delete_order" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="5dip"
+        android:background="#E5E5E5" />
+
+    <include layout="@layout/shopping_cart_order_item_header" />
+
+    <LinearLayout
+        android:id="@+id/orderItemsListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="5dip"
+        android:background="#E5E5E5" />
+
+    <LinearLayout
+        android:id="@+id/totalInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="总计（不包括跑腿费）：" />
+
+        <TextView
+            android:id="@+id/totalAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="81.0"
+            android:textColor="#F00" />
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="跑腿费：" />
+
+        <TextView
+            android:id="@+id/costOfRunErrands"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5.0"
+            android:textColor="#F00" />
+    </LinearLayout>
+
+</LinearLayout>

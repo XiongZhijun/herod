@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:herod="http://schemas.android.com/apk/res/org.herod.buyer.phone"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="#E5E5E5"
     android:orientation="vertical" >
 
     <include layout="@layout/action_bar" />
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Home home" />
+    <ListView
+        android:id="@+id/ordersListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dip"
+        android:divider="#E5E5E5"
+        android:dividerHeight="10dip" >
+    </ListView>
 
 </LinearLayout>

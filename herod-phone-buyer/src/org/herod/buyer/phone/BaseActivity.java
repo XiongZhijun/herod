@@ -15,6 +15,12 @@ import android.widget.TextView;
  */
 public class BaseActivity extends FragmentActivity {
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		updateTotalQuantity();
+	}
+
 	public void back(View v) {
 		onBackPressed();
 	}

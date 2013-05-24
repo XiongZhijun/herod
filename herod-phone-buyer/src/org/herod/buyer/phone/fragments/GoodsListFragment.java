@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.herod.buyer.phone.BaseActivity;
 import org.herod.buyer.phone.BuyerContext;
 import org.herod.buyer.phone.HerodTask;
 import org.herod.buyer.phone.HerodTask.AsyncTaskable;
@@ -19,6 +20,7 @@ import org.herod.framework.widget.XListView.IXListViewListener;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -139,6 +141,10 @@ public class GoodsListFragment extends Fragment implements
 		} else {
 			quantityView.setVisibility(View.INVISIBLE);
 			reduceButton.setVisibility(View.INVISIBLE);
+		}
+		FragmentActivity activity = getActivity();
+		if (activity instanceof BaseActivity) {
+			((BaseActivity) activity).updateTotalQuantity();
 		}
 	}
 

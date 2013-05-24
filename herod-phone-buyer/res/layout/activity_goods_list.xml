@@ -6,9 +6,7 @@
     android:background="#FFF"
     android:orientation="vertical" >
 
-    <org.herod.framework.widget.ActionBar
-        android:id="@+id/actionbar"
-        style="@style/ActionBar" />
+    <include layout="@layout/action_bar" />
 
     <org.herod.framework.widget.TabPageIndicator
         android:id="@+id/indicator"

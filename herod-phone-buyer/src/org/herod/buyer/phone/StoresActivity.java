@@ -8,13 +8,10 @@ import java.util.Map;
 
 import org.herod.buyer.phone.HerodTask.AsyncTaskable;
 import org.herod.buyer.phone.fragments.ShopListFragment;
-import org.herod.framework.widget.ActionBar;
-import org.herod.framework.widget.ActionBar.IntentAction;
 import org.herod.framework.widget.TitlePageIndicator;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -26,7 +23,7 @@ import android.support.v4.view.ViewPager;
  * @email hust.xzj@gmail.com
  * 
  */
-public class StoresActivity extends FragmentActivity implements
+public class StoresActivity extends BaseActivity implements
 		AsyncTaskable<Object, List<Map<String, Object>>> {
 
 	private ViewPager mPager;
@@ -37,10 +34,10 @@ public class StoresActivity extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_stores);
 
-		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
-		actionBar.setHomeAction(new IntentAction(this, HomeActivity
-				.createIntent(this), R.drawable.ic_title_home_default));
-		actionBar.setDisplayHomeAsUpEnabled(true);
+		setTitle(R.string.app_name);
+
+		showActionButton(R.id.queryButton, R.id.historyOrdersButton,
+				R.id.shoppingCartButton, R.id.backButton);
 
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mIndicator = (TitlePageIndicator) findViewById(R.id.indicator);

@@ -8,13 +8,10 @@ import java.util.Map;
 
 import org.herod.buyer.phone.HerodTask.AsyncTaskable;
 import org.herod.buyer.phone.fragments.GoodsListFragment;
-import org.herod.framework.widget.ActionBar;
-import org.herod.framework.widget.ActionBar.IntentAction;
 import org.herod.framework.widget.TabPageIndicator;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -24,7 +21,7 @@ import android.support.v4.view.ViewPager;
  * @email hust.xzj@gmail.com
  * 
  */
-public class GoodsListActivity extends FragmentActivity implements
+public class GoodsListActivity extends BaseActivity implements
 		AsyncTaskable<Object, List<Map<String, Object>>> {
 	private ViewPager mPager;
 	private TabPageIndicator mIndicator;
@@ -37,11 +34,9 @@ public class GoodsListActivity extends FragmentActivity implements
 		setContentView(R.layout.activity_goods_list);
 		shopId = getIntent().getLongExtra("shopId", 0);
 		shopName = getIntent().getStringExtra("shopName");
-		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
-		actionBar.setTitle(shopName);
-		actionBar.setHomeAction(new IntentAction(this, HomeActivity
-				.createIntent(this), R.drawable.ic_title_home_default));
-		actionBar.setDisplayHomeAsUpEnabled(true);
+		setTitle(shopName);
+		showActionButton(R.id.queryButton, R.id.historyOrdersButton,
+				R.id.shoppingCartButton, R.id.backButton);
 
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mIndicator = (TabPageIndicator) findViewById(R.id.indicator);

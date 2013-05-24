@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:herod="http://schemas.android.com/apk/res/org.herod.buyer.phone"
     style="@style/ActivityTheme"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <org.herod.framework.widget.ActionBar
-        android:id="@+id/actionbar"
-        style="@style/ActionBar"
-        herod:title="@string/app_name" />
+    <include layout="@layout/action_bar" />
 
     <GridView
         android:id="@+id/shopTypesGrid"

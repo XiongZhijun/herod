@@ -22,6 +22,14 @@ public class ShoppingCartCache {
 		return instance;
 	}
 
+	public int getTotalQuantity() {
+		int total = 0;
+		for (ShopCache shopCache : shopCaches.values()) {
+			total += shopCache.getTotalQuantity();
+		}
+		return total;
+	}
+
 	public void put(long shopId, long goodsId, int quantity) {
 		ShopCache sellerCache = shopCaches.get(shopId);
 		if (sellerCache == null) {
@@ -94,5 +102,14 @@ public class ShoppingCartCache {
 			}
 			return 0;
 		}
+
+		public int getTotalQuantity() {
+			int total = 0;
+			for (int quantity : goodsQuantities.values()) {
+				total += quantity;
+			}
+			return total;
+		}
+
 	}
 }

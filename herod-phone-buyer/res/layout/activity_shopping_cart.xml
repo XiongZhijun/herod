@@ -5,10 +5,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <org.herod.framework.widget.ActionBar
-        android:id="@+id/actionbar"
-        style="@style/ActionBar"
-        herod:title="购物车" />
+    <include layout="@layout/action_bar" />
 
     <TextView
         android:layout_width="fill_parent"

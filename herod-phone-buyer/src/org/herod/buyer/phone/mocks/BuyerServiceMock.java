@@ -76,7 +76,8 @@ public class BuyerServiceMock implements BuyerService {
 			long beginGoodsId, int count) {
 		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
 		for (long i = beginGoodsId + 1; i < beginGoodsId + 1 + count; i++) {
-			data.add(createGoods(i, goodsTypeId + "-商品-" + i));
+			data.add(createGoods(goodsTypeId * 1000 + i, goodsTypeId + "-商品-"
+					+ i));
 		}
 		return data;
 	}

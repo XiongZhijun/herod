@@ -4,7 +4,6 @@
 package org.herod.buyer.phone.fragments;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +11,7 @@ import org.herod.buyer.phone.BuyerContext;
 import org.herod.buyer.phone.HerodTask;
 import org.herod.buyer.phone.HerodTask.AsyncTaskable;
 import org.herod.buyer.phone.R;
+import org.herod.buyer.phone.ShoppingCartCache;
 import org.herod.framework.adapter.SimpleAdapter;
 import org.herod.framework.adapter.SimpleAdapter.ViewBinder;
 import org.herod.framework.widget.XListView;
@@ -23,10 +23,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * @author Xiong Zhijun
@@ -40,7 +38,7 @@ public class GoodsListFragment extends Fragment implements
 	private Map<String, Object> goodsType;
 	private long latestGoodsId = 0;
 	private SimpleAdapter adapter;
-	private Map<Long, Integer> goodsQuantityMap = new HashMap<Long, Integer>();
+	private long shopId;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,57 +85,50 @@ public class GoodsListFragment extends Fragment implements
 	public boolean setViewValue(final View dataSetView,
 			final Map<String, ?> dataSet, final View view, String from, int to,
 			int position, Object data, String textRepresentation) {
-		final long id = (Long) dataSet.get("id");
+		final long goodsId = (Long) dataSet.get("id");
 		if (to == R.id.quantity) {
-			setQuantity(dataSetView, id);
+			int quantity = ShoppingCartCache.getInstance().getQuantity(shopId,
+					goodsId);
+			setQuantity(dataSetView, quantity);
 			return true;
 		}
 		if (to == R.id.reduceButton) {
 			view.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					decrease(dataSetView, id);
+					decrease(dataSetView, goodsId);
 				}
 			});
 		}
 		if (to == R.id.addButton) {
 			view.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					increase(dataSetView, id);
+					increase(dataSetView, goodsId);
 				}
 			});
 		}
 		return false;
 	}
 
-	private void increase(View dataSetView, long id) {
-		int quantity = getQuantity(id);
-		quantity++;
-
-		if (quantity <= 0) {
-			goodsQuantityMap.remove(id);
-		} else if (quantity > 99) {
+	private void increase(View dataSetView, long goodsId) {
+		int currentQuantity = ShoppingCartCache.getInstance().getQuantity(
+				shopId, goodsId);
+		if (currentQuantity >= 99) {
 			Toast.makeText(getActivity(), "一次购买某个商品的数量不能超过99！",
 					Toast.LENGTH_SHORT).show();
-			goodsQuantityMap.put(id, 99);
-		} else {
-			goodsQuantityMap.put(id, quantity);
+			return;
 		}
-		setQuantity(dataSetView, id);
+		int quantity = ShoppingCartCache.getInstance()
+				.increase(shopId, goodsId);
+		setQuantity(dataSetView, quantity);
 	}
 
-	private void decrease(View dataSetView, long id) {
-		int quantity = getQuantity(id);
-		quantity--;
-		if (quantity <= 0) {
-			goodsQuantityMap.remove(id);
-		} else {
-			goodsQuantityMap.put(id, quantity);
-		}
-		setQuantity(dataSetView, id);
+	private void decrease(View dataSetView, long goodsId) {
+		int quantity = ShoppingCartCache.getInstance()
+				.decrease(shopId, goodsId);
+		setQuantity(dataSetView, quantity);
 	}
 
-	private void setQuantity(View dataSetView, Long id) {
-		int quantity = getQuantity(id);
+	private void setQuantity(View dataSetView, int quantity) {
 		TextView quantityView = (TextView) dataSetView
 				.findViewById(R.id.quantity);
 		View reduceButton = dataSetView.findViewById(R.id.reduceButton);
@@ -149,12 +140,6 @@ public class GoodsListFragment extends Fragment implements
 			quantityView.setVisibility(View.INVISIBLE);
 			reduceButton.setVisibility(View.INVISIBLE);
 		}
-	}
-
-	private int getQuantity(Long id) {
-		Integer quantity = goodsQuantityMap.get(id);
-		quantity = quantity == null || quantity < 0 ? 0 : quantity;
-		return quantity;
 	}
 
 	public void setGoodsType(Map<String, Object> goodsType) {

@@ -71,6 +71,7 @@ public class ShopListFragment extends Fragment implements
 		Map<String, Object> item = (Map<String, Object>) adapterView
 				.getItemAtPosition(position);
 		intent.putExtra("shopId", (Long) item.get("id"));
+		intent.putExtra("shopName", (String) item.get("name"));
 		startActivity(intent);
 	}
 

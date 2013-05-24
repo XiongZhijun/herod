@@ -29,13 +29,16 @@ public class GoodsListActivity extends FragmentActivity implements
 	private ViewPager mPager;
 	private TabPageIndicator mIndicator;
 	private long shopId;
+	private String shopName;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_goods_list);
-
+		shopId = getIntent().getLongExtra("shopId", 0);
+		shopName = getIntent().getStringExtra("shopName");
 		ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+		actionBar.setTitle(shopName);
 		actionBar.setHomeAction(new IntentAction(this, HomeActivity
 				.createIntent(this), R.drawable.ic_title_home_default));
 		actionBar.setDisplayHomeAsUpEnabled(true);

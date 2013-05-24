@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
@@ -33,8 +34,8 @@ import android.widget.TextView;
  * 
  */
 public class GoodsListFragment extends Fragment implements
-		AsyncTaskable<Long, List<Map<String, Object>>>, OnItemClickListener,
-		IXListViewListener, ViewBinder {
+		AsyncTaskable<Long, List<Map<String, Object>>>, IXListViewListener,
+		ViewBinder {
 	private XListView goodsListView;
 	private Map<String, Object> goodsType;
 	private long latestGoodsId = 0;
@@ -49,13 +50,14 @@ public class GoodsListFragment extends Fragment implements
 		goodsListView = (XListView) view.findViewById(R.id.goodsListView);
 		goodsListView.setPullRefreshEnable(false);
 		goodsListView.setPullLoadEnable(true);
-		goodsListView.setOnItemClickListener(this);
+		// goodsListView.setOnItemClickListener(this);
 		goodsListView.setXListViewListener(this);
 		adapter = new SimpleAdapter(getActivity(),
 				Collections.<Map<String, Object>> emptyList(),
 				R.layout.fragment_goods_list_item, new String[] { "name",
-						"price", "name", "name" }, new int[] { R.id.name,
-						R.id.price, R.id.quantity, R.id.deleteItem });
+						"price", "name", "name", "name" }, new int[] {
+						R.id.name, R.id.price, R.id.quantity, R.id.addButton,
+						R.id.reduceButton });
 		adapter.setViewBinder(this);
 		goodsListView.setAdapter(adapter);
 		return view;
@@ -85,69 +87,74 @@ public class GoodsListFragment extends Fragment implements
 	public boolean setViewValue(final View dataSetView,
 			final Map<String, ?> dataSet, final View view, String from, int to,
 			int position, Object data, String textRepresentation) {
+		final long id = (Long) dataSet.get("id");
 		if (to == R.id.quantity) {
-			decreaseQuantity((Long) dataSet.get("id"), view,
-					dataSetView.findViewById(R.id.deleteItem));
+			setQuantity(dataSetView, id);
 			return true;
 		}
-		if (to == R.id.deleteItem) {
+		if (to == R.id.reduceButton) {
 			view.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					decreaseQuantity((Long) dataSet.get("id"),
-							dataSetView.findViewById(R.id.quantity), view);
+					decrease(dataSetView, id);
+				}
+			});
+		}
+		if (to == R.id.addButton) {
+			view.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					increase(dataSetView, id);
 				}
 			});
 		}
 		return false;
 	}
 
-	private void decreaseQuantity(long id, View quantityView,
-			View decreaseButton) {
-		int quantity = 0;
-		if (goodsQuantityMap.containsKey(id)) {
-			quantity = goodsQuantityMap.get(id);
-			quantity--;
-		}
-		if (quantity > 0) {
-			((TextView) quantityView).setText(quantity + "");
-			quantityView.setVisibility(View.VISIBLE);
-			decreaseButton.setVisibility(View.VISIBLE);
+	private void increase(View dataSetView, long id) {
+		int quantity = getQuantity(id);
+		quantity++;
+
+		if (quantity <= 0) {
+			goodsQuantityMap.remove(id);
+		} else if (quantity > 99) {
+			Toast.makeText(getActivity(), "一次购买某个商品的数量不能超过99！",
+					Toast.LENGTH_SHORT).show();
+			goodsQuantityMap.put(id, 99);
 		} else {
-			quantity = 0;
-			quantityView.setVisibility(View.INVISIBLE);
-			decreaseButton.setVisibility(View.INVISIBLE);
+			goodsQuantityMap.put(id, quantity);
 		}
-		goodsQuantityMap.put(id, quantity);
+		setQuantity(dataSetView, id);
 	}
 
-	private void increaseQuantity(long id, View quantityView,
-			View decreaseButton) {
-		int quantity = 1;
-		if (goodsQuantityMap.containsKey(id)) {
-			quantity = goodsQuantityMap.get(id);
-			quantity++;
-		}
-		if (quantity > 0) {
-			((TextView) quantityView).setText(quantity + "");
-			quantityView.setVisibility(View.VISIBLE);
-			decreaseButton.setVisibility(View.VISIBLE);
+	private void decrease(View dataSetView, long id) {
+		int quantity = getQuantity(id);
+		quantity--;
+		if (quantity <= 0) {
+			goodsQuantityMap.remove(id);
 		} else {
-			quantity = 0;
-			quantityView.setVisibility(View.INVISIBLE);
-			decreaseButton.setVisibility(View.INVISIBLE);
+			goodsQuantityMap.put(id, quantity);
 		}
-		goodsQuantityMap.put(id, quantity);
+		setQuantity(dataSetView, id);
 	}
 
-	@Override
-	public void onItemClick(AdapterView<?> adapterView, View view,
-			int position, long itemId) {
-		Map<String, Object> item = (Map<String, Object>) adapterView
-				.getItemAtPosition(position);
-		long id = (Long) item.get("id");
-		increaseQuantity(id, view.findViewById(R.id.quantity),
-				view.findViewById(R.id.deleteItem));
+	private void setQuantity(View dataSetView, Long id) {
+		int quantity = getQuantity(id);
+		TextView quantityView = (TextView) dataSetView
+				.findViewById(R.id.quantity);
+		View reduceButton = dataSetView.findViewById(R.id.reduceButton);
+		if (quantity > 0) {
+			quantityView.setText(quantity + "");
+			quantityView.setVisibility(View.VISIBLE);
+			reduceButton.setVisibility(View.VISIBLE);
+		} else {
+			quantityView.setVisibility(View.INVISIBLE);
+			reduceButton.setVisibility(View.INVISIBLE);
+		}
+	}
 
+	private int getQuantity(Long id) {
+		Integer quantity = goodsQuantityMap.get(id);
+		quantity = quantity == null || quantity < 0 ? 0 : quantity;
+		return quantity;
 	}
 
 	public void setGoodsType(Map<String, Object> goodsType) {

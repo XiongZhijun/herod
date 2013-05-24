@@ -3,6 +3,7 @@
     xmlns:herod="http://schemas.android.com/apk/res/org.herod.buyer.phone"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFF"
     android:orientation="vertical" >
 
     <org.herod.framework.widget.ActionBar
@@ -13,6 +14,7 @@
         android:id="@+id/indicator"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="#FFF"
         android:padding="10dip"
         android:textColor="#000"
         herod:selectedColor="#000" />

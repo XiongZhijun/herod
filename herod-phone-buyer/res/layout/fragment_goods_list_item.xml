@@ -1,91 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="100dip"
+    android:background="#FFF"
     android:descendantFocusability="blocksDescendants"
-    android:orientation="horizontal" >
-
-    <LinearLayout
-        android:id="@+id/deleteItem"
-        android:layout_width="28dip"
-        android:layout_height="50dip" >
-
-        <ImageButton
-            android:layout_width="20dip"
-            android:layout_height="20dip"
-            android:layout_gravity="center"
-            android:layout_marginLeft="5dip"
-            android:layout_marginRight="3dip"
-            android:background="@drawable/delete_image"
-            android:contentDescription="@null"
-            android:focusable="false"
-            android:src="@drawable/delete_image"
-            android:visibility="visible" />
-    </LinearLayout>
+    android:orientation="horizontal"
+    android:paddingLeft="5dip" >
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="50dip"
-        android:layout_height="50dip"
+        android:layout_width="80dip"
+        android:layout_height="80dip"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
         android:contentDescription="@null"
         android:src="@drawable/test_goods" />
 
     <TextView
+        android:id="@+id/quantity"
+        android:layout_width="20dip"
+        android:layout_height="20dip"
+        android:layout_alignRight="@+id/image"
+        android:layout_alignTop="@+id/image"
+        android:layout_gravity="center"
+        android:background="@drawable/quantity_background"
+        android:gravity="center"
+        android:text="2"
+        android:textColor="#F00" />
+
+    <LinearLayout
+        android:id="@+id/addButton"
+        android:layout_width="41dip"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:clickable="true"
+        android:paddingLeft="5dip"
+        android:paddingRight="5dip" >
+
+        <ImageView
+            android:layout_width="28dip"
+            android:layout_height="28dip"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:gravity="center"
+            android:scaleType="fitXY"
+            android:src="@drawable/add" />
+    </LinearLayout>
+
+    <TextView
         android:id="@+id/name"
-        android:layout_width="0dip"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/image"
         android:layout_gravity="center_vertical|left"
+        android:layout_marginBottom="10dip"
         android:layout_marginLeft="10dip"
-        android:layout_weight="1"
+        android:layout_marginTop="10dip"
+        android:layout_toLeftOf="@+id/addButton"
+        android:layout_toRightOf="@+id/image"
         android:text="农夫山泉"
         android:textSize="20sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|right"
-        android:text="￥"
-        android:textColor="#F00"
-        android:textSize="20sp" />
+        android:layout_below="@+id/name"
+        android:layout_marginLeft="10dip"
+        android:layout_toLeftOf="@+id/addButton"
+        android:layout_toRightOf="@+id/image"
+        android:orientation="horizontal" >
 
-    <TextView
-        android:id="@+id/price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|right"
-        android:text="20.0"
-        android:textColor="#F00"
-        android:textSize="20sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:text="￥"
+            android:textColor="#F00"
+            android:textSize="20sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|right"
-        android:text="/"
-        android:textColor="#000"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:text="20.0"
+            android:textColor="#F00"
+            android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/unit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|right"
-        android:text="瓶"
-        android:textColor="#000"
-        android:textSize="20sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:text="/"
+            android:textColor="#F00"
+            android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/quantity"
-        android:layout_width="25dip"
-        android:layout_height="25dip"
-        android:layout_gravity="center"
-        android:layout_marginLeft="5dip"
-        android:layout_marginRight="5dip"
-        android:background="@drawable/quantity_background"
-        android:gravity="center"
-        android:textColor="#F0F"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:visibility="invisible" />
+        <TextView
+            android:id="@+id/unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:text="瓶"
+            android:textColor="#F00"
+            android:textSize="20sp" />
+    </LinearLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/reduceButton"
+        android:layout_width="41dip"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/addButton"
+        android:clickable="true"
+        android:paddingLeft="5dip"
+        android:paddingRight="5dip" >
+
+        <ImageView
+            android:layout_width="28dip"
+            android:layout_height="28dip"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:gravity="center"
+            android:scaleType="fitXY"
+            android:src="@drawable/reduce" />
+    </LinearLayout>
+
+</RelativeLayout>

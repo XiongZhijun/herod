@@ -16,7 +16,7 @@ import org.herod.buyer.phone.model.OrderItem;
  */
 public class ShoppingCartCache {
 	private static ShoppingCartCache instance = new ShoppingCartCache();
-	private Map<Long, Order> shopCaches = new HashMap<Long, Order>();
+	private Map<Long, Order> orderCaches = new HashMap<Long, Order>();
 
 	private ShoppingCartCache() {
 	}
@@ -27,18 +27,18 @@ public class ShoppingCartCache {
 
 	public int getTotalQuantity() {
 		int total = 0;
-		for (Order order : shopCaches.values()) {
+		for (Order order : orderCaches.values()) {
 			total += order.getTotalQuantity();
 		}
 		return total;
 	}
 
 	public void put(long shopId, long goodsId, String goodsCode, int quantity) {
-		Order order = shopCaches.get(shopId);
+		Order order = orderCaches.get(shopId);
 		if (order == null) {
 			order = new Order();
 			order.setShopId(shopId);
-			shopCaches.put(shopId, order);
+			orderCaches.put(shopId, order);
 		}
 		OrderItem orderItem = order.findOrderItemByGoodsId(goodsId);
 		if (orderItem == null) {
@@ -82,18 +82,18 @@ public class ShoppingCartCache {
 	}
 
 	public void remove(long shopId, long goodsId) {
-		Order sellerCache = shopCaches.get(shopId);
-		if (sellerCache != null) {
-			sellerCache.removeOrderItemByGoodsId(goodsId);
+		Order order = orderCaches.get(shopId);
+		if (order != null) {
+			order.removeOrderItemByGoodsId(goodsId);
 		}
 	}
 
 	public int getQuantity(long shopId, long goodsId) {
-		Order sellerCache = shopCaches.get(shopId);
-		if (sellerCache == null) {
+		Order order = orderCaches.get(shopId);
+		if (order == null) {
 			return 0;
 		}
-		OrderItem orderItem = sellerCache.findOrderItemByGoodsId(goodsId);
+		OrderItem orderItem = order.findOrderItemByGoodsId(goodsId);
 		if (orderItem != null) {
 			return orderItem.getQuantity();
 		}

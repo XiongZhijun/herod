@@ -155,4 +155,30 @@ public class Order {
 		this.comment = comment;
 	}
 
+	public int getTotalQuantity() {
+		int total = 0;
+		for (OrderItem orderItem : orderItems) {
+			total += orderItem.getQuantity();
+		}
+		return total;
+	}
+
+	public OrderItem findOrderItemByGoodsId(long goodsId) {
+		for (OrderItem orderItem : orderItems) {
+			if (orderItem.getGoodsId() == goodsId) {
+				return orderItem;
+			}
+		}
+		return null;
+	}
+
+	public void removeOrderItemByGoodsId(long goodsId) {
+		for (OrderItem orderItem : orderItems) {
+			if (orderItem.getGoodsId() == goodsId) {
+				orderItems.remove(orderItem);
+				break;
+			}
+		}
+	}
+
 }

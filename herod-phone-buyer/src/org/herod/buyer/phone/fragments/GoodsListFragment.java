@@ -88,6 +88,7 @@ public class GoodsListFragment extends Fragment implements
 			final Map<String, ?> dataSet, final View view, String from, int to,
 			int position, Object data, String textRepresentation) {
 		final long goodsId = (Long) dataSet.get("id");
+		final String goodsCode = (String) dataSet.get("code");
 		if (to == R.id.quantity) {
 			int quantity = ShoppingCartCache.getInstance().getQuantity(shopId,
 					goodsId);
@@ -97,21 +98,21 @@ public class GoodsListFragment extends Fragment implements
 		if (to == R.id.reduceButton) {
 			view.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					decrease(dataSetView, goodsId);
+					decrease(dataSetView, goodsId, goodsCode);
 				}
 			});
 		}
 		if (to == R.id.addButton) {
 			view.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					increase(dataSetView, goodsId);
+					increase(dataSetView, goodsId, goodsCode);
 				}
 			});
 		}
 		return false;
 	}
 
-	private void increase(View dataSetView, long goodsId) {
+	private void increase(View dataSetView, long goodsId, String goodsCode) {
 		int currentQuantity = ShoppingCartCache.getInstance().getQuantity(
 				shopId, goodsId);
 		if (currentQuantity >= 99) {
@@ -119,14 +120,14 @@ public class GoodsListFragment extends Fragment implements
 					Toast.LENGTH_SHORT).show();
 			return;
 		}
-		int quantity = ShoppingCartCache.getInstance()
-				.increase(shopId, goodsId);
+		int quantity = ShoppingCartCache.getInstance().increase(shopId,
+				goodsId, goodsCode);
 		setQuantity(dataSetView, quantity);
 	}
 
-	private void decrease(View dataSetView, long goodsId) {
-		int quantity = ShoppingCartCache.getInstance()
-				.decrease(shopId, goodsId);
+	private void decrease(View dataSetView, long goodsId, String goodsCode) {
+		int quantity = ShoppingCartCache.getInstance().decrease(shopId,
+				goodsId, goodsCode);
 		setQuantity(dataSetView, quantity);
 	}
 

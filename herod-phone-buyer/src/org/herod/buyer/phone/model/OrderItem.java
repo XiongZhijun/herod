@@ -102,4 +102,8 @@ public class OrderItem {
 		this.flag = flag;
 	}
 
+	public double getTotalAmount() {
+		return unitPrice * quantity;
+	}
+
 }

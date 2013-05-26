@@ -19,6 +19,7 @@ import org.herod.buyer.phone.model.OrderItem;
 public class ShoppingCartCache {
 	private static ShoppingCartCache instance = new ShoppingCartCache();
 	private Map<Long, Order> orderCaches = new HashMap<Long, Order>();
+	private List<GoodsQuantityChangedListener> listeners = new ArrayList<ShoppingCartCache.GoodsQuantityChangedListener>();
 
 	private ShoppingCartCache() {
 	}
@@ -74,6 +75,18 @@ public class ShoppingCartCache {
 		return orderItem;
 	}
 
+	public int increaseWithExistGoods(long shopId, long goodsId) {
+		OrderItem orderItem = findOrderItem(shopId, goodsId);
+		if (orderItem == null) {
+			return 0;
+		}
+		int quantity = orderItem.getQuantity();
+		quantity++;
+		orderItem.setQuantity(quantity);
+		notifyQuantityChanged(shopId, goodsId, quantity);
+		return quantity;
+	}
+
 	public int increase(long shopId, Map<String, ?> goods) {
 		OrderItem orderItem = findAndCreateOrderItem(shopId, goods);
 		int current = orderItem.getQuantity();
@@ -82,6 +95,7 @@ public class ShoppingCartCache {
 			current = 99;
 		}
 		orderItem.setQuantity(current);
+		notifyQuantityChanged(shopId, orderItem.getGoodsId(), current);
 		return current;
 	}
 
@@ -94,11 +108,12 @@ public class ShoppingCartCache {
 		current--;
 		if (current > 0) {
 			orderItem.setQuantity(current);
-			return current;
 		} else {
 			remove(shopId, goodsId);
-			return 0;
+			current = 0;
 		}
+		notifyQuantityChanged(shopId, goodsId, current);
+		return current;
 
 	}
 
@@ -131,6 +146,27 @@ public class ShoppingCartCache {
 			return orderItem.getQuantity();
 		}
 		return 0;
+	}
+
+	private void notifyQuantityChanged(long shopId, long goodsId,
+			int newQuantity) {
+		for (GoodsQuantityChangedListener listener : listeners) {
+			listener.onGoodsQuantityChanged(shopId, goodsId, newQuantity);
+		}
+	}
+
+	public void registGoodsQuantityChangedListener(
+			GoodsQuantityChangedListener listener) {
+		this.listeners.add(listener);
+	}
+
+	public void unReistGoodsQuantityChangedListener(
+			GoodsQuantityChangedListener listener) {
+		this.listeners.remove(listener);
+	}
+
+	public static interface GoodsQuantityChangedListener {
+		void onGoodsQuantityChanged(long shopId, long goodsId, int newQuantity);
 	}
 
 }

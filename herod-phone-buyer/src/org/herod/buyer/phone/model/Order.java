@@ -82,6 +82,7 @@ public class Order {
 
 	public void setShopId(long shopId) {
 		this.shopId = shopId;
+		updateShopIdWithItems();
 	}
 
 	public long getWorkerId() {
@@ -132,10 +133,18 @@ public class Order {
 		if (orderItems != null) {
 			this.orderItems.clear();
 			this.orderItems.addAll(orderItems);
+			updateShopIdWithItems();
+		}
+	}
+
+	protected void updateShopIdWithItems() {
+		for (OrderItem item : orderItems) {
+			item.setShopId(shopId);
 		}
 	}
 
 	public void addOrderItem(OrderItem orderItem) {
+		orderItem.setShopId(shopId);
 		this.orderItems.add(orderItem);
 	}
 
@@ -179,6 +188,14 @@ public class Order {
 				break;
 			}
 		}
+	}
+
+	public double getTotalAmount() {
+		double total = 0;
+		for (OrderItem orderItem : orderItems) {
+			total += orderItem.getTotalAmount();
+		}
+		return total;
 	}
 
 }

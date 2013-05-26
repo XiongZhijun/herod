@@ -17,6 +17,8 @@ public interface BuyerService {
 
 	List<Map<String, Object>> findShopesByType(long typeId);
 
+	Map<String, Object> findShopById(long shopId);
+
 	List<Map<String, Object>> findGoodsTypesByShop(long shopId);
 
 	List<Map<String, Object>> findGoodsesByType(long goodsTypeId,

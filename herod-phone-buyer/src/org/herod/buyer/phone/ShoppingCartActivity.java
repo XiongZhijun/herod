@@ -1,6 +1,5 @@
 package org.herod.buyer.phone;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.herod.buyer.phone.adapter.OrderListAdapter;
@@ -24,11 +23,7 @@ public class ShoppingCartActivity extends BaseActivity {
 
 		orderListView = (ListView) findViewById(R.id.ordersListView);
 
-		List<Order> orders = new ArrayList<Order>();
-		orders.add(new Order());
-		orders.add(new Order());
-		orders.add(new Order());
-		orders.add(new Order());
+		List<Order> orders = ShoppingCartCache.getInstance().getAllOrders();
 		ListAdapter adapter = new OrderListAdapter(this,orders );
 		orderListView.setAdapter(adapter);
 	}

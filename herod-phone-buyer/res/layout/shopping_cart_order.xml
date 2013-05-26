@@ -16,7 +16,6 @@
             android:id="@+id/shopName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="外婆家"
             android:textSize="16sp" />
 
         <TextView

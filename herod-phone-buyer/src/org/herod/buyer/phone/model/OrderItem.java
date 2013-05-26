@@ -19,14 +19,14 @@ public class OrderItem {
 	private long goodsId;
 	/** 商品编码 */
 	private String goodsCode;
-	/** 代理商 */
-	private long agentId;
+	/** 商品名称 */
+	private String goodsName;
 	/** 商店 */
 	private long shopId;
 	/** 成交单价 */
 	private double unitPrice;
 	/** 数量 */
-	private int quantity;
+	private int quantity = 0;
 	/** 订单项标记 */
 	private OrderItemFlag flag = OrderItemFlag.Common;
 
@@ -62,12 +62,12 @@ public class OrderItem {
 		this.goodsCode = goodsCode;
 	}
 
-	public long getAgentId() {
-		return agentId;
+	public String getGoodsName() {
+		return goodsName;
 	}
 
-	public void setAgentId(long agentId) {
-		this.agentId = agentId;
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
 	}
 
 	public long getShopId() {

@@ -26,7 +26,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * @author Xiong Zhijun
@@ -47,6 +46,7 @@ public class GoodsListFragment extends Fragment implements
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_goods_list, container,
 				false);
+		shopId = getArguments().getLong("shopId");
 		goodsListView = (XListView) view.findViewById(R.id.goodsListView);
 		goodsListView.setPullRefreshEnable(false);
 		goodsListView.setPullLoadEnable(true);
@@ -88,7 +88,6 @@ public class GoodsListFragment extends Fragment implements
 			final Map<String, ?> dataSet, final View view, String from, int to,
 			int position, Object data, String textRepresentation) {
 		final long goodsId = (Long) dataSet.get("id");
-		final String goodsCode = (String) dataSet.get("code");
 		if (to == R.id.quantity) {
 			int quantity = ShoppingCartCache.getInstance().getQuantity(shopId,
 					goodsId);
@@ -98,36 +97,29 @@ public class GoodsListFragment extends Fragment implements
 		if (to == R.id.reduceButton) {
 			view.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					decrease(dataSetView, goodsId, goodsCode);
+					decrease(dataSetView, goodsId);
 				}
 			});
 		}
 		if (to == R.id.addButton) {
 			view.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					increase(dataSetView, goodsId, goodsCode);
+					increase(dataSetView, dataSet);
 				}
 			});
 		}
 		return false;
 	}
 
-	private void increase(View dataSetView, long goodsId, String goodsCode) {
-		int currentQuantity = ShoppingCartCache.getInstance().getQuantity(
-				shopId, goodsId);
-		if (currentQuantity >= 99) {
-			Toast.makeText(getActivity(), "一次购买某个商品的数量不能超过99！",
-					Toast.LENGTH_SHORT).show();
-			return;
-		}
-		int quantity = ShoppingCartCache.getInstance().increase(shopId,
-				goodsId, goodsCode);
+	private void increase(View dataSetView, Map<String, ?> dataSet) {
+		int quantity = ShoppingCartCache.getInstance()
+				.increase(shopId, dataSet);
 		setQuantity(dataSetView, quantity);
 	}
 
-	private void decrease(View dataSetView, long goodsId, String goodsCode) {
-		int quantity = ShoppingCartCache.getInstance().decrease(shopId,
-				goodsId, goodsCode);
+	private void decrease(View dataSetView, long goodsId) {
+		int quantity = ShoppingCartCache.getInstance()
+				.decrease(shopId, goodsId);
 		setQuantity(dataSetView, quantity);
 	}
 

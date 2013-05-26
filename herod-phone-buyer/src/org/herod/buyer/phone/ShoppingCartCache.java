@@ -3,7 +3,9 @@
  */
 package org.herod.buyer.phone;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.herod.buyer.phone.model.Order;
@@ -25,6 +27,10 @@ public class ShoppingCartCache {
 		return instance;
 	}
 
+	public List<Order> getAllOrders() {
+		return new ArrayList<Order>(orderCaches.values());
+	}
+
 	public int getTotalQuantity() {
 		int total = 0;
 		for (Order order : orderCaches.values()) {
@@ -33,58 +39,85 @@ public class ShoppingCartCache {
 		return total;
 	}
 
-	public void put(long shopId, long goodsId, String goodsCode, int quantity) {
+	private Order findOrCreateOrder(long shopId) {
 		Order order = orderCaches.get(shopId);
 		if (order == null) {
 			order = new Order();
 			order.setShopId(shopId);
 			orderCaches.put(shopId, order);
 		}
-		OrderItem orderItem = order.findOrderItemByGoodsId(goodsId);
-		if (orderItem == null) {
-			order.addOrderItem(createorderItem(goodsId, goodsCode, quantity));
-		} else {
-			orderItem.setQuantity(quantity);
-		}
+		return order;
 	}
 
-	private OrderItem createorderItem(long goodsId, String goodsCode,
-			int quantity) {
-		OrderItem orderItem = new OrderItem();
-		orderItem.setGoodsId(goodsId);
-		orderItem.setGoodsCode(goodsCode);
-		orderItem.setQuantity(quantity);
+	private OrderItem findAndCreateOrderItem(long shopId, Map<String, ?> goods) {
+		Order order = findOrCreateOrder(shopId);
+		long goodsId = (Long) goods.get("id");
+		OrderItem orderItem = order.findOrderItemByGoodsId(goodsId);
+		if (orderItem == null) {
+			orderItem = createOrderItem(goods);
+			order.addOrderItem(orderItem);
+		}
 		return orderItem;
 	}
 
-	public int increase(long shopId, long goodsId, String goodsCode) {
-		int current = getQuantity(shopId, goodsId);
+	private OrderItem createOrderItem(Map<String, ?> goods) {
+		OrderItem orderItem;
+		orderItem = new OrderItem();
+		long goodsId = (Long) goods.get("id");
+		String goodsCode = (String) goods.get("code");
+		String goodsName = (String) goods.get("name");
+		double unitPrice = (Double) goods.get("price");
+		orderItem.setUnitPrice(unitPrice);
+		orderItem.setGoodsCode(goodsCode);
+		orderItem.setGoodsName(goodsName);
+		orderItem.setGoodsId(goodsId);
+		return orderItem;
+	}
+
+	public int increase(long shopId, Map<String, ?> goods) {
+		OrderItem orderItem = findAndCreateOrderItem(shopId, goods);
+		int current = orderItem.getQuantity();
 		current++;
 		if (current > 99) {
 			current = 99;
 		}
-		put(shopId, goodsId, goodsCode, current);
+		orderItem.setQuantity(current);
 		return current;
 	}
 
-	public int decrease(long shopId, long goodsId, String goodsCode) {
-		int quantity = getQuantity(shopId, goodsId);
-		if (quantity > 0) {
-			quantity--;
+	public int decrease(long shopId, long goodsId) {
+		OrderItem orderItem = findOrderItem(shopId, goodsId);
+		if (orderItem == null) {
+			return 0;
 		}
-		if (quantity <= 0) {
+		int current = orderItem.getQuantity();
+		current--;
+		if (current > 0) {
+			orderItem.setQuantity(current);
+			return current;
+		} else {
 			remove(shopId, goodsId);
 			return 0;
-		} else {
-			put(shopId, goodsId, goodsCode, quantity);
-			return quantity;
 		}
+
 	}
 
-	public void remove(long shopId, long goodsId) {
+	private OrderItem findOrderItem(long shopId, long goodsId) {
 		Order order = orderCaches.get(shopId);
-		if (order != null) {
-			order.removeOrderItemByGoodsId(goodsId);
+		if (order == null) {
+			return null;
+		}
+		return order.findOrderItemByGoodsId(goodsId);
+	}
+
+	private void remove(long shopId, long goodsId) {
+		Order order = orderCaches.get(shopId);
+		if (order == null) {
+			return;
+		}
+		order.removeOrderItemByGoodsId(goodsId);
+		if (order.getOrderItems().size() == 0) {
+			orderCaches.remove(shopId);
 		}
 	}
 

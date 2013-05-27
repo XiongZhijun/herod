@@ -51,6 +51,8 @@ public class BuyerServiceMock implements BuyerService {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("name", name);
+		map.put("minChargeForFreeDelivery", id * 1.0d);
+		map.put("costOfRunErrands", 5d);
 		return map;
 	}
 

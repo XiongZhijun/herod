@@ -43,6 +43,8 @@ public class Order {
 	private String comment;
 	/** 订单项 */
 	private List<OrderItem> orderItems = new ArrayList<OrderItem>();
+	/** 跑腿费 */
+	private double costOfRunErrands = 0;
 
 	public String getSerialNumber() {
 		return serialNumber;
@@ -164,6 +166,14 @@ public class Order {
 		this.comment = comment;
 	}
 
+	public double getCostOfRunErrands() {
+		return costOfRunErrands;
+	}
+
+	public void setCostOfRunErrands(double costOfRunErrands) {
+		this.costOfRunErrands = costOfRunErrands;
+	}
+
 	public int getTotalQuantity() {
 		int total = 0;
 		for (OrderItem orderItem : orderItems) {
@@ -196,6 +206,10 @@ public class Order {
 			total += orderItem.getTotalAmount();
 		}
 		return total;
+	}
+
+	public double getTotalAmountWithCostOfRunErrands() {
+		return getTotalAmount() + getCostOfRunErrands();
 	}
 
 }

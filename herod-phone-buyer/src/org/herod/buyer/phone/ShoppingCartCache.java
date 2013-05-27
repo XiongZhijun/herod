@@ -20,6 +20,7 @@ public class ShoppingCartCache {
 	private static ShoppingCartCache instance = new ShoppingCartCache();
 	private Map<Long, Order> orderCaches = new HashMap<Long, Order>();
 	private List<GoodsQuantityChangedListener> listeners = new ArrayList<ShoppingCartCache.GoodsQuantityChangedListener>();
+	private ShopService shopService = BuyerContext.getShopService();
 
 	private ShoppingCartCache() {
 	}
@@ -44,6 +45,12 @@ public class ShoppingCartCache {
 		Order order = orderCaches.get(shopId);
 		if (order == null) {
 			order = new Order();
+			Map<String, Object> shop = shopService.findShopById(shopId);
+			if (shop != null) {
+				double costOfRunErrands = (Double) shop
+						.get(Constants.COST_OF_RUN_ERRANDS);
+				order.setCostOfRunErrands(costOfRunErrands);
+			}
 			order.setShopId(shopId);
 			orderCaches.put(shopId, order);
 		}

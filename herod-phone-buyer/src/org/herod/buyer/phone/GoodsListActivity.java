@@ -77,7 +77,7 @@ public class GoodsListActivity extends BaseActivity implements
 			GoodsListFragment fragment = new GoodsListFragment();
 			fragment.setGoodsType(goodsTypes.get(position));
 			Bundle args = new Bundle();
-			args.putLong("shopId", shopId);
+			args.putAll(getIntent().getExtras());
 			fragment.setArguments(args);
 			return fragment;
 		}

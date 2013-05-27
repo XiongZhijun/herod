@@ -10,7 +10,9 @@ import org.herod.buyer.phone.model.OrderItem;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -100,12 +102,32 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 	}
 
 	protected void decreaseQuantity() {
-		int quantity = shoppingCartCache.decrease(shopId, goodsId);
-		setQuantity(quantity);
-		if (quantity == 0) {
-			deletedLine.setVisibility(View.VISIBLE);
-			disableButtons();
+		int currentQuantity = shoppingCartCache.getQuantity(shopId, goodsId);
+		if (currentQuantity == 1) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+			builder.setTitle("提醒");
+			builder.setMessage("确认将该商品从订单删除？");
+			builder.setPositiveButton("确认",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							shoppingCartCache.removeOrderItem(shopId, goodsId);
+							setQuantity(0);
+							deletedLine.setVisibility(View.VISIBLE);
+							disableButtons();
+						}
+					});
+			builder.setNegativeButton("取消",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					});
+			AlertDialog dialog = builder.create();
+			dialog.show();
+		} else {
+			int quantity = shoppingCartCache.decrease(shopId, goodsId);
+			setQuantity(quantity);
 		}
+
 	}
 
 	protected void increaseQuantity() {

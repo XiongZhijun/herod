@@ -116,7 +116,7 @@ public class ShoppingCartCache {
 		if (current > 0) {
 			orderItem.setQuantity(current);
 		} else {
-			remove(shopId, goodsId);
+			removeOrderItem(shopId, goodsId);
 			current = 0;
 		}
 		notifyQuantityChanged(shopId, goodsId, current);
@@ -132,7 +132,7 @@ public class ShoppingCartCache {
 		return order.findOrderItemByGoodsId(goodsId);
 	}
 
-	private void remove(long shopId, long goodsId) {
+	public void removeOrderItem(long shopId, long goodsId) {
 		Order order = orderCaches.get(shopId);
 		if (order == null) {
 			return;

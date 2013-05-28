@@ -11,6 +11,10 @@ import org.herod.buyer.phone.GoodsListActivity;
 import org.herod.buyer.phone.HerodTask;
 import org.herod.buyer.phone.HerodTask.AsyncTaskable;
 import org.herod.buyer.phone.R;
+import org.herod.buyer.phone.adapter.ImageLoaderAdapter;
+import org.herod.framework.adapter.SimpleAdapter;
+
+import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +25,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
-import android.widget.SimpleAdapter;
 
 /**
  * 
@@ -57,10 +60,13 @@ public class ShopListFragment extends Fragment implements
 
 	@Override
 	public void onPostExecute(List<Map<String, Object>> data) {
-		SimpleAdapter adapter = new SimpleAdapter(getActivity(), data,
-				R.layout.fragment_shop_list_shop_item, new String[] { "name" },
-				new int[] { R.id.name });
+		ImageLoaderAdapter adapter = new ImageLoaderAdapter(getActivity(),
+				data, R.layout.fragment_shop_list_shop_item, new String[] {
+						"name", "imageUrl" },
+				new int[] { R.id.name, R.id.image });
 		shopsGridView.setAdapter(adapter);
+		shopsGridView.setOnScrollListener(new PauseOnScrollListener(adapter
+				.getImageLoader(), false, true));
 	}
 
 	@SuppressWarnings("unchecked")

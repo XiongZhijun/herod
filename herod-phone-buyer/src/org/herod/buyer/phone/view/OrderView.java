@@ -10,6 +10,10 @@ import org.herod.buyer.phone.Constants;
 import org.herod.buyer.phone.MapUtils;
 import org.herod.buyer.phone.R;
 import org.herod.buyer.phone.ShopService;
+import org.herod.buyer.phone.ShoppingCartActivity;
+import org.herod.buyer.phone.ShoppingCartCache;
+import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
+import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnButtonClickListener;
 import org.herod.buyer.phone.model.Order;
 import org.herod.buyer.phone.model.OrderItem;
 import org.herod.buyer.phone.view.OrderItemView.GoodsQuantityChangedListener;
@@ -48,27 +52,33 @@ public class OrderView extends LinearLayout implements
 	private ShopService shopService;
 	private OrderItemView summationView;
 	private Map<String, Object> shop;
+	private ShoppingCartActivity activity;
 
 	public OrderView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		initView();
+		initView(context);
 	}
 
 	public OrderView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		initView();
+		initView(context);
 	}
 
 	public OrderView(Context context) {
 		super(context);
-		initView();
+		initView(context);
 	}
 
-	private void initView() {
+	private void initView(Context context) {
+		if (context instanceof ShoppingCartActivity) {
+			this.activity = (ShoppingCartActivity) context;
+		}
 		LayoutInflater.from(getContext()).inflate(R.layout.shopping_cart_order,
 				this);
 		new InjectViewHelper().injectViews(this);
 		shopService = BuyerContext.getShopService();
+		findViewById(R.id.cancelOrderButton).setOnClickListener(
+				new CancelOrderListener());
 	}
 
 	@Override
@@ -147,6 +157,26 @@ public class OrderView extends LinearLayout implements
 
 	private void setText(View view, Object data) {
 		((TextView) view).setText(data.toString());
+	}
+
+	private class CancelOrderListener implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			ConfirmDialogFragment dialog = ConfirmDialogFragment.newInstance(
+					R.drawable.alarm, "确定删除该订单？", new OnButtonClickListener() {
+						public void onClick(int id) {
+							if (id == R.id.okButton) {
+								ShoppingCartCache.getInstance().removeOrder(
+										order.getShopId());
+								if (activity != null) {
+									activity.refreshOrders();
+								}
+							}
+						}
+					});
+			dialog.show(activity.getSupportFragmentManager(), null);
+		}
+
 	}
 
 }

@@ -132,6 +132,10 @@ public class ShoppingCartCache {
 		return order.findOrderItemByGoodsId(goodsId);
 	}
 
+	public void removeOrder(long shopId) {
+		orderCaches.remove(shopId);
+	}
+
 	public void removeOrderItem(long shopId, long goodsId) {
 		Order order = orderCaches.get(shopId);
 		if (order == null) {
@@ -153,6 +157,10 @@ public class ShoppingCartCache {
 			return orderItem.getQuantity();
 		}
 		return 0;
+	}
+
+	public void clearOrders() {
+		orderCaches.clear();
 	}
 
 	private void notifyQuantityChanged(long shopId, long goodsId,

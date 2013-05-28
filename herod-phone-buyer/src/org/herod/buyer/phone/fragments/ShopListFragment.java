@@ -12,9 +12,6 @@ import org.herod.buyer.phone.HerodTask;
 import org.herod.buyer.phone.HerodTask.AsyncTaskable;
 import org.herod.buyer.phone.R;
 import org.herod.buyer.phone.adapter.ImageLoaderAdapter;
-import org.herod.framework.adapter.SimpleAdapter;
-
-import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +22,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+
+import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 
 /**
  * 

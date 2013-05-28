@@ -42,6 +42,8 @@ public class OrderView extends LinearLayout implements
 	private TextView totalAmountView;
 	@InjectView(R.id.costOfRunErrands)
 	private TextView costOfRunErrandsView;
+	@InjectView(R.id.totalWithCostOfRunErrands)
+	private TextView totalWithCostOfRunErrandsView;
 	private Order order;
 	private ShopService shopService;
 	private OrderItemView summationView;
@@ -131,7 +133,8 @@ public class OrderView extends LinearLayout implements
 			order.setCostOfRunErrands(0);
 		}
 		setText(costOfRunErrandsView, order.getCostOfRunErrands());
-		totalAmountView.setText(Double.toString(order
+		totalAmountView.setText(Double.toString(order.getTotalAmount()));
+		totalWithCostOfRunErrandsView.setText(Double.toString(order
 				.getTotalAmountWithCostOfRunErrands()));
 	}
 

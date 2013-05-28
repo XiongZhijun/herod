@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dip"
             android:layout_weight="1"
-            android:text="消费满50免跑腿费"
             android:textColor="#888"
             android:textSize="12sp" />
 
@@ -70,7 +69,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="总计（包括跑腿费）：" />
+            android:text="总计（消费+跑腿费）：" />
 
         <TextView
             android:id="@+id/totalAmount"
@@ -79,14 +78,25 @@
             android:textColor="#F00" />
 
         <TextView
-            android:layout_width="0dip"
+            android:layout_width="20dip"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:text="跑腿费：" />
+            android:gravity="center"
+            android:text="+" />
 
         <TextView
             android:id="@+id/costOfRunErrands"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#F00" />
+
+        <TextView
+            android:layout_width="20dip"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="=" />
+
+        <TextView
+            android:id="@+id/totalWithCostOfRunErrands"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#F00" />

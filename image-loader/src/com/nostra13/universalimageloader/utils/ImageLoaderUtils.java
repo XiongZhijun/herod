@@ -61,6 +61,10 @@ public abstract class ImageLoaderUtils {
 			DisplayImageOptions options) {
 		imageLoader.displayImage(url, imageView, options, animateFirstListener);
 	}
+	
+	public static ImageLoader getImageLoader() {
+		return imageLoader;
+	}
 
 	private static class AnimateFirstDisplayListener extends
 			SimpleImageLoadingListener {

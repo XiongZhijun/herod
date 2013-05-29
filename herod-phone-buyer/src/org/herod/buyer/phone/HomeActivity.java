@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.herod.buyer.phone.HerodTask.AsyncTaskable;
 
+import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +23,7 @@ public class HomeActivity extends BaseActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		ImageLoaderUtils.initImageLoader(this);
 		setContentView(R.layout.activity_home);
 		showActionButton(R.id.queryButton, R.id.historyOrdersButton,
 				R.id.shoppingCartButton);

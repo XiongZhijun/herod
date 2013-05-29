@@ -1,7 +1,5 @@
 /*
- * 香港摩比科技有限公司 版权所有
- *
- * www.mobi-inf.com
+ * Copyright © 2013-2014 Xiong Zhijun, All Rights Reserved. 
  */
 package org.herod.framework.ci.annotation;
 

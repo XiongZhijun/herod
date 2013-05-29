@@ -10,10 +10,40 @@
     <ListView
         android:id="@+id/ordersListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dip"
         android:layout_margin="10dip"
+        android:layout_weight="1"
         android:divider="#E5E5E5"
         android:dividerHeight="10dip" >
     </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFF"
+        android:gravity="center_vertical"
+        android:paddingBottom="10dip"
+        android:paddingLeft="20dip"
+        android:paddingRight="20dip"
+        android:paddingTop="10dip" >
+
+        <Button
+            android:id="@+id/clearButton"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dip"
+            android:layout_weight="1"
+            android:onClick="clearShoppingCart"
+            android:text="清空购物车" />
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_weight="1"
+            android:onClick="submitOrders"
+            android:text="下单" />
+    </LinearLayout>
 
 </LinearLayout>

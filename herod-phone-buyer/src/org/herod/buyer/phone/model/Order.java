@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.location.Address;
-
 /**
  * 订单
  * 
@@ -45,6 +43,9 @@ public class Order {
 	private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 	/** 跑腿费 */
 	private double costOfRunErrands = 0;
+	private transient String shopName;
+	private transient double shopCostOfRunErrands = 0;
+	private transient double shopMinChargeForFreeDelivery = 0;
 
 	public String getSerialNumber() {
 		return serialNumber;
@@ -137,6 +138,31 @@ public class Order {
 			this.orderItems.addAll(orderItems);
 			updateShopIdWithItems();
 		}
+	}
+
+	public String getShopName() {
+		return shopName;
+	}
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
+
+	public double getShopCostOfRunErrands() {
+		return shopCostOfRunErrands;
+	}
+
+	public void setShopCostOfRunErrands(double shopCostOfRunErrands) {
+		this.shopCostOfRunErrands = shopCostOfRunErrands;
+	}
+
+	public double getShopMinChargeForFreeDelivery() {
+		return shopMinChargeForFreeDelivery;
+	}
+
+	public void setShopMinChargeForFreeDelivery(
+			double shopMinChargeForFreeDelivery) {
+		this.shopMinChargeForFreeDelivery = shopMinChargeForFreeDelivery;
 	}
 
 	protected void updateShopIdWithItems() {

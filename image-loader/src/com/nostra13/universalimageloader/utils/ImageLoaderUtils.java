@@ -54,8 +54,7 @@ public abstract class ImageLoaderUtils {
 	}
 
 	public static void loadImage(ImageView imageView, String url) {
-		imageLoader.displayImage(url, imageView, defaultOptions,
-				animateFirstListener);
+		loadImage(imageView, url, defaultOptions);
 	}
 
 	public static void loadImage(ImageView imageView, String url,

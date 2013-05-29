@@ -13,7 +13,7 @@ import org.herod.buyer.phone.ShopService;
 import org.herod.buyer.phone.ShoppingCartActivity;
 import org.herod.buyer.phone.ShoppingCartCache;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
-import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnButtonClickListener;
+import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
 import org.herod.buyer.phone.model.Order;
 import org.herod.buyer.phone.model.OrderItem;
 import org.herod.buyer.phone.view.OrderItemView.GoodsQuantityChangedListener;
@@ -162,19 +162,19 @@ public class OrderView extends LinearLayout implements
 	private class CancelOrderListener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
-			ConfirmDialogFragment dialog = ConfirmDialogFragment.newInstance(
-					R.drawable.alarm, "确定删除该订单？", new OnButtonClickListener() {
-						public void onClick(int id) {
-							if (id == R.id.okButton) {
-								ShoppingCartCache.getInstance().removeOrder(
-										order.getShopId());
-								if (activity != null) {
-									activity.refreshOrders();
-								}
-							}
-						}
-					});
-			dialog.show(activity.getSupportFragmentManager(), null);
+			ConfirmDialogFragment.showDialog(activity, R.drawable.alarm,
+					"确定删除该订单？", new OnDeleteOrderByOkListener());
+		}
+
+	}
+
+	private class OnDeleteOrderByOkListener implements OnOkButtonClickListener {
+		@Override
+		public void onOk() {
+			ShoppingCartCache.getInstance().removeOrder(order.getShopId());
+			if (activity != null) {
+				activity.refreshOrders();
+			}
 		}
 
 	}

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.herod.buyer.phone.adapter.OrderListAdapter;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
-import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnButtonClickListener;
+import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
 import org.herod.buyer.phone.model.Order;
 
 import android.os.Bundle;
@@ -35,16 +35,8 @@ public class ShoppingCartActivity extends BaseActivity {
 	}
 
 	public void clearShoppingCart(View v) {
-		ConfirmDialogFragment dialog = ConfirmDialogFragment.newInstance(
-				R.drawable.alarm, "确定清空购物车？", new OnButtonClickListener() {
-					public void onClick(int id) {
-						if (id == R.id.okButton) {
-							ShoppingCartCache.getInstance().clearOrders();
-							refreshOrders();
-						}
-					}
-				});
-		dialog.show(getSupportFragmentManager(), null);
+		ConfirmDialogFragment.showDialog(this, R.drawable.alarm, "确定清空购物车？",
+				new OnClearShoppingCartOkListener());
 
 	}
 
@@ -54,5 +46,14 @@ public class ShoppingCartActivity extends BaseActivity {
 		orderListView.setAdapter(adapter);
 		findViewById(R.id.clearButton).setEnabled(orders.size() > 0);
 		findViewById(R.id.submitButton).setEnabled(orders.size() > 0);
+	}
+
+	private class OnClearShoppingCartOkListener implements
+			OnOkButtonClickListener {
+		public void onOk() {
+			ShoppingCartCache.getInstance().clearOrders();
+			refreshOrders();
+		}
+
 	}
 }

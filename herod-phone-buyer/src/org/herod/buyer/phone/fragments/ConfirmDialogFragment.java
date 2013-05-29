@@ -5,10 +5,10 @@ package org.herod.buyer.phone.fragments;
 
 import org.herod.buyer.phone.R;
 import org.herod.framework.ci.InjectViewHelper;
-import org.herod.framework.ci.annotation.InjectView;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +27,8 @@ public class ConfirmDialogFragment extends DialogFragment implements
 		OnClickListener {
 	private String message;
 	private int imageResId;
-	private OnButtonClickListener onButtonClickListener;
+	private OnOkButtonClickListener onOkButtonClickListener;
+	private OnCancelButtonClickListener onCancelButtonClickListener;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,24 +58,34 @@ public class ConfirmDialogFragment extends DialogFragment implements
 
 	@Override
 	public void onClick(View v) {
-		if (onButtonClickListener != null) {
-			onButtonClickListener.onClick(v.getId());
+		if (v.getId() == R.id.okButton) {
+			if (onOkButtonClickListener != null) {
+				onOkButtonClickListener.onOk();
+			}
+		} else if (v.getId() == R.id.cancelButton) {
+			if (onCancelButtonClickListener != null) {
+				onCancelButtonClickListener.onCancel();
+			}
 		}
 		dismiss();
 	}
 
-	public static interface OnButtonClickListener {
-		void onClick(int id);
+	public static interface OnOkButtonClickListener {
+		void onOk();
 	}
 
-	public static ConfirmDialogFragment newInstance(int image, String message,
-			OnButtonClickListener onButtonClickListener) {
+	public static interface OnCancelButtonClickListener {
+		void onCancel();
+	}
+
+	public static void showDialog(FragmentActivity activity, int image,
+			String message, OnOkButtonClickListener onOkButtonClickListener) {
 		ConfirmDialogFragment fragment = new ConfirmDialogFragment();
 		Bundle args = new Bundle();
 		args.putInt("image", image);
 		args.putString("message", message);
 		fragment.setArguments(args);
-		fragment.onButtonClickListener = onButtonClickListener;
-		return fragment;
+		fragment.onOkButtonClickListener = onOkButtonClickListener;
+		fragment.show(activity.getSupportFragmentManager(), null);
 	}
 }

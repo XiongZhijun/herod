@@ -152,4 +152,11 @@ public abstract class ClassUtils {
 				.append(name.substring(1, name.length()));
 		return sb.toString();
 	}
+
+	public static boolean isPrimitive(Class<?> clazz) {
+		return clazz.isPrimitive() || clazz.equals(Long.class)
+				|| clazz.equals(Double.class) || clazz.equals(Float.class)
+				|| clazz.equals(Integer.class) || clazz.equals(Short.class)
+				|| clazz.equals(String.class);
+	}
 }

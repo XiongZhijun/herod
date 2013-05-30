@@ -12,10 +12,10 @@ package org.herod.framework.db;
  */
 public class ColumnNameUtils {
 
-	public static String toPropertyName(String fieldname) {
+	public static String toPropertyName(String columnName) {
 		StringBuilder sb = new StringBuilder();
 		Status status = Status.NONE;
-		for (char c : fieldname.toCharArray()) {
+		for (char c : columnName.toCharArray()) {
 			if (c == '_') {
 				status = Status.STRIKE;
 				continue;

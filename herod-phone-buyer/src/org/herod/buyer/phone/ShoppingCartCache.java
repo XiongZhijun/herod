@@ -41,6 +41,14 @@ public class ShoppingCartCache {
 		return total;
 	}
 
+	public double getTotalAmount() {
+		double total = 0;
+		for (Order order : orderCaches.values()) {
+			total += order.getTotalAmountWithCostOfRunErrands();
+		}
+		return total;
+	}
+
 	private Order findOrCreateOrder(long shopId) {
 		Order order = orderCaches.get(shopId);
 		if (order == null) {

@@ -1,7 +1,7 @@
 /*
  * Copyright © 2013-2014 Xiong Zhijun, All Rights Reserved. 
  */
-package org.herod.buyer.phone.db;
+package org.herod.framework.db;
 
 /**
  * 

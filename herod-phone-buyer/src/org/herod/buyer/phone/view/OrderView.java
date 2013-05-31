@@ -101,6 +101,7 @@ public class OrderView extends LinearLayout implements
 			addLineToOrderItemListView(orderItemsContainer);
 			OrderItemView child = new OrderItemView(getContext());
 			child.setOrderAndOrderItem(order, item);
+			child.setActivity(activity);
 			child.setGoodsQuantityChangedListener(this);
 			LayoutParams param = new LayoutParams(LayoutParams.MATCH_PARENT,
 					LayoutParams.WRAP_CONTENT);

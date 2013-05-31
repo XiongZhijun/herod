@@ -5,14 +5,15 @@ package org.herod.buyer.phone.view;
 
 import org.herod.buyer.phone.R;
 import org.herod.buyer.phone.ShoppingCartCache;
+import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
+import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
 import org.herod.buyer.phone.model.Order;
 import org.herod.buyer.phone.model.OrderItem;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +45,7 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 	private GoodsQuantityChangedListener goodsQuantityChangedListener;
 	private long shopId;
 	private long goodsId;
+	private FragmentActivity activity;
 
 	public OrderItemView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -67,6 +69,10 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 		new InjectViewHelper().injectViews(this);
 		addButton.setOnClickListener(this);
 		reduceButton.setOnClickListener(this);
+	}
+
+	public void setActivity(FragmentActivity activity) {
+		this.activity = activity;
 	}
 
 	public void setOrderAndOrderItem(Order order, OrderItem orderItem) {
@@ -104,28 +110,23 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 	protected void decreaseQuantity() {
 		int currentQuantity = shoppingCartCache.getQuantity(shopId, goodsId);
 		if (currentQuantity == 1) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-			builder.setTitle("提醒");
-			builder.setMessage("确认将该商品从订单删除？");
-			builder.setPositiveButton("确认",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							shoppingCartCache.removeOrderItem(shopId, goodsId);
-							setQuantity(0);
-							deletedLine.setVisibility(View.VISIBLE);
-							disableButtons();
-						}
-					});
-			builder.setNegativeButton("取消",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-						}
-					});
-			AlertDialog dialog = builder.create();
-			dialog.show();
+			ConfirmDialogFragment.showDialog(activity, "确认将该商品从订单删除？",
+					new OnDeleteOrderItemByOkListener());
+
 		} else {
 			int quantity = shoppingCartCache.decrease(shopId, goodsId);
 			setQuantity(quantity);
+		}
+
+	}
+
+	private class OnDeleteOrderItemByOkListener implements
+			OnOkButtonClickListener {
+		public void onOk() {
+			shoppingCartCache.removeOrderItem(shopId, goodsId);
+			setQuantity(0);
+			deletedLine.setVisibility(View.VISIBLE);
+			disableButtons();
 		}
 
 	}
@@ -149,5 +150,4 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 		addButton.setVisibility(View.INVISIBLE);
 		reduceButton.setVisibility(View.INVISIBLE);
 	}
-
 }

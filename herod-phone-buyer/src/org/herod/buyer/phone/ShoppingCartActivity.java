@@ -5,13 +5,13 @@ import java.util.List;
 import org.herod.buyer.phone.adapter.OrderListAdapter;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
+import org.herod.buyer.phone.fragments.SubmitOrderInfoFragment;
 import org.herod.buyer.phone.model.Order;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class ShoppingCartActivity extends BaseActivity {
 	private ListView orderListView;
@@ -31,13 +31,13 @@ public class ShoppingCartActivity extends BaseActivity {
 	}
 
 	public void submitOrders(View v) {
-		Toast.makeText(this, "下单", Toast.LENGTH_SHORT).show();
+		SubmitOrderInfoFragment fragment = new SubmitOrderInfoFragment();
+		fragment.show(getSupportFragmentManager(), null);
 	}
 
 	public void clearShoppingCart(View v) {
-		ConfirmDialogFragment.showDialog(this, R.drawable.alarm, "确定清空购物车？",
+		ConfirmDialogFragment.showDialog(this, "确定清空购物车？",
 				new OnClearShoppingCartOkListener());
-
 	}
 
 	public void refreshOrders() {

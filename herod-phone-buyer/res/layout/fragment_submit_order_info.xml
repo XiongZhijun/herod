@@ -2,29 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:minHeight="10000dip"
+    android:minWidth="10000dip"
     android:orientation="vertical"
-    android:paddingTop="10dip" >
+    android:padding="10dip" >
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dip"
+        style="@style/TextViewStyle1"
         android:text="提交订单"
-        android:textSize="25sp" />
+        android:textSize="20sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:layout_marginBottom="10dip"
-        android:layout_marginTop="5dip"
-        android:background="#777" />
+    <View style="@style/LineStyle" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="1"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip" >
+        android:layout_weight="1" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,103 +26,109 @@
             android:orientation="vertical" >
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dip"
-                android:text="送货地址："
-                android:textSize="20sp" />
+                style="@style/TextViewStyle2"
+                android:text="送货地址：" />
 
             <EditText
                 android:id="@+id/buyerAddress"
+                style="@style/TextViewStyle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dip"
                 android:ems="10"
-                android:hint="请输入准确送货地址" />
+                android:hint="例如：某某小区3栋2单元" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dip"
-                android:text="联系电话："
-                android:textSize="20sp" />
+                style="@style/TextViewStyle2"
+                android:text="联系电话：" />
 
             <EditText
                 android:id="@+id/buyerPhone"
+                style="@style/TextViewStyle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dip"
                 android:ems="10"
-                android:hint="请输入有效联系方式"
-                android:inputType="phone" />
+                android:hint="请输入手机号码"
+                android:inputType="phone"
+                android:singleLine="true" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dip"
-                android:text="联系人姓名："
-                android:textSize="20sp" />
+                style="@style/TextViewStyle2"
+                android:text="联系人姓名：" />
 
             <EditText
                 android:id="@+id/buyerName"
+                style="@style/TextViewStyle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dip"
                 android:ems="10"
-                android:hint="请输入联系人姓名" />
+                android:hint="例如：张三、郑先生、王小姐"
+                android:singleLine="true" />
 
             <TextView
+                style="@style/TextViewStyle2"
+                android:text="订单备注：" />
+
+            <EditText
+                android:id="@+id/comment"
+                style="@style/TextViewStyle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dip"
-                android:text="选购商品数量："
-                android:textSize="20sp" />
+                android:layout_marginBottom="10dip"
+                android:ems="10"
+                android:hint="例如：加糖、重辣" />
+
+            <TextView
+                style="@style/TextViewStyle2"
+                android:text="选购商品数量：" />
 
             <EditText
                 android:id="@+id/totalQuantity"
+                style="@style/TextViewStyle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dip"
-                android:ems="10" />
+                android:ems="10"
+                android:enabled="false"
+                android:textColor="#F00" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dip"
-                android:text="应付总额："
-                android:textSize="20sp" />
+                style="@style/TextViewStyle2"
+                android:text="应付总额：" />
 
             <EditText
                 android:id="@+id/totalAmount"
+                style="@style/TextViewStyle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dip"
-                android:ems="10" />
+                android:ems="10"
+                android:enabled="false"
+                android:textColor="#F00" />
         </LinearLayout>
     </ScrollView>
+
+    <View style="@style/LineStyle" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#E5E5E5"
-        android:orientation="horizontal"
-        android:padding="10sp" >
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
 
         <Button
-            android:layout_width="0dip"
-            android:layout_height="60dip"
+            android:id="@+id/submitOrdersButton"
+            style="@style/ButtonStyle"
             android:layout_marginRight="10dip"
-            android:layout_weight="1"
-            android:text="提交订单"
-            android:textSize="20sp" />
+            android:text="提交订单" />
 
         <Button
-            android:layout_width="0dip"
-            android:layout_height="60dip"
+            android:id="@+id/cancelButton"
+            style="@style/ButtonStyle"
             android:layout_marginLeft="10dip"
-            android:layout_weight="1"
-            android:text="返回"
-            android:textSize="20sp" />
+            android:text="返回" />
     </LinearLayout>
 
 </LinearLayout>

@@ -20,28 +20,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFF"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:paddingBottom="10dip"
-        android:paddingLeft="20dip"
-        android:paddingRight="20dip"
         android:paddingTop="10dip" >
 
         <Button
             android:id="@+id/clearButton"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dip"
-            android:layout_weight="1"
+            style="@style/ButtonStyle"
+            android:layout_marginRight="20dip"
             android:onClick="clearShoppingCart"
             android:text="清空购物车" />
 
         <Button
             android:id="@+id/submitButton"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:layout_weight="1"
+            style="@style/ButtonStyle"
+            android:layout_marginLeft="20dip"
             android:onClick="submitOrders"
             android:text="下单" />
     </LinearLayout>

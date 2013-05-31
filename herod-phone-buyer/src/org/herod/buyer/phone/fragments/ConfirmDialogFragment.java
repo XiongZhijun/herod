@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -26,7 +25,6 @@ import android.widget.TextView;
 public class ConfirmDialogFragment extends DialogFragment implements
 		OnClickListener {
 	private String message;
-	private int imageResId;
 	private OnOkButtonClickListener onOkButtonClickListener;
 	private OnCancelButtonClickListener onCancelButtonClickListener;
 
@@ -48,10 +46,7 @@ public class ConfirmDialogFragment extends DialogFragment implements
 		super.onViewCreated(view, savedInstanceState);
 		new InjectViewHelper().injectViews(view);
 		message = getArguments().getString("message");
-		imageResId = getArguments().getInt("image");
 		((TextView) view.findViewById(R.id.message)).setText(message);
-		((ImageView) view.findViewById(R.id.image))
-				.setImageResource(imageResId);
 		view.findViewById(R.id.okButton).setOnClickListener(this);
 		view.findViewById(R.id.cancelButton).setOnClickListener(this);
 	}
@@ -78,11 +73,10 @@ public class ConfirmDialogFragment extends DialogFragment implements
 		void onCancel();
 	}
 
-	public static void showDialog(FragmentActivity activity, int image,
-			String message, OnOkButtonClickListener onOkButtonClickListener) {
+	public static void showDialog(FragmentActivity activity, String message,
+			OnOkButtonClickListener onOkButtonClickListener) {
 		ConfirmDialogFragment fragment = new ConfirmDialogFragment();
 		Bundle args = new Bundle();
-		args.putInt("image", image);
 		args.putString("message", message);
 		fragment.setArguments(args);
 		fragment.onOkButtonClickListener = onOkButtonClickListener;

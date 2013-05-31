@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -18,7 +19,15 @@ import android.widget.TextView;
  * @email hust.xzj@gmail.com
  * 
  */
-public class SubmitOrderInfoFragment extends DialogFragment {
+public class SubmitOrderInfoFragment extends DialogFragment implements
+		OnClickListener {
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setStyle(DialogFragment.STYLE_NO_TITLE,
+				android.R.style.Theme_Holo_Light_Dialog);
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -33,10 +42,18 @@ public class SubmitOrderInfoFragment extends DialogFragment {
 		double totalAmount = ShoppingCartCache.getInstance().getTotalAmount();
 		setText(R.id.totalQuantity, totalQuantity);
 		setText(R.id.totalAmount, totalAmount);
-
+		view.findViewById(R.id.submitOrdersButton).setOnClickListener(this);
+		view.findViewById(R.id.cancelButton).setOnClickListener(this);
 	}
 
 	protected void setText(int viewId, Object text) {
 		((TextView) getView().findViewById(viewId)).setText(text.toString());
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.cancelButton) {
+			dismiss();
+		}
 	}
 }

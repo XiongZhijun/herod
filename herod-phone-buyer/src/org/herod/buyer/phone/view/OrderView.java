@@ -162,8 +162,8 @@ public class OrderView extends LinearLayout implements
 	private class CancelOrderListener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
-			ConfirmDialogFragment.showDialog(activity, R.drawable.alarm,
-					"确定删除该订单？", new OnDeleteOrderByOkListener());
+			ConfirmDialogFragment.showDialog(activity, "确定删除该订单？",
+					new OnDeleteOrderByOkListener());
 		}
 
 	}

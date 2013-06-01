@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#E5E5E5"
+    android:orientation="vertical" >
+
+    <include layout="@layout/action_bar" />
+
+    <ListView
+        android:id="@+id/ordersListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_margin="10dip"
+        android:layout_weight="1"
+        android:divider="#E5E5E5"
+        android:dividerHeight="10dip" >
+    </ListView>
+
+    <Button
+        android:id="@+id/clearButton"
+        style="@style/ButtonStyle"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dip"
+        android:onClick="clearHistoryOrders"
+        android:text="清空历史记录" />
+
+</LinearLayout>

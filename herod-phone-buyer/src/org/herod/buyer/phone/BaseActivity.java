@@ -29,6 +29,7 @@ public class BaseActivity extends FragmentActivity {
 	}
 
 	public void showHistoryOrders(View v) {
+		startActivity(new Intent(this, HisttoryOrdersActivity.class));
 	}
 
 	public void showShoppingCart(View v) {

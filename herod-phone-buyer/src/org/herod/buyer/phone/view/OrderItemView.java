@@ -9,6 +9,7 @@ import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
 import org.herod.buyer.phone.model.Order;
 import org.herod.buyer.phone.model.OrderItem;
+import org.herod.buyer.phone.model.OrderStatus;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
 
@@ -81,6 +82,13 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 		setGoodsName(orderItem.getGoodsName());
 		setQuantity(orderItem.getQuantity());
 		setUnitPrice(orderItem.getUnitPrice());
+		if (order.getStatus() != OrderStatus.Unsubmit) {
+			addButton.setVisibility(View.INVISIBLE);
+			reduceButton.setVisibility(View.INVISIBLE);
+		} else {
+			addButton.setVisibility(View.VISIBLE);
+			reduceButton.setVisibility(View.VISIBLE);
+		}
 	}
 
 	public void setUnitPrice(double unitPrice) {

@@ -3,19 +3,14 @@
  */
 package org.herod.buyer.phone.view;
 
-import java.util.Map;
-
-import org.herod.buyer.phone.BuyerContext;
-import org.herod.buyer.phone.Constants;
-import org.herod.buyer.phone.MapUtils;
+import org.herod.buyer.phone.AbstractOrdersActivity;
 import org.herod.buyer.phone.R;
-import org.herod.buyer.phone.ShopService;
-import org.herod.buyer.phone.ShoppingCartActivity;
 import org.herod.buyer.phone.ShoppingCartCache;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
 import org.herod.buyer.phone.model.Order;
 import org.herod.buyer.phone.model.OrderItem;
+import org.herod.buyer.phone.model.OrderStatus;
 import org.herod.buyer.phone.view.OrderItemView.GoodsQuantityChangedListener;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
@@ -53,10 +48,8 @@ public class OrderView extends LinearLayout implements
 	@InjectView(R.id.totalWithCostOfRunErrands)
 	private TextView totalWithCostOfRunErrandsView;
 	private Order order;
-	private ShopService shopService;
 	private OrderItemView summationView;
-	private Map<String, Object> shop;
-	private ShoppingCartActivity activity;
+	private AbstractOrdersActivity activity;
 
 	public OrderView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -74,13 +67,12 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void initView(Context context) {
-		if (context instanceof ShoppingCartActivity) {
-			this.activity = (ShoppingCartActivity) context;
+		if (context instanceof AbstractOrdersActivity) {
+			this.activity = (AbstractOrdersActivity) context;
 		}
 		LayoutInflater.from(getContext()).inflate(R.layout.shopping_cart_order,
 				this);
 		new InjectViewHelper().injectViews(this);
-		shopService = BuyerContext.getShopService();
 		findViewById(R.id.cancelOrderButton).setOnClickListener(
 				new CancelOrderListener());
 		shopPhoneView.setOnClickListener(new CallPhoneListener());
@@ -93,11 +85,15 @@ public class OrderView extends LinearLayout implements
 
 	public void setOrder(Order order) {
 		this.order = order;
-		this.shop = shopService.findShopById(order.getShopId());
+		if (order.getStatus() != OrderStatus.Unsubmit) {
+			findViewById(R.id.cancelOrderButton).setVisibility(View.INVISIBLE);
+		} else {
+			findViewById(R.id.cancelOrderButton).setVisibility(View.VISIBLE);
+		}
 		orderItemsContainer.removeAllViews();
-		setText(shopNameView, shop.get("name"));
-		setText(shopPhoneView, shop.get("phone"));
-		setText(shopTipsView, createShopTips(shop));
+		setText(shopNameView, order.getShopName());
+		setText(shopPhoneView, order.getShopPhone());
+		setText(shopTipsView, createShopTips(order));
 		summationView = new OrderItemView(getContext());
 		summationView.disableButtons();
 		summationView.setGoodsName("合计");
@@ -119,10 +115,9 @@ public class OrderView extends LinearLayout implements
 		orderItemsContainer.addView(summationView, param);
 	}
 
-	private String createShopTips(Map<String, Object> shop) {
+	private String createShopTips(Order order) {
 		StringBuilder sb = new StringBuilder();
-		double charge = MapUtils.getDouble(shop,
-				Constants.MIN_CHARGE_FOR_FREE_DELIVERY);
+		double charge = order.getShopMinChargeForFreeDelivery();
 		if (charge > 0) {
 			sb.append("消费满").append(charge).append("免跑腿费");
 		} else {
@@ -132,7 +127,7 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void updateOrderSummationInfo() {
-		if (summationView != null && order != null && shop != null) {
+		if (summationView != null && order != null) {
 			summationView.setQuantity(order.getTotalQuantity());
 			summationView.setUnitPrice(order.getTotalAmount());
 			showOrderTotalInfo();
@@ -140,10 +135,9 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void showOrderTotalInfo() {
-		double costOfRunErrands = MapUtils.getDouble(shop,
-				Constants.COST_OF_RUN_ERRANDS);
-		double minChargeForFreeDelivery = MapUtils.getDouble(shop,
-				Constants.MIN_CHARGE_FOR_FREE_DELIVERY);
+		double costOfRunErrands = order.getShopCostOfRunErrands();
+		double minChargeForFreeDelivery = order
+				.getShopMinChargeForFreeDelivery();
 		if (order.getTotalAmount() < minChargeForFreeDelivery) {
 			order.setCostOfRunErrands(costOfRunErrands);
 		} else {
@@ -163,7 +157,9 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void setText(View view, Object data) {
-		((TextView) view).setText(data.toString());
+		if (data != null) {
+			((TextView) view).setText(data.toString());
+		}
 	}
 
 	private class CancelOrderListener implements OnClickListener {
@@ -187,7 +183,7 @@ public class OrderView extends LinearLayout implements
 
 	private class CallPhoneListener implements OnClickListener {
 		public void onClick(View v) {
-			String phone = (String) shop.get("phone");
+			String phone = order.getShopPhone();
 			Uri uri = Uri.parse("tel:" + phone);
 			Intent it = new Intent(Intent.ACTION_DIAL, uri);
 			activity.startActivity(it);

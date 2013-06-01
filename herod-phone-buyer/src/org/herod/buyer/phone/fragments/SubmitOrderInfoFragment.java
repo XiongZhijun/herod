@@ -5,12 +5,14 @@ package org.herod.buyer.phone.fragments;
 
 import java.util.List;
 
+import org.herod.buyer.phone.AbstractOrdersActivity;
 import org.herod.buyer.phone.BuyerContext;
 import org.herod.buyer.phone.R;
 import org.herod.buyer.phone.ShoppingCartCache;
 import org.herod.buyer.phone.db.OrderDao;
 import org.herod.buyer.phone.model.Address;
 import org.herod.buyer.phone.model.Order;
+import org.herod.buyer.phone.model.OrderItem;
 import org.herod.framework.db.DatabaseOpenHelper;
 import org.herod.framework.utils.StringUtils;
 
@@ -18,6 +20,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -129,7 +132,13 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 				order.setBuyerName(buyerName);
 				order.setComment(comment);
 				long index = BuyerContext.increaseOrderIndex(getActivity());
-				order.setSerialNumber(terminalId + "-" + index);
+				String orderSerialNumber = terminalId + "-" + index;
+				order.setSerialNumber(orderSerialNumber);
+				for (int i = 0; i < order.getOrderItems().size(); i++) {
+					OrderItem orderItem = order.getOrderItems().get(i);
+					orderItem.setOrderSerialNumber(orderSerialNumber);
+					orderItem.setSerialNumber(orderSerialNumber + "-" + i);
+				}
 			}
 			// TODO 需要提交到服务器。
 			return null;
@@ -142,10 +151,17 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 
 		@Override
 		protected void onPostExecute(Object result) {
-			SQLiteOpenHelper openHelper = new DatabaseOpenHelper(getActivity());
+			FragmentActivity activity = getActivity();
+			SQLiteOpenHelper openHelper = new DatabaseOpenHelper(activity);
 			OrderDao orderDao = new OrderDao(openHelper);
 			orderDao.addOrders(orders);
-			Toast.makeText(getActivity(), "下单成功", Toast.LENGTH_SHORT).show();
+			openHelper.close();
+			Toast.makeText(activity, "下单成功", Toast.LENGTH_SHORT).show();
+			ShoppingCartCache.getInstance().clearOrders();
+			dismiss();
+			if (activity instanceof AbstractOrdersActivity) {
+				((AbstractOrdersActivity) activity).refreshOrders();
+			}
 		}
 
 	}

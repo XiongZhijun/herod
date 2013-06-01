@@ -6,7 +6,7 @@ package org.herod.buyer.phone.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.herod.buyer.phone.ShoppingCartActivity;
+import org.herod.buyer.phone.AbstractOrdersActivity;
 import org.herod.buyer.phone.model.Order;
 import org.herod.buyer.phone.view.OrderView;
 
@@ -22,9 +22,9 @@ import android.widget.BaseAdapter;
 public class OrderListAdapter extends BaseAdapter {
 
 	private List<Order> orders = new ArrayList<Order>();
-	private ShoppingCartActivity activity;
+	private AbstractOrdersActivity activity;
 
-	public OrderListAdapter(ShoppingCartActivity activity, List<Order> orders) {
+	public OrderListAdapter(AbstractOrdersActivity activity, List<Order> orders) {
 		this.orders = orders;
 		this.activity = activity;
 	}

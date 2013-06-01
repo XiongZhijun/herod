@@ -54,11 +54,19 @@ public class ShoppingCartCache {
 		if (order == null) {
 			order = new Order();
 			Map<String, Object> shop = shopService.findShopById(shopId);
+			double shopCostOfRunErrands = 0;
+			double shopMinChargeForFreeDelivery = 0;
 			if (shop != null) {
-				double costOfRunErrands = (Double) shop
+				shopCostOfRunErrands = (Double) shop
 						.get(Constants.COST_OF_RUN_ERRANDS);
-				order.setCostOfRunErrands(costOfRunErrands);
+				order.setCostOfRunErrands(shopCostOfRunErrands);
+				shopMinChargeForFreeDelivery = (Double) shop
+						.get(Constants.MIN_CHARGE_FOR_FREE_DELIVERY);
 			}
+			order.setShopName((String) shop.get(Constants.NAME));
+			order.setShopPhone((String) shop.get("phone"));
+			order.setShopCostOfRunErrands(shopCostOfRunErrands);
+			order.setShopMinChargeForFreeDelivery(shopMinChargeForFreeDelivery);
 			order.setShopId(shopId);
 			orderCaches.put(shopId, order);
 		}

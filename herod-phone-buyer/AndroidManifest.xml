@@ -26,6 +26,8 @@
         </activity>
         <activity android:name="org.herod.buyer.phone.ShoppingCartActivity" >
         </activity>
+        <activity android:name="org.herod.buyer.phone.HisttoryOrdersActivity" >
+        </activity>
         <activity android:name="org.herod.buyer.phone.StoresActivity" >
         </activity>
         <activity

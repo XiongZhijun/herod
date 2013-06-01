@@ -57,12 +57,13 @@ public class BuyerServiceMock implements BuyerService {
 		} else if (id % 3 == 1) {
 			map.put("imageUrl",
 					"http://z.abang.com/d/hangzhoucai/1/0/i/3/-/-/DSC04097-.jpg");
-		} else if (id %3 == 2) {
+		} else if (id % 3 == 2) {
 			map.put("imageUrl",
 					"http://www.sj998.com/uploads/allimg/130201/102552-130201103419627.jpg");
 		}
 		map.put("minChargeForFreeDelivery", id * 1.0d);
 		map.put("costOfRunErrands", 5d);
+		map.put("phone", "15990196179");
 		return map;
 	}
 

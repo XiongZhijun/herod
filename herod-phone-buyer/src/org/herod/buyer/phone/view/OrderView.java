@@ -21,6 +21,8 @@ import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +40,8 @@ public class OrderView extends LinearLayout implements
 		GoodsQuantityChangedListener {
 	@InjectView(R.id.shopName)
 	private TextView shopNameView;
+	@InjectView(R.id.shopPhone)
+	private TextView shopPhoneView;
 	@InjectView(R.id.shopTips)
 	private TextView shopTipsView;
 	@InjectView(R.id.orderItemsListView)
@@ -79,6 +83,7 @@ public class OrderView extends LinearLayout implements
 		shopService = BuyerContext.getShopService();
 		findViewById(R.id.cancelOrderButton).setOnClickListener(
 				new CancelOrderListener());
+		shopPhoneView.setOnClickListener(new CallPhoneListener());
 	}
 
 	@Override
@@ -91,6 +96,7 @@ public class OrderView extends LinearLayout implements
 		this.shop = shopService.findShopById(order.getShopId());
 		orderItemsContainer.removeAllViews();
 		setText(shopNameView, shop.get("name"));
+		setText(shopPhoneView, shop.get("phone"));
 		setText(shopTipsView, createShopTips(shop));
 		summationView = new OrderItemView(getContext());
 		summationView.disableButtons();
@@ -176,6 +182,15 @@ public class OrderView extends LinearLayout implements
 			if (activity != null) {
 				activity.refreshOrders();
 			}
+		}
+	}
+
+	private class CallPhoneListener implements OnClickListener {
+		public void onClick(View v) {
+			String phone = (String) shop.get("phone");
+			Uri uri = Uri.parse("tel:" + phone);
+			Intent it = new Intent(Intent.ACTION_DIAL, uri);
+			activity.startActivity(it);
 		}
 
 	}

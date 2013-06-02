@@ -4,10 +4,10 @@
 package org.herod.buyer.phone;
 
 import java.util.List;
-import java.util.Map;
 
 import org.herod.buyer.phone.HerodTask.AsyncTaskable;
 import org.herod.buyer.phone.fragments.GoodsListFragment;
+import org.herod.framework.MapWrapper;
 import org.herod.framework.widget.TabPageIndicator;
 
 import android.os.Bundle;
@@ -22,7 +22,7 @@ import android.support.v4.view.ViewPager;
  * 
  */
 public class GoodsListActivity extends BaseActivity implements
-		AsyncTaskable<Object, List<Map<String, Object>>> {
+		AsyncTaskable<Object, List<MapWrapper<String, Object>>> {
 	private ViewPager mPager;
 	private TabPageIndicator mIndicator;
 	private long shopId;
@@ -41,7 +41,7 @@ public class GoodsListActivity extends BaseActivity implements
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mIndicator = (TabPageIndicator) findViewById(R.id.indicator);
 
-		new HerodTask<Object, List<Map<String, Object>>>(this).execute();
+		new HerodTask<Object, List<MapWrapper<String, Object>>>(this).execute();
 	}
 
 	@Override
@@ -50,20 +50,20 @@ public class GoodsListActivity extends BaseActivity implements
 
 	}
 
-	public List<Map<String, Object>> runOnBackground(Object... params) {
+	public List<MapWrapper<String, Object>> runOnBackground(Object... params) {
 		return BuyerContext.getBuyerService().findGoodsTypesByShop(shopId);
 	}
 
-	public void onPostExecute(List<Map<String, Object>> result) {
+	public void onPostExecute(List<MapWrapper<String, Object>> result) {
 		GoodsFragmentAdapter mAdapter = new GoodsFragmentAdapter(result);
 		mPager.setAdapter(mAdapter);
 		mIndicator.setViewPager(mPager);
 	}
 
 	class GoodsFragmentAdapter extends FragmentPagerAdapter {
-		private List<Map<String, Object>> goodsTypes;
+		private List<MapWrapper<String, Object>> goodsTypes;
 
-		public GoodsFragmentAdapter(List<Map<String, Object>> goodsTypes) {
+		public GoodsFragmentAdapter(List<MapWrapper<String, Object>> goodsTypes) {
 			super(getSupportFragmentManager());
 			this.goodsTypes = goodsTypes;
 		}
@@ -89,7 +89,7 @@ public class GoodsListActivity extends BaseActivity implements
 
 		@Override
 		public CharSequence getPageTitle(int position) {
-			return (CharSequence) goodsTypes.get(position).get("name");
+			return goodsTypes.get(position).getString("name");
 		}
 
 	}

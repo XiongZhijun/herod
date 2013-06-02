@@ -4,8 +4,8 @@
 package org.herod.buyer.phone.adapter;
 
 import java.util.List;
-import java.util.Map;
 
+import org.herod.framework.MapWrapper;
 import org.herod.framework.adapter.SimpleAdapter;
 
 import android.content.Context;
@@ -21,7 +21,7 @@ import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
 public class ImageLoaderAdapter extends SimpleAdapter {
 
 	public ImageLoaderAdapter(Context context,
-			List<? extends Map<String, ?>> data, int resource, String[] from,
+			List<MapWrapper<String, Object>> data, int resource, String[] from,
 			int[] to) {
 		super(context, data, resource, from, to);
 	}

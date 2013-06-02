@@ -4,7 +4,8 @@
 package org.herod.buyer.phone;
 
 import java.util.List;
-import java.util.Map;
+
+import org.herod.framework.MapWrapper;
 
 /**
  * @author Xiong Zhijun
@@ -13,14 +14,14 @@ import java.util.Map;
  */
 public interface BuyerService {
 
-	List<Map<String, Object>> findShopTypes();
+	List<MapWrapper<String, Object>> findShopTypes();
 
-	List<Map<String, Object>> findShopesByType(long typeId);
+	List<MapWrapper<String, Object>> findShopesByType(long typeId);
 
-	Map<String, Object> findShopById(long shopId);
+	MapWrapper<String, Object> findShopById(long shopId);
 
-	List<Map<String, Object>> findGoodsTypesByShop(long shopId);
+	List<MapWrapper<String, Object>> findGoodsTypesByShop(long shopId);
 
-	List<Map<String, Object>> findGoodsesByType(long goodsTypeId,
+	List<MapWrapper<String, Object>> findGoodsesByType(long goodsTypeId,
 			long beginGoodsId, int count);
 }

@@ -5,7 +5,8 @@ package org.herod.framework.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
+import org.herod.framework.MapWrapper;
 
 import android.content.Context;
 import android.net.Uri;
@@ -28,14 +29,15 @@ public class SimpleAdapter extends BaseAdapter {
 	private String[] mFrom;
 	private ViewBinder mViewBinder;
 
-	private List<Map<String, ?>> mData = new ArrayList<Map<String, ?>>();
+	private List<MapWrapper<String, Object>> mData = new ArrayList<MapWrapper<String, Object>>();
 
 	private int mResource;
 	private int mDropDownResource;
 	private LayoutInflater mInflater;
 
-	public SimpleAdapter(Context context, List<? extends Map<String, ?>> data,
-			int resource, String[] from, int[] to) {
+	public SimpleAdapter(Context context,
+			List<MapWrapper<String, Object>> data, int resource, String[] from,
+			int[] to) {
 		mData.addAll(data);
 		mResource = mDropDownResource = resource;
 		mFrom = from;
@@ -52,13 +54,13 @@ public class SimpleAdapter extends BaseAdapter {
 		return mData.get(position);
 	}
 
-	public void updateData(List<? extends Map<String, ?>> data) {
+	public void updateData(List<MapWrapper<String, Object>> data) {
 		this.mData.clear();
 		this.mData.addAll(data);
 		notifyDataSetChanged();
 	}
 
-	public void addData(List<? extends Map<String, ?>> data) {
+	public void addData(List<MapWrapper<String, Object>> data) {
 		this.mData.addAll(data);
 		notifyDataSetChanged();
 	}
@@ -96,7 +98,7 @@ public class SimpleAdapter extends BaseAdapter {
 	}
 
 	private void bindView(int position, View view) {
-		final Map<String, ?> dataSet = mData.get(position);
+		final MapWrapper<String, Object> dataSet = mData.get(position);
 		if (dataSet == null) {
 			return;
 		}
@@ -182,9 +184,9 @@ public class SimpleAdapter extends BaseAdapter {
 	}
 
 	public static interface ViewBinder {
-		boolean setViewValue(View dataSetView, Map<String, ?> dataSet,
-				View view, String from, int to, int position, Object data,
-				String textRepresentation);
+		boolean setViewValue(View dataSetView,
+				MapWrapper<String, Object> dataSet, View view, String from,
+				int to, int position, Object data, String textRepresentation);
 	}
 
 }

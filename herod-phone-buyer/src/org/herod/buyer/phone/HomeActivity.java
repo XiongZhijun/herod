@@ -1,11 +1,10 @@
 package org.herod.buyer.phone;
 
 import java.util.List;
-import java.util.Map;
 
 import org.herod.buyer.phone.HerodTask.AsyncTaskable;
-
-import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
+import org.herod.framework.MapWrapper;
+import org.herod.framework.adapter.SimpleAdapter;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,10 +13,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
+
+import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
 
 public class HomeActivity extends BaseActivity implements
-		AsyncTaskable<Object, List<Map<String, Object>>>, OnItemClickListener {
+		AsyncTaskable<Object, List<MapWrapper<String, Object>>>,
+		OnItemClickListener {
 	private GridView shopTypesGridView;
 
 	@Override
@@ -31,7 +32,7 @@ public class HomeActivity extends BaseActivity implements
 		shopTypesGridView = (GridView) findViewById(R.id.shopTypesGrid);
 		shopTypesGridView.setOnItemClickListener(this);
 
-		new HerodTask<Object, List<Map<String, Object>>>(this).execute();
+		new HerodTask<Object, List<MapWrapper<String, Object>>>(this).execute();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -39,19 +40,19 @@ public class HomeActivity extends BaseActivity implements
 			int position, long id) {
 		Intent intent = new Intent(HomeActivity.this, StoresActivity.class);
 		intent.putExtra("position", position);
-		Map<String, Object> item = (Map<String, Object>) adapterView
+		MapWrapper<String, Object> item = (MapWrapper<String, Object>) adapterView
 				.getItemAtPosition(position);
-		intent.putExtra("typeId", (Long) item.get("id"));
+		intent.putExtra("typeId", item.getLong("id"));
 		startActivity(intent);
 	}
 
 	@Override
-	public List<Map<String, Object>> runOnBackground(Object... params) {
+	public List<MapWrapper<String, Object>> runOnBackground(Object... params) {
 		return BuyerContext.getBuyerService().findShopTypes();
 	}
 
 	@Override
-	public void onPostExecute(List<Map<String, Object>> data) {
+	public void onPostExecute(List<MapWrapper<String, Object>> data) {
 		ListAdapter adapter = new SimpleAdapter(this, data,
 				R.layout.activity_home_shop_type_item, new String[] { "name" },
 				new int[] { R.id.name });

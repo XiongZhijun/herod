@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.herod.buyer.phone.model.Order;
 import org.herod.buyer.phone.model.OrderItem;
+import org.herod.framework.MapWrapper;
 
 /**
  * @author Xiong Zhijun
@@ -53,18 +54,18 @@ public class ShoppingCartCache {
 		Order order = orderCaches.get(shopId);
 		if (order == null) {
 			order = new Order();
-			Map<String, Object> shop = shopService.findShopById(shopId);
+			MapWrapper<String, Object> shop = shopService.findShopById(shopId);
 			double shopCostOfRunErrands = 0;
 			double shopMinChargeForFreeDelivery = 0;
 			if (shop != null) {
-				shopCostOfRunErrands = (Double) shop
-						.get(Constants.COST_OF_RUN_ERRANDS);
+				shopCostOfRunErrands = shop
+						.getDouble(Constants.COST_OF_RUN_ERRANDS);
 				order.setCostOfRunErrands(shopCostOfRunErrands);
-				shopMinChargeForFreeDelivery = (Double) shop
-						.get(Constants.MIN_CHARGE_FOR_FREE_DELIVERY);
+				shopMinChargeForFreeDelivery = shop
+						.getDouble(Constants.MIN_CHARGE_FOR_FREE_DELIVERY);
 			}
-			order.setShopName((String) shop.get(Constants.NAME));
-			order.setShopPhone((String) shop.get("phone"));
+			order.setShopName(shop.getString(Constants.NAME));
+			order.setShopPhone(shop.getString("phone"));
 			order.setShopCostOfRunErrands(shopCostOfRunErrands);
 			order.setShopMinChargeForFreeDelivery(shopMinChargeForFreeDelivery);
 			order.setShopId(shopId);
@@ -73,9 +74,10 @@ public class ShoppingCartCache {
 		return order;
 	}
 
-	private OrderItem findAndCreateOrderItem(long shopId, Map<String, ?> goods) {
+	private OrderItem findAndCreateOrderItem(long shopId,
+			MapWrapper<String, ?> goods) {
 		Order order = findOrCreateOrder(shopId);
-		long goodsId = (Long) goods.get("id");
+		long goodsId = goods.getLong("id");
 		OrderItem orderItem = order.findOrderItemByGoodsId(goodsId);
 		if (orderItem == null) {
 			orderItem = createOrderItem(goods);
@@ -84,13 +86,13 @@ public class ShoppingCartCache {
 		return orderItem;
 	}
 
-	private OrderItem createOrderItem(Map<String, ?> goods) {
+	private OrderItem createOrderItem(MapWrapper<String, ?> goods) {
 		OrderItem orderItem;
 		orderItem = new OrderItem();
-		long goodsId = (Long) goods.get("id");
-		String goodsCode = (String) goods.get("code");
-		String goodsName = (String) goods.get("name");
-		double unitPrice = (Double) goods.get("price");
+		long goodsId = goods.getLong("id");
+		String goodsCode = goods.getString("code");
+		String goodsName = goods.getString("name");
+		double unitPrice = goods.getDouble("price");
 		orderItem.setUnitPrice(unitPrice);
 		orderItem.setGoodsCode(goodsCode);
 		orderItem.setGoodsName(goodsName);
@@ -110,7 +112,7 @@ public class ShoppingCartCache {
 		return quantity;
 	}
 
-	public int increase(long shopId, Map<String, ?> goods) {
+	public int increase(long shopId, MapWrapper<String, ?> goods) {
 		OrderItem orderItem = findAndCreateOrderItem(shopId, goods);
 		int current = orderItem.getQuantity();
 		current++;

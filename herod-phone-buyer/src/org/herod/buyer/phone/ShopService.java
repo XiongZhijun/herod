@@ -3,7 +3,7 @@
  */
 package org.herod.buyer.phone;
 
-import java.util.Map;
+import org.herod.framework.MapWrapper;
 
 /**
  * 
@@ -14,5 +14,5 @@ import java.util.Map;
  */
 public interface ShopService {
 
-	Map<String, Object> findShopById(long shopId);
+	MapWrapper<String, Object> findShopById(long shopId);
 }

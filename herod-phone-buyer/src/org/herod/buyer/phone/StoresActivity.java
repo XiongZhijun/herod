@@ -4,10 +4,10 @@
 package org.herod.buyer.phone;
 
 import java.util.List;
-import java.util.Map;
 
 import org.herod.buyer.phone.HerodTask.AsyncTaskable;
 import org.herod.buyer.phone.fragments.ShopListFragment;
+import org.herod.framework.MapWrapper;
 import org.herod.framework.widget.TitlePageIndicator;
 
 import android.os.Bundle;
@@ -24,7 +24,7 @@ import android.support.v4.view.ViewPager;
  * 
  */
 public class StoresActivity extends BaseActivity implements
-		AsyncTaskable<Object, List<Map<String, Object>>> {
+		AsyncTaskable<Object, List<MapWrapper<String, Object>>> {
 
 	private ViewPager mPager;
 	private TitlePageIndicator mIndicator;
@@ -42,7 +42,7 @@ public class StoresActivity extends BaseActivity implements
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mIndicator = (TitlePageIndicator) findViewById(R.id.indicator);
 
-		new HerodTask<Object, List<Map<String, Object>>>(this).execute();
+		new HerodTask<Object, List<MapWrapper<String, Object>>>(this).execute();
 	}
 
 	@Override
@@ -51,11 +51,11 @@ public class StoresActivity extends BaseActivity implements
 
 	}
 
-	public List<Map<String, Object>> runOnBackground(Object... params) {
+	public List<MapWrapper<String, Object>> runOnBackground(Object... params) {
 		return BuyerContext.getBuyerService().findShopTypes();
 	}
 
-	public void onPostExecute(List<Map<String, Object>> result) {
+	public void onPostExecute(List<MapWrapper<String, Object>> result) {
 		ShopsFragmentAdapter mAdapter = new ShopsFragmentAdapter(result);
 		mPager.setAdapter(mAdapter);
 		mIndicator.setViewPager(mPager);
@@ -64,9 +64,9 @@ public class StoresActivity extends BaseActivity implements
 	}
 
 	class ShopsFragmentAdapter extends FragmentPagerAdapter {
-		private List<Map<String, Object>> shopTypes;
+		private List<MapWrapper<String, Object>> shopTypes;
 
-		public ShopsFragmentAdapter(List<Map<String, Object>> shopTypes) {
+		public ShopsFragmentAdapter(List<MapWrapper<String, Object>> shopTypes) {
 			super(getSupportFragmentManager());
 			this.shopTypes = shopTypes;
 		}
@@ -87,7 +87,7 @@ public class StoresActivity extends BaseActivity implements
 
 		@Override
 		public CharSequence getPageTitle(int position) {
-			return (CharSequence) shopTypes.get(position).get("name");
+			return shopTypes.get(position).getString("name");
 		}
 
 	}

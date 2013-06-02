@@ -1,7 +1,7 @@
 /*
  * Copyright © 2013-2014 Xiong Zhijun, All Rights Reserved. 
  */
-package org.herod.buyer.phone;
+package org.herod.framework.utils;
 
 import java.util.Map;
 
@@ -14,8 +14,8 @@ import java.util.Map;
  */
 public class MapUtils {
 
-	public static double getDouble(Map<String, Object> map, String key) {
-		Object value = map.get(key);
+	public static <K, V> double getDouble(Map<K, V> map, K key) {
+		V value = map.get(key);
 		if (value == null) {
 			return 0.0d;
 		}
@@ -25,8 +25,19 @@ public class MapUtils {
 		return Double.parseDouble(value.toString());
 	}
 
-	public static int getInt(Map<String, Object> map, String key) {
-		Object value = map.get(key);
+	public static <K, V> long getLong(Map<K, V> map, K key) {
+		V value = map.get(key);
+		if (value == null) {
+			return 0;
+		}
+		if (value instanceof Long || value.getClass().equals(long.class)) {
+			return (Long) value;
+		}
+		return Long.parseLong(value.toString());
+	}
+
+	public static <K, V> int getInt(Map<K, V> map, K key) {
+		V value = map.get(key);
 		if (value == null) {
 			return 0;
 		}
@@ -36,8 +47,8 @@ public class MapUtils {
 		return Integer.parseInt(value.toString());
 	}
 
-	public static String getString(Map<String, Object> map, String key) {
-		Object value = map.get(key);
+	public static <K, V> String getString(Map<K, V> map, K key) {
+		V value = map.get(key);
 		if (value == null) {
 			return null;
 		}

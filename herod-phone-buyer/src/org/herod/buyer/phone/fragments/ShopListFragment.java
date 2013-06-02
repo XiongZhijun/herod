@@ -4,7 +4,6 @@
 package org.herod.buyer.phone.fragments;
 
 import java.util.List;
-import java.util.Map;
 
 import org.herod.buyer.phone.BuyerContext;
 import org.herod.buyer.phone.GoodsListActivity;
@@ -12,6 +11,7 @@ import org.herod.buyer.phone.HerodTask;
 import org.herod.buyer.phone.HerodTask.AsyncTaskable;
 import org.herod.buyer.phone.R;
 import org.herod.buyer.phone.adapter.ImageLoaderAdapter;
+import org.herod.framework.MapWrapper;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,7 +34,8 @@ import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
  * 
  */
 public class ShopListFragment extends Fragment implements
-		AsyncTaskable<Long, List<Map<String, Object>>>, OnItemClickListener {
+		AsyncTaskable<Long, List<MapWrapper<String, Object>>>,
+		OnItemClickListener {
 	private GridView shopsGridView;
 
 	@Override
@@ -50,23 +51,23 @@ public class ShopListFragment extends Fragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		new HerodTask<Long, List<Map<String, Object>>>(this).execute();
+		new HerodTask<Long, List<MapWrapper<String, Object>>>(this).execute();
 	}
 
 	@Override
-	public List<Map<String, Object>> runOnBackground(Long... params) {
+	public List<MapWrapper<String, Object>> runOnBackground(Long... params) {
 		return BuyerContext.getBuyerService().findShopesByType(1);
 	}
 
 	@Override
-	public void onPostExecute(List<Map<String, Object>> data) {
+	public void onPostExecute(List<MapWrapper<String, Object>> data) {
 		ImageLoaderAdapter adapter = new ImageLoaderAdapter(getActivity(),
 				data, R.layout.fragment_shop_list_shop_item, new String[] {
 						"name", "imageUrl" },
 				new int[] { R.id.name, R.id.image });
 		shopsGridView.setAdapter(adapter);
-		shopsGridView.setOnScrollListener(new PauseOnScrollListener(ImageLoaderUtils
-				.getImageLoader(), false, true));
+		shopsGridView.setOnScrollListener(new PauseOnScrollListener(
+				ImageLoaderUtils.getImageLoader(), false, true));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -74,10 +75,10 @@ public class ShopListFragment extends Fragment implements
 	public void onItemClick(AdapterView<?> adapterView, View arg1,
 			int position, long arg3) {
 		Intent intent = new Intent(getActivity(), GoodsListActivity.class);
-		Map<String, Object> item = (Map<String, Object>) adapterView
+		MapWrapper<String, Object> item = (MapWrapper<String, Object>) adapterView
 				.getItemAtPosition(position);
-		intent.putExtra("shopId", (Long) item.get("id"));
-		intent.putExtra("shopName", (String) item.get("name"));
+		intent.putExtra("shopId", item.getLong("id"));
+		intent.putExtra("shopName", item.getString("name"));
 		startActivity(intent);
 	}
 

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.herod.buyer.phone.BuyerService;
+import org.herod.framework.MapWrapper;
 
 /**
  * @author Xiong Zhijun
@@ -17,16 +18,17 @@ import org.herod.buyer.phone.BuyerService;
  */
 public class BuyerServiceMock implements BuyerService {
 
-	private ArrayList<Map<String, Object>> allShops;
+	private ArrayList<MapWrapper<String, Object>> allShops;
 
 	@Override
-	public List<Map<String, Object>> findShopTypes() {
+	public List<MapWrapper<String, Object>> findShopTypes() {
 		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
 		data.add(createShopType(1, "外卖"));
 		data.add(createShopType(2, "便利店"));
 		data.add(createShopType(3, "蔬菜水果"));
 		data.add(createShopType(4, "其它"));
-		return data;
+
+		return toMapWrapperList(data);
 	}
 
 	private HashMap<String, Object> createShopType(long id, String value) {
@@ -37,17 +39,18 @@ public class BuyerServiceMock implements BuyerService {
 	}
 
 	@Override
-	public List<Map<String, Object>> findShopesByType(long typeId) {
-		allShops = new ArrayList<Map<String, Object>>();
+	public List<MapWrapper<String, Object>> findShopesByType(long typeId) {
+		allShops = new ArrayList<MapWrapper<String, Object>>();
 		allShops.add(createShop(typeId * 100 + 1, "肯德基"));
 		allShops.add(createShop(typeId * 100 + 2, "麦当劳"));
 		for (int i = 3; i < 10; i++) {
 			allShops.add(createShop(typeId * 100 + i, "外婆家-" + i + "号店"));
 		}
+
 		return allShops;
 	}
 
-	private HashMap<String, Object> createShop(long id, String name) {
+	private MapWrapper<String, Object> createShop(long id, String name) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("name", name);
@@ -64,11 +67,11 @@ public class BuyerServiceMock implements BuyerService {
 		map.put("minChargeForFreeDelivery", id * 1.0d);
 		map.put("costOfRunErrands", 5d);
 		map.put("phone", "15990196179");
-		return map;
+		return new MapWrapper<String, Object>(map);
 	}
 
 	@Override
-	public List<Map<String, Object>> findGoodsTypesByShop(long shopId) {
+	public List<MapWrapper<String, Object>> findGoodsTypesByShop(long shopId) {
 		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
 		data.add(createGoodsType(shopId * 10 + 1, "烟酒"));
 		data.add(createGoodsType(shopId * 10 + 2, "饮料"));
@@ -76,7 +79,7 @@ public class BuyerServiceMock implements BuyerService {
 		data.add(createGoodsType(shopId * 10 + 4, "日用百货"));
 		data.add(createGoodsType(shopId * 10 + 5, "五金"));
 		data.add(createGoodsType(shopId * 10 + 6, "建材"));
-		return data;
+		return toMapWrapperList(data);
 	}
 
 	private Map<String, Object> createGoodsType(long id, String name) {
@@ -87,14 +90,14 @@ public class BuyerServiceMock implements BuyerService {
 	}
 
 	@Override
-	public List<Map<String, Object>> findGoodsesByType(long goodsTypeId,
+	public List<MapWrapper<String, Object>> findGoodsesByType(long goodsTypeId,
 			long beginGoodsId, int count) {
 		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
 		for (long i = beginGoodsId + 1; i < beginGoodsId + 1 + count; i++) {
 			data.add(createGoods(goodsTypeId * 1000 + i, goodsTypeId + "-商品-"
 					+ i));
 		}
-		return data;
+		return toMapWrapperList(data);
 	}
 
 	private Map<String, Object> createGoods(long id, String name) {
@@ -106,13 +109,22 @@ public class BuyerServiceMock implements BuyerService {
 	}
 
 	@Override
-	public Map<String, Object> findShopById(long shopId) {
-		for (Map<String, Object> shop : allShops) {
-			if (shopId == (Long) shop.get("id")) {
+	public MapWrapper<String, Object> findShopById(long shopId) {
+		for (MapWrapper<String, Object> shop : allShops) {
+			if (shopId == shop.getLong("id")) {
 				return shop;
 			}
 		}
 		return null;
+	}
+
+	private List<MapWrapper<String, Object>> toMapWrapperList(
+			List<Map<String, Object>> mapList) {
+		List<MapWrapper<String, Object>> result = new ArrayList<MapWrapper<String, Object>>();
+		for (Map<String, Object> map : mapList) {
+			result.add(new MapWrapper<String, Object>(map));
+		}
+		return result;
 	}
 
 }

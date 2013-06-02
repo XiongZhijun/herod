@@ -3,8 +3,6 @@
  */
 package org.herod.framework.db;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -13,7 +11,7 @@ import java.util.List;
 import org.herod.framework.bean.BeanWrapper;
 import org.herod.framework.bean.BeanWrapper.ValueGetter;
 import org.herod.framework.utils.BeanUtils;
-import org.herod.framework.utils.StringUtils;
+import org.herod.framework.utils.DateUtils;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -26,22 +24,15 @@ import android.database.Cursor;
  * 
  */
 public class DatabaseUtils {
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss");
+
+	private static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 
 	public static String format(Date date) {
-		return dateFormat.format(date);
+		return DateUtils.format(YYYY_MM_DD_HH_MM_SS, date);
 	}
 
 	public static Date parse(String date) {
-		if (StringUtils.isBlank(date)) {
-			return null;
-		}
-		try {
-			return dateFormat.parse(date);
-		} catch (ParseException e) {
-			return null;
-		}
+		return DateUtils.parse(YYYY_MM_DD_HH_MM_SS, date);
 	}
 
 	public static ContentValues toContentValues(Object bean,
@@ -74,6 +65,8 @@ public class DatabaseUtils {
 		} else if (value instanceof Float
 				|| value.getClass().equals(float.class)) {
 			values.put(column, (Float) value);
+		} else if (value instanceof Date) {
+			values.put(column, format((Date) value));
 		} else {
 			values.put(column, value.toString());
 		}

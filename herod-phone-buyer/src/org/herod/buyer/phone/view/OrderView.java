@@ -14,6 +14,8 @@ import org.herod.buyer.phone.model.OrderStatus;
 import org.herod.buyer.phone.view.OrderItemView.GoodsQuantityChangedListener;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
+import org.herod.framework.utils.DateUtils;
+import org.herod.framework.utils.ResourcesUtils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -47,6 +49,14 @@ public class OrderView extends LinearLayout implements
 	private TextView costOfRunErrandsView;
 	@InjectView(R.id.totalWithCostOfRunErrands)
 	private TextView totalWithCostOfRunErrandsView;
+
+	@InjectView(R.id.serialNumber)
+	private TextView serialNumberView;
+	@InjectView(R.id.status)
+	private TextView statusView;
+	@InjectView(R.id.submitTime)
+	private TextView submitTimeView;
+
 	private Order order;
 	private OrderItemView summationView;
 	private AbstractOrdersActivity activity;
@@ -85,10 +95,17 @@ public class OrderView extends LinearLayout implements
 
 	public void setOrder(Order order) {
 		this.order = order;
-		if (order.getStatus() != OrderStatus.Unsubmit) {
-			findViewById(R.id.cancelOrderButton).setVisibility(View.INVISIBLE);
-		} else {
+		if (order.getStatus() == OrderStatus.Unsubmit) {
 			findViewById(R.id.cancelOrderButton).setVisibility(View.VISIBLE);
+			findViewById(R.id.historyInfo).setVisibility(View.GONE);
+		} else {
+			findViewById(R.id.historyInfo).setVisibility(View.VISIBLE);
+			findViewById(R.id.cancelOrderButton).setVisibility(View.INVISIBLE);
+			setText(statusView,
+					ResourcesUtils.getEnumShowName(activity, order.getStatus()));
+			setText(serialNumberView, order.getSerialNumber());
+			setText(submitTimeView,
+					DateUtils.format("MM-dd HH:mm", order.getSubmitTime()));
 		}
 		orderItemsContainer.removeAllViews();
 		setText(shopNameView, order.getShopName());

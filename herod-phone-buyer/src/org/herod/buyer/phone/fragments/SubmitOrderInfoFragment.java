@@ -3,6 +3,7 @@
  */
 package org.herod.buyer.phone.fragments;
 
+import java.util.Date;
 import java.util.List;
 
 import org.herod.buyer.phone.AbstractOrdersActivity;
@@ -13,6 +14,7 @@ import org.herod.buyer.phone.db.OrderDao;
 import org.herod.buyer.phone.model.Address;
 import org.herod.buyer.phone.model.Order;
 import org.herod.buyer.phone.model.OrderItem;
+import org.herod.buyer.phone.model.OrderStatus;
 import org.herod.framework.db.DatabaseOpenHelper;
 import org.herod.framework.utils.StringUtils;
 
@@ -131,6 +133,7 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 				order.setBuyerPhone(buyerPhone);
 				order.setBuyerName(buyerName);
 				order.setComment(comment);
+				order.setSubmitTime(new Date());
 				long index = BuyerContext.increaseOrderIndex(getActivity());
 				String orderSerialNumber = terminalId + "-" + index;
 				order.setSerialNumber(orderSerialNumber);
@@ -152,6 +155,9 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 		@Override
 		protected void onPostExecute(Object result) {
 			FragmentActivity activity = getActivity();
+			for (Order order : orders) {
+				order.setStatus(OrderStatus.Submitted);
+			}
 			SQLiteOpenHelper openHelper = new DatabaseOpenHelper(activity);
 			OrderDao orderDao = new OrderDao(openHelper);
 			orderDao.addOrders(orders);

@@ -44,8 +44,17 @@ public class ShoppingCartActivity extends AbstractOrdersActivity {
 		List<Order> orders = ShoppingCartCache.getInstance().getAllOrders();
 		ListAdapter adapter = new OrderListAdapter(this, orders);
 		orderListView.setAdapter(adapter);
-		findViewById(R.id.clearButton).setEnabled(orders.size() > 0);
-		findViewById(R.id.submitButton).setEnabled(orders.size() > 0);
+		if (orders.size() > 0) {
+			findViewById(R.id.clearButton).setVisibility(View.VISIBLE);
+			findViewById(R.id.submitButton).setVisibility(View.VISIBLE);
+			findViewById(R.id.emptyTips).setVisibility(View.GONE);
+			orderListView.setVisibility(View.VISIBLE);
+		} else {
+			findViewById(R.id.clearButton).setVisibility(View.GONE);
+			findViewById(R.id.submitButton).setVisibility(View.GONE);
+			findViewById(R.id.emptyTips).setVisibility(View.VISIBLE);
+			orderListView.setVisibility(View.GONE);
+		}
 	}
 
 	private class OnClearShoppingCartOkListener implements

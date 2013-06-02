@@ -4,8 +4,9 @@
 package org.herod.framework.db;
 
 import java.lang.reflect.Field;
-import java.sql.Date;
+import java.util.Date;
 
+import org.codehaus.jackson.map.deser.EnumResolver;
 import org.herod.framework.bean.BeanWrapper.ValueGetter;
 
 import android.database.Cursor;
@@ -56,6 +57,9 @@ public class CursorValueGetter implements ValueGetter {
 			value = DatabaseUtils.parse(str);
 		} else if (fieldType.equals(String.class)) {
 			value = cursor.getString(columnIndex);
+		} else if (Enum.class.isAssignableFrom(fieldType)) {
+			return EnumResolver.constructUnsafeUsingToString(fieldType)
+					.findEnum(cursor.getString(columnIndex));
 		}
 		return value;
 	}

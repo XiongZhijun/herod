@@ -43,6 +43,59 @@
             android:src="@drawable/delete_order" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/historyInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="5dip"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="订单号："
+            android:textColor="#888"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/serialNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dip"
+            android:textColor="#888"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="订单状态："
+            android:textColor="#888"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dip"
+            android:textColor="#888"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="提交时间："
+            android:textColor="#888"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/submitTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#888"
+            android:textSize="14sp" />
+    </LinearLayout>
+
     <View
         android:id="@+id/line1"
         android:layout_width="match_parent"
@@ -51,7 +104,8 @@
         android:layout_marginTop="5dip"
         android:background="#E5E5E5" />
 
-    <include layout="@layout/shopping_cart_order_item_header" />
+    <include
+        layout="@layout/shopping_cart_order_item_header" />
 
     <LinearLayout
         android:id="@+id/orderItemsListView"

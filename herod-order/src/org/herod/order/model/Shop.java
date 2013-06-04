@@ -14,6 +14,12 @@ public class Shop {
 	private long id;
 	/** 店名 */
 	private String name;
+	/**
+	 * 店铺类别
+	 * 
+	 * @see {@link ShopType}
+	 */
+	private long shopType;
 	/** 所属代理商 */
 	private long agentId;
 	/** 地址 */
@@ -28,6 +34,8 @@ public class Shop {
 	private String serviceEndTime;
 	/** 服务区间 */
 	private int serviceArea;
+	/** 图片 */
+	private String imageUrl;
 
 	public long getId() {
 		return id;
@@ -99,5 +107,21 @@ public class Shop {
 
 	public void setServiceArea(int serviceArea) {
 		this.serviceArea = serviceArea;
+	}
+
+	public long getShopType() {
+		return shopType;
+	}
+
+	public void setShopType(long shopType) {
+		this.shopType = shopType;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 }

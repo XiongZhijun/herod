@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+	<display-name>宅人汇</display-name>
+	<welcome-file-list>
+		<welcome-file>login.jsp</welcome-file>
+	</welcome-file-list>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:META-INF/server/wink-core-context.xml,/WEB-INF/context/*-context.xml,/WEB-INF/spring/*.spring.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<filter>
+		<filter-name>shiroFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			<param-name>targetFilterLifecycle</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>SystemDispatcherServlet</servlet-name>
+		<servlet-class>com.fpi.bear.web.framework.servlet.SystemDispactcherServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SystemDispatcherServlet</servlet-name>
+		<url-pattern>/system</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>RestService</servlet-name>
+		<servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RestService</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- 节点类型文件服务器 -->
+	<servlet>
+		<servlet-name>DownloadJavahbmFiles</servlet-name>
+		<servlet-class>com.fpi.bear.ifs.builder.servlet.DataTransAction</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DownloadJavahbmFiles</servlet-name>
+		<url-pattern>/infodefine/dataTrans</url-pattern>
+	</servlet-mapping>
+
+	<!-- 文件服务器 -->
+	<servlet>
+		<servlet-name>DownloadFileServlet</servlet-name>
+		<servlet-class>com.fpi.bear.fileserver.servlet.DownloadFileServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DownloadFileServlet</servlet-name>
+		<url-pattern>/download/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>FileUploadServlet</servlet-name>
+		<servlet-class>com.fpi.bear.fileserver.servlet.FileUploadServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FileUploadServlet</servlet-name>
+		<url-pattern>/upload/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<display-name>DWR Servlet</display-name>
+		<servlet-name>dwr-invoker</servlet-name>
+		<servlet-class>com.fpi.bear.common.dwr.servlet.BearDWRServlet</servlet-class>
+		<init-param>
+			<param-name>bearjavascript</param-name>
+			<param-value>dwr.js</param-value>
+		</init-param>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>crossDomainSessionSecurity</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>allowScriptTagRemoting</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>dwr-invoker</servlet-name>
+		<url-pattern>/dwr/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>FormDesignerFileUploader</servlet-name>
+		<servlet-class>com.fpi.bear.designer.servlet.DesignFileImportServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FormDesignerFileUploader</servlet-name>
+		<url-pattern>/FormDesigner/upload</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>FormDesignerFileDownloader</servlet-name>
+		<servlet-class>com.fpi.bear.designer.servlet.DesignFileExportServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FormDesignerFileDownloader</servlet-name>
+		<url-pattern>/FormDesigner/download</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>WebDesignerFileUploader</servlet-name>
+		<servlet-class>com.fpi.bear.designer.servlet.DesignFileImportServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>WebDesignerFileUploader</servlet-name>
+		<url-pattern>/Designer/upload</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>WebDesignerFileDownloader</servlet-name>
+		<servlet-class>com.fpi.bear.designer.servlet.DesignFileExportServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>WebDesignerFileDownloader</servlet-name>
+		<url-pattern>/Designer/download</url-pattern>
+	</servlet-mapping>
+
+</web-app>

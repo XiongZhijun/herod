@@ -49,7 +49,7 @@
 
 		<dependency org="com.fpi.bear" name="bear-common-rest" rev="1.6.1+"
 			conf="compile->master;spring->spring" />
-		<dependency org="com.mobi.common" name="mobi-tomcat-server"
+		<dependency org="com.fpi.bear" name="bear-tomcat-server"
 			rev="1.6.1+" conf="server->server" />
 		<dependency org="com.fpi.bear" name="bear-database-sql"
 			rev="1.6.1+" conf="runtime->runtime;sql->sql" />

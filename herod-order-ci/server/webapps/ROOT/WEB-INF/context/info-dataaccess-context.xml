@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<bean class="com.fpi.bear.tools.db.DatabaseInitToolBeanPostProcessor"
+		lazy-init="false">
+		<property name="serverType" value="info" />
+		<property name="dataSourceBeanName" value="dataSource" />
+		<property name="root" value="/WEB-INF/sqls" />
+		<property name="group" value="platform" />
+		<property name="versionType" value="PLATFORM_DB_VERSION" />
+		<property name="order" value="0" />
+	</bean>
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl"
+			value="jdbc:mysql://localhost:3306/herod-order?useUnicode=true&amp;characterEncoding=utf-8&amp;allowMultiQueries=true" />
+		<property name="user" value="root" />
+		<property name="password" value="123456" />
+		<property name="maxIdleTime" value="28000" />
+		<property name="idleConnectionTestPeriod" value="28000" />
+	</bean>
+
+	<bean id="bearConfigLocationBean" class="com.fpi.bear.common.hibernate.BearConfigLocationBean">
+		<property name="configPath">
+			<value>/WEB-INF/hibernate/</value>
+		</property>
+		<property name="configLocations">
+			<list>
+				<value>/WEB-INF/hibernate.cfg.xml</value>
+			</list>
+		</property>
+		<property name="filenameFilter">
+			<bean class="com.fpi.bear.common.util.AntPathMatchFilenameFilter">
+				<property name="patterns">
+					<list>
+						<value>bear-fileserver*</value>
+						<value>bear-info*</value>
+						<value>bear-web*</value>
+						<value>bear-permission*</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocations">
+			<bean id="bearConfigLocationBean.configLocations"
+				class="org.springframework.beans.factory.config.PropertyPathFactoryBean" />
+		</property>
+	</bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="simpleJdbcTemplate" class="org.springframework.jdbc.core.simple.SimpleJdbcTemplate">
+		<constructor-arg>
+			<ref bean="dataSource" />
+		</constructor-arg>
+	</bean>
+	
+		<bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+     	<constructor-arg ref="dataSource" /> 
+	</bean> 
+ 
+ 
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+</beans>

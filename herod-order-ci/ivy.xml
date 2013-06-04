@@ -56,8 +56,6 @@
 		<dependency org="com.fpi.bear" name="bear-cas" rev="1.6.1+"
 			conf="server->server" branch="trunk" />
 
-		<conflict org="org.slf4j" module="slf4j-api" rev="1.5.2" />
-		<conflict org="org.slf4j" module="slf4j-log4j12" rev="1.5.2" />
 		<dependency org="org.testng" name="testng" rev="6.1.1"
 			conf="test->master,runtime;sources->sources" />
 		<dependency org="com.fpi.bear" name="bear-test" rev="1.6.1+"

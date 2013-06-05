@@ -5,8 +5,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <include layout="@layout/action_bar" />
-
     <org.herod.framework.widget.TitlePageIndicator
         android:id="@+id/indicator"
         android:layout_width="fill_parent"

@@ -3,8 +3,12 @@
  */
 package org.herod.buyer.phone;
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,6 +18,16 @@ import android.widget.TextView;
  * 
  */
 public class BaseActivity extends FragmentActivity {
+	private Menu menu;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		ActionBar actionBar = getActionBar();
+		actionBar.setHomeButtonEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayShowTitleEnabled(true);
+	}
 
 	@Override
 	protected void onResume() {
@@ -25,50 +39,44 @@ public class BaseActivity extends FragmentActivity {
 		onBackPressed();
 	}
 
-	public void queryGoods(View v) {
+	public void queryGoods(MenuItem item) {
 	}
 
-	public void showHistoryOrders(View v) {
+	public void showHistoryOrders(MenuItem item) {
 		startActivity(new Intent(this, HisttoryOrdersActivity.class));
 	}
 
-	public void showShoppingCart(View v) {
+	public void showShoppingCart(MenuItem item) {
 		startActivity(new Intent(this, ShoppingCartActivity.class));
 	}
 
-	public void hideActionButton(int... ids) {
-		for (int id : ids) {
-			findViewById(id).setVisibility(View.GONE);
-		}
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(getMenuConfigResource(), menu);
+		this.menu = menu;
+		return true;
 	}
 
-	public void showActionButton(int... ids) {
-		for (int id : ids) {
-			findViewById(id).setVisibility(View.VISIBLE);
+	protected int getMenuConfigResource() {
+		return R.menu.home;
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.shoppingCart) {
+			showShoppingCart(item);
+			return true;
 		}
+		return false;
 	}
 
 	public void updateTotalQuantity() {
-		TextView totalQuantityView = (TextView) findViewById(R.id.totalQuantity);
 		int quantity = ShoppingCartCache.getInstance().getTotalQuantity();
-		totalQuantityView.setText(Integer.toString(quantity));
-	}
-
-	public void setTitle(String title) {
-		TextView titleView = (TextView) findViewById(R.id.title);
-		titleView.setText(title);
-	}
-
-	public void setTitle(int title) {
-		TextView titleView = (TextView) findViewById(R.id.title);
-		titleView.setText(title);
-	}
-
-	public void setCanBack(boolean canBack) {
-		if (canBack) {
-			findViewById(R.id.backButton).setVisibility(View.VISIBLE);
-		} else {
-			findViewById(R.id.backButton).setVisibility(View.INVISIBLE);
+		if (menu != null) {
+			View actionView = menu.findItem(R.id.shoppingCart).getActionView();
+			View totalQuantityView = actionView
+					.findViewById(R.id.totalQuantity);
+			if (totalQuantityView != null) {
+				((TextView) totalQuantityView).setText(quantity + "");
+			}
 		}
 	}
 

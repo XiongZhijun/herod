@@ -50,7 +50,7 @@ public class HisttoryOrdersActivity extends AbstractOrdersActivity {
 		OrderDao orderDao = new OrderDao(openHelper);
 		List<Order> orders = orderDao.getAllOrders();
 		openHelper.close();
-		
+
 		ListAdapter adapter = new OrderListAdapter(this, orders);
 		orderListView.setAdapter(adapter);
 		findViewById(R.id.clearButton).setEnabled(orders.size() > 0);
@@ -59,12 +59,17 @@ public class HisttoryOrdersActivity extends AbstractOrdersActivity {
 	private class OnClearShoppingCartOkListener implements
 			OnOkButtonClickListener {
 		public void onOk() {
-			SQLiteOpenHelper openHelper = new DatabaseOpenHelper(getApplicationContext());
+			SQLiteOpenHelper openHelper = new DatabaseOpenHelper(
+					getApplicationContext());
 			OrderDao orderDao = new OrderDao(openHelper);
 			orderDao.deleteAllOrders();
 			openHelper.close();
 			refreshOrders();
 		}
 
+	}
+
+	protected int getMenuConfigResource() {
+		return R.menu.history_orders;
 	}
 }

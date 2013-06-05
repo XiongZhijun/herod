@@ -36,9 +36,6 @@ public class StoresActivity extends BaseActivity implements
 
 		setTitle(R.string.app_name);
 
-		showActionButton(R.id.queryButton, R.id.historyOrdersButton,
-				R.id.shoppingCartButton, R.id.backButton);
-
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mIndicator = (TitlePageIndicator) findViewById(R.id.indicator);
 

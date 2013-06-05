@@ -23,7 +23,6 @@ public class ShoppingCartActivity extends AbstractOrdersActivity {
 		setContentView(R.layout.activity_shopping_cart);
 
 		setTitle("购物车");
-		showActionButton(R.id.historyOrdersButton, R.id.backButton);
 
 		orderListView = (ListView) findViewById(R.id.ordersListView);
 
@@ -64,5 +63,9 @@ public class ShoppingCartActivity extends AbstractOrdersActivity {
 			refreshOrders();
 		}
 
+	}
+
+	protected int getMenuConfigResource() {
+		return R.menu.shopping_cart;
 	}
 }

@@ -35,8 +35,6 @@ public class GoodsListActivity extends BaseActivity implements
 		shopId = getIntent().getLongExtra("shopId", 0);
 		shopName = getIntent().getStringExtra("shopName");
 		setTitle(shopName);
-		showActionButton(R.id.queryButton, R.id.historyOrdersButton,
-				R.id.shoppingCartButton, R.id.backButton);
 
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mIndicator = (TabPageIndicator) findViewById(R.id.indicator);

@@ -26,13 +26,16 @@ public class HomeActivity extends BaseActivity implements
 		super.onCreate(savedInstanceState);
 		ImageLoaderUtils.initImageLoader(this);
 		setContentView(R.layout.activity_home);
-		showActionButton(R.id.queryButton, R.id.historyOrdersButton,
-				R.id.shoppingCartButton);
 
 		shopTypesGridView = (GridView) findViewById(R.id.shopTypesGrid);
 		shopTypesGridView.setOnItemClickListener(this);
 
 		new HerodTask<Object, List<MapWrapper<String, Object>>>(this).execute();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -62,4 +65,6 @@ public class HomeActivity extends BaseActivity implements
 	public void back(View v) {
 
 	}
+
+
 }

@@ -25,8 +25,8 @@ public class BaseActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		ActionBar actionBar = getActionBar();
 		if (actionBar != null) {
-			actionBar.setHomeButtonEnabled(true);
-			actionBar.setDisplayHomeAsUpEnabled(true);
+			actionBar.setHomeButtonEnabled(canBack());
+			actionBar.setDisplayHomeAsUpEnabled(canBack());
 			actionBar.setDisplayShowTitleEnabled(true);
 		}
 	}
@@ -37,7 +37,7 @@ public class BaseActivity extends FragmentActivity {
 		updateTotalQuantity();
 	}
 
-	public void back(View v) {
+	public void back(MenuItem item) {
 		onBackPressed();
 	}
 
@@ -63,8 +63,8 @@ public class BaseActivity extends FragmentActivity {
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.shoppingCart) {
-			showShoppingCart(item);
+		if (item.getItemId() == android.R.id.home) {
+			back(item);
 			return true;
 		}
 		return false;
@@ -72,14 +72,22 @@ public class BaseActivity extends FragmentActivity {
 
 	public void updateTotalQuantity() {
 		int quantity = ShoppingCartCache.getInstance().getTotalQuantity();
-		if (menu != null) {
-			View actionView = menu.findItem(R.id.shoppingCart).getActionView();
-			View totalQuantityView = actionView
-					.findViewById(R.id.totalQuantity);
-			if (totalQuantityView != null) {
-				((TextView) totalQuantityView).setText(quantity + "");
-			}
+		if (menu == null) {
+			return;
 		}
+		MenuItem item = menu.findItem(R.id.shoppingCart);
+		if (item == null) {
+			return;
+		}
+		View actionView = item.getActionView();
+		View totalQuantityView = actionView.findViewById(R.id.totalQuantity);
+		if (totalQuantityView != null) {
+			((TextView) totalQuantityView).setText(quantity + "");
+		}
+	}
+
+	protected boolean canBack() {
+		return true;
 	}
 
 }

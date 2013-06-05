@@ -66,5 +66,8 @@ public class HomeActivity extends BaseActivity implements
 
 	}
 
+	protected boolean canBack() {
+		return false;
+	}
 
 }

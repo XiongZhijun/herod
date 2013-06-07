@@ -58,6 +58,7 @@ public class SearchGoodsListFragment extends AbstractGoodsListFragment {
 
 	public void query(String query) {
 		goodsName = query;
+		adapter.clear();
 		new HerodTask<Long, List<MapWrapper<String, Object>>>(this).execute();
 	}
 

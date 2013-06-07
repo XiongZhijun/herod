@@ -4,6 +4,7 @@
 package org.herod.framework.adapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.herod.framework.MapWrapper;
@@ -58,6 +59,10 @@ public class SimpleAdapter extends BaseAdapter {
 		this.mData.clear();
 		this.mData.addAll(data);
 		notifyDataSetChanged();
+	}
+
+	public void clear() {
+		updateData(Collections.<MapWrapper<String, Object>> emptyList());
 	}
 
 	public void addData(List<MapWrapper<String, Object>> data) {

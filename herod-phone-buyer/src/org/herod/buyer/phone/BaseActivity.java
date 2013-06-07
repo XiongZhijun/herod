@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 
 /**
@@ -25,7 +26,7 @@ import android.widget.TextView;
  */
 public class BaseActivity extends FragmentActivity {
 	private Menu menu;
-	private SearchView searchview;
+	protected SearchView searchview;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,17 @@ public class BaseActivity extends FragmentActivity {
 		}
 		searchview = (SearchView) search.getActionView();
 		searchview.setMaxWidth(10000);
+		searchview.setIconifiedByDefault(isSearchViewIconified());
+		searchview.setOnQueryTextListener(new OnQueryTextListener() {
+			public boolean onQueryTextSubmit(String query) {
+				searchview.setIconified(true);
+				return false;
+			}
+
+			public boolean onQueryTextChange(String newText) {
+				return false;
+			}
+		});
 		searchview.setOnSearchClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (!searchview.isIconified()) {
@@ -95,6 +107,10 @@ public class BaseActivity extends FragmentActivity {
 		SearchableInfo info = mSearchManager
 				.getSearchableInfo(getComponentName());
 		searchview.setSearchableInfo(info);
+	}
+
+	protected boolean isSearchViewIconified() {
+		return true;
 	}
 
 	protected int getMenuConfigResource() {
@@ -140,6 +156,7 @@ public class BaseActivity extends FragmentActivity {
 	@Override
 	public void onBackPressed() {
 		if (searchview != null && !searchview.isIconified()) {
+			searchview.setIconified(true);
 			searchview.setIconified(true);
 			showBackAction(canBack());
 			return;

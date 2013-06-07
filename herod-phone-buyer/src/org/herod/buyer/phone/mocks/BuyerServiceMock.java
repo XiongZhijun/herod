@@ -4,12 +4,14 @@
 package org.herod.buyer.phone.mocks;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.herod.buyer.phone.BuyerService;
 import org.herod.framework.MapWrapper;
+import org.herod.framework.utils.StringUtils;
 
 /**
  * @author Xiong Zhijun
@@ -18,7 +20,9 @@ import org.herod.framework.MapWrapper;
  */
 public class BuyerServiceMock implements BuyerService {
 
-	private ArrayList<MapWrapper<String, Object>> allShops;
+	private List<MapWrapper<String, Object>> allShops = new ArrayList<MapWrapper<String, Object>>();
+	private List<MapWrapper<String, Object>> allGoodsTypes = new ArrayList<MapWrapper<String, Object>>();
+	private List<MapWrapper<String, Object>> allGoodses = new ArrayList<MapWrapper<String, Object>>();
 
 	@Override
 	public List<MapWrapper<String, Object>> findShopTypes() {
@@ -40,14 +44,14 @@ public class BuyerServiceMock implements BuyerService {
 
 	@Override
 	public List<MapWrapper<String, Object>> findShopesByType(long typeId) {
-		allShops = new ArrayList<MapWrapper<String, Object>>();
-		allShops.add(createShop(typeId * 100 + 1, "肯德基"));
-		allShops.add(createShop(typeId * 100 + 2, "麦当劳"));
+		List<MapWrapper<String, Object>> shops = new ArrayList<MapWrapper<String, Object>>();
+		shops.add(createShop(typeId * 100 + 1, "肯德基"));
+		shops.add(createShop(typeId * 100 + 2, "麦当劳"));
 		for (int i = 3; i < 10; i++) {
-			allShops.add(createShop(typeId * 100 + i, "外婆家-" + i + "号店"));
+			shops.add(createShop(typeId * 100 + i, "外婆家-" + i + "号店"));
 		}
 
-		return allShops;
+		return shops;
 	}
 
 	private MapWrapper<String, Object> createShop(long id, String name) {
@@ -67,45 +71,101 @@ public class BuyerServiceMock implements BuyerService {
 		map.put("minChargeForFreeDelivery", id * 1.0d);
 		map.put("costOfRunErrands", 5d);
 		map.put("phone", "15990196179");
-		return new MapWrapper<String, Object>(map);
+		MapWrapper<String, Object> shop = new MapWrapper<String, Object>(map);
+		addShopToCache(shop);
+		return shop;
+	}
+
+	private void addShopToCache(MapWrapper<String, Object> shop) {
+		for (MapWrapper<String, Object> tmp : allShops) {
+			if (tmp.getLong("id") == shop.getLong("id")) {
+				return;
+			}
+		}
+		allShops.add(shop);
 	}
 
 	@Override
 	public List<MapWrapper<String, Object>> findGoodsTypesByShop(long shopId) {
-		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
-		data.add(createGoodsType(shopId * 10 + 1, "烟酒"));
-		data.add(createGoodsType(shopId * 10 + 2, "饮料"));
-		data.add(createGoodsType(shopId * 10 + 3, "办公用品"));
-		data.add(createGoodsType(shopId * 10 + 4, "日用百货"));
-		data.add(createGoodsType(shopId * 10 + 5, "五金"));
-		data.add(createGoodsType(shopId * 10 + 6, "建材"));
-		return toMapWrapperList(data);
+		List<MapWrapper<String, Object>> data = new ArrayList<MapWrapper<String, Object>>();
+		data.add(createGoodsType(shopId * 10 + 1, "烟酒", shopId));
+		data.add(createGoodsType(shopId * 10 + 2, "饮料", shopId));
+		data.add(createGoodsType(shopId * 10 + 3, "办公用品", shopId));
+		data.add(createGoodsType(shopId * 10 + 4, "日用百货", shopId));
+		data.add(createGoodsType(shopId * 10 + 5, "五金", shopId));
+		data.add(createGoodsType(shopId * 10 + 6, "建材", shopId));
+		return data;
 	}
 
-	private Map<String, Object> createGoodsType(long id, String name) {
+	private MapWrapper<String, Object> createGoodsType(long id, String name,
+			long shopId) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("name", name);
-		return map;
+		map.put("shopId", shopId);
+		MapWrapper<String, Object> goodsType = new MapWrapper<String, Object>(
+				map);
+		addGoodsTypeToCache(goodsType);
+		return goodsType;
+	}
+
+	private void addGoodsTypeToCache(MapWrapper<String, Object> goodsType) {
+		for (MapWrapper<String, Object> tmp : allGoodsTypes) {
+			if (tmp.getLong("id") == goodsType.getLong("id")) {
+				return;
+			}
+		}
+		allGoodsTypes.add(goodsType);
 	}
 
 	@Override
 	public List<MapWrapper<String, Object>> findGoodsesByType(long goodsTypeId,
 			long beginGoodsId, int count) {
-		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
+		List<MapWrapper<String, Object>> data = new ArrayList<MapWrapper<String, Object>>();
 		for (long i = beginGoodsId + 1; i < beginGoodsId + 1 + count; i++) {
 			data.add(createGoods(goodsTypeId * 1000 + i, goodsTypeId + "-商品-"
-					+ i));
+					+ i, goodsTypeId));
 		}
-		return toMapWrapperList(data);
+		return data;
 	}
 
-	private Map<String, Object> createGoods(long id, String name) {
+	private MapWrapper<String, Object> createGoods(long id, String name,
+			long goodsTypeId) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("name", name);
 		map.put("price", 5.0d);
-		return map;
+		map.put("goodsTypeId", goodsTypeId);
+		MapWrapper<String, Object> shop = findShopByGoodsType(goodsTypeId);
+		map.put("shopId", shop.getLong("id"));
+		map.put("shopName", shop.getString("name"));
+		MapWrapper<String, Object> goods = new MapWrapper<String, Object>(map);
+		addGoodsToCache(goods);
+		return goods;
+	}
+
+	private MapWrapper<String, Object> findShopByGoodsType(long goodsTypeId) {
+		long shopId = 0;
+		for (MapWrapper<String, Object> type : allGoodsTypes) {
+			if (type.getLong("id") == goodsTypeId) {
+				shopId = type.getLong("shopId");
+			}
+		}
+		for (MapWrapper<String, Object> shop : allShops) {
+			if (shop.getLong("id") == shopId) {
+				return shop;
+			}
+		}
+		return new MapWrapper<String, Object>(new HashMap<String, Object>());
+	}
+
+	private void addGoodsToCache(MapWrapper<String, Object> goods) {
+		for (MapWrapper<String, Object> tmp : allGoodses) {
+			if (tmp.getLong("id") == goods.getLong("id")) {
+				return;
+			}
+		}
+		allGoodses.add(goods);
 	}
 
 	@Override
@@ -125,6 +185,28 @@ public class BuyerServiceMock implements BuyerService {
 			result.add(new MapWrapper<String, Object>(map));
 		}
 		return result;
+	}
+
+	@Override
+	public List<MapWrapper<String, Object>> searchGoodses(String goodsName,
+			int begin, int count) {
+		if (StringUtils.isBlank(goodsName)) {
+			return Collections.emptyList();
+		}
+		ArrayList<MapWrapper<String, Object>> list = new ArrayList<MapWrapper<String, Object>>();
+		for (MapWrapper<String, Object> goods : allGoodses) {
+			if (goods.getString("name").indexOf(goodsName) >= 0) {
+				list.add(goods);
+			}
+		}
+		int end = begin + count;
+		if (begin >= list.size()) {
+			return Collections.emptyList();
+		}
+		if (end > list.size()) {
+			end = list.size();
+		}
+		return list.subList(begin, end);
 	}
 
 }

@@ -5,11 +5,10 @@
     android:background="#E5E5E5"
     android:orientation="vertical" >
 
-    <ListView
-        android:id="@+id/goodsListView"
+    <fragment
+        android:id="@+id/goodsListFragment"
+        android:name="org.herod.buyer.phone.fragments.SearchGoodsListFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:dividerHeight="3dip" >
-    </ListView>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

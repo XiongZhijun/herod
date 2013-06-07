@@ -24,4 +24,7 @@ public interface BuyerService {
 
 	List<MapWrapper<String, Object>> findGoodsesByType(long goodsTypeId,
 			long beginGoodsId, int count);
+
+	List<MapWrapper<String, Object>> searchGoodses(String goodsName, int begin,
+			int count);
 }

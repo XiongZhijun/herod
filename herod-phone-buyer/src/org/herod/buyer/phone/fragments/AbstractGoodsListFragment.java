@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * 
@@ -37,6 +38,7 @@ public abstract class AbstractGoodsListFragment extends Fragment implements
 		IXListViewListener, ViewBinder {
 	protected XListView goodsListView;
 	protected SimpleAdapter adapter;
+	private boolean isFirstLoad = true;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,13 +60,29 @@ public abstract class AbstractGoodsListFragment extends Fragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		new HerodTask<Long, List<MapWrapper<String, Object>>>(this).execute();
+		isFirstLoad = true;
+		if (isLoadOnResume()) {
+			new HerodTask<Long, List<MapWrapper<String, Object>>>(this)
+					.execute();
+		}
 	}
+
+	protected abstract boolean isLoadOnResume();
 
 	@Override
 	public void onPostExecute(List<MapWrapper<String, Object>> data) {
-		adapter.addData(data);
-		goodsListView.stopLoadMore();
+		if (data == null || data.size() == 0) {
+			if (!isFirstLoad) {
+				Toast.makeText(getActivity(), "没有更多商品了！", Toast.LENGTH_SHORT)
+						.show();
+			}
+			goodsListView.stopLoadMore();
+			goodsListView.setPullLoadEnable(false);
+		} else {
+			adapter.addData(data);
+			goodsListView.stopLoadMore();
+		}
+		isFirstLoad = false;
 	}
 
 	@Override

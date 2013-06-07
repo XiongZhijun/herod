@@ -4,12 +4,18 @@
 package org.herod.buyer.phone;
 
 import android.app.ActionBar;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 /**
@@ -19,14 +25,19 @@ import android.widget.TextView;
  */
 public class BaseActivity extends FragmentActivity {
 	private Menu menu;
+	private SearchView searchview;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		showBackAction(canBack());
+	}
+
+	private void showBackAction(boolean canBack) {
 		ActionBar actionBar = getActionBar();
 		if (actionBar != null) {
-			actionBar.setHomeButtonEnabled(canBack());
-			actionBar.setDisplayHomeAsUpEnabled(canBack());
+			actionBar.setHomeButtonEnabled(canBack);
+			actionBar.setDisplayHomeAsUpEnabled(canBack);
 			actionBar.setDisplayShowTitleEnabled(true);
 		}
 	}
@@ -35,6 +46,9 @@ public class BaseActivity extends FragmentActivity {
 	protected void onResume() {
 		super.onResume();
 		updateTotalQuantity();
+		if (searchview != null && !searchview.isIconified()) {
+			searchview.setIconified(true);
+		}
 	}
 
 	public void back(MenuItem item) {
@@ -53,9 +67,34 @@ public class BaseActivity extends FragmentActivity {
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(getMenuConfigResource(), menu);
+		int menuConfigResource = getMenuConfigResource();
+		if (menuConfigResource <= 0) {
+			return false;
+		}
+		getMenuInflater().inflate(menuConfigResource, menu);
 		this.menu = menu;
+		initSearch(menu);
 		return true;
+	}
+
+	private void initSearch(Menu menu) {
+		MenuItem search = menu.findItem(R.id.search);
+		if (search == null) {
+			return;
+		}
+		searchview = (SearchView) search.getActionView();
+		searchview.setMaxWidth(10000);
+		searchview.setOnSearchClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				if (!searchview.isIconified()) {
+					showBackAction(true);
+				}
+			}
+		});
+		SearchManager mSearchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		SearchableInfo info = mSearchManager
+				.getSearchableInfo(getComponentName());
+		searchview.setSearchableInfo(info);
 	}
 
 	protected int getMenuConfigResource() {
@@ -80,10 +119,32 @@ public class BaseActivity extends FragmentActivity {
 			return;
 		}
 		View actionView = item.getActionView();
+		if (actionView == null) {
+			return;
+		}
 		View totalQuantityView = actionView.findViewById(R.id.totalQuantity);
 		if (totalQuantityView != null) {
 			((TextView) totalQuantityView).setText(quantity + "");
 		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_MENU && searchview != null
+				&& !searchview.isIconified()) {
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (searchview != null && !searchview.isIconified()) {
+			searchview.setIconified(true);
+			showBackAction(canBack());
+			return;
+		}
+		super.onBackPressed();
 	}
 
 	protected boolean canBack() {

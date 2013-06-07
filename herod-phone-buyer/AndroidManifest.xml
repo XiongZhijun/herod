@@ -35,6 +35,19 @@
             android:name="org.herod.buyer.phone.GoodsListActivity"
             android:theme="@style/Theme.PageIndicatorDefaults" >
         </activity>
+        <activity android:name="org.herod.buyer.phone.GoodsSearchActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value="org.herod.buyer.phone.GoodsSearchActivity" />
     </application>
 
 </manifest>

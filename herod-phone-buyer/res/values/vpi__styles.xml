@@ -17,7 +17,7 @@
 
 <resources>
 
-    <style name="Theme.PageIndicatorDefaults" parent="android:Theme.Light">
+    <style name="Theme.PageIndicatorDefaults" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="vpiIconPageIndicatorStyle">@style/Widget.IconPageIndicator</item>
         <item name="vpiTabPageIndicatorStyle">@style/Widget.TabPageIndicator</item>
         <item name="android:windowTitleSize">45dp</item>

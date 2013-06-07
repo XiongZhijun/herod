@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">宅人汇</string>
-    <string name="action_settings">Settings</string>
+    <string name="search_hint">请输入商品名称</string>
     <!-- 订单状态 -->
     <string name="OrderStatus_Unsubmit">未提交</string>
     <string name="OrderStatus_Submitted">待受理</string>

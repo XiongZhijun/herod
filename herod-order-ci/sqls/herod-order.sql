@@ -1,20 +1,20 @@
 /*
-SQLyog Community Edition- MySQL GUI v6.07
-Host - 5.0.19-nt : Database - herod-order
+SQLyog Community v9.20 
+MySQL - 5.0.19-nt : Database - herod-order
 *********************************************************************
-Server version : 5.0.19-nt
 */
 
 /*!40101 SET NAMES utf8 */;
 
 /*!40101 SET SQL_MODE=''*/;
 
-create database if not exists `herod-order`;
-
-USE `herod-order`;
-
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`herod-order` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+USE `herod-order`;
 
 /*Table structure for table `action` */
 
@@ -70,7 +70,7 @@ CREATE TABLE `component` (
 
 /*Data for the table `component` */
 
-insert  into `component`(`ID`,`NAME`,`CODE`,`FUNCCLASS`,`PARAMS`,`DESCRIPTION`,`CONFIGCLASS`,`PINYIN`) values (10000,'数据集信息列表','dataSetInfoList','bear.module.datasource.InfoManagerGridPanel','{\"dataSetConfig\":{\"dataSetContextLocation\":\"tableContext\",\"dataSetCode\":\"DATA_SET\",\"nodeTypeCode\":\"DATA_SET\",\"pageSize\":\"20\",\"advancedConfig\":\"\",\"dataSetContext\":{\"code\":\"DATA_SET\"}},\"gridPanelConfig\":{\"advancedConfig\":\"\",\"formClass\":\"bear.module.datasource.dataset.DataSetForm\",\"addable\":true,\"deletable\":true,\"deletselectedable\":true,\"updatable\":true,\"checkboxable\":true,\"columns\":[{\"header\":\"ID\",\"dataIndex\":\"ID\",\"xtype\":null,\"format\":null,\"hidden\":true,\"advancedConfig\":\"\"},{\"header\":\"\\u540d\\u79f0\",\"dataIndex\":\"NAME\",\"xtype\":null,\"format\":null,\"hidden\":false,\"advancedConfig\":\"\"},{\"header\":\"\\u7f16\\u7801\",\"dataIndex\":\"CODE\",\"xtype\":null,\"format\":null,\"hidden\":\"\",\"advancedConfig\":\"\"}],\"toolbarItems\":[],\"operationItems\":[]},\"searchPanelConfig\":{\"columnCount\":5,\"items\":[{\"fieldLabel\":\"\\u540d\\u79f0\",\"propertyName\":\"\",\"op\":\"like\",\"xtype\":\"textfield\",\"type\":\"string\",\"format\":null,\"colspan\":1,\"name\":\"NAME\",\"advancedConfig\":\"\"},{\"fieldLabel\":\"\\u7f16\\u7801\",\"propertyName\":\"\",\"op\":\"like\",\"xtype\":\"textfield\",\"type\":\"string\",\"format\":null,\"colspan\":1,\"name\":\"CODE\",\"advancedConfig\":\"\"}]}}','',NULL,NULL);
+insert  into `component`(`ID`,`NAME`,`CODE`,`FUNCCLASS`,`PARAMS`,`DESCRIPTION`,`CONFIGCLASS`,`PINYIN`) values (10000,'数据集信息列表','dataSetInfoList','bear.module.datasource.InfoManagerGridPanel','{\"dataSetConfig\":{\"dataSetContextLocation\":\"tableContext\",\"dataSetCode\":\"DATA_SET\",\"nodeTypeCode\":\"DATA_SET\",\"pageSize\":\"20\",\"advancedConfig\":\"\",\"dataSetContext\":{\"code\":\"DATA_SET\"}},\"gridPanelConfig\":{\"advancedConfig\":\"\",\"formClass\":\"bear.module.datasource.dataset.DataSetForm\",\"addable\":true,\"deletable\":true,\"deletselectedable\":true,\"updatable\":true,\"checkboxable\":true,\"columns\":[{\"header\":\"ID\",\"dataIndex\":\"ID\",\"xtype\":null,\"format\":null,\"hidden\":true,\"advancedConfig\":\"\"},{\"header\":\"\\u540d\\u79f0\",\"dataIndex\":\"NAME\",\"xtype\":null,\"format\":null,\"hidden\":false,\"advancedConfig\":\"\"},{\"header\":\"\\u7f16\\u7801\",\"dataIndex\":\"CODE\",\"xtype\":null,\"format\":null,\"hidden\":\"\",\"advancedConfig\":\"\"}],\"toolbarItems\":[],\"operationItems\":[]},\"searchPanelConfig\":{\"columnCount\":5,\"items\":[{\"fieldLabel\":\"\\u540d\\u79f0\",\"propertyName\":\"\",\"op\":\"like\",\"xtype\":\"textfield\",\"type\":\"string\",\"format\":null,\"colspan\":1,\"name\":\"NAME\",\"advancedConfig\":\"\"},{\"fieldLabel\":\"\\u7f16\\u7801\",\"propertyName\":\"\",\"op\":\"like\",\"xtype\":\"textfield\",\"type\":\"string\",\"format\":null,\"colspan\":1,\"name\":\"CODE\",\"advancedConfig\":\"\"}]}}','',NULL,NULL),(10001,'商家类型管理列表配置','shop_type_manager_grid_config','bear.module.datasource.InfoManagerGridPanel','{\"dataSetConfig\":{\"dataSetContextLocation\":\"tableContext\",\"dataSetCode\":\"ZRH_SHOP_TYPE\",\"nodeTypeCode\":\"ZRH_SHOP_TYPE\",\"pageSize\":\"25\",\"advancedConfig\":\"\",\"requireControls\":\"\",\"dataSetContext\":{\"code\":\"ZRH_SHOP_TYPE\"}},\"gridPanelConfig\":{\"advancedConfig\":\"\",\"formClass\":\"form.herod.order.ShopTypeForm\",\"addable\":true,\"deletable\":true,\"deletselectedable\":true,\"updatable\":true,\"checkboxable\":true,\"columns\":[{\"header\":\"ID\",\"dataIndex\":\"ID\",\"xtype\":null,\"format\":null,\"hidden\":true,\"advancedConfig\":\"\",\"width\":\"\"},{\"header\":\"\\u540d\\u79f0\",\"dataIndex\":\"NAME\",\"xtype\":null,\"format\":null,\"hidden\":false,\"advancedConfig\":\"\",\"width\":\"\"}],\"toolbarItems\":[],\"operationItems\":[]},\"searchPanelConfig\":{\"columnCount\":5,\"advancedConfig\":\"\",\"items\":[{\"fieldLabel\":\"\\u5546\\u5e97\\u7c7b\\u578b\\u540d\\u79f0\",\"name\":\"NAME\",\"op\":\"like\",\"format\":null,\"xtype\":\"textfield\",\"colspan\":1,\"advancedConfig\":\"\",\"type\":\"string\"}]}}','',NULL,NULL),(10002,'代理商管理列表配置','agent_manger_grid_config','bear.module.datasource.InfoManagerGridPanel','{\"dataSetConfig\":{\"dataSetContextLocation\":\"tableContext\",\"dataSetCode\":\"ZRH_AGENT\",\"nodeTypeCode\":\"ZRH_AGENT\",\"pageSize\":\"25\",\"advancedConfig\":\"\",\"requireControls\":\"\",\"dataSetContext\":{\"code\":\"ZRH_AGENT\"}},\"gridPanelConfig\":{\"advancedConfig\":\"\",\"formClass\":\"form.herod.AgentForm\",\"addable\":true,\"deletable\":true,\"deletselectedable\":true,\"updatable\":true,\"checkboxable\":true,\"columns\":[{\"header\":\"ID\",\"dataIndex\":\"ID\",\"xtype\":null,\"format\":null,\"hidden\":true,\"advancedConfig\":\"\",\"width\":\"\"},{\"header\":\"\\u540d\\u79f0\",\"dataIndex\":\"NAME\",\"xtype\":null,\"format\":null,\"hidden\":false,\"advancedConfig\":\"\",\"width\":\"\"},{\"header\":\"\\u8054\\u7cfb\\u4eba\",\"dataIndex\":\"LINKMAN\",\"xtype\":null,\"format\":null,\"hidden\":\"\",\"advancedConfig\":\"\",\"width\":\"\"},{\"header\":\"\\u8054\\u7cfb\\u7535\\u8bdd\",\"dataIndex\":\"CONTACT_NUMBER\",\"xtype\":null,\"format\":null,\"hidden\":\"\",\"advancedConfig\":\"\",\"width\":\"\"},{\"header\":\"\\u7ba1\\u7406\\u5458\\u8d26\\u53f7\",\"dataIndex\":\"ADMIN_ACCOUNT\",\"xtype\":null,\"format\":null,\"hidden\":\"\",\"advancedConfig\":\"\",\"width\":\"\"}],\"toolbarItems\":[],\"operationItems\":[]},\"searchPanelConfig\":{\"columnCount\":5,\"advancedConfig\":\"\",\"items\":[{\"fieldLabel\":\"\\u540d\\u79f0\",\"name\":\"NAME\",\"op\":\"like\",\"format\":null,\"xtype\":\"textfield\",\"colspan\":1,\"advancedConfig\":\"\",\"type\":\"string\"}]}}','',NULL,NULL),(10003,'商家管理列表配置','shop_manger_grid_config','bear.module.datasource.InfoManagerGridPanel','{\"dataSetConfig\":{\"dataSetContextLocation\":\"tableContext\",\"dataSetCode\":\"ZRH_SHOP\",\"nodeTypeCode\":\"ZRH_SHOP\",\"pageSize\":\"25\",\"advancedConfig\":\"\",\"requireControls\":\"\",\"dataSetContext\":{\"code\":\"ZRH_SHOP\"}},\"gridPanelConfig\":{\"advancedConfig\":\"\",\"formClass\":null,\"addable\":true,\"deletable\":true,\"deletselectedable\":true,\"updatable\":true,\"checkboxable\":true,\"columns\":[{\"header\":\"ID\",\"dataIndex\":\"ID\",\"xtype\":null,\"format\":null,\"hidden\":true,\"advancedConfig\":\"\",\"width\":\"\"},{\"header\":\"\\u540d\\u79f0\",\"dataIndex\":\"NAME\",\"xtype\":null,\"format\":null,\"hidden\":false,\"advancedConfig\":\"\",\"width\":\"\"},{\"header\":\"\\u4ee3\\u7406\\u5546\",\"dataIndex\":\"AGENT_ID\",\"xtype\":null,\"format\":null,\"hidden\":\"\",\"advancedConfig\":\"\",\"width\":\"\"},{\"header\":\"\\u5546\\u5e97\\u7c7b\\u578b\",\"dataIndex\":\"SHOP_TYPE_ID\",\"xtype\":null,\"format\":null,\"hidden\":\"\",\"advancedConfig\":\"\",\"width\":\"\"},{\"header\":\"\\u5730\\u5740\",\"dataIndex\":\"ADDRESS\",\"xtype\":null,\"format\":null,\"hidden\":\"\",\"advancedConfig\":\"\",\"width\":\"\"},{\"header\":\"\\u8054\\u7cfb\\u7535\\u8bdd\",\"dataIndex\":\"CONTACT_NUMBER\",\"xtype\":null,\"format\":null,\"hidden\":\"\",\"advancedConfig\":\"\",\"width\":\"\"}],\"toolbarItems\":[],\"operationItems\":[]},\"searchPanelConfig\":{\"columnCount\":5,\"advancedConfig\":\"\",\"items\":[]}}','',NULL,NULL),(10004,'配送员管理列表配置','delivery_worker_grid_config','bear.module.datasource.InfoManagerGridPanel','{\"dataSetConfig\":{\"dataSetContextLocation\":\"tableContext\",\"dataSetCode\":\"ZRH_AGENT_DELIVERY_WORKER\",\"nodeTypeCode\":\"ZRH_AGENT_DELIVERY_WORKER\",\"pageSize\":\"30\",\"advancedConfig\":\"\",\"requireControls\":\"\",\"dataSetContext\":{\"code\":\"ZRH_AGENT_DELIVERY_WORKER\"}},\"gridPanelConfig\":{\"advancedConfig\":\"\",\"formClass\":\"form.herod.DeliveryWorkerForm\",\"addable\":true,\"deletable\":true,\"deletselectedable\":true,\"updatable\":true,\"checkboxable\":true,\"columns\":[{\"header\":\"ID\",\"dataIndex\":\"ID\",\"xtype\":null,\"format\":null,\"hidden\":true,\"advancedConfig\":\"\",\"width\":\"\"},{\"header\":\"\\u59d3\\u540d\",\"dataIndex\":\"NAME\",\"xtype\":null,\"format\":null,\"hidden\":false,\"advancedConfig\":\"\",\"width\":\"\"},{\"header\":\"\\u7535\\u8bdd\\u53f7\\u7801\",\"dataIndex\":\"PHONE\",\"xtype\":null,\"format\":null,\"hidden\":\"\",\"advancedConfig\":\"\",\"width\":\"\"},{\"header\":\"\\u72b6\\u6001\",\"dataIndex\":\"FLAG\",\"xtype\":null,\"format\":null,\"hidden\":\"\",\"advancedConfig\":\"\",\"width\":\"\"}],\"toolbarItems\":[],\"operationItems\":[]},\"searchPanelConfig\":{\"columnCount\":5,\"advancedConfig\":\"\",\"items\":[{\"fieldLabel\":\"\\u59d3\\u540d\",\"name\":\"NAME\",\"op\":\"like\",\"format\":null,\"xtype\":\"textfield\",\"colspan\":1,\"advancedConfig\":\"\",\"type\":\"string\"},{\"fieldLabel\":\"\\u7535\\u8bdd\\u53f7\\u7801\",\"name\":\"PHONE\",\"op\":\"=\",\"format\":null,\"xtype\":\"textfield\",\"colspan\":1,\"advancedConfig\":\"\",\"type\":\"string\"}]}}','',NULL,NULL);
 
 /*Table structure for table `data_set` */
 
@@ -100,7 +100,7 @@ CREATE TABLE `database_alias` (
 
 /*Data for the table `database_alias` */
 
-insert  into `database_alias`(`TABLE_NAME`,`COLUMN_NAME`,`ALIAS`) values ('ORGANIZATION',NULL,'组织'),('ORGANIZATION','ID','编码'),('ORGANIZATION','NAME','名称'),('ORGANIZATION','PARENTID','父组织'),('ORGANIZATION','DESCRIPTION','描述'),('ORGANIZATION','POSITIONCODE','组织位置编码'),('ORGANIZATION','PINYIN','拼音'),('POSITION',NULL,'岗位'),('POSITION','ID','编码'),('POSITION','NAME','名称'),('POSITION','DESCRIPTION','描述'),('POSITION','PINYIN','拼音'),('STAFF',NULL,'员工'),('STAFF','ID','编码'),('STAFF','NAME','姓名'),('STAFF','USERID','账号'),('STAFF','POSITIONID','岗位'),('STAFF','ORGANIZATIONID','组织'),('STAFF','TELEPHONE','电话号码'),('STAFF','MOBILEPHONE','手机'),('STAFF','EMAIL','电子邮箱'),('STAFF','ADDRESS','联系地址'),('STAFF','PINYIN','拼音'),('ZRH_AGENT',NULL,'代理商'),('ZRH_AGENT','ID','主键'),('ZRH_AGENT','NAME','名称'),('ZRH_AGENT','LEGAL_REPRESENTATIVE','法人代表'),('ZRH_AGENT','LINKMAN','联系人'),('ZRH_AGENT','CONTACT_NUMBER','联系电话'),('ZRH_AGENT','CONTACT_ADDRESS','联系地址'),('ZRH_AGENT','BANK_NAME','开户行'),('ZRH_AGENT','BANK_ACCOUNT','银行账号'),('ZRH_AGENT','ORGANIZATION_CODE','组织机构代码'),('ZRH_AGENT','BUSINESS_LICENSE','营业执照'),('ZRH_AGENT','ADMIN_ACCOUNT','管理员账号'),('ZRH_AGENT','PINYIN','拼音'),('ZRH_AGENT_DELIVERY_WORKER',NULL,'代理商配送人员'),('ZRH_AGENT_DELIVERY_WORKER','ID','主键'),('ZRH_AGENT_DELIVERY_WORKER','NAME','姓名'),('ZRH_AGENT_DELIVERY_WORKER','PHONE','电话'),('ZRH_AGENT_DELIVERY_WORKER','PASSWORD','密码'),('ZRH_AGENT_DELIVERY_WORKER','AGENT_ID','所属代理商'),('ZRH_AGENT_DELIVERY_WORKER','FLAG','状态标记'),('ZRH_AGENT_DELIVERY_WORKER','PINYIN','拼音'),('ZRH_SHOP',NULL,'商店'),('ZRH_SHOP','ID','主键'),('ZRH_SHOP','NAME','名称'),('ZRH_SHOP','SHOP_TYPE_ID','商店类型'),('ZRH_SHOP','AGENT_ID','所属代理商'),('ZRH_SHOP','ADDRESS','商店地址'),('ZRH_SHOP','CONTACT_NUMBER','联系电话'),('ZRH_SHOP','LONGITUDE','经度'),('ZRH_SHOP','LATITUDE','纬度'),('ZRH_SHOP','SERVICE_RADIUS','服务半径'),('ZRH_SHOP','IMAGE_URL','图片'),('ZRH_SHOP','BANK_NAME','开户行'),('ZRH_SHOP','BANK_ACCOUNT','银行账号'),('ZRH_SHOP','ORGANIZATION_CODE','组织机构代码'),('ZRH_SHOP','BUSINESS_LICENSE','营业执照'),('ZRH_SHOP','PINYIN','拼音'),('ZRH_GOODS_CATEGORY',NULL,'商品分类'),('ZRH_GOODS_CATEGORY','ID','主键'),('ZRH_GOODS_CATEGORY','NAME','名称'),('ZRH_GOODS_CATEGORY','ALIAS','别名'),('ZRH_GOODS_CATEGORY','SHOP_ID','所属商店'),('ZRH_GOODS_CATEGORY','PINYIN','拼音'),('ZRH_SHOP_TYPE',NULL,'商店类型'),('ZRH_SHOP_TYPE','ID','主键'),('ZRH_SHOP_TYPE','NAME','名称'),('ZRH_SHOP_TYPE','IMAGE_URL','图片'),('ZRH_SHOP_TYPE','PINYIN','拼音'),('ZRH_GOODS',NULL,'商品'),('ZRH_GOODS','ID','主键'),('ZRH_GOODS','NAME','名称'),('ZRH_GOODS','CODE','商品编码'),('ZRH_GOODS','ALIAS','别名'),('ZRH_GOODS','SUPPLY_PRICE','商店供货价'),('ZRH_GOODS','SELLING_PRICE','售价'),('ZRH_GOODS','UNIT','计量单位'),('ZRH_GOODS','COMMENT','商品备注'),('ZRH_GOODS','LARGE_IMAGE','大图'),('ZRH_GOODS','THUMBNAIL','缩略图'),('ZRH_GOODS','CATEGORY_ID','所属商品分类'),('ZRH_GOODS','SHOP_ID','所属商店'),('ZRH_GOODS','AGENT_ID','所属代理商'),('ZRH_GOODS','PINYIN','拼音'),('ZRH_ORDER',NULL,'订单'),('ZRH_ORDER','ID','主键'),('ZRH_ORDER','SERIAL_NUMBER','流水号'),('ZRH_ORDER','BUYER_PHONE','买家电话'),('ZRH_ORDER','BUYER_NAME','买家名称'),('ZRH_ORDER','AGENT_ID','所属代理商'),('ZRH_ORDER','SHOP_ID','所属商店'),('ZRH_ORDER','DELIVERY_WORKER_ID','配送人员'),('ZRH_ORDER','STATUS','状态'),('ZRH_ORDER','SUBMIT_TIME','提交时间'),('ZRH_ORDER','COMPLETE_TIME','完成时间'),('ZRH_ORDER','PREPARE_TIME','备货时间'),('ZRH_ORDER','DELIVERY_ADDRESS','配送地址'),('ZRH_ORDER','DELIVERY_LONGITUDE','配送地址经度'),('ZRH_ORDER','DELIVERY_LATITUDE','配送地址纬度'),('ZRH_ORDER','COMMENT','备注'),('ZRH_ORDER_ITEM',NULL,'订单项'),('ZRH_ORDER_ITEM','ID','主键'),('ZRH_ORDER_ITEM','SERIAL_NUMBER','流水号'),('ZRH_ORDER_ITEM','ORDER_SERIAL_NUMBER','所属订单流水号'),('ZRH_ORDER_ITEM','GOODS_ID','商品ID'),('ZRH_ORDER_ITEM','GOODS_CODE','商品编码'),('ZRH_ORDER_ITEM','AGENT_ID','所属代理商'),('ZRH_ORDER_ITEM','SHOP_ID','所属商店'),('ZRH_ORDER_ITEM','SELLING_PRICE','售价'),('ZRH_ORDER_ITEM','SUPPLY_PRICE','供货价'),('ZRH_ORDER_ITEM','QUANTITY','数量'),('ZRH_ORDER_ITEM','FLAG','标志');
+insert  into `database_alias`(`TABLE_NAME`,`COLUMN_NAME`,`ALIAS`) values ('ORGANIZATION',NULL,'组织'),('ORGANIZATION','ID','编码'),('ORGANIZATION','NAME','名称'),('ORGANIZATION','PARENTID','父组织'),('ORGANIZATION','DESCRIPTION','描述'),('ORGANIZATION','POSITIONCODE','组织位置编码'),('ORGANIZATION','PINYIN','拼音'),('POSITION',NULL,'岗位'),('POSITION','ID','编码'),('POSITION','NAME','名称'),('POSITION','DESCRIPTION','描述'),('POSITION','PINYIN','拼音'),('STAFF',NULL,'员工'),('STAFF','ID','编码'),('STAFF','NAME','姓名'),('STAFF','USERID','账号'),('STAFF','POSITIONID','岗位'),('STAFF','ORGANIZATIONID','组织'),('STAFF','TELEPHONE','电话号码'),('STAFF','MOBILEPHONE','手机'),('STAFF','EMAIL','电子邮箱'),('STAFF','ADDRESS','联系地址'),('STAFF','PINYIN','拼音'),('ZRH_AGENT',NULL,'代理商'),('ZRH_AGENT','ID','主键'),('ZRH_AGENT','NAME','名称'),('ZRH_AGENT','LEGAL_REPRESENTATIVE','法人代表'),('ZRH_AGENT','LINKMAN','联系人'),('ZRH_AGENT','CONTACT_NUMBER','联系电话'),('ZRH_AGENT','CONTACT_ADDRESS','联系地址'),('ZRH_AGENT','BANK_NAME','开户行'),('ZRH_AGENT','BANK_ACCOUNT','银行账号'),('ZRH_AGENT','ORGANIZATION_CODE','组织机构代码'),('ZRH_AGENT','BUSINESS_LICENSE','营业执照'),('ZRH_AGENT','ADMIN_ACCOUNT','管理员账号'),('ZRH_AGENT','PINYIN','拼音'),('ZRH_AGENT_DELIVERY_WORKER',NULL,'代理商配送人员'),('ZRH_AGENT_DELIVERY_WORKER','ID','主键'),('ZRH_AGENT_DELIVERY_WORKER','NAME','姓名'),('ZRH_AGENT_DELIVERY_WORKER','PHONE','电话'),('ZRH_AGENT_DELIVERY_WORKER','PASSWORD','密码'),('ZRH_AGENT_DELIVERY_WORKER','AGENT_ID','所属代理商'),('ZRH_AGENT_DELIVERY_WORKER','FLAG','状态标记'),('ZRH_AGENT_DELIVERY_WORKER','PINYIN','拼音'),('ZRH_GOODS_CATEGORY',NULL,'商品分类'),('ZRH_GOODS_CATEGORY','ID','主键'),('ZRH_GOODS_CATEGORY','NAME','名称'),('ZRH_GOODS_CATEGORY','ALIAS','别名'),('ZRH_GOODS_CATEGORY','SHOP_ID','所属商店'),('ZRH_GOODS_CATEGORY','PINYIN','拼音'),('ZRH_GOODS',NULL,'商品'),('ZRH_GOODS','ID','主键'),('ZRH_GOODS','NAME','名称'),('ZRH_GOODS','CODE','商品编码'),('ZRH_GOODS','ALIAS','别名'),('ZRH_GOODS','SUPPLY_PRICE','商店供货价'),('ZRH_GOODS','SELLING_PRICE','售价'),('ZRH_GOODS','UNIT','计量单位'),('ZRH_GOODS','COMMENT','商品备注'),('ZRH_GOODS','LARGE_IMAGE','大图'),('ZRH_GOODS','THUMBNAIL','缩略图'),('ZRH_GOODS','CATEGORY_ID','所属商品分类'),('ZRH_GOODS','SHOP_ID','所属商店'),('ZRH_GOODS','AGENT_ID','所属代理商'),('ZRH_GOODS','PINYIN','拼音'),('ZRH_ORDER',NULL,'订单'),('ZRH_ORDER','ID','主键'),('ZRH_ORDER','SERIAL_NUMBER','流水号'),('ZRH_ORDER','BUYER_PHONE','买家电话'),('ZRH_ORDER','BUYER_NAME','买家名称'),('ZRH_ORDER','AGENT_ID','所属代理商'),('ZRH_ORDER','SHOP_ID','所属商店'),('ZRH_ORDER','DELIVERY_WORKER_ID','配送人员'),('ZRH_ORDER','STATUS','状态'),('ZRH_ORDER','SUBMIT_TIME','提交时间'),('ZRH_ORDER','COMPLETE_TIME','完成时间'),('ZRH_ORDER','PREPARE_TIME','备货时间'),('ZRH_ORDER','DELIVERY_ADDRESS','配送地址'),('ZRH_ORDER','DELIVERY_LONGITUDE','配送地址经度'),('ZRH_ORDER','DELIVERY_LATITUDE','配送地址纬度'),('ZRH_ORDER','COMMENT','备注'),('ZRH_ORDER_ITEM',NULL,'订单项'),('ZRH_ORDER_ITEM','ID','主键'),('ZRH_ORDER_ITEM','SERIAL_NUMBER','流水号'),('ZRH_ORDER_ITEM','ORDER_SERIAL_NUMBER','所属订单流水号'),('ZRH_ORDER_ITEM','GOODS_ID','商品ID'),('ZRH_ORDER_ITEM','GOODS_CODE','商品编码'),('ZRH_ORDER_ITEM','AGENT_ID','所属代理商'),('ZRH_ORDER_ITEM','SHOP_ID','所属商店'),('ZRH_ORDER_ITEM','SELLING_PRICE','售价'),('ZRH_ORDER_ITEM','SUPPLY_PRICE','供货价'),('ZRH_ORDER_ITEM','QUANTITY','数量'),('ZRH_ORDER_ITEM','FLAG','标志'),('ZRH_ORDER_LOG',NULL,'订单操作日志'),('ZRH_ORDER_LOG','ID','主键'),('ZRH_ORDER_LOG','ORDER_SERIAL_NUMBER','订单流水号'),('ZRH_ORDER_LOG','OPERATION','操作'),('ZRH_ORDER_LOG','REASON','原因'),('ZRH_ORDER_LOG','OPERATOR_TYPE','操作者类型'),('ZRH_ORDER_LOG','OPERATOR','操作者'),('ZRH_ORDER_LOG','OPERATE_TIME','操作时间'),('ZRH_ORDER_LOG','COMMENT','备注'),('ZRH_SHOP_TYPE',NULL,'商店类型'),('ZRH_SHOP_TYPE','ID','主键'),('ZRH_SHOP_TYPE','NAME','名称'),('ZRH_SHOP_TYPE','IMAGE_URL','图片'),('ZRH_SHOP_TYPE','COMMENT','备注'),('ZRH_SHOP_TYPE','PINYIN','拼音'),('ZRH_SHOP',NULL,'商店'),('ZRH_SHOP','ID','主键'),('ZRH_SHOP','NAME','名称'),('ZRH_SHOP','SHOP_TYPE_ID','商店类型'),('ZRH_SHOP','AGENT_ID','所属代理商'),('ZRH_SHOP','ADDRESS','商店地址'),('ZRH_SHOP','CONTACT_NUMBER','联系电话'),('ZRH_SHOP','LONGITUDE','经度'),('ZRH_SHOP','LATITUDE','纬度'),('ZRH_SHOP','SERVICE_RADIUS','服务半径'),('ZRH_SHOP','IMAGE_URL','图片'),('ZRH_SHOP','BANK_NAME','开户行'),('ZRH_SHOP','BANK_ACCOUNT','银行账号'),('ZRH_SHOP','ORGANIZATION_CODE','组织机构代码'),('ZRH_SHOP','BUSINESS_LICENSE','营业执照'),('ZRH_SHOP','LINKMAN','联系人'),('ZRH_SHOP','PINYIN','拼音');
 
 /*Table structure for table `file_info` */
 
@@ -119,6 +119,8 @@ CREATE TABLE `file_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `file_info` */
+
+insert  into `file_info`(`ID`,`NAME`,`URL`,`UUID`,`UPLOADUSER`,`UPLOADDATE`,`PINYIN`,`TYPE`) values (1,'alarm.png','/d255fa4783014485b5897f2ceb1fdc9f.png','d255fa4783014485b5897f2ceb1fdc9f',NULL,'2013-06-08 21:23:45',NULL,'SystemIcon');
 
 /*Table structure for table `group_` */
 
@@ -179,7 +181,7 @@ CREATE TABLE `menu` (
 
 /*Data for the table `menu` */
 
-insert  into `menu`(`ID`,`NAME`,`CODE`,`ICON`,`URL`,`FUNCCLASS`,`FUNCDEFINE`,`PARENTID`,`SYSTEMID`,`ORDERINDEX`,`HIDDEN`,`DESCRIPTION`,`PINYIN`) values (2,'节点类型管理','nodeTypeDefine','','','infodefine.nodetype.NodeTypeManager',-1,-1,10000,1,0,'',NULL),(3,'数据集管理','dataSetManager','','','bear.module.datasource.InfoManagerGridPanel',10000,-1,10000,2,0,'',NULL),(4,'设计工具','designers','','','',-1,-1,10000,2,0,'',NULL),(5,'表单设计器','formDesigner','','','bear.designer.form.view.VisualFormDesigner',-1,4,10000,0,0,'',NULL),(6,'界面设计器','webDesigner','','','bear.designer.web.module.WebDesignerPanel',-1,4,10000,1,0,'',NULL),(10000,'系统构建','systemBuilder','systemIcons/7e6d9e5ec6074a3c83a2c95189f273a2.gif','','bear.module.builder.SystemBuild',0,-1,10000,0,0,'',NULL);
+insert  into `menu`(`ID`,`NAME`,`CODE`,`ICON`,`URL`,`FUNCCLASS`,`FUNCDEFINE`,`PARENTID`,`SYSTEMID`,`ORDERINDEX`,`HIDDEN`,`DESCRIPTION`,`PINYIN`) values (2,'节点类型管理','nodeTypeDefine','','','infodefine.nodetype.NodeTypeManager',-1,-1,10000,1,0,'',NULL),(3,'数据集管理','dataSetManager','','','bear.module.datasource.InfoManagerGridPanel',10000,-1,10000,2,0,'',NULL),(4,'设计工具','designers','','','',-1,-1,10000,2,0,'',NULL),(5,'表单设计器','formDesigner','','','bear.designer.form.view.VisualFormDesigner',-1,4,10000,0,0,'',NULL),(6,'界面设计器','webDesigner','','','bear.designer.web.module.WebDesignerPanel',-1,4,10000,1,0,'',NULL),(10000,'系统构建','systemBuilder','systemIcons/7e6d9e5ec6074a3c83a2c95189f273a2.gif','','bear.module.builder.SystemBuild',0,-1,10000,0,0,'',NULL),(10001,'商家类型管理','shop_type_manager','','','bear.module.datasource.InfoManagerGridPanel',10001,-1,10001,0,0,'',NULL),(10002,'代理商管理','agent_manager','','','bear.module.datasource.InfoManagerGridPanel',10002,-1,10001,1,0,'',NULL),(10003,'商家管理','shop_manager','','','bear.module.datasource.InfoManagerGridPanel',10003,-1,10002,0,0,'',NULL),(10004,'账户管理','user_manager','','','bear.module.permissioncontrol.permission.control.user.UserGrid',-1,-1,10003,0,0,'',NULL),(10005,'角色管理','role_manager','','','bear.module.permissioncontrol.permission.control.role.RoleGrid',-1,-1,10003,1,0,'',NULL),(10006,'权限管理','permission_manager','','','bear.module.permissioncontrol.permission.control.permission.PermissionGrid',-1,-1,10003,2,0,'',NULL),(10007,'动作管理','action_manager','','','bear.module.permissioncontrol.permission.control.action.ActionGrid',-1,-1,10003,3,0,'',NULL),(10008,'配送员管理','delivery_worker_manager','','','bear.module.datasource.InfoManagerGridPanel',10004,-1,10002,1,0,'',NULL);
 
 /*Table structure for table `nodetype` */
 
@@ -199,7 +201,7 @@ CREATE TABLE `nodetype` (
 
 /*Data for the table `nodetype` */
 
-insert  into `nodetype`(`ID`,`CODE`,`NAME`,`PINYIN`,`GROUPID`,`CREATETIME`,`DESCRIPTION`,`TREESTRUCTURE`) values (1,'ORGANIZATION','组织','zz',10000,NULL,'',0),(2,'POSITION','岗位','gw',10000,NULL,'',0),(3,'USERS','账户','zh',10000,NULL,NULL,0),(4,'SERVICE_USER_MAPPING','应用用户映射','yyyhys',10000,NULL,NULL,0),(10000,'STAFF','员工','yg',10000,NULL,'',0),(10001,'ZRH_SHOP_TYPE','商店类型','sdlx',10001,NULL,'',0),(10002,'ZRH_AGENT','代理商','dls',10001,'2013-06-08 16:06:03','',0),(10003,'ZRH_AGENT_DELIVERY_WORKER','代理商配送人员','dlspsry',10001,'2013-06-08 16:08:38','',0),(10004,'ZRH_SHOP','商店','sd',10001,'2013-06-08 16:14:12','',0),(10005,'ZRH_GOODS_CATEGORY','商品分类','spfl',10001,'2013-06-08 16:15:44','',0),(10006,'ZRH_GOODS','商品','sp',10001,'2013-06-08 16:20:33','',0),(10007,'ZRH_ORDER','订单','dd',10001,'2013-06-08 17:15:29','',0),(10008,'ZRH_ORDER_ITEM','订单项','ddx',10001,'2013-06-08 17:20:34','',0);
+insert  into `nodetype`(`ID`,`CODE`,`NAME`,`PINYIN`,`GROUPID`,`CREATETIME`,`DESCRIPTION`,`TREESTRUCTURE`) values (1,'ORGANIZATION','组织','zz',10000,NULL,'',0),(2,'POSITION','岗位','gw',10000,NULL,'',0),(3,'USERS','账户','zh',10000,NULL,NULL,0),(4,'SERVICE_USER_MAPPING','应用用户映射','yyyhys',10000,NULL,NULL,0),(10000,'STAFF','员工','yg',10000,NULL,'',0),(10001,'ZRH_SHOP_TYPE','商店类型','sdlx',10001,NULL,'',0),(10002,'ZRH_AGENT','代理商','dls',10001,'2013-06-08 16:06:03','',0),(10003,'ZRH_AGENT_DELIVERY_WORKER','代理商配送人员','dlspsry',10001,'2013-06-08 16:08:38','',0),(10004,'ZRH_SHOP','商店','sd',10001,NULL,'',0),(10005,'ZRH_GOODS_CATEGORY','商品分类','spfl',10001,'2013-06-08 16:15:44','',0),(10006,'ZRH_GOODS','商品','sp',10001,'2013-06-08 16:20:33','',0),(10007,'ZRH_ORDER','订单','dd',10001,'2013-06-08 17:15:29','',0),(10008,'ZRH_ORDER_ITEM','订单项','ddx',10001,'2013-06-08 17:20:34','',0),(10009,'ZRH_ORDER_LOG','订单操作日志','ddczrz',10001,'2013-06-08 20:46:43','',0);
 
 /*Table structure for table `nodetypestrategy` */
 
@@ -396,7 +398,7 @@ CREATE TABLE `system` (
 
 /*Data for the table `system` */
 
-insert  into `system`(`ID`,`NAME`,`CODE`,`ICON`,`LOGO`,`TITLEIMG`,`LAYOUT`,`URL`,`DESCRIPTION`,`PINYIN`) values (10000,'构建系统','builder','/systemIcons/900263cd28bc4980981822563324bbfd.jpg','./bear/ued/pmf/standard/images/logo.jpg','bear/ued/pmf/standard/images/logo.jpg','standard','','',NULL);
+insert  into `system`(`ID`,`NAME`,`CODE`,`ICON`,`LOGO`,`TITLEIMG`,`LAYOUT`,`URL`,`DESCRIPTION`,`PINYIN`) values (10000,'构建系统','builder','/systemIcons/900263cd28bc4980981822563324bbfd.jpg','./bear/ued/pmf/standard/images/logo.jpg','bear/ued/pmf/standard/images/logo.jpg','standard','','',NULL),(10001,'管理系统','manager_system','','','','standard','','',NULL),(10002,'代理商管理系统','agent_manager_system','','','','standard','','',NULL),(10003,'权限系统','permission_system','','','','standard','','',NULL);
 
 /*Table structure for table `system_info` */
 
@@ -592,6 +594,24 @@ CREATE TABLE `zrh_order_item` (
 
 /*Data for the table `zrh_order_item` */
 
+/*Table structure for table `zrh_order_log` */
+
+DROP TABLE IF EXISTS `zrh_order_log`;
+
+CREATE TABLE `zrh_order_log` (
+  `ID` bigint(19) NOT NULL auto_increment,
+  `ORDER_SERIAL_NUMBER` varchar(255) NOT NULL,
+  `OPERATION` varchar(255) default NULL,
+  `REASON` varchar(255) default NULL,
+  `OPERATOR_TYPE` varchar(255) default NULL,
+  `OPERATOR` varchar(255) default NULL,
+  `OPERATE_TIME` datetime default NULL,
+  `COMMENT` varchar(255) default NULL,
+  PRIMARY KEY  (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `zrh_order_log` */
+
 /*Table structure for table `zrh_shop` */
 
 DROP TABLE IF EXISTS `zrh_shop`;
@@ -612,11 +632,12 @@ CREATE TABLE `zrh_shop` (
   `ORGANIZATION_CODE` varchar(255) default NULL,
   `BUSINESS_LICENSE` varchar(255) default NULL,
   `PINYIN` varchar(255) default NULL,
+  `LINKMAN` varchar(255) default NULL,
   PRIMARY KEY  (`ID`),
   KEY `FK_ZRH_SHOP_SHOP_TYPE_ID` (`SHOP_TYPE_ID`),
   KEY `FK_ZRH_SHOP_AGENT_ID` (`AGENT_ID`),
-  CONSTRAINT `FK_ZRH_SHOP_SHOP_TYPE_ID` FOREIGN KEY (`SHOP_TYPE_ID`) REFERENCES `zrh_shop_type` (`ID`),
-  CONSTRAINT `FK_ZRH_SHOP_AGENT_ID` FOREIGN KEY (`AGENT_ID`) REFERENCES `zrh_agent` (`ID`)
+  CONSTRAINT `FK_ZRH_SHOP_AGENT_ID` FOREIGN KEY (`AGENT_ID`) REFERENCES `zrh_agent` (`ID`),
+  CONSTRAINT `FK_ZRH_SHOP_SHOP_TYPE_ID` FOREIGN KEY (`SHOP_TYPE_ID`) REFERENCES `zrh_shop_type` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `zrh_shop` */
@@ -630,6 +651,7 @@ CREATE TABLE `zrh_shop_type` (
   `NAME` varchar(255) NOT NULL,
   `IMAGE_URL` varchar(255) default NULL,
   `PINYIN` varchar(255) default NULL,
+  `COMMENT` varchar(2048) default NULL,
   PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -637,3 +659,5 @@ CREATE TABLE `zrh_shop_type` (
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;

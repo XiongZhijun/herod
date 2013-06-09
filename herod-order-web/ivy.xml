@@ -19,8 +19,10 @@
 		<artifact type="component" ext="component.xml" conf="component" />
 	</publications>
 	<dependencies>
+		<dependency org="com.fpi.bear" name="bear-fileserver"
+			rev="1.6.1.6" conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
 		<dependency org="com.fpi.bear" name="bear-common-database"
-			rev="1.6.1.6" conf="compile->compile;sources->sources" />
+			rev="1.6.1.6" conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
 		<dependency org="com.fpi.bear" name="bear-common-third-web"
 			rev="1.6.1.6" conf="compile->compile;sources->sources" />
 		<dependency org="com.fpi.bear" name="bear-common-rest" rev="1.6.1.6"

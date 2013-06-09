@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="herod-order-web" xmlns:ivy="antlib:org.apache.ivy.ant"
+	xmlns:bear="http://fpi-inc.com/bear">
+
+	<import file="../bear-builds/publish.xml" />
+	<import file="../bear-builds/publish-local.xml" />
+	<import file="../bear-builds/deploy.xml" />
+	<target name="compile" depends="init" if="srcDirExist">
+		<!-- <ivy:cachepath pathid="compile.classpath" conf="compile" /> -->
+		<path id="compile.classpath">
+			<fileset dir="${lib.deploy.dir}" includes="*.jar" />
+		</path>
+		<bear:compile />
+		<bear:hbmBuild pattern="${hbm.build.pattern}" />
+	</target>
+
+	<target name="resolve" depends="init" description="resolve all dependency modules.">
+		<!-- <bear:resolve /> -->
+	</target>
+
+	<target name="release-version" depends="init, resolve" unless="version">
+	</target>
+</project>

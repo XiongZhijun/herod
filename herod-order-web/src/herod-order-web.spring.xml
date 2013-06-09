@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<aop:aspectj-autoproxy />
+	<context:annotation-config />
+	<context:component-scan base-package="com.fpi.bear.permission" />
+	<context:component-scan base-package="com.fpi.bear.rest" />
+
+	<bean class="org.apache.wink.spring.Registrar">
+		<property name="instances">
+			<set>
+				<ref bean="dataSetRestService" />
+				<ref bean="nodeManagerRestService" />
+				<ref bean="jacksonJaxbJsonProvider" />
+			</set>
+		</property>
+	</bean>
+
+	<bean id="dataSetInitVisitor" class="com.fpi.bear.dataset.spi.visitor.DataSetInitVisitor">
+		<property name="simpleJdbcTemplate" ref="simpleJdbcTemplate" />
+		<property name="selectSqlBuilder" ref="selectSqlBuilder" />
+	</bean>
+
+	<bean id="springDataSetContext" name="Spring管理数据集容器"
+		class="com.fpi.bear.dataset.spring.SpringDataSetContext" />
+
+	<bean id="tableContext" name="信息服务器表"
+		class="com.fpi.bear.dataset.spi.TableContext">
+		<property name="databaseManagerService" ref="databaseManagerService" />
+		<property name="visitors">
+			<list>
+				<ref bean="dataSetInitVisitor" />
+			</list>
+		</property>
+	</bean>
+	<bean id="dataSetDefinitionService" class="com.fpi.bear.dataset.manager.DataSetManagerImpl">
+		<property name="nodeAccessService" ref="nodeAccessService" />
+	</bean>
+
+	<bean id="basicDataSetContext" name="信息服务器数据集"
+		class="com.fpi.bear.dataset.spi.basic.BasicDataSetContext">
+		<property name="dataSetDefinitionService" ref="dataSetDefinitionService" />
+		<property name="visitors">
+			<list>
+				<ref bean="dataSetInitVisitor" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="dataSetContextFactory" class="com.fpi.bear.dataset.DataSetContextFactoryImpl"></bean>
+
+	<bean id="dataSetControl" class="com.fpi.bear.dataset.control.DataSetControl">
+		<property name="dataSetContextFactory" ref="dataSetContextFactory" />
+	</bean>
+
+	<bean id="viewService" class="com.fpi.bear.dataset.listener.ViewService">
+		<property name="simpleJdbcTemplate" ref="simpleJdbcTemplate" />
+	</bean>
+
+	<bean id="afterAddListener" class="com.fpi.bear.dataset.listener.AfterAddListener">
+		<property name="viewService" ref="viewService" />
+		<property name="eventCenter" ref="eventCenter" />
+	</bean>
+	<bean id="afterUpdateView" class="com.fpi.bear.dataset.listener.AfterUpdateViewListener">
+		<property name="viewService" ref="viewService" />
+		<property name="eventCenter" ref="eventCenter" />
+	</bean>
+	<bean id="beforeDeleteView" class="com.fpi.bear.dataset.listener.BeforeDeleteViewListener">
+		<property name="viewService" ref="viewService" />
+		<property name="simpleJdbcTemplate" ref="simpleJdbcTemplate" />
+		<property name="eventCenter" ref="eventCenter" />
+	</bean>
+
+	<bean id="sqlExecutor" class="com.fpi.bear.dataset.SqlExecutor">
+		<property name="selectSqlBuilder" ref="selectSqlBuilder" />
+		<property name="simpleJdbcTemplate" ref="simpleJdbcTemplate" />
+	</bean>
+
+	<bean id="sqlExecutorHelper" class="com.fpi.bear.servlet.SqlExecutorHelper">
+		<property name="templatesDir" value="/WEB-INF/fm-templates" />
+		<property name="sqlExecutor" ref="sqlExecutor" />
+	</bean>
+
+	<bean id="formDataAccessService" class="com.fpi.bear.db.impl.FormDataAccessServiceImpl" />
+
+</beans>

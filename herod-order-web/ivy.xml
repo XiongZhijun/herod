@@ -19,8 +19,7 @@
 		<artifact type="component" ext="component.xml" conf="component" />
 	</publications>
 	<dependencies>
-		<dependency org="com.fpi.bear" name="bear-fileserver"
-			rev="1.6.1.6" conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
+		<dependency org="servlets.com" name="cos" rev="05Nov2002" conf="compile->master;sources->sources;runtime->runtime" branch="trunk"/>
 		<dependency org="com.fpi.bear" name="bear-common-database"
 			rev="1.6.1.6" conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
 		<dependency org="com.fpi.bear" name="bear-common-third-web"

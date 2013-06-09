@@ -6,6 +6,7 @@ package org.herod.order.web.servlet;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,6 +30,8 @@ import com.oreilly.servlet.multipart.FileRenamePolicy;
  * 
  */
 public class OrderImageUploadServlet extends HttpServlet {
+	/**  */
+	private static final int _1M = 1 * 1024 * 1024;
 	private static final long serialVersionUID = 1971771252526988106L;
 	private static final String UTF_8 = "UTF-8";
 	protected WebApplicationContext context;
@@ -45,13 +48,14 @@ public class OrderImageUploadServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		final List<String> files = new LinkedList<String>();
-
-		new MultipartRequest(req, getStoreDir(), 2 * 1024 * 1024, UTF_8,
+		String realPath = getServletConfig().getServletContext().getRealPath(
+				getStoreDir());
+		new MultipartRequest(req, realPath, _1M, UTF_8,
 				new CustomerFileRenamePolicy(files));
 		resp.setCharacterEncoding(UTF_8);
 		resp.setContentType("text/html;charset=UTF-8");
 
-		resp.getWriter().write(new Gson().toJson(files));
+		resp.getWriter().write(new Gson().toJson(new Result(true, files)));
 
 	}
 
@@ -76,6 +80,26 @@ public class OrderImageUploadServlet extends HttpServlet {
 			files.add(getStoreDir() + "/" + newFileName);
 			return newFile;
 		}
+	}
+
+	public static class Result {
+		private boolean success = true;
+		private List<String> images = new ArrayList<String>();
+
+		public Result(boolean success, List<String> images) {
+			super();
+			this.success = success;
+			this.images = images;
+		}
+
+		public boolean isSuccess() {
+			return success;
+		}
+
+		public List<String> getImages() {
+			return images;
+		}
+
 	}
 
 }

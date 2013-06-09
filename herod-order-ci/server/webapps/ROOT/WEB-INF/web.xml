@@ -77,6 +77,16 @@
 		<servlet-name>FileUploadServlet</servlet-name>
 		<url-pattern>/upload/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>OrderImageUploadServlet</servlet-name>
+		<servlet-class>org.herod.order.web.servlet.OrderImageUploadServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>OrderImageUploadServlet</servlet-name>
+		<url-pattern>/UploadImage/*</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<display-name>DWR Servlet</display-name>

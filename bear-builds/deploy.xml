@@ -32,7 +32,8 @@
 	</target>
 
 	<target name="deploy-local-dwr-spring-hibernate-component-config"
-		depends="copy-artifacts-to-build-dir, generate-component-xml">
+		depends="copy-artifacts-to-build-dir, generate-component-xml"
+		description="deploy-local-dwr-spring-hibernate-component-config">
 		<copy toDir="${spring.deploy.dir}" overwrite="true">
 			<fileset dir="${build.dir}" includes="*.spring.xml" />
 		</copy>

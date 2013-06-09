@@ -7,12 +7,21 @@
  * @date 2012-4-18
  * 
  */
-Ext.define('scud.form.Form', {
+Ext.define('form.Form', {
     extend: 'Ext.form.Panel',
-    updateDwrFunction: ScudFormDataAccessService.update,
-    addDwrFunction: ScudFormDataAccessService.add,
-    loadDwrFunction: ScudFormDataAccessService.getNodeById,
+    updateDwrFunction: OrderFormDataAccessService.update,
+    addDwrFunction: OrderFormDataAccessService.add,
+    loadDwrFunction: OrderFormDataAccessService.getNodeById,
     bodyPadding: 5,
+    layout : {
+		type : 'table',
+		columns : 2
+	},
+	defaultType : 'textfield',
+	defaults : {
+		labelAlign : 'right',
+		margin : '5 5 5 5'
+	},
     onSaved: function(){},
     initComponent: function() {
     	var me = this;

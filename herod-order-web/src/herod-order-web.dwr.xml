@@ -5,44 +5,14 @@
 <dwr>
 
 	<allow>
-		<create creator="spring" javascript="FormDataAccessService">
-			<param name="beanName" value="formDataAccessService" />
+		<create creator="spring" javascript="OrderFormDataAccessService">
+			<param name="beanName" value="orderFormDataAccessService" />
 			<include method="add" />
 			<include method="getNodeById" />
 			<include method="update" />
 			<include method="deleteById" />
 			<include method="deleteByIds" />
 		</create>
-
-		<create creator="spring" javascript="DataSetControl">
-			<param name="beanName" value="dataSetControl" />
-			<include method="search" />
-			<include method="getDataSetColumns" />
-			<include method="getAllDataSetDefinition" />
-			<include method="getAllContextLocations" />
-		</create>
-
-		<create creator="spring" javascript="DataSetDefinitionService">
-			<param name="beanName" value="dataSetDefinitionService" />
-			<include method="add" />
-			<include method="update" />
-			<include method="deleteById" />
-			<include method="deleteByIds" />
-			<include method="getById" />
-		</create>
-
-		<convert converter="bean"
-			match="com.fpi.bear.sql.condition.ConditionDefinition" />
-		<convert converter="bean" match="com.fpi.bear.sql.SimpleOrders" />
-		<convert converter="bean"
-			match="com.fpi.bear.dataset.DataSetContextFactoryImpl" />
-		<convert converter="bean"
-			match="com.fpi.bear.dataset.spi.basic.MapListDataStore" />
-		<convert converter="bean"
-			match="com.fpi.bear.dataset.basic.BasicDataSetDefinition" />
-		<convert converter="bean" match="com.fpi.bear.db.impl.NodeImpl" />
-		<convert converter="bean" match="com.fpi.bear.db.data.FormData" />
-		<convert converter="bean" match="com.fpi.bear.db.data.FieldData" />
 	</allow>
 
 	<signatures>

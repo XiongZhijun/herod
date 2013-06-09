@@ -18,7 +18,7 @@ import com.fpi.bear.db.impl.FormDataAccessServiceImpl;
  * @email hust.xzj@gmail.com
  * 
  */
-public class OrderCommonDataAccessService extends FormDataAccessServiceImpl {
+public class OrderFormDataAccessService extends FormDataAccessServiceImpl {
 
 	@Autowired
 	@Qualifier("simpleJdbcTemplate")

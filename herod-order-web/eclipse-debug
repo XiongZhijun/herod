@@ -1,0 +1,10 @@
+-Xms512m -Xmx512m -XX:PermSize=128m -XX:MaxPermSize=128m -Dfile.encoding=UTF8 -Duser.timezone=GMT+8:00 
+-Dcatalina.base=D:/herod/git/herod/runtime/server/bear-appserver 
+-Djava.security.auth.login.config=D:/herod/git/herod/runtime/server/bear-appserver/conf/jaas.config
+-Djava.endorsed.dirs=D:/herod/git/herod/runtime/server/bear-appserver/common/endorsed
+-Dcatalina.home=D:/herod/git/herod/runtime/server/bear-appserver
+-Djava.io.tmpdir=D:/herod/git/herod/runtime/server/bear-appserver/temp
+-Djava.library.path=D:/herod/git/herod/runtime/server/bear-appserver/bin
+
+
+org.apache.catalina.startup.Bootstrap

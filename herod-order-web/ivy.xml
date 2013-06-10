@@ -19,9 +19,15 @@
 		<artifact type="component" ext="component.xml" conf="component" />
 	</publications>
 	<dependencies>
-		<dependency org="servlets.com" name="cos" rev="05Nov2002" conf="compile->master;sources->sources;runtime->runtime" branch="trunk"/>
+		<dependency name="herod-common" rev="1.0+"
+			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
+		<dependency org="servlets.com" name="cos" rev="05Nov2002"
+			conf="compile->master;sources->sources;runtime->runtime" branch="trunk" />
 		<dependency org="com.fpi.bear" name="bear-common-database"
-			rev="1.6.1.6" conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
+			rev="1.6.1.6"
+			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
+		<dependency org="com.fpi.bear" name="bear-permission" rev="1.6.1.6"
+			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
 		<dependency org="com.fpi.bear" name="bear-common-third-web"
 			rev="1.6.1.6" conf="compile->compile;sources->sources" />
 		<dependency org="com.fpi.bear" name="bear-common-rest" rev="1.6.1.6"

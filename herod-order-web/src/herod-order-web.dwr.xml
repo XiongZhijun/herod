@@ -13,6 +13,10 @@
 			<include method="deleteById" />
 			<include method="deleteByIds" />
 		</create>
+		<create creator="spring" javascript="UserAccessService">
+			<param name="beanName" value="userAccessService" />
+			<include method="createAgentUser" />
+		</create>
 	</allow>
 
 	<signatures>

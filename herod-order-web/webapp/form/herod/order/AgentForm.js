@@ -85,11 +85,63 @@ Ext.define('form.herod.order.AgentForm', {
 				id : 'ADMIN_ACCOUNT',
 				name : 'ADMIN_ACCOUNT',
 				fieldLabel : '管理员账号',
+				labelAlign : 'right',
 				allowBlank : false,
+			}, {
+				xtype : 'button',
+				text : '创建账户',
+				scale : 'medium',
+				handler : function() {
+					me.createAccount();
+				}
 			} ]
 		});
 
 		me.callParent();
+	},
+	createAccount : function() {
+		var window = Ext.create('Ext.window.Window', {
+			title : '创建账户',
+			layout : 'table',
+			plain : true,
+			resizable : false,
+			modal : true,
+			items : [ {
+				id : 'ACCOUNT',
+				name : 'ACCOUNT',
+				fieldLabel : '账号',
+				xtype : 'textfield',
+				labelAlign : 'right',
+				allowBlank : false,
+			} ],
+			buttons : [ {
+				text : '创建',
+				handler : function() {
+					var account = Ext.getCmp("ACCOUNT").getValue();
+					if (!account) {
+						Ext.Msg.alert("提示", "请输入账户名！");
+						return;
+					}
+					UserAccessService.createAgentUser(account, {
+						callback : function() {
+							Ext.getCmp("ADMIN_ACCOUNT").setValue(account);
+							Ext.Msg.alert("提示", "创建账户成功！");
+							window.close();
+						},
+						exceptionHandler : function(msg, exp) {
+							Ext.Msg.show({
+								title : '错误',
+								msg : msg + '节点信息出错',
+								buttons : Ext.Msg.YES,
+								icon : Ext.Msg.ERROR
+							});
+						}
+					});
+				}
+			} ]
+		});
+		window.show();
+
 	},
 	getFormData : function() {
 		var me = this;

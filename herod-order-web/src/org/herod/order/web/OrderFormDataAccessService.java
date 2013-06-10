@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fpi.bear.db.data.FormData;
 import com.fpi.bear.db.impl.FormDataAccessServiceImpl;
@@ -18,24 +19,32 @@ import com.fpi.bear.db.impl.FormDataAccessServiceImpl;
  * @email hust.xzj@gmail.com
  * 
  */
+@Transactional
 public class OrderFormDataAccessService extends FormDataAccessServiceImpl {
 
 	@Autowired
 	@Qualifier("simpleJdbcTemplate")
 	private SimpleJdbcTemplate simpleJdbcTemplate;
+	@Autowired
+	private OrderFormDataPreprocessor orderFormDataPreprocessor;
+	@Autowired
+	private OrderFormDataPostprocessor orderFormDataPostprocessor;
 
 	private static final String BATCH_UPDATE_DELETE_FLAGS = "UPDATE ${TABLE} SET ${FIELD} = 1 WHERE ID = ?";
 
 	@Override
 	public Object add(FormData formData) {
-		handleFormData(formData);
-		return super.add(formData);
+		orderFormDataPreprocessor.preproccess(formData);
+		Object id = super.add(formData);
+		orderFormDataPostprocessor.postproccess(formData);
+		return id;
 	}
 
 	@Override
 	public void update(FormData formData) {
-		handleFormData(formData);
+		orderFormDataPreprocessor.preproccess(formData);
 		super.update(formData);
+		orderFormDataPostprocessor.postproccess(formData);
 	}
 
 	public void batchUpdateDeleteFlags(String nodeTypeCode, String deleteFlag,
@@ -52,8 +61,11 @@ public class OrderFormDataAccessService extends FormDataAccessServiceImpl {
 		simpleJdbcTemplate.batchUpdate(sql, params);
 	}
 
-	private void handleFormData(FormData formData) {
-		// TODO
+	public static interface OrderFormDataPreprocessor {
+		void preproccess(FormData formData);
 	}
 
+	public static interface OrderFormDataPostprocessor {
+		void postproccess(FormData formData);
+	}
 }

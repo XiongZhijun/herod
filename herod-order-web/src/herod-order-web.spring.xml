@@ -10,5 +10,9 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	<context:annotation-config />
 
 	<bean id="orderFormDataAccessService" class="org.herod.order.web.OrderFormDataAccessService" />
-
+	<bean id="userAccessService" class="org.herod.order.web.UserAccessService"></bean>
+	<bean id="orderUserDao" class="org.herod.order.web.pms.UserDao"></bean>
+	<bean id="userPasswordEncryptor" class="org.herod.order.web.pms.MD5UserPasswordEncryptor"></bean>
+	<bean id="orderFormDataProcessor" class="org.herod.order.web.OrderFormDataProcessor"></bean>
+	<bean id="userService" class="org.herod.order.web.pms.SimpleUserService"></bean>
 </beans>

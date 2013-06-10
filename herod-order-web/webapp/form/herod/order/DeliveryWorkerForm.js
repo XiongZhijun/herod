@@ -24,13 +24,20 @@ Ext.define('form.herod.order.DeliveryWorkerForm', {
 				name : 'PHONE',
 				fieldLabel : '手机号',
 				regex : /^[0-9]+$/,
-				regexText : '请输入电话号码',
+				regexText : '请输入合法电话号码（0-9）',
 			}, {
 				id : 'PASSWORD',
 				name : 'PASSWORD',
 				fieldLabel : '登陆密码',
 				maxLength : 24,
 				inputType : 'password',
+			}, {
+				id : 'ID_NUMBER',
+				name : 'ID_NUMBER',
+				fieldLabel : '身份证号',
+				regex : /^[0-9a-zA-Z]+$/,
+				regexText : '请输入合法身份证号',
+				maxLength : 18,
 			}, {
 				xtype : 'fieldcontainer',
 				fieldLabel : '状态',

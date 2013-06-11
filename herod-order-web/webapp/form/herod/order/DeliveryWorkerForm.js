@@ -1,5 +1,5 @@
 /**
- * @class form.herod.DeliveryWorkerForm
+ * @class form.herod.order.DeliveryWorkerForm
  * @extends bear.control.ux.Sheet
  * @designControl
  */

@@ -1,0 +1,229 @@
+/**
+ * @class form.herod.order.ShopForm
+ * @author Xiong Zhijun
+ * @date 2011-7-4
+ * @extends Ext.Component
+ */
+Ext.ns('form.herod.order');
+Ext.define('form.herod.order.ShopForm', {
+	extend : 'form.Form',
+	defaults : {
+		labelAlign : 'right',
+		margin : '5 5 5 5',
+		labelWidth : 80,
+		msgTarget : 'side',
+		allowBlank : false,
+	},
+	initComponent : function() {
+		var me = this;
+
+		Ext.apply(me, {
+			items : [ {
+				id : 'NAME',
+				name : 'NAME',
+				fieldLabel : '商店名称',
+				msgTarget : 'side',
+			}, {
+				id : 'IMAGE_URL',
+				name : 'IMAGE_URL',
+				fieldLabel : '图片',
+				rowspan : 5,
+				width : 200,
+				height : 150,
+				src : '',
+				align : 'center',
+				xtype : 'image'
+			}, {
+				xtype : 'form',
+				border : false,
+				defaults : {
+					labelAlign : 'right'
+				},
+				items : [ {
+					fieldLabel : '商店图片',
+					labelWidth : 80,
+					emptyText : '请选择图片……',
+					buttonText : '选择图片',
+					xtype : 'fileuploadfield',
+					listeners : {
+						'change' : function() {
+							fileUploadField = this;
+							me.uploadImage(this, function(images) {
+								Ext.getCmp("IMAGE_URL").setSrc(images[0]);
+							});
+						}
+					}
+				} ]
+			}, {
+				id : 'SHOP_TYPE_ID',
+				name : 'SHOP_TYPE_ID',
+				fieldLabel : '商店类型',
+				msgTarget : 'side',
+			}, {
+				id : 'ADDRESS',
+				name : 'ADDRESS',
+				fieldLabel : '商店地址',
+				msgTarget : 'side',
+			}, {
+				id : 'ORGANIZATION_CODE',
+				name : 'ORGANIZATION_CODE',
+				fieldLabel : '组织机构代码',
+				msgTarget : 'side',
+			}, {
+				xtype : 'form',
+				border : false,
+				defaults : {
+					labelAlign : 'right'
+				},
+				items : [ {
+					fieldLabel : '营业执照',
+					labelWidth : 80,
+					emptyText : '请选择图片……',
+					buttonText : '选择图片',
+					xtype : 'fileuploadfield',
+					listeners : {
+						'change' : function() {
+							fileUploadField = this;
+							me.uploadImage(this, function(images) {
+								var cmp = Ext.getCmp("BUSINESS_LICENSE");
+								cmp.setSrc(images[0]);
+							});
+						}
+					}
+				} ]
+			}, {
+				id : 'BUSINESS_LICENSE',
+				name : 'BUSINESS_LICENSE',
+				fieldLabel : '营业执照',
+				rowspan : 5,
+				width : 200,
+				height : 150,
+				src : '',
+				align : 'center',
+				xtype : 'image'
+			}, {
+				id : 'LINKMAN',
+				name : 'LINKMAN',
+				fieldLabel : '联系人',
+				msgTarget : 'side',
+			}, {
+				id : 'CONTACT_NUMBER',
+				name : 'CONTACT_NUMBER',
+				fieldLabel : '联系电话',
+				msgTarget : 'side',
+			}, {
+				id : 'BANK_NAME',
+				name : 'BANK_NAME',
+				fieldLabel : '开户行',
+				msgTarget : 'side',
+			}, {
+				id : 'BANK_ACCOUNT',
+				name : 'BANK_ACCOUNT',
+				fieldLabel : '银行账号',
+				msgTarget : 'side',
+			}, {
+				id : 'LOCATION',
+				name : 'LOCATION',
+				fieldLabel : '经纬度',
+				readOnly : 'true',
+				disabled : true,
+				msgTarget : 'side',
+			}, {
+				xtype : 'button',
+				text : 'GPS定位',
+				scale : 'medium',
+				handler : function() {
+					me.setLocation();
+				}
+			}, {
+				id : 'SERVICE_RADIUS',
+				name : 'SERVICE_RADIUS',
+				fieldLabel : '服务半径',
+				colspan : '2',
+				msgTarget : 'side',
+			}, {
+				id : 'COMMENT',
+				name : 'COMMENT',
+				xtype : 'textareafield',
+				fieldLabel : '备注',
+				width : 500,
+				colspan : 2
+			} ]
+		});
+
+		me.callParent();
+	},
+	setLocation : function() {
+		var mapPanel = Ext.create('Ext.panel.Panel', {
+			id : 'allmap',
+			loader : {
+				url : '/form/herod/order/Map.html',
+				scripts : true,
+				autoLoad : true
+			}
+		});
+		var window = Ext.create('Ext.window.Window', {
+			title : '商店定位',
+			layout : 'fit',
+			width : 800,
+			height : 600,
+			modal : true,
+			items : [ mapPanel ],
+			buttons : [ {
+				text : '确定',
+				handler : function() {
+					window.close();
+				}
+			} ]
+		});
+		window.show();
+	},
+	getFormData : function() {
+		var me = this;
+		var formData = me.callParent();
+		var location = Ext.getCmp('LOCATION').getValue();
+		if (location && location.length > 0) {
+			var split = location.split(',');
+			if (split.length > 1) {
+				formData.fields.push({
+					name : 'LONGITUDE',
+					value : split[0]
+				});
+				formData.fields.push({
+					name : 'LATITUDE',
+					value : split[1]
+				});
+			}
+		}
+		formData.fields.push({
+			name : 'IMAGE_URL',
+			value : Ext.getCmp("IMAGE_URL").src
+		});
+		formData.fields.push({
+			name : 'BUSINESS_LICENSE',
+			value : Ext.getCmp("BUSINESS_LICENSE").src
+		});
+		return formData;
+	},
+	afterLoad : function(fieldValueMap) {
+		var lon = fieldValueMap['LONGITUDE'];
+		var lat = fieldValueMap['LATITUDE'];
+		var location = '';
+		if (lon && lat) {
+			location = lon + ',' + lat;
+		}
+		Ext.getCmp("LOCATION").setValue(location);
+		Ext.getCmp("IMAGE_URL").setSrc(
+				fieldValueMap['IMAGE_URL'] == null ? ''
+						: fieldValueMap['IMAGE_URL']);
+		Ext.getCmp("BUSINESS_LICENSE").setSrc(
+				fieldValueMap['BUSINESS_LICENSE'] == null ? ''
+						: fieldValueMap['BUSINESS_LICENSE']);
+	},
+	clearValue : function() {
+		var me = this;
+		me.callParent();
+		Ext.getCmp("IMAGE_URL").setSrc('');
+		Ext.getCmp("BUSINESS_LICENSE").setSrc('');
+	}
+});

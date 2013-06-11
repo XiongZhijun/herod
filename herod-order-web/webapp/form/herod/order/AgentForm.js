@@ -85,6 +85,7 @@ Ext.define('form.herod.order.AgentForm', {
 				id : 'ADMIN_ACCOUNT',
 				name : 'ADMIN_ACCOUNT',
 				fieldLabel : '管理员账号',
+				readOnly : 'true',
 				labelAlign : 'right',
 				allowBlank : false,
 			}, {

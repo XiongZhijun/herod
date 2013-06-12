@@ -57,6 +57,9 @@ Ext.define('form.herod.order.ShopForm', {
 			}, {
 				id : 'SHOP_TYPE_ID',
 				name : 'SHOP_TYPE_ID',
+				xtype : 'datasetcombobox',
+				contextLocation : 'basicDataSetContext',
+				dataSetCode : 'SHOP_TYPE_VIEW',
 				fieldLabel : '商店类型',
 				msgTarget : 'side',
 			}, {
@@ -69,6 +72,7 @@ Ext.define('form.herod.order.ShopForm', {
 				name : 'ORGANIZATION_CODE',
 				fieldLabel : '组织机构代码',
 				msgTarget : 'side',
+				allowBlank : true
 			}, {
 				xtype : 'form',
 				border : false,
@@ -116,11 +120,13 @@ Ext.define('form.herod.order.ShopForm', {
 				name : 'BANK_NAME',
 				fieldLabel : '开户行',
 				msgTarget : 'side',
+				allowBlank : true
 			}, {
 				id : 'BANK_ACCOUNT',
 				name : 'BANK_ACCOUNT',
 				fieldLabel : '银行账号',
 				msgTarget : 'side',
+				allowBlank : true
 			}, {
 				id : 'LOCATION',
 				name : 'LOCATION',
@@ -138,16 +144,21 @@ Ext.define('form.herod.order.ShopForm', {
 			}, {
 				id : 'SERVICE_RADIUS',
 				name : 'SERVICE_RADIUS',
-				fieldLabel : '服务半径',
+				xtype : 'numberfield',
+				fieldLabel : '服务半径(KM)',
 				colspan : '2',
 				msgTarget : 'side',
+				value : 3,
+				minValue : 0,
+				maxValue : 99
 			}, {
 				id : 'COMMENT',
 				name : 'COMMENT',
 				xtype : 'textareafield',
 				fieldLabel : '备注',
 				width : 500,
-				colspan : 2
+				colspan : 2,
+				allowBlank : true
 			} ]
 		});
 

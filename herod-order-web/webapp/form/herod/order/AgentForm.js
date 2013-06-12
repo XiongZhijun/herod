@@ -28,6 +28,7 @@ Ext.define('form.herod.order.AgentForm', {
 				height : 150,
 				align : 'right',
 				xtype : 'image',
+				allowBlank : true,
 			}, {
 				id : 'LEGAL_REPRESENTATIVE',
 				name : 'LEGAL_REPRESENTATIVE',
@@ -75,19 +76,18 @@ Ext.define('form.herod.order.AgentForm', {
 				id : 'BANK_NAME',
 				name : 'BANK_NAME',
 				fieldLabel : '开户行',
-				allowBlank : false,
+				allowBlank : true,
 			}, {
 				id : 'BANK_ACCOUNT',
 				name : 'BANK_ACCOUNT',
 				fieldLabel : '银行账号',
-				allowBlank : false,
+				allowBlank : true,
 			}, {
 				id : 'ADMIN_ACCOUNT',
 				name : 'ADMIN_ACCOUNT',
 				fieldLabel : '管理员账号',
 				readOnly : 'true',
 				labelAlign : 'right',
-				allowBlank : false,
 			}, {
 				xtype : 'button',
 				text : '创建账户',

@@ -1,20 +1,20 @@
 /*
-SQLyog Community v9.20 
-MySQL - 5.0.19-nt : Database - herod-order
+SQLyog Community Edition- MySQL GUI v6.07
+Host - 5.0.19-nt : Database - herod-order
 *********************************************************************
+Server version : 5.0.19-nt
 */
 
 /*!40101 SET NAMES utf8 */;
 
 /*!40101 SET SQL_MODE=''*/;
 
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`herod-order` /*!40100 DEFAULT CHARACTER SET utf8 */;
+create database if not exists `herod-order`;
 
 USE `herod-order`;
+
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 /*Table structure for table `action` */
 
@@ -88,7 +88,7 @@ CREATE TABLE `data_set` (
 
 /*Data for the table `data_set` */
 
-insert  into `data_set`(`ID`,`CODE`,`NAME`,`TYPE`,`_SQL`,`PINYIN`) values (1,'SHOP_TYPE_VIEW','商店类型视图','com.fpi.bear.dataset.spi.basic.SQLDataSet','SELECT ID, NAME FROM ZRH_SHOP_TYPE','sdlxst'),(2,'SHOP_VIEW','商店视图','com.fpi.bear.dataset.spi.basic.SQLDataSet','SELECT S.ID, S.NAME, T.NAME SHOP_TYPE_NAME, S.ADDRESS, S.CONTACT_NUMBER FROM ZRH_SHOP S LEFT JOIN ZRH_SHOP_TYPE T ON S.SHOP_TYPE_ID = T.ID','sdst');
+insert  into `data_set`(`ID`,`CODE`,`NAME`,`TYPE`,`_SQL`,`PINYIN`) values (1,'SHOP_TYPE_VIEW','商店类型视图','com.fpi.bear.dataset.spi.basic.SQLDataSet','SELECT ID, NAME FROM ZRH_SHOP_TYPE','sdlxst'),(2,'SHOP_VIEW','商店视图','com.fpi.bear.dataset.spi.basic.SQLDataSet','SELECT S.ID, S.NAME, T.NAME SHOP_TYPE_NAME, S.ADDRESS, S.CONTACT_NUMBER, S.AGENT_ID FROM ZRH_SHOP S LEFT JOIN ZRH_SHOP_TYPE T ON S.SHOP_TYPE_ID = T.ID','sdst');
 
 /*Table structure for table `database_alias` */
 
@@ -270,7 +270,7 @@ CREATE TABLE `permissions` (
 
 /*Data for the table `permissions` */
 
-insert  into `permissions`(`ID`,`NAME`,`TYPE`,`CODE`,`DESCRIPTION`,`PINYIN`,`LOCATION`,`CONDITION_DEFINE`) values (10000,'all','simpleDefine','*','超级管理员权限',NULL,NULL,NULL);
+insert  into `permissions`(`ID`,`NAME`,`TYPE`,`CODE`,`DESCRIPTION`,`PINYIN`,`LOCATION`,`CONDITION_DEFINE`) values (10000,'all','simpleDefine','*','超级管理员权限',NULL,NULL,NULL),(10001,'SystemPermission10001','SystemPermission','SystemPermission:VIEW:10002',NULL,NULL,NULL,NULL),(10002,'MenuPermission10001','MenuPermission','MenuPermission:VIEW:10003,10008',NULL,NULL,NULL,NULL),(10003,'商店视图查看权限','simpleDefine','SHOP_VIEW:VIEW',NULL,NULL,NULL,NULL),(10004,'配送人员查看权限','simpleDefine','ZRH_AGENT_DELIVERY_WORKER:VIEW',NULL,NULL,NULL,NULL),(10005,'店铺类型查看权限','simpleDefine','SHOP_TYPE_VIEW:VIEW',NULL,NULL,NULL,NULL),(10006,'商品分类查看权限','simpleDefine','ZRH_GOODS_CATEGORY:VIEW',NULL,NULL,NULL,NULL),(10007,'商品查看权限','simpleDefine','ZRH_GOODS:VIEW',NULL,NULL,NULL,NULL);
 
 /*Table structure for table `position` */
 
@@ -319,7 +319,7 @@ CREATE TABLE `roles_permissions` (
 
 /*Data for the table `roles_permissions` */
 
-insert  into `roles_permissions`(`PERMISSIONID`,`ROLEID`) values (10000,10000);
+insert  into `roles_permissions`(`PERMISSIONID`,`ROLEID`) values (10000,10000),(10001,10001),(10002,10001),(10003,10001),(10004,10001),(10005,10001),(10006,10001),(10007,10001);
 
 /*Table structure for table `service_user_mapping` */
 
@@ -431,7 +431,7 @@ CREATE TABLE `users` (
 
 /*Data for the table `users` */
 
-insert  into `users`(`ID`,`NAME`,`PASSWORD`,`CREATETIME`,`PINYIN`,`USER_TYPE`) values (10000,'root','E10ADC3949BA59ABBE56E057F20F883E','2011-11-11 11:11:11',NULL,'Admin');
+insert  into `users`(`ID`,`NAME`,`PASSWORD`,`CREATETIME`,`PINYIN`,`USER_TYPE`) values (10000,'root','E10ADC3949BA59ABBE56E057F20F883E','2011-11-11 11:11:11',NULL,'Admin'),(10001,'bj_agent','E10ADC3949BA59ABBE56E057F20F883E','2013-06-13 14:49:21',NULL,'AgentAdmin');
 
 /*Table structure for table `users_roles` */
 
@@ -449,7 +449,7 @@ CREATE TABLE `users_roles` (
 
 /*Data for the table `users_roles` */
 
-insert  into `users_roles`(`ROLEID`,`USERID`) values (10000,10000);
+insert  into `users_roles`(`ROLEID`,`USERID`) values (10000,10000),(10001,10001);
 
 /*Table structure for table `zrh_agent` */
 
@@ -473,7 +473,7 @@ CREATE TABLE `zrh_agent` (
 
 /*Data for the table `zrh_agent` */
 
-insert  into `zrh_agent`(`ID`,`NAME`,`LEGAL_REPRESENTATIVE`,`LINKMAN`,`CONTACT_NUMBER`,`CONTACT_ADDRESS`,`BANK_NAME`,`BANK_ACCOUNT`,`ORGANIZATION_CODE`,`BUSINESS_LICENSE`,`ADMIN_ACCOUNT`,`PINYIN`) values (1,'超级代理商','熊志军','熊志军','110','中南海','中国人民银行','001','','','root','cjdls');
+insert  into `zrh_agent`(`ID`,`NAME`,`LEGAL_REPRESENTATIVE`,`LINKMAN`,`CONTACT_NUMBER`,`CONTACT_ADDRESS`,`BANK_NAME`,`BANK_ACCOUNT`,`ORGANIZATION_CODE`,`BUSINESS_LICENSE`,`ADMIN_ACCOUNT`,`PINYIN`) values (1,'超级代理商','熊志军','熊志军','110','中南海','中国人民银行','001','','/OrderImages/51a4e54164e0411883dd365671a974cb.png','root','cjdls'),(2,'滨江代理商','张三','张三','120','精工科技','','','','','bj_agent','bjdls');
 
 /*Table structure for table `zrh_agent_delivery_worker` */
 
@@ -525,6 +525,8 @@ CREATE TABLE `zrh_goods` (
 
 /*Data for the table `zrh_goods` */
 
+insert  into `zrh_goods`(`ID`,`NAME`,`CODE`,`ALIAS`,`SUPPLY_PRICE`,`SELLING_PRICE`,`UNIT`,`COMMENT`,`LARGE_IMAGE`,`THUMBNAIL`,`CATEGORY_ID`,`SHOP_ID`,`AGENT_ID`,`PINYIN`) values (3,'sfsdf','dfg','dfg',4,5,'fdg','','/OrderImages/3bbbaaaee5ae4cae8f4480acb68c6026.png','/OrderImages/edee7c70785942c7a894130d3afd05fe.png',3,7,1,'');
+
 /*Table structure for table `zrh_goods_category` */
 
 DROP TABLE IF EXISTS `zrh_goods_category`;
@@ -544,6 +546,8 @@ CREATE TABLE `zrh_goods_category` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `zrh_goods_category` */
+
+insert  into `zrh_goods_category`(`ID`,`NAME`,`ALIAS`,`SHOP_ID`,`PINYIN`,`AGENT_ID`) values (3,'sdfsdf','',7,'',1);
 
 /*Table structure for table `zrh_order` */
 
@@ -669,9 +673,7 @@ CREATE TABLE `zrh_shop_type` (
 
 /*Data for the table `zrh_shop_type` */
 
-insert  into `zrh_shop_type`(`ID`,`NAME`,`IMAGE_URL`,`PINYIN`,`COMMENT`) values (1,'餐饮外卖','/OrderImages/7421eb612f5148ab9d1f1a4c8abfdbfc.jpg','cywm','');
+insert  into `zrh_shop_type`(`ID`,`NAME`,`IMAGE_URL`,`PINYIN`,`COMMENT`) values (1,'餐饮外卖','/OrderImages/2d7f10aa6870449a87bc9b5dffbf7aab.png','cywm','');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;

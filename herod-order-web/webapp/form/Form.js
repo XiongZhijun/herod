@@ -166,13 +166,21 @@ Ext.define('form.Form', {
 			}
 		});
 	},
-	uploadImage : function(me, uploadSuccessListener) {
+	uploadImage : function(me, uploadSuccessListener, params) {
 		var form = me.up('form').getForm();
 		if (!form || !form.isValid()) {
 			return;
 		}
+		
+		var url = '/UploadImage';
+		if (params) {
+			url += '?';
+			for ( var k in params) {
+				url += k + "=" + params[k];
+			}
+		}
 		form.submit({
-			url : '/UploadImage',
+			url : url,
 			standardSubmit : true,
 			waitMsg : '图片上传中……',
 			success : function(form, action) {

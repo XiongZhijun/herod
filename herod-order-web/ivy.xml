@@ -45,6 +45,8 @@
 			rev="1.6" conf="compile->master;sources->sources" />
 		<dependency org="freemarker" name="freemarker" rev="2.3.8"
 			conf="compile->master;sources->sources" />
+		<dependency org="thumbnailator" name="thumbnailator" rev="0.4.4"
+			conf="compile->default" />
 
 
 		<dependency org="org.testng" name="testng" rev="6.1.1"

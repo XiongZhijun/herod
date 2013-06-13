@@ -14,6 +14,7 @@ Ext.define('form.herod.order.GoodsForm', {
 		msgTarget : 'side',
 		allowBlank : false,
 	},
+	images : null,
 	initComponent : function() {
 		var me = this;
 
@@ -50,7 +51,8 @@ Ext.define('form.herod.order.GoodsForm', {
 							fileUploadField = this;
 							me.uploadImage(this, function(images) {
 								Ext.getCmp("LARGE_IMAGE").setSrc(images[0]);
-							});
+								me.images = images;
+							},{'BUILD_THUMBNAIL':true});
 						}
 					}
 				} ]
@@ -130,6 +132,10 @@ Ext.define('form.herod.order.GoodsForm', {
 			value : Ext.getCmp("LARGE_IMAGE").src
 		});
 		formData.fields.push({
+			name : 'THUMBNAIL',
+			value : me.images[1]
+		});
+		formData.fields.push({
 			name : 'SHOP_ID',
 			value : me.gridPanel.shopId
 		});
@@ -142,7 +148,7 @@ Ext.define('form.herod.order.GoodsForm', {
 	afterLoad : function(fieldValueMap) {
 		Ext.getCmp("LARGE_IMAGE").setSrc(
 				fieldValueMap['LARGE_IMAGE'] == null ? ''
-						: fieldValueMap['IMAGE_URL']);
+						: fieldValueMap['LARGE_IMAGE']);
 	},
 	clearValue : function() {
 		var me = this;

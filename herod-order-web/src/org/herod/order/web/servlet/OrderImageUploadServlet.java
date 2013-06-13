@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.coobird.thumbnailator.Thumbnails;
+
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -48,12 +50,24 @@ public class OrderImageUploadServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		final List<String> files = new LinkedList<String>();
+		List<String> fileNames = new ArrayList<String>();
 		String realPath = getServletConfig().getServletContext().getRealPath(
 				getStoreDir());
 		new MultipartRequest(req, realPath, _1M, UTF_8,
-				new CustomerFileRenamePolicy(files));
+				new CustomerFileRenamePolicy(files, fileNames));
 		resp.setCharacterEncoding(UTF_8);
 		resp.setContentType("text/html;charset=UTF-8");
+
+		boolean buildThumbnails = "true".equalsIgnoreCase(req
+				.getParameter("BUILD_THUMBNAIL"));
+		if (buildThumbnails) {
+			for (String fileName : fileNames) {
+				File file = new File(realPath, fileName);
+				File thumbnail = new File(realPath, buildNewFileName(fileName));
+				Thumbnails.of(file).size(80, 80).toFile(thumbnail);
+				files.add(getStoreDir() + "/" + thumbnail.getName());
+			}
+		}
 
 		resp.getWriter().write(new Gson().toJson(new Result(true, files)));
 
@@ -65,21 +79,31 @@ public class OrderImageUploadServlet extends HttpServlet {
 
 	class CustomerFileRenamePolicy implements FileRenamePolicy {
 		List<String> files;
+		List<String> fileNames;
 
-		public CustomerFileRenamePolicy(List<String> files) {
+		public CustomerFileRenamePolicy(List<String> files,
+				List<String> fileNames) {
 			super();
 			this.files = files;
+			this.fileNames = fileNames;
 		}
 
 		@Override
 		public File rename(File originalFile) {
-			String uuid = FileUtils.buildUUID();
-			String newFileName = FileUtils.rename(originalFile.getName(), uuid);
+			String newFileName = buildNewFileName(originalFile.getName());
 			String dir = originalFile.getParent();
 			File newFile = new File(dir, newFileName);
 			files.add(getStoreDir() + "/" + newFileName);
+			fileNames.add(newFileName);
 			return newFile;
 		}
+
+	}
+
+	private String buildNewFileName(String originalFileName) {
+		String uuid = FileUtils.buildUUID();
+		String newFileName = FileUtils.rename(originalFileName, uuid);
+		return newFileName;
 	}
 
 	public static class Result {

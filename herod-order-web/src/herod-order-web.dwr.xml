@@ -17,6 +17,13 @@
 			<param name="beanName" value="userAccessService" />
 			<include method="createAgentUser" />
 		</create>
+		<create creator="spring" javascript="OrderDataSetControl">
+			<param name="beanName" value="orderDataSetControl" />
+			<include method="search" />
+			<include method="getDataSetColumns" />
+			<include method="getAllDataSetDefinition" />
+			<include method="getAllContextLocations" />
+		</create>
 	</allow>
 
 	<signatures>

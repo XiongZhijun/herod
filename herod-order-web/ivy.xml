@@ -23,6 +23,9 @@
 			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
 		<dependency org="servlets.com" name="cos" rev="05Nov2002"
 			conf="compile->master;sources->sources;runtime->runtime" branch="trunk" />
+		<dependency org="com.fpi.bear" name="bear-common-database-control"
+			rev="1.6.1.6"
+			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
 		<dependency org="com.fpi.bear" name="bear-common-database"
 			rev="1.6.1.6"
 			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
@@ -36,7 +39,8 @@
 		<dependency org="com.fpi.bear" name="bear-common-database"
 			rev="1.6.1.6"
 			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
-
+		<dependency org="org.apache.shiro" name="shiro-core" rev="1.1.0"
+			conf="compile->master;sources->sources" />
 		<dependency org="commons-configuration" name="commons-configuration"
 			rev="1.6" conf="compile->master;sources->sources" />
 		<dependency org="freemarker" name="freemarker" rev="2.3.8"

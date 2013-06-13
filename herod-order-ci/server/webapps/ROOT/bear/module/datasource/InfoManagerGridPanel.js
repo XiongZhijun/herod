@@ -38,7 +38,7 @@ Ext.define('bear.module.datasource.InfoManagerGridPanel', {
 	condition : null,
 	basicCondition : null,
 	pageSize : 20,
-	dwrFunction : DataSetControl.search,
+	dwrFunction : OrderDataSetControl.search,
 	dataSetContext : null,
 	dataSetCode : null,
 	dataSetContextLocation : 'tableContext',

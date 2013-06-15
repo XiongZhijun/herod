@@ -44,7 +44,7 @@ public class SimpleBuyerPhoneService implements BuyerPhoneService {
 			return Collections.emptyList();
 		}
 		return queryForList("SELECT ID,NAME,IMAGE_URL FROM ZRH_SHOP_TYPE WHERE ID IN "
-				+ SqlUtils.buildInSql(shopTypeIds));
+				+ SqlUtils.buildInSql(shopTypeIds) + "  ORDER BY SORT");
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class SimpleBuyerPhoneService implements BuyerPhoneService {
 	public List<Map<String, Object>> findGoodsTypesByShop(long shopId,
 			double latitude, double longitude) {
 		return queryForList(
-				"SELECT ID,NAME,ALIAS,SHOP_ID,AGENT_ID FROM ZRH_GOODS_CATEGORY WHERE SHOP_ID = ? ",
+				"SELECT ID,NAME,ALIAS,SHOP_ID,AGENT_ID FROM ZRH_GOODS_CATEGORY WHERE SHOP_ID = ? ORDER BY SORT ",
 				shopId);
 	}
 
@@ -87,7 +87,7 @@ public class SimpleBuyerPhoneService implements BuyerPhoneService {
 				"SELECT G.ID, G.NAME, G.CODE, G.ALIAS, G.SUPPLY_PRICE, "
 						+ "G.SELLING_PRICE, G.UNIT, G.COMMENT, G.LARGE_IMAGE, G.THUMBNAIL, "
 						+ "G.CATEGORY_ID, G.SHOP_ID, G.AGENT_ID, S.NAME AS SHOP_NAME FROM ZRH_GOODS G "
-						+ "LEFT JOIN ZRH_SHOP S ON G.SHOP_ID = S.ID WHERE G.CATEGORY_ID = ? LIMIT ?, ?",
+						+ "LEFT JOIN ZRH_SHOP S ON G.SHOP_ID = S.ID WHERE G.CATEGORY_ID = ? ORDER BY G.SORT LIMIT ?, ?",
 				goodsTypeId, begin, count);
 	}
 
@@ -98,7 +98,7 @@ public class SimpleBuyerPhoneService implements BuyerPhoneService {
 				"SELECT G.ID, G.NAME, G.CODE, G.ALIAS, G.SUPPLY_PRICE, "
 						+ "G.SELLING_PRICE, G.UNIT, G.COMMENT, G.LARGE_IMAGE, G.THUMBNAIL, "
 						+ "G.CATEGORY_ID, G.SHOP_ID, G.AGENT_ID, S.NAME AS SHOP_NAME FROM ZRH_GOODS G "
-						+ "LEFT JOIN ZRH_SHOP S ON G.SHOP_ID = S.ID WHERE G.NAME LIKE ? LIMIT ?, ?",
+						+ "LEFT JOIN ZRH_SHOP S ON G.SHOP_ID = S.ID WHERE G.NAME LIKE ?  ORDER BY G.SORT LIMIT ?, ?",
 				"%" + goodsName + "%", begin, count);
 	}
 
@@ -123,6 +123,6 @@ public class SimpleBuyerPhoneService implements BuyerPhoneService {
 	}
 
 	private List<Map<String, Object>> getAllShops() {
-		return queryForList("SELECT ID, NAME, SHOP_TYPE_ID, AGENT_ID, ADDRESS, CONTACT_NUMBER, LONGITUDE, LATITUDE, SERVICE_RADIUS, IMAGE_URL, BANK_NAME, BANK_ACCOUNT, ORGANIZATION_CODE, BUSINESS_LICENSE, LINKMAN, COMMENT FROM ZRH_SHOP ");
+		return queryForList("SELECT ID, NAME, SHOP_TYPE_ID, AGENT_ID, ADDRESS, CONTACT_NUMBER, LONGITUDE, LATITUDE, SERVICE_RADIUS, IMAGE_URL, BANK_NAME, BANK_ACCOUNT, ORGANIZATION_CODE, BUSINESS_LICENSE, LINKMAN, COMMENT, COST_OF_RUN_ERRANDS, MIN_CHARGE_FOR_FREE_DELIVERY FROM ZRH_SHOP ORDER BY SORT");
 	}
 }

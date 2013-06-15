@@ -159,12 +159,12 @@ Ext.define('form.Form', {
 		return this.getForm().getValues(false, false, true, true);
 	},
 	clearValue : function() {
-		this.form.getFields().each(function(field) {
-			if (Ext.isFunction(field.setValue)) {
-				field.setValue('');
-				field.resetOriginalValue();
-			}
-		});
+//		this.form.getFields().each(function(field) {
+//			if (Ext.isFunction(field.setValue)) {
+//				field.setValue('');
+//				field.resetOriginalValue();
+//			}
+//		});
 	},
 	uploadImage : function(me, uploadSuccessListener, params) {
 		var form = me.up('form').getForm();

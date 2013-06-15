@@ -52,7 +52,9 @@ Ext.define('form.herod.order.GoodsForm', {
 							me.uploadImage(this, function(images) {
 								Ext.getCmp("LARGE_IMAGE").setSrc(images[0]);
 								me.images = images;
-							},{'BUILD_THUMBNAIL':true});
+							}, {
+								'BUILD_THUMBNAIL' : true
+							});
 						}
 					}
 				} ]
@@ -86,6 +88,18 @@ Ext.define('form.herod.order.GoodsForm', {
 				name : 'UNIT',
 				fieldLabel : '计量单位',
 				msgTarget : 'side',
+			}, {
+				id : 'SORT',
+				name : 'SORT',
+				fieldLabel : '排序',
+				colspan : 2,
+				regex : /^[0-9]+$/,
+				regexText : '请输入整数',
+				xtype : 'numberfield',
+				allowBlank : false,
+				msgTarget : 'side',
+				value : 255,
+				minValue : 1
 			}, {
 				id : 'COMMENT',
 				name : 'COMMENT',

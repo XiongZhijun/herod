@@ -27,6 +27,17 @@ Ext.define('form.herod.order.GoodsCategoryForm', {
 				id : 'ALIAS',
 				name : 'ALIAS',
 				fieldLabel : '别名',
+			}, {
+				id : 'SORT',
+				name : 'SORT',
+				fieldLabel : '排序',
+				regex : /^[0-9]+$/,
+				regexText : '请输入整数',
+				xtype : 'numberfield',
+				allowBlank : false,
+				msgTarget : 'side',
+				value : 255,
+				minValue : 1
 			} ]
 		});
 		me.callParent();

@@ -128,6 +128,22 @@ Ext.define('form.herod.order.ShopForm', {
 				msgTarget : 'side',
 				allowBlank : true
 			}, {
+				id : 'COST_OF_RUN_ERRANDS',
+				name : 'COST_OF_RUN_ERRANDS',
+				xtype : 'numberfield',
+				fieldLabel : '配送费',
+				msgTarget : 'side',
+				allowBlank : true,
+				minValue : 0
+			}, {
+				id : 'MIN_CHARGE_FOR_FREE_DELIVERY',
+				name : 'MIN_CHARGE_FOR_FREE_DELIVERY',
+				xtype : 'numberfield',
+				fieldLabel : '免配送费消费金额',
+				msgTarget : 'side',
+				allowBlank : true,
+				minValue : 0
+			}, {
 				id : 'LOCATION',
 				name : 'LOCATION',
 				fieldLabel : '经纬度',
@@ -146,11 +162,21 @@ Ext.define('form.herod.order.ShopForm', {
 				name : 'SERVICE_RADIUS',
 				xtype : 'numberfield',
 				fieldLabel : '服务半径(KM)',
-				colspan : '2',
 				msgTarget : 'side',
 				value : 3,
 				minValue : 0,
 				maxValue : 99
+			}, {
+				id : 'SORT',
+				name : 'SORT',
+				fieldLabel : '排序',
+				regex : /^[0-9]+$/,
+				regexText : '请输入整数',
+				xtype : 'numberfield',
+				allowBlank : false,
+				msgTarget : 'side',
+				value : 255,
+				minValue : 1
 			}, {
 				id : 'COMMENT',
 				name : 'COMMENT',

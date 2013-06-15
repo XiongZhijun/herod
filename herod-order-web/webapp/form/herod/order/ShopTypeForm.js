@@ -24,7 +24,7 @@ Ext.define('form.herod.order.ShopTypeForm', {
 				name : 'IMAGE_URL',
 				fieldLabel : '图片',
 				labelWidth : 70,
-				rowspan : 2,
+				rowspan : 3,
 				width : 200,
 				height : 100,
 				src : '',
@@ -51,6 +51,18 @@ Ext.define('form.herod.order.ShopTypeForm', {
 						}
 					}
 				} ]
+			}, {
+				id : 'SORT',
+				name : 'SORT',
+				fieldLabel : '排序',
+				labelWidth : 70,
+				regex : /^[0-9]+$/,
+				regexText : '请输入整数',
+				xtype : 'numberfield',
+				allowBlank : false,
+				msgTarget : 'side',
+				value : 255,
+				minValue : 1
 			}, {
 				id : 'COMMENT',
 				name : 'COMMENT',

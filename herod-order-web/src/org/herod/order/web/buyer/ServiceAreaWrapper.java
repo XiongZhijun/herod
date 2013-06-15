@@ -22,7 +22,7 @@ public class ServiceAreaWrapper {
 	public ServiceAreaWrapper(Map<String, Object> map) {
 		location.setLatitude(getDouble(map, "latitude"));
 		location.setLongitude(getDouble(map, "longitude"));
-		this.serviceRadius = getDouble(map, "serviceRadius");
+		this.serviceRadius = getDouble(map, "serviceRadius") * 1000;
 	}
 
 	public boolean isInServiceArea(double latitude, double longitude) {

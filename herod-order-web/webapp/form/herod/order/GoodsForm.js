@@ -127,14 +127,16 @@ Ext.define('form.herod.order.GoodsForm', {
 	getFormData : function() {
 		var me = this;
 		var formData = me.callParent();
-		formData.fields.push({
-			name : 'LARGE_IMAGE',
-			value : Ext.getCmp("LARGE_IMAGE").src
-		});
-		formData.fields.push({
-			name : 'THUMBNAIL',
-			value : me.images[1]
-		});
+		if (me.images) {
+			formData.fields.push({
+				name : 'LARGE_IMAGE',
+				value : me.images[0]
+			});
+			formData.fields.push({
+				name : 'THUMBNAIL',
+				value : me.images[1]
+			});
+		}
 		formData.fields.push({
 			name : 'SHOP_ID',
 			value : me.gridPanel.shopId

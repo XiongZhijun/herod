@@ -22,7 +22,7 @@ Ext.define('form.herod.order.GoodsForm', {
 			items : [ {
 				id : 'NAME',
 				name : 'NAME',
-				fieldLabel : '商店名称',
+				fieldLabel : '商品名称',
 				msgTarget : 'side',
 			}, {
 				id : 'LARGE_IMAGE',

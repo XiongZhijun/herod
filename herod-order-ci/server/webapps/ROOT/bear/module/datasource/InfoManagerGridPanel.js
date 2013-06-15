@@ -157,20 +157,18 @@ Ext.define('bear.module.datasource.InfoManagerGridPanel', {
 
 	showForm : function(config) {
 		var me = this;
-		if (me.formWindow == null) {
-			me.form = Ext.create(this.gridPanel.formClass, config);
-			me.formWindow = Ext.create('Ext.window.Window', {
-				title : '编辑',
-				layout : 'fit',
-				items : me.form,
-				closeAction : 'hide',
-				listeners : {
-					close : function() {
-						me.gridPanel.store.load();
-					}
+		me.form = Ext.create(this.gridPanel.formClass, config);
+		me.formWindow = Ext.create('Ext.window.Window', {
+			title : '编辑',
+			layout : 'fit',
+			items : me.form,
+			closeAction : 'destroy',
+			listeners : {
+				close : function() {
+					me.gridPanel.store.load();
 				}
-			});
-		}
+			}
+		});
 		Ext.apply(me.form, config);
 		me.form.loadNode();
 		me.formWindow.show();

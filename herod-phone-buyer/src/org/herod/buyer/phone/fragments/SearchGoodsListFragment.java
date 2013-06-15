@@ -9,6 +9,7 @@ import java.util.List;
 import org.herod.buyer.phone.BuyerContext;
 import org.herod.buyer.phone.HerodTask;
 import org.herod.buyer.phone.R;
+import org.herod.buyer.phone.adapter.ImageLoaderAdapter;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.adapter.SimpleAdapter;
 
@@ -43,12 +44,13 @@ public class SearchGoodsListFragment extends AbstractGoodsListFragment {
 
 	@Override
 	protected SimpleAdapter createAdapter(FragmentActivity activity) {
-		return new SimpleAdapter(activity,
+		return new ImageLoaderAdapter(activity,
 				Collections.<MapWrapper<String, Object>> emptyList(),
 				R.layout.activity_goods_search_goods_item, new String[] {
-						"name", "price", "name", "name", "name", "shopName" },
-				new int[] { R.id.name, R.id.price, R.id.quantity,
-						R.id.addButton, R.id.reduceButton, R.id.shopName });
+						"thumbnail", "name", "sellingPrice", "name", "name",
+						"name", "shopName", "unit" }, new int[] { R.id.image,
+						R.id.name, R.id.price, R.id.quantity, R.id.addButton,
+						R.id.reduceButton, R.id.shopName, R.id.unit });
 	}
 
 	@Override

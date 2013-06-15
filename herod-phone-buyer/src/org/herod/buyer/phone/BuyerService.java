@@ -23,7 +23,7 @@ public interface BuyerService {
 	List<MapWrapper<String, Object>> findGoodsTypesByShop(long shopId);
 
 	List<MapWrapper<String, Object>> findGoodsesByType(long goodsTypeId,
-			long beginGoodsId, int count);
+			int begin, int count);
 
 	List<MapWrapper<String, Object>> searchGoodses(String goodsName, int begin,
 			int count);

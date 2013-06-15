@@ -3,13 +3,13 @@ package org.herod.buyer.phone;
 import java.util.List;
 
 import org.herod.buyer.phone.HerodTask.AsyncTaskable;
+import org.herod.buyer.phone.adapter.ImageLoaderAdapter;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
 import org.herod.buyer.phone.lbs.LocationManager;
 import org.herod.buyer.phone.lbs.SimpleLocationPlan;
 import org.herod.buyer.phone.lbs.SimpleLocationPlan.OnLocationSuccessListener;
 import org.herod.framework.MapWrapper;
-import org.herod.framework.adapter.SimpleAdapter;
 import org.herod.framework.tools.NetworkStatusTools;
 import org.herod.framework.tools.NetworkStatusTools.ConnectType;
 import org.herod.framework.tools.NetworkStatusTools.NetworkConnectInfo;
@@ -37,6 +37,7 @@ public class HomeActivity extends BaseActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		BuyerContext.init(this);
 		ImageLoaderUtils.initImageLoader(this);
 		setContentView(R.layout.activity_home);
 		SimpleLocationPlan locationPlan = new SimpleLocationPlan(this);
@@ -95,9 +96,9 @@ public class HomeActivity extends BaseActivity implements
 
 	@Override
 	public void onPostExecute(List<MapWrapper<String, Object>> data) {
-		ListAdapter adapter = new SimpleAdapter(this, data,
-				R.layout.activity_home_shop_type_item, new String[] { "name" },
-				new int[] { R.id.name });
+		ListAdapter adapter = new ImageLoaderAdapter(this, data,
+				R.layout.activity_home_shop_type_item, new String[] { "name",
+						"imageUrl" }, new int[] { R.id.name, R.id.image });
 		shopTypesGridView.setAdapter(adapter);
 	}
 

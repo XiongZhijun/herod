@@ -7,7 +7,7 @@
     <GridView
         android:id="@+id/shopsGridView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="10dip"
         android:horizontalSpacing="13dip"
         android:numColumns="2"

@@ -58,8 +58,8 @@ public class BuyerServiceProxy implements BuyerService, ShopService {
 
 	@Override
 	public List<MapWrapper<String, Object>> findGoodsesByType(long goodsTypeId,
-			long beginGoodsId, int count) {
-		return buyerService.findGoodsesByType(goodsTypeId, beginGoodsId, count);
+			int begin, int count) {
+		return buyerService.findGoodsesByType(goodsTypeId, begin, count);
 	}
 
 	@Override

@@ -65,7 +65,7 @@ public class ShoppingCartCache {
 						.getDouble(Constants.MIN_CHARGE_FOR_FREE_DELIVERY);
 			}
 			order.setShopName(shop.getString(Constants.NAME));
-			order.setShopPhone(shop.getString("phone"));
+			order.setShopPhone(shop.getString("contactNumber"));
 			order.setShopCostOfRunErrands(shopCostOfRunErrands);
 			order.setShopMinChargeForFreeDelivery(shopMinChargeForFreeDelivery);
 			order.setShopId(shopId);
@@ -92,7 +92,7 @@ public class ShoppingCartCache {
 		long goodsId = goods.getLong("id");
 		String goodsCode = goods.getString("code");
 		String goodsName = goods.getString("name");
-		double unitPrice = goods.getDouble("price");
+		double unitPrice = goods.getDouble("sellingPrice");
 		orderItem.setUnitPrice(unitPrice);
 		orderItem.setGoodsCode(goodsCode);
 		orderItem.setGoodsName(goodsName);

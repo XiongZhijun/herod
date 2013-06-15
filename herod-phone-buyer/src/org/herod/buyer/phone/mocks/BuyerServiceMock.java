@@ -120,9 +120,9 @@ public class BuyerServiceMock implements BuyerService {
 
 	@Override
 	public List<MapWrapper<String, Object>> findGoodsesByType(long goodsTypeId,
-			long beginGoodsId, int count) {
+			int begin, int count) {
 		List<MapWrapper<String, Object>> data = new ArrayList<MapWrapper<String, Object>>();
-		for (long i = beginGoodsId + 1; i < beginGoodsId + 1 + count; i++) {
+		for (long i = begin + 1; i < begin + 1 + count; i++) {
 			data.add(createGoods(goodsTypeId * 1000 + i, goodsTypeId + "-商品-"
 					+ i, goodsTypeId));
 		}

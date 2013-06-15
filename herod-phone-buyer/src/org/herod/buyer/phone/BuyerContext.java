@@ -4,6 +4,7 @@
 package org.herod.buyer.phone;
 
 import org.herod.buyer.phone.mocks.BuyerServiceMock;
+import org.herod.buyer.phone.rest.RestBuyerService;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,9 +24,10 @@ public class BuyerContext {
 	private static final String TERMINAL_ID = "TerminalId";
 	private static BuyerService buyerService = new BuyerServiceMock();
 	private static ShopService shopService;
-	static {
+
+	public static void init(Context context) {
 		BuyerServiceProxy buyerServiceProxy = new BuyerServiceProxy(
-				new BuyerServiceMock());
+				new RestBuyerService(context));
 		buyerService = buyerServiceProxy;
 		shopService = buyerServiceProxy;
 	}

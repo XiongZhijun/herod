@@ -42,4 +42,8 @@ public class MapWrapper<K, V> {
 		return map.get(key);
 	}
 
+	public boolean containsKey(K key) {
+		return map.containsKey(key);
+	}
+
 }

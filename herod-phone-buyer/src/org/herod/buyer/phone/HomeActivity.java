@@ -3,39 +3,78 @@ package org.herod.buyer.phone;
 import java.util.List;
 
 import org.herod.buyer.phone.HerodTask.AsyncTaskable;
+import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
+import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
+import org.herod.buyer.phone.lbs.LocationManager;
+import org.herod.buyer.phone.lbs.SimpleLocationPlan;
+import org.herod.buyer.phone.lbs.SimpleLocationPlan.OnLocationSuccessListener;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.adapter.SimpleAdapter;
+import org.herod.framework.tools.NetworkStatusTools;
+import org.herod.framework.tools.NetworkStatusTools.ConnectType;
+import org.herod.framework.tools.NetworkStatusTools.NetworkConnectInfo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ListAdapter;
+import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
 import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
 
 public class HomeActivity extends BaseActivity implements
 		AsyncTaskable<Object, List<MapWrapper<String, Object>>>,
-		OnItemClickListener {
+		OnItemClickListener, OnLocationSuccessListener {
 	private GridView shopTypesGridView;
+	private boolean isFirst = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ImageLoaderUtils.initImageLoader(this);
 		setContentView(R.layout.activity_home);
-
+		SimpleLocationPlan locationPlan = new SimpleLocationPlan(this);
+		LocationManager.getInstance(this).executeWithPlan(locationPlan);
 		shopTypesGridView = (GridView) findViewById(R.id.shopTypesGrid);
 		shopTypesGridView.setOnItemClickListener(this);
 
-		new HerodTask<Object, List<MapWrapper<String, Object>>>(this).execute();
+		NetworkConnectInfo networkConnectInfo = NetworkStatusTools
+				.getNetworkConnectInfo(this);
+		if (!networkConnectInfo.available) {
+			ConfirmDialogFragment.showDialog(this, "当前网络不可用，请设置网络！",
+					new OnSettingNetworkOkButtonClickListener());
+			return;
+		}
+		if (networkConnectInfo.connectType == ConnectType._2G) {
+			Toast.makeText(this, "当前为2G网络", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	@Override
+	public void onLocationSuccess(BDLocation location) {
+		Log.d("LocationSuccess",
+				location.getLatitude() + "," + location.getLongitude());
+		if (isFirst) {
+			new HerodTask<Object, List<MapWrapper<String, Object>>>(this)
+					.execute();
+			isFirst = false;
+		}
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -68,6 +107,14 @@ public class HomeActivity extends BaseActivity implements
 
 	protected boolean canBack() {
 		return false;
+	}
+
+	class OnSettingNetworkOkButtonClickListener implements
+			OnOkButtonClickListener {
+		public void onOk() {
+			startActivity(new Intent(Settings.ACTION_SETTINGS));
+		}
+
 	}
 
 }

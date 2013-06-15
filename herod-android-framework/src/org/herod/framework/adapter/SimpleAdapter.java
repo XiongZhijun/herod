@@ -30,7 +30,7 @@ public class SimpleAdapter extends BaseAdapter {
 	private String[] mFrom;
 	private ViewBinder mViewBinder;
 
-	private List<MapWrapper<String, Object>> mData = new ArrayList<MapWrapper<String, Object>>();
+	protected List<MapWrapper<String, Object>> mData = new ArrayList<MapWrapper<String, Object>>();
 
 	private int mResource;
 	private int mDropDownResource;

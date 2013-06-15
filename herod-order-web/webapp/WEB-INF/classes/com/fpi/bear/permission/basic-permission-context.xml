@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<bean class="org.apache.wink.spring.Registrar">
+		<property name="instances">
+			<set>
+				<bean class="com.fpi.bear.permission.rest.SecrityRestService" />
+				<ref bean="jacksonJaxbJsonProvider" />
+			</set>
+		</property>
+	</bean>
+
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManagerConfigFile"
+			value="classpath:com/fpi/bear/permission/ehcache.xml" />
+	</bean>
+
+	<bean id="securityUserCenter"
+		class="com.fpi.bear.permission.security.ShiroSecurityUserCenter">
+		<property name="permissionFilterStrategy" ref="threadNameFilter" />
+	</bean>
+
+	<bean id="realm" class="com.fpi.bear.permission.security.HibernateRealm">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="credentialsMatcher">
+			<bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+				<property name="hashAlgorithmName" value="MD5" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="staticMethod"
+			value="com.fpi.bear.permission.BearSecurityUtils.setSecurityUserCenter" />
+		<property name="arguments" ref="securityUserCenter" />
+	</bean>
+
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="staticMethod"
+			value="org.apache.shiro.SecurityUtils.setSecurityManager" />
+		<property name="arguments" ref="securityManager" />
+	</bean>
+
+	<bean id="threadNameFilter" class="com.fpi.bear.permission.security.ThreadNameFilter">
+		<property name="regex" value="(?!fpi-exec).*" />
+	</bean>
+
+	<bean id="userInfoAccessService" class="com.fpi.bear.permission.DefaultUserInfoAccessService">
+	</bean>
+	
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="staticMethod"
+			value="com.fpi.bear.permission.UserInfoServiceUtils.setUserInfoAccessService" />
+		<property name="arguments" ref="userInfoAccessService" />
+	</bean>
+</beans>

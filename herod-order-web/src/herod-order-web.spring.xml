@@ -18,4 +18,15 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	<bean id="orderDataSetControl" class="org.herod.order.web.OrderDataSetControl">
 		<property name="dataSetContextFactory" ref="dataSetContextFactory" />
 	</bean>
+	
+	
+	<bean id="buyerPhoneService" class="org.herod.order.web.buyer.SimpleBuyerPhoneService"></bean>
+	<bean class="org.apache.wink.spring.Registrar">
+		<property name="instances">
+			<set>
+				<ref bean="buyerPhoneService" />
+				<ref bean="jacksonJaxbJsonProvider" />
+			</set>
+		</property>
+	</bean>
 </beans>

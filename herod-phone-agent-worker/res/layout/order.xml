@@ -13,38 +13,37 @@
 
         <ImageButton
             android:id="@+id/editOrderButton"
+            style="@style/OrderButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:background="@null"
             android:contentDescription="@null"
             android:src="@android:drawable/ic_menu_edit" />
 
         <ImageButton
             android:id="@+id/cancelOrderButton"
+            style="@style/OrderButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dip"
             android:layout_toRightOf="@+id/editOrderButton"
-            android:background="@null"
             android:contentDescription="@null"
             android:src="@android:drawable/ic_menu_close_clear_cancel" />
 
         <ImageButton
             android:id="@+id/acceptOrderButton"
+            style="@style/OrderButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:background="@null"
             android:contentDescription="@null"
-            android:src="@drawable/ic_checkmark_holo_light" />
+            android:src="@drawable/accept" />
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dip"
         android:layout_marginBottom="5dip"
-        android:layout_marginTop="5dip"
         android:background="#E5E5E5" />
 
     <RelativeLayout
@@ -79,7 +78,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dip"
         android:layout_marginBottom="5dip"
-        android:layout_marginTop="5dip"
         android:background="#E5E5E5" />
 
     <include layout="@layout/order_item_header" />

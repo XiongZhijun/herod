@@ -5,9 +5,6 @@ package org.herod.worker.phone.view;
 
 import org.herod.framework.widget.TabPageIndicator;
 import org.herod.worker.phone.R;
-import org.herod.worker.phone.R.attr;
-import org.herod.worker.phone.R.id;
-import org.herod.worker.phone.R.layout;
 
 import android.content.Context;
 import android.util.AttributeSet;

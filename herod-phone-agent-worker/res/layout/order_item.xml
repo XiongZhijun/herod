@@ -34,7 +34,8 @@
             android:layout_height="42dip"
             android:contentDescription="@null"
             android:scaleType="center"
-            android:src="@drawable/reduce" />
+            android:src="@drawable/reduce"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/quantity"
@@ -50,7 +51,8 @@
             android:layout_height="42dip"
             android:contentDescription="@null"
             android:scaleType="center"
-            android:src="@drawable/add" />
+            android:src="@drawable/add"
+            android:visibility="invisible" />
     </LinearLayout>
 
     <View

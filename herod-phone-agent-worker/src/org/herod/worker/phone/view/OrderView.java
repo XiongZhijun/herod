@@ -14,14 +14,14 @@ import org.herod.worker.phone.model.OrderItem;
 import org.herod.worker.phone.view.OrderItemView.GoodsQuantityChangedListener;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * 
@@ -31,14 +31,9 @@ import android.widget.TextView;
  * 
  */
 public class OrderView extends LinearLayout implements
-		GoodsQuantityChangedListener {
+		GoodsQuantityChangedListener, OnClickListener {
 	@InjectView(R.id.orderItemsListView)
 	private LinearLayout orderItemsContainer;
-
-	@InjectView(R.id.serialNumber)
-	private TextView serialNumberView;
-	@InjectView(R.id.submitTime)
-	private TextView submitTimeView;
 
 	private Order order;
 	private OrderItemView summationView;
@@ -65,6 +60,13 @@ public class OrderView extends LinearLayout implements
 		}
 		LayoutInflater.from(getContext()).inflate(R.layout.order, this);
 		new InjectViewHelper().injectViews(this);
+		findViewById(R.id.editOrderButton).setOnClickListener(this);
+		findViewById(R.id.acceptOrderButton).setOnClickListener(this);
+		findViewById(R.id.deleteOrderButton).setOnClickListener(this);
+		findViewById(R.id.cancelButton).setOnClickListener(this);
+		findViewById(R.id.confirmButton).setOnClickListener(this);
+		findViewById(R.id.shopName).setOnClickListener(this);
+		findViewById(R.id.buyerName).setOnClickListener(this);
 	}
 
 	@Override
@@ -74,8 +76,8 @@ public class OrderView extends LinearLayout implements
 
 	public void setOrder(Order order) {
 		this.order = order;
-		setText(serialNumberView, order.getSerialNumber());
-		setText(submitTimeView,
+		setText(R.id.serialNumber, order.getSerialNumber());
+		setText(R.id.submitTime,
 				DateUtils.format("MM-dd HH:mm", order.getSubmitTime()));
 		orderItemsContainer.removeAllViews();
 		setText(R.id.shopName, order.getShopName());
@@ -128,9 +130,82 @@ public class OrderView extends LinearLayout implements
 				LayoutParams.MATCH_PARENT, 1));
 	}
 
-	private void setText(View view, Object data) {
-		if (data != null) {
-			((TextView) view).setText(data.toString());
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.editOrderButton) {
+			onEditOrderButtonClick();
+		} else if (v.getId() == R.id.acceptOrderButton) {
+			onAcceptOrderButtonClick();
+		} else if (v.getId() == R.id.deleteOrderButton) {
+			onDeleteOrderButtonClick();
+		} else if (v.getId() == R.id.cancelButton) {
+			onCancelButtonClick();
+		} else if (v.getId() == R.id.confirmButton) {
+			onConfirmButtonClick();
+		} else if (v.getId() == R.id.shopName) {
+			onShopNameClickListener();
+		} else if (v.getId() == R.id.buyerName) {
+			onBuyerNameClickListener();
+		}
+	}
+
+	private void onBuyerNameClickListener() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void onShopNameClickListener() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void onDeleteOrderButtonClick() {
+		ConfirmDialogFragment.showDialog(activity, "确定删除该订单？",
+				new OnDeleteOrderByOkListener());
+	}
+
+	private class OnDeleteOrderByOkListener implements OnOkButtonClickListener {
+		@Override
+		public void onOk() {
+			// TODO
+			Toast.makeText(getContext(), "成功删除订单！", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	private void onAcceptOrderButtonClick() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void onCancelButtonClick() {
+		enableOperationButtons();
+		// TODO
+	}
+
+	private void onConfirmButtonClick() {
+		enableOperationButtons();
+		// TODO
+	}
+
+	private void enableOperationButtons() {
+		setVisibility(View.VISIBLE, R.id.acceptOrderButton,
+				R.id.editOrderButton, R.id.deleteOrderButton);
+		setVisibility(View.GONE, R.id.cancelButton, R.id.confirmButton);
+		for (int i = 0; i < orderItemsContainer.getChildCount(); i++) {
+			View view = orderItemsContainer.getChildAt(i);
+			setVisibility(View.INVISIBLE, view.findViewById(R.id.addButton));
+			setVisibility(View.INVISIBLE, view.findViewById(R.id.reduceButton));
+		}
+	}
+
+	private void onEditOrderButtonClick() {
+		setVisibility(View.GONE, R.id.acceptOrderButton, R.id.editOrderButton,
+				R.id.deleteOrderButton);
+		setVisibility(View.VISIBLE, R.id.cancelButton, R.id.confirmButton);
+		for (int i = 0; i < orderItemsContainer.getChildCount(); i++) {
+			View view = orderItemsContainer.getChildAt(i);
+			setVisibility(View.VISIBLE, view.findViewById(R.id.addButton));
+			setVisibility(View.VISIBLE, view.findViewById(R.id.reduceButton));
 		}
 	}
 
@@ -140,30 +215,19 @@ public class OrderView extends LinearLayout implements
 		}
 	}
 
-	private class CancelOrderListener implements OnClickListener {
-		@Override
-		public void onClick(View v) {
-			ConfirmDialogFragment.showDialog(activity, "确定删除该订单？",
-					new OnDeleteOrderByOkListener());
-		}
-
-	}
-
-	private class OnDeleteOrderByOkListener implements OnOkButtonClickListener {
-		@Override
-		public void onOk() {
-			// TODO
+	private void setVisibility(int visibility, int... ids) {
+		for (int id : ids) {
+			View view = findViewById(id);
+			setVisibility(visibility, view);
 		}
 	}
 
-	private class CallPhoneListener implements OnClickListener {
-		public void onClick(View v) {
-			String phone = order.getShopPhone();
-			Uri uri = Uri.parse("tel:" + phone);
-			Intent it = new Intent(Intent.ACTION_DIAL, uri);
-			activity.startActivity(it);
+	private void setVisibility(int visibility, View... views) {
+		for (View view : views) {
+			if (view != null) {
+				view.setVisibility(visibility);
+			}
 		}
-
 	}
 
 }

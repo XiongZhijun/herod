@@ -4,23 +4,25 @@
     android:layout_height="match_parent"
     android:minWidth="1000000dip"
     android:orientation="vertical"
-    android:paddingLeft="10dip"
-    android:paddingRight="10dip"
-    android:paddingTop="10dip" >
+    android:padding="10dip" >
 
     <TextView
         android:id="@+id/phone"
         style="@style/OrderButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dip"
-        android:drawableLeft="@android:drawable/stat_sys_phone_call" />
+        android:layout_marginBottom="15dip"
+        android:drawableLeft="@android:drawable/stat_sys_phone_call"
+        android:drawablePadding="5dip"
+        android:textColor="#000" />
 
     <TextView
         android:id="@+id/location"
         style="@style/OrderButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/location" />
+        android:drawableLeft="@drawable/location"
+        android:drawablePadding="5dip"
+        android:textColor="#000" />
 
 </LinearLayout>

@@ -8,12 +8,14 @@ import org.herod.framework.ci.annotation.InjectView;
 import org.herod.framework.utils.DateUtils;
 import org.herod.worker.phone.R;
 import org.herod.worker.phone.fragment.ConfirmDialogFragment;
+import org.herod.worker.phone.fragment.PlaceInfoDialogFragment;
 import org.herod.worker.phone.fragment.ConfirmDialogFragment.OnOkButtonClickListener;
 import org.herod.worker.phone.model.Order;
 import org.herod.worker.phone.model.OrderItem;
 import org.herod.worker.phone.view.OrderItemView.GoodsQuantityChangedListener;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -155,7 +157,12 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void onShopNameClickListener() {
-		// TODO Auto-generated method stub
+		PlaceInfoDialogFragment fragment = new PlaceInfoDialogFragment();
+		Bundle args = new Bundle();
+		args.putString("phone", order.getShopPhone());
+		args.putString("locationName", order.getShopName());
+		fragment.setArguments(args);
+		fragment.show(activity.getSupportFragmentManager(), null);
 
 	}
 

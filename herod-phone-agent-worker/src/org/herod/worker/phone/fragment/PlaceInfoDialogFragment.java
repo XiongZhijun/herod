@@ -10,6 +10,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 /**
  * @author Xiong Zhijun
@@ -31,4 +32,12 @@ public class PlaceInfoDialogFragment extends DialogFragment {
 				false);
 	}
 
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		String phone = getArguments().getString("phone");
+		String locationName = getArguments().getString("locationName");
+		((TextView) view.findViewById(R.id.phone)).setText(phone);
+		((TextView) view.findViewById(R.id.location)).setText(locationName);
+	}
 }

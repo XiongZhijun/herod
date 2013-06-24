@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.herod.worker.phone.R;
+import org.herod.worker.phone.model.Address;
 import org.herod.worker.phone.model.Order;
 import org.herod.worker.phone.model.OrderItem;
 
@@ -57,6 +58,9 @@ public class OrderListFragment extends Fragment {
 			order.addOrderItem(createOrderItem());
 			order.addOrderItem(createOrderItem());
 			order.setCostOfRunErrands(5);
+			Address deliveryAddress = new Address();
+			deliveryAddress.setAddress("滨安路760号");
+			order.setDeliveryAddress(deliveryAddress);
 			orders.add(order);
 		}
 		return orders;

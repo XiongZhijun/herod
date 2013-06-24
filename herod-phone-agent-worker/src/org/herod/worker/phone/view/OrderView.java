@@ -152,8 +152,12 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void onBuyerNameClickListener() {
-		// TODO Auto-generated method stub
-
+		PlaceInfoDialogFragment fragment = new PlaceInfoDialogFragment();
+		Bundle args = new Bundle();
+		args.putString("phone", order.getBuyerPhone());
+		args.putString("locationName", order.getDeliveryAddress().getAddress());
+		fragment.setArguments(args);
+		fragment.show(activity.getSupportFragmentManager(), null);
 	}
 
 	private void onShopNameClickListener() {

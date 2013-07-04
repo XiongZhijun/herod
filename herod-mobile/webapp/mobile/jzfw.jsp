@@ -1,3 +1,4 @@
+<%@ page language="Java" contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +14,7 @@
 </head>
 <body>
 
-	<div data-role="page" id="fp" data-title="废品回收站">
+	<div data-role="page" id="fp" data-title="家政服务目录">
 
 		<div data-role="header" data-theme="b">
 			<h1>家政服务目录</h1>

@@ -1,3 +1,4 @@
+<%@ page language="Java" contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
 	href="http://code.jquery.com/mobile/1.2.1/jquery.mobile-1.2.1.min.css" />
+<link rel="stylesheet" href="css/fp.css" />
 <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 <script
 	src="http://code.jquery.com/mobile/1.2.1/jquery.mobile-1.2.1.min.js"></script>

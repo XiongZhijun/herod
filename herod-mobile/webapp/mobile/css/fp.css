@@ -19,3 +19,12 @@ div.ui-grid-a img {
 	background-image: url("../images/dialing.png");
 }
 
+em {
+	color: red;
+	font-weight: bold;
+	padding-right: .25em;
+}
+
+form label.error {
+	color: red;
+}

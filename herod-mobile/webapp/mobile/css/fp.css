@@ -1,0 +1,21 @@
+.ui-block-a,.ui-block-b,.ui-block-c {
+	text-align: center;
+	display: table;
+	padding: 10px
+}
+
+.ui-block-a>div,.ui-block-b>div,.ui-block-c>div {
+	width: 100%;
+	background: #FFF;
+	padding-bottom: 10px;
+}
+
+div.ui-grid-a img {
+	width: 100%;
+	height: 13em;
+}
+
+.ui-icon-dialing {
+	background-image: url("../images/dialing.png");
+}
+

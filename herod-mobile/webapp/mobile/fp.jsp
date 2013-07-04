@@ -19,7 +19,9 @@
 		<div data-role="header" data-theme="b">
 			<h1>废品回收站</h1>
 			<a href="index.html" data-icon="home" data-iconpos="notext"
-				data-direction="reverse">Home</a>
+				data-direction="reverse">首页</a>
+			<a href="tel:10000" data-icon="dialing" data-iconpos="notext"
+				data-direction="reverse">联系我们</a>
 		</div>
 		<!-- /header -->
 

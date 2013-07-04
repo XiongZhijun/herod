@@ -19,7 +19,7 @@
 		<div data-role="header" data-theme="b">
 			<h1>家政服务目录</h1>
 			<a href="index.html" data-icon="home" data-iconpos="notext"
-				data-direction="reverse">Home</a>
+				data-direction="reverse">首页</a>
 		</div>
 		<!-- /header -->
 

@@ -4,20 +4,26 @@
 package org.herod.order.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.herod.order.cache.ShopCache;
+import org.apache.commons.collections.CollectionUtils;
+import org.herod.common.das.HerodColumnMapRowMapper;
+import org.herod.common.das.SqlUtils;
 import org.herod.order.model.Address;
 import org.herod.order.model.Goods;
 import org.herod.order.model.GoodsCategory;
-import org.herod.order.model.Location;
 import org.herod.order.model.Order;
 import org.herod.order.model.OrderItem;
-import org.herod.order.model.Shop;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
 /**
  * 
@@ -28,12 +34,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class SimplePhoneBuyerService implements PhoneBuyerService {
 	@Autowired
-	private ShopCache shopCache;
-	@Autowired
-	private GoodsCategoryQueryService goodsCategoryQueryService;
-	@Autowired
-	private GoodsQueryService goodsQueryService;
-	@Autowired
 	private OrderDas orderDas;
 	@Autowired
 	private OrderItemDas orderItemDas;
@@ -41,21 +41,6 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 	private BuyerUsedAddressQueryService buyerUsedAddressQueryService;
 	@Autowired
 	private OrderLogService orderLogService;
-
-	@Override
-	public List<Shop> findShopsByLocation(Location location) {
-		return shopCache.findShopsByLocation(location);
-	}
-
-	@Override
-	public List<GoodsCategory> findGoodsCategoryByShop(long shopId) {
-		return goodsCategoryQueryService.findGoodsCategoryByShop(shopId);
-	}
-
-	@Override
-	public List<Goods> findGoodsByCategory(long shopId, long categoryId) {
-		return goodsQueryService.findGoodsByCategory(shopId, categoryId);
-	}
 
 	@Override
 	public Result submitOrders(List<Order> orders) {
@@ -86,17 +71,104 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 		return buyerUsedAddressQueryService.findUsedAddressesByPhone(phone);
 	}
 
-	public void setShopCache(ShopCache shopCache) {
-		this.shopCache = shopCache;
+	@Autowired
+	@Qualifier("simpleJdbcTemplate")
+	private SimpleJdbcTemplate simpleJdbcTemplate;
+
+	@Override
+	public List<Map<String, Object>> findShopTypes(double latitude,
+			double longitude) {
+		Set<Object> shopTypeIds = new HashSet<Object>();
+		for (Map<String, Object> shop : getAllShops()) {
+			ServiceAreaWrapper serviceArea = new ServiceAreaWrapper(shop);
+			if (serviceArea.isInServiceArea(latitude, longitude)) {
+				shopTypeIds.add(getLong(shop, "shopTypeId"));
+			}
+		}
+		if (CollectionUtils.isEmpty(shopTypeIds)) {
+			return Collections.emptyList();
+		}
+		return queryForList("SELECT ID,NAME,IMAGE_URL FROM ZRH_SHOP_TYPE WHERE ID IN "
+				+ SqlUtils.buildInSql(shopTypeIds) + "  ORDER BY SORT");
 	}
 
-	public void setGoodsCategoryQueryService(
-			GoodsCategoryQueryService goodsCategoryQueryService) {
-		this.goodsCategoryQueryService = goodsCategoryQueryService;
+	@Override
+	public List<Map<String, Object>> findShopesByType(long typeId,
+			double latitude, double longitude) {
+		List<Map<String, Object>> nearbyShops = new ArrayList<Map<String, Object>>();
+		for (Map<String, Object> shop : getAllShops()) {
+			ServiceAreaWrapper serviceArea = new ServiceAreaWrapper(shop);
+			if (getLong(shop, "shopTypeId") == typeId
+					&& serviceArea.isInServiceArea(latitude, longitude)) {
+				nearbyShops.add(shop);
+			}
+		}
+		return nearbyShops;
 	}
 
-	public void setGoodsQueryService(GoodsQueryService goodsQueryService) {
-		this.goodsQueryService = goodsQueryService;
+	@Override
+	public Map<String, Object> findShopById(long shopId, double latitude,
+			double longitude) {
+		for (Map<String, Object> shop : getAllShops()) {
+			if (getLong(shop, "id") == shopId) {
+				return shop;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> findGoodsTypesByShop(long shopId,
+			double latitude, double longitude) {
+		return queryForList(
+				"SELECT ID,NAME,ALIAS,SHOP_ID,AGENT_ID FROM ZRH_GOODS_CATEGORY WHERE SHOP_ID = ? ORDER BY SORT ",
+				shopId);
+	}
+
+	@Override
+	public List<Map<String, Object>> findGoodsesByType(long goodsTypeId,
+			int begin, int count, double latitude, double longitude) {
+		return queryForList(
+				"SELECT G.ID, G.NAME, G.CODE, G.ALIAS, G.SUPPLY_PRICE, "
+						+ "G.SELLING_PRICE, G.UNIT, G.COMMENT, G.LARGE_IMAGE, G.THUMBNAIL, "
+						+ "G.CATEGORY_ID, G.SHOP_ID, G.AGENT_ID, S.NAME AS SHOP_NAME FROM ZRH_GOODS G "
+						+ "LEFT JOIN ZRH_SHOP S ON G.SHOP_ID = S.ID WHERE G.CATEGORY_ID = ? ORDER BY G.SORT LIMIT ?, ?",
+				goodsTypeId, begin, count);
+	}
+
+	@Override
+	public List<Map<String, Object>> searchGoodses(String goodsName, int begin,
+			int count, double latitude, double longitude) {
+		return queryForList(
+				"SELECT G.ID, G.NAME, G.CODE, G.ALIAS, G.SUPPLY_PRICE, "
+						+ "G.SELLING_PRICE, G.UNIT, G.COMMENT, G.LARGE_IMAGE, G.THUMBNAIL, "
+						+ "G.CATEGORY_ID, G.SHOP_ID, G.AGENT_ID, S.NAME AS SHOP_NAME FROM ZRH_GOODS G "
+						+ "LEFT JOIN ZRH_SHOP S ON G.SHOP_ID = S.ID WHERE G.NAME LIKE ?  ORDER BY G.SORT LIMIT ?, ?",
+				"%" + goodsName + "%", begin, count);
+	}
+
+	private List<Map<String, Object>> queryForList(String sql, Object... args) {
+		RowMapper<Map<String, Object>> rm = new HerodColumnMapRowMapper();
+		return simpleJdbcTemplate.query(sql, rm, args);
+	}
+
+	private static long getLong(Map<String, Object> shop, String key) {
+		Object value = shop.get(key);
+		if (value == null) {
+			return 0;
+		}
+		if (value instanceof Long || value.getClass() == long.class) {
+			return (Long) value;
+		}
+		return Long.parseLong(value.toString());
+	}
+
+	public void setSimpleJdbcTemplate(SimpleJdbcTemplate simpleJdbcTemplate) {
+		this.simpleJdbcTemplate = simpleJdbcTemplate;
+	}
+
+	private List<Map<String, Object>> getAllShops() {
+		return queryForList("SELECT ID, NAME, SHOP_TYPE_ID, AGENT_ID, ADDRESS, CONTACT_NUMBER, LONGITUDE, LATITUDE, SERVICE_RADIUS, IMAGE_URL, BANK_NAME, BANK_ACCOUNT, ORGANIZATION_CODE, BUSINESS_LICENSE, LINKMAN, COMMENT, COST_OF_RUN_ERRANDS, MIN_CHARGE_FOR_FREE_DELIVERY FROM ZRH_SHOP ORDER BY SORT");
 	}
 
 	public void setOrderDas(OrderDas orderDas) {
@@ -116,10 +188,12 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 		this.orderLogService = orderLogService;
 	}
 
+	@Deprecated
 	public static interface GoodsCategoryQueryService {
 		List<GoodsCategory> findGoodsCategoryByShop(long shopId);
 	}
 
+	@Deprecated
 	public static interface GoodsQueryService {
 		List<Goods> findGoodsByCategory(long shopId, long categoryId);
 	}

@@ -6,12 +6,14 @@ package org.herod.order.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+
 import org.herod.order.model.Address;
-import org.herod.order.model.Goods;
-import org.herod.order.model.GoodsCategory;
-import org.herod.order.model.Location;
 import org.herod.order.model.Order;
-import org.herod.order.model.Shop;
 
 /**
  * 提供给手机买家的服务
@@ -21,34 +23,55 @@ import org.herod.order.model.Shop;
  * 
  */
 public interface PhoneBuyerService {
+	public static final String DEFAULT_MEDIA_TYPE = "application/json;charset=utf-8";
 
-	/**
-	 * 根据买家的地理位置来读取店铺列表
-	 * 
-	 * @param location
-	 * @return
-	 */
-	List<Shop> findShopsByLocation(Location location);
+	@GET
+	@Path("shopTypes")
+	@Produces(DEFAULT_MEDIA_TYPE)
+	List<Map<String, Object>> findShopTypes(
+			@QueryParam("latitude") double latitude,
+			@QueryParam("longitude") double longitude);
 
-	/**
-	 * 读取店铺的商品分类
-	 * 
-	 * @param shopId
-	 *            店铺Id
-	 * @return
-	 */
-	List<GoodsCategory> findGoodsCategoryByShop(long shopId);
+	@GET
+	@Path("/shopTypes/{typeId}/shops")
+	@Produces(DEFAULT_MEDIA_TYPE)
+	List<Map<String, Object>> findShopesByType(
+			@PathParam("typeId") long typeId,
+			@QueryParam("latitude") double latitude,
+			@QueryParam("longitude") double longitude);
 
-	/**
-	 * 根据店铺的商品分类读取店铺商品
-	 * 
-	 * @param shopId
-	 *            店铺
-	 * @param categoryId
-	 *            商品分类
-	 * @return
-	 */
-	List<Goods> findGoodsByCategory(long shopId, long categoryId);
+	@GET
+	@Path("shops/{shopId}")
+	@Produces(DEFAULT_MEDIA_TYPE)
+	Map<String, Object> findShopById(@PathParam("shopId") long shopId,
+			@QueryParam("latitude") double latitude,
+			@QueryParam("longitude") double longitude);
+
+	@GET
+	@Path("shops/{shopId}/goodsTypes")
+	@Produces(DEFAULT_MEDIA_TYPE)
+	List<Map<String, Object>> findGoodsTypesByShop(
+			@PathParam("shopId") long shopId,
+			@QueryParam("latitude") double latitude,
+			@QueryParam("longitude") double longitude);
+
+	@GET
+	@Path("goodsTypes/{goodsTypeId}/goodses")
+	@Produces(DEFAULT_MEDIA_TYPE)
+	List<Map<String, Object>> findGoodsesByType(
+			@PathParam("goodsTypeId") long goodsTypeId,
+			@QueryParam("begin") int begin, @QueryParam("count") int count,
+			@QueryParam("latitude") double latitude,
+			@QueryParam("longitude") double longitude);
+
+	@GET
+	@Path("goodses")
+	@Produces(DEFAULT_MEDIA_TYPE)
+	List<Map<String, Object>> searchGoodses(
+			@QueryParam("goodsName") String goodsName,
+			@QueryParam("begin") int begin, @QueryParam("count") int count,
+			@QueryParam("latitude") double latitude,
+			@QueryParam("longitude") double longitude);
 
 	/**
 	 * 提交订单

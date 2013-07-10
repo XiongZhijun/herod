@@ -23,6 +23,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
  * @email hust.xzj@gmail.com
  * 
  */
+@Deprecated
 public class SimpleGoodsDas implements GoodsCategoryQueryService,
 		GoodsQueryService {
 	private static final String QUERY_CATEGORY_BY_SHOP_SQL = "SELECT ID,NAME,ALIAS,SHOP_ID,PARENT_ID FROM HEROD_GOODS_CATEGORY where SHOP_ID = ?";

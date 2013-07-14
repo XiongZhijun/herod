@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.herod.common.das.HerodBeanPropertySqlParameterSource;
+import org.herod.order.das.SimpleOrderDas.OrderItemQueryService;
 import org.herod.order.model.OrderItem;
 import org.herod.order.model.OrderItemFlag;
 import org.herod.order.service.SimplePhoneAgentWorkerService.OrderItemUpdateService;
@@ -25,7 +26,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
  * @email hust.xzj@gmail.com
  * 
  */
-public class SimpleOrderItemDas implements OrderItemUpdateService, OrderItemDas {
+public class SimpleOrderItemDas implements OrderItemUpdateService,
+		OrderItemDas, OrderItemQueryService {
 	private static final String UPDATE_ITEM_QUANTITY_SQL = "UPDATE HEROD_ORDER_ITEMS SET QUANTITY = ? WHERE SERIAL_NUMBER = ?";
 	private static final String UPDATE_ITEM_FLAG_SQL = "UPDATE HEROD_ORDER_ITEMS SET FLAG = ? WHERE SERIAL_NUMBER = ?";
 	private static final String INSERT_ORDER_ITEM_SQL = "INSERT INTO HEROD_ORDER_ITEMS (SERIAL_NUMBER,"
@@ -70,6 +72,13 @@ public class SimpleOrderItemDas implements OrderItemUpdateService, OrderItemDas 
 
 	public void setSimpleJdbcTemplate(SimpleJdbcTemplate simpleJdbcTemplate) {
 		this.simpleJdbcTemplate = simpleJdbcTemplate;
+	}
+
+	@Override
+	public List<OrderItem> findOrderItemsBySerialNumber(
+			List<String> orderSerialNumbers) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

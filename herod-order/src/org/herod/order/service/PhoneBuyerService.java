@@ -22,6 +22,7 @@ import org.herod.order.model.Order;
  * @email hust.xzj@gmail.com
  * 
  */
+@Path("/herod/order")
 public interface PhoneBuyerService {
 	public static final String DEFAULT_MEDIA_TYPE = "application/json;charset=utf-8";
 

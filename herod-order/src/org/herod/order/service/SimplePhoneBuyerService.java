@@ -16,8 +16,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.herod.common.das.HerodColumnMapRowMapper;
 import org.herod.common.das.SqlUtils;
 import org.herod.order.model.Address;
-import org.herod.order.model.Goods;
-import org.herod.order.model.GoodsCategory;
 import org.herod.order.model.Order;
 import org.herod.order.model.OrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +39,9 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 	private BuyerUsedAddressQueryService buyerUsedAddressQueryService;
 	@Autowired
 	private OrderLogService orderLogService;
+	@Autowired
+	@Qualifier("simpleJdbcTemplate")
+	private SimpleJdbcTemplate simpleJdbcTemplate;
 
 	@Override
 	public Result submitOrders(List<Order> orders) {
@@ -70,10 +71,6 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 	public List<Address> findUsedAddress(String phone) {
 		return buyerUsedAddressQueryService.findUsedAddressesByPhone(phone);
 	}
-
-	@Autowired
-	@Qualifier("simpleJdbcTemplate")
-	private SimpleJdbcTemplate simpleJdbcTemplate;
 
 	@Override
 	public List<Map<String, Object>> findShopTypes(double latitude,
@@ -186,16 +183,6 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 
 	public void setOrderLogService(OrderLogService orderLogService) {
 		this.orderLogService = orderLogService;
-	}
-
-	@Deprecated
-	public static interface GoodsCategoryQueryService {
-		List<GoodsCategory> findGoodsCategoryByShop(long shopId);
-	}
-
-	@Deprecated
-	public static interface GoodsQueryService {
-		List<Goods> findGoodsByCategory(long shopId, long categoryId);
 	}
 
 	public static interface OrderDas {

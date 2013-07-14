@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<aop:aspectj-autoproxy />
+	<context:annotation-config />
+	<bean id="logDas" class="org.herod.order.das.SimpleLogDas" />
+	<bean id="agentWorkerIdentityService" class="org.herod.order.service.SimpleAgentWorkerIdentityService" />
+	<bean id="orderLogService" class="org.herod.order.service.SimpleOrderLogService" />
+	<bean id="buyerDas" class="org.herod.order.das.SimpleBuyerDas" />
+	<bean id="orderItemDas" class="org.herod.order.das.SimpleOrderItemDas" />
+	<bean id="orderDas" class="org.herod.order.das.SimpleOrderDas" />
+	<bean id="phoneBuyerService" class="org.herod.order.service.SimplePhoneBuyerService"></bean>
+	<bean class="org.apache.wink.spring.Registrar">
+		<property name="instances">
+			<set>
+				<ref bean="phoneBuyerService" />
+				<ref bean="jacksonJaxbJsonProvider" />
+			</set>
+		</property>
+	</bean>
+</beans>

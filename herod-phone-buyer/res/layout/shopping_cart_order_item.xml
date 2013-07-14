@@ -20,13 +20,6 @@
             android:gravity="center_vertical|left" />
 
         <TextView
-            android:id="@+id/quantity"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center" />
-
-        <TextView
             android:id="@+id/unitPrice"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
@@ -43,6 +36,13 @@
             android:padding="5dip"
             android:scaleType="fitXY"
             android:src="@drawable/reduce" />
+
+        <TextView
+            android:id="@+id/quantity"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center" />
 
         <ImageView
             android:id="@+id/addButton"

@@ -54,6 +54,11 @@ public class Order {
 
 	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
+		for (int i = 0; i < orderItems.size(); i++) {
+			OrderItem orderItem = orderItems.get(i);
+			orderItem.setOrderSerialNumber(serialNumber);
+			orderItem.setSerialNumber(serialNumber + "-" + i);
+		}
 	}
 
 	public String getBuyerPhone() {

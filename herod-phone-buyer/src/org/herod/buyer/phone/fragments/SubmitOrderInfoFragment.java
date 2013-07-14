@@ -13,7 +13,6 @@ import org.herod.buyer.phone.ShoppingCartCache;
 import org.herod.buyer.phone.db.OrderDao;
 import org.herod.buyer.phone.model.Address;
 import org.herod.buyer.phone.model.Order;
-import org.herod.buyer.phone.model.OrderItem;
 import org.herod.buyer.phone.model.OrderStatus;
 import org.herod.framework.db.DatabaseOpenHelper;
 import org.herod.framework.utils.StringUtils;
@@ -125,8 +124,9 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 
 		protected Object doInBackground(Object... params) {
 			orders = ShoppingCartCache.getInstance().getAllOrders();
-			long terminalId = getTerminalId();
-			for (Order order : orders) {
+			String transactionSN = getTransactionSerialNumber();
+			for (int i = 0; i < orders.size(); i++) {
+				Order order = orders.get(i);
 				Address deliveryAddress = new Address();
 				deliveryAddress.setAddress(buyerAddress);
 				order.setDeliveryAddress(deliveryAddress);
@@ -134,22 +134,14 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 				order.setBuyerName(buyerName);
 				order.setComment(comment);
 				order.setSubmitTime(new Date());
-				long index = BuyerContext.increaseOrderIndex(getActivity());
-				String orderSerialNumber = terminalId + "-" + index;
-				order.setSerialNumber(orderSerialNumber);
-				for (int i = 0; i < order.getOrderItems().size(); i++) {
-					OrderItem orderItem = order.getOrderItems().get(i);
-					orderItem.setOrderSerialNumber(orderSerialNumber);
-					orderItem.setSerialNumber(orderSerialNumber + "-" + i);
-				}
+				order.setSerialNumber(transactionSN + "-" + i);
 			}
 			// TODO 需要提交到服务器。
 			return null;
 		}
 
-		protected long getTerminalId() {
-			// TODO 如果TerminalId没有设置过的话，需要从远程服务器处读取。
-			return BuyerContext.getTerminalId(getActivity());
+		protected String getTransactionSerialNumber() {
+			return BuyerContext.getBuyerService().getTransactionSerialNumber();
 		}
 
 		@Override

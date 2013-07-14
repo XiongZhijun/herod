@@ -40,6 +40,11 @@ public class RestBuyerService extends RestServiceSupport implements
 	}
 
 	@Override
+	public String getTransactionSerialNumber() {
+		return getForObject("/herod/sn/transaction", String.class);
+	}
+
+	@Override
 	public List<MapWrapper<String, Object>> findShopTypes() {
 		String json = getForObject("/herod/order/shopTypes", String.class);
 		return toMapWrapperList(json);

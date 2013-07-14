@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.wink.common.annotations.Workspace;
 import org.herod.common.das.HerodColumnMapRowMapper;
 import org.herod.common.das.SqlUtils;
 import org.herod.order.model.Address;
@@ -30,6 +31,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
  * @email hust.xzj@gmail.com
  * 
  */
+@Workspace(collectionTitle = "Goods And Orders Service", workspaceTitle = "Order System")
 public class SimplePhoneBuyerService implements PhoneBuyerService {
 	@Autowired
 	private OrderDas orderDas;

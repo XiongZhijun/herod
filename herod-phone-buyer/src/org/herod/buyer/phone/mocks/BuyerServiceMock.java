@@ -209,4 +209,9 @@ public class BuyerServiceMock implements BuyerService {
 		return list.subList(begin, end);
 	}
 
+	@Override
+	public String getTransactionSerialNumber() {
+		return "1";
+	}
+
 }

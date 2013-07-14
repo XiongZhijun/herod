@@ -43,8 +43,6 @@ public class OrderView extends LinearLayout implements
 	private TextView shopTipsView;
 	@InjectView(R.id.orderItemsListView)
 	private LinearLayout orderItemsContainer;
-	@InjectView(R.id.totalAmount)
-	private TextView totalAmountView;
 	@InjectView(R.id.costOfRunErrands)
 	private TextView costOfRunErrandsView;
 	@InjectView(R.id.totalWithCostOfRunErrands)
@@ -136,9 +134,9 @@ public class OrderView extends LinearLayout implements
 		StringBuilder sb = new StringBuilder();
 		double charge = order.getShopMinChargeForFreeDelivery();
 		if (charge > 0) {
-			sb.append("消费满").append(charge).append("免跑腿费");
+			sb.append("消费满").append(charge).append("免配送费");
 		} else {
-			sb.append("免跑腿费");
+			sb.append("免配送费");
 		}
 		return sb.toString();
 	}
@@ -161,7 +159,6 @@ public class OrderView extends LinearLayout implements
 			order.setCostOfRunErrands(0);
 		}
 		setText(costOfRunErrandsView, order.getCostOfRunErrands());
-		totalAmountView.setText(Double.toString(order.getTotalAmount()));
 		totalWithCostOfRunErrandsView.setText(Double.toString(order
 				.getTotalAmountWithCostOfRunErrands()));
 	}

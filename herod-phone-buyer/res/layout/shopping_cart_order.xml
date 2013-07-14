@@ -43,6 +43,87 @@
             android:src="@drawable/delete_order" />
     </LinearLayout>
 
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="5dip"
+        android:background="#E5E5E5" />
+
+    <include layout="@layout/shopping_cart_order_item_header" />
+
+    <LinearLayout
+        android:id="@+id/orderItemsListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="5dip"
+        android:background="#E5E5E5" />
+
+    <LinearLayout
+        android:id="@+id/totalInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="消费总计：" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="￥"
+            android:textColor="#F00" />
+
+        <TextView
+            android:id="@+id/totalWithCostOfRunErrands"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#F00" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="（其中包含配送费：" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="￥"
+            android:textColor="#F00" />
+
+        <TextView
+            android:id="@+id/costOfRunErrands"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#F00" />
+
+        <TextView
+            android:layout_width="20dip"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="）" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="5dip"
+        android:background="#E5E5E5" />
+
     <LinearLayout
         android:id="@+id/historyInfo"
         android:layout_width="match_parent"
@@ -65,6 +146,15 @@
             android:layout_marginRight="10dip"
             android:textColor="#888"
             android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/historyInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="5dip"
+        android:orientation="horizontal" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -94,74 +184,6 @@
             android:layout_height="wrap_content"
             android:textColor="#888"
             android:textSize="14sp" />
-    </LinearLayout>
-
-    <View
-        android:id="@+id/line1"
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:layout_marginBottom="5dip"
-        android:layout_marginTop="5dip"
-        android:background="#E5E5E5" />
-
-    <include
-        layout="@layout/shopping_cart_order_item_header" />
-
-    <LinearLayout
-        android:id="@+id/orderItemsListView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-    </LinearLayout>
-
-    <View
-        android:id="@+id/line2"
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:layout_marginBottom="5dip"
-        android:layout_marginTop="5dip"
-        android:background="#E5E5E5" />
-
-    <LinearLayout
-        android:id="@+id/totalInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="总计（消费+跑腿费）：" />
-
-        <TextView
-            android:id="@+id/totalAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#F00" />
-
-        <TextView
-            android:layout_width="20dip"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="+" />
-
-        <TextView
-            android:id="@+id/costOfRunErrands"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#F00" />
-
-        <TextView
-            android:layout_width="20dip"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="=" />
-
-        <TextView
-            android:id="@+id/totalWithCostOfRunErrands"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#F00" />
     </LinearLayout>
 
     <TextView

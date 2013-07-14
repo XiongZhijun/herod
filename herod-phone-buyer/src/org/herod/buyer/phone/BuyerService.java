@@ -14,6 +14,8 @@ import org.herod.framework.MapWrapper;
  */
 public interface BuyerService {
 
+	String getTransactionSerialNumber();
+
 	List<MapWrapper<String, Object>> findShopTypes();
 
 	List<MapWrapper<String, Object>> findShopesByType(long typeId);

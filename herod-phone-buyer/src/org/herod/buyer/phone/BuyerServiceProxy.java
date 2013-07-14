@@ -68,4 +68,9 @@ public class BuyerServiceProxy implements BuyerService, ShopService {
 		return buyerService.searchGoodses(goodsName, begin, count);
 	}
 
+	@Override
+	public String getTransactionSerialNumber() {
+		return buyerService.getTransactionSerialNumber();
+	}
+
 }

@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.herod.buyer.phone.BuyerService;
+import org.herod.buyer.phone.model.Order;
+import org.herod.buyer.phone.model.Result;
+import org.herod.buyer.phone.model.SimpleResult;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.rest.GZipRestTemplateBuilder;
 import org.herod.framework.rest.RestServiceSupport;
@@ -113,6 +116,12 @@ public class RestBuyerService extends RestServiceSupport implements
 		MapWrapper<String, Object> mapWrapper = new MapWrapper<String, Object>(
 				newMap);
 		return mapWrapper;
+	}
+
+	@Override
+	public Result submitOrders(List<Order> orders) {
+		return postForObject("/herod/order", SimpleResult.class,
+				new Gson().toJson(orders));
 	}
 
 	@Override

@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.herod.buyer.phone.BuyerService;
+import org.herod.buyer.phone.model.Order;
+import org.herod.buyer.phone.model.Result;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.utils.StringUtils;
 
@@ -212,6 +214,12 @@ public class BuyerServiceMock implements BuyerService {
 	@Override
 	public String getTransactionSerialNumber() {
 		return "1";
+	}
+
+	@Override
+	public Result submitOrders(List<Order> orders) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.herod.buyer.phone.model.Order;
+import org.herod.buyer.phone.model.Result;
 import org.herod.framework.MapWrapper;
 
 /**
@@ -71,6 +73,11 @@ public class BuyerServiceProxy implements BuyerService, ShopService {
 	@Override
 	public String getTransactionSerialNumber() {
 		return buyerService.getTransactionSerialNumber();
+	}
+
+	@Override
+	public Result submitOrders(List<Order> orders) {
+		return buyerService.submitOrders(orders);
 	}
 
 }

@@ -24,7 +24,11 @@ public class HerodBeanPropertySqlParameterSource extends
 
 	public Object getValue(String paramName) throws IllegalArgumentException {
 		try {
-			return super.getValue(paramName);
+			Object value = super.getValue(paramName);
+			if (value instanceof Enum) {
+				return ((Enum<?>) value).name();
+			}
+			return value;
 		} catch (NullValueInNestedPathException e) {
 			_log.warn("null value in nested path. param name is " + paramName);
 			return null;

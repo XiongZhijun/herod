@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -81,7 +82,11 @@ public interface PhoneBuyerService {
 	 *            订单
 	 * @return
 	 */
-	Result submitOrders(List<Order> orders);
+	@POST
+	@Produces(DEFAULT_MEDIA_TYPE)
+	Result submitOrders(String ordersJson,
+			@QueryParam("latitude") double latitude,
+			@QueryParam("longitude") double longitude);
 
 	/**
 	 * 根据订单流水号读取订单详细信息

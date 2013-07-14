@@ -17,12 +17,18 @@ import org.apache.wink.common.annotations.Workspace;
 import org.herod.common.das.HerodColumnMapRowMapper;
 import org.herod.common.das.SqlUtils;
 import org.herod.order.model.Address;
+import org.herod.order.model.Location;
 import org.herod.order.model.Order;
 import org.herod.order.model.OrderItem;
+import org.herod.order.model.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * 
@@ -31,6 +37,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
  * @email hust.xzj@gmail.com
  * 
  */
+@Transactional
 @Workspace(collectionTitle = "Goods And Orders Service", workspaceTitle = "Order System")
 public class SimplePhoneBuyerService implements PhoneBuyerService {
 	@Autowired
@@ -46,10 +53,21 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 	private SimpleJdbcTemplate simpleJdbcTemplate;
 
 	@Override
-	public Result submitOrders(List<Order> orders) {
+	public Result submitOrders(String ordersJson, double latitude,
+			double longitude) {
+		List<Order> orders = new Gson().fromJson(ordersJson,
+				new TypeToken<List<Order>>() {
+				}.getType());
 		List<OrderItem> orderItems = new ArrayList<OrderItem>();
 		for (Order order : orders) {
+			Address deliveryAddress = order.getDeliveryAddress();
+			if (deliveryAddress == null) {
+				deliveryAddress = new Address();
+			}
+			deliveryAddress.setLocation(new Location(longitude, latitude));
 			order.setSubmitTime(new Date());
+			order.initOrderItemProperties();
+			order.setStatus(OrderStatus.Submitted);
 			orderItems.addAll(order.getOrderItems());
 		}
 		orderDas.addOrders(orders);

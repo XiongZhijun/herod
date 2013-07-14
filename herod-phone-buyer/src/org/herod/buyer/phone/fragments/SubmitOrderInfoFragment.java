@@ -14,6 +14,7 @@ import org.herod.buyer.phone.db.OrderDao;
 import org.herod.buyer.phone.model.Address;
 import org.herod.buyer.phone.model.Order;
 import org.herod.buyer.phone.model.OrderStatus;
+import org.herod.buyer.phone.model.Result;
 import org.herod.framework.db.DatabaseOpenHelper;
 import org.herod.framework.utils.StringUtils;
 
@@ -105,7 +106,7 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 				.execute();
 	}
 
-	class SubmitOrdersTask extends AsyncTask<Object, Object, Object> {
+	class SubmitOrdersTask extends AsyncTask<Object, Object, Result> {
 
 		private List<Order> orders;
 		private String buyerAddress;
@@ -122,7 +123,7 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 			this.comment = comment;
 		}
 
-		protected Object doInBackground(Object... params) {
+		protected Result doInBackground(Object... params) {
 			orders = ShoppingCartCache.getInstance().getAllOrders();
 			String transactionSN = getTransactionSerialNumber();
 			for (int i = 0; i < orders.size(); i++) {
@@ -136,8 +137,7 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 				order.setSubmitTime(new Date());
 				order.setSerialNumber(transactionSN + "-" + i);
 			}
-			// TODO 需要提交到服务器。
-			return null;
+			return BuyerContext.getBuyerService().submitOrders(orders);
 		}
 
 		protected String getTransactionSerialNumber() {
@@ -145,8 +145,13 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 		}
 
 		@Override
-		protected void onPostExecute(Object result) {
+		protected void onPostExecute(Result result) {
 			FragmentActivity activity = getActivity();
+			if (result == null || !result.isSuccess()) {
+				Toast.makeText(activity, "下单失败，请重试！", Toast.LENGTH_SHORT)
+						.show();
+				return;
+			}
 			for (Order order : orders) {
 				order.setStatus(OrderStatus.Submitted);
 			}

@@ -22,4 +22,6 @@ public interface Constants {
 	String NAME = "name";
 
 	String ID = "id";
+
+	String AGENT_ID = "agentId";
 }

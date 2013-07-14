@@ -18,6 +18,16 @@ public class Location {
 	/** 纬度 */
 	private double latitude;
 
+	public Location() {
+		super();
+	}
+
+	public Location(double longitude, double latitude) {
+		super();
+		this.longitude = longitude;
+		this.latitude = latitude;
+	}
+
 	public double getLongitude() {
 		return longitude;
 	}

@@ -1,6 +1,7 @@
 package org.herod.buyer.phone;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class HerodTask<Params, Result> extends
 		AsyncTask<Params, Object, Result> {
@@ -20,7 +21,12 @@ public class HerodTask<Params, Result> extends
 
 	@Override
 	protected Result doInBackground(Params... params) {
-		return runnable.runOnBackground(params);
+		try {
+			return runnable.runOnBackground(params);
+		} catch (Exception e) {
+			Log.e("TEST", e.getMessage(), e);
+			return null;
+		}
 	}
 
 	@Override

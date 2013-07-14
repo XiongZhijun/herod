@@ -153,4 +153,9 @@ public class Order {
 		this.comment = comment;
 	}
 
+	public void initOrderItemProperties() {
+		for (OrderItem orderItem : orderItems) {
+			orderItem.setAgentId(agentId);
+		}
+	}
 }

@@ -18,6 +18,8 @@
 	<dependencies>
 		<dependency name="herod-common" rev="1.0+"
 			conf="compile->master,compile;sources->sources" />
+		<dependency org="com.fpi.bear" name="bear-permission"
+			rev="1.6.1.6" conf="compile->master,compile;sources->sources" />
 		<dependency org="com.fpi.bear" name="bear-common-third-web"
 			rev="1.6.1.6" conf="compile->compile;sources->sources" />
 		<dependency org="com.fpi.bear" name="bear-common-rest" rev="1.6.1.6"

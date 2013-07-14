@@ -22,7 +22,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
  * 
  */
 public class SimpleLogDas implements LogDas {
-	private static final String INSERT_LOGS_SQL = "INSERT INTO HEROD_ORDER_LOGS (ORDER_SERIAL_NUMBER,OPERATION,REASON,OPERATOR_TYPE,OPERATOR,OPERATE_TIME) "
+	private static final String INSERT_LOGS_SQL = "INSERT INTO ZRH_ORDER_LOG (ORDER_SERIAL_NUMBER,OPERATION,REASON,OPERATOR_TYPE,OPERATOR,OPERATE_TIME) "
 			+ "VALUES (:orderSerialNumber,:operation,:reason,:operatorType,:operator,:operateTime) ";
 	@Autowired
 	@Qualifier("simpleJdbcTemplate")

@@ -69,6 +69,7 @@ public class ShoppingCartCache {
 			order.setShopCostOfRunErrands(shopCostOfRunErrands);
 			order.setShopMinChargeForFreeDelivery(shopMinChargeForFreeDelivery);
 			order.setShopId(shopId);
+			order.setAgentId(shop.getLong(Constants.AGENT_ID));
 			orderCaches.put(shopId, order);
 		}
 		return order;

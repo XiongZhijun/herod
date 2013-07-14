@@ -5,6 +5,8 @@ package org.herod.buyer.phone;
 
 import java.util.List;
 
+import org.herod.buyer.phone.model.Order;
+import org.herod.buyer.phone.model.Result;
 import org.herod.framework.MapWrapper;
 
 /**
@@ -29,4 +31,6 @@ public interface BuyerService {
 
 	List<MapWrapper<String, Object>> searchGoodses(String goodsName, int begin,
 			int count);
+
+	Result submitOrders(List<Order> orders);
 }

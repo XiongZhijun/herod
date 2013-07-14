@@ -28,11 +28,11 @@ import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
  */
 public class SimpleOrderItemDas implements OrderItemUpdateService,
 		OrderItemDas, OrderItemQueryService {
-	private static final String UPDATE_ITEM_QUANTITY_SQL = "UPDATE HEROD_ORDER_ITEMS SET QUANTITY = ? WHERE SERIAL_NUMBER = ?";
-	private static final String UPDATE_ITEM_FLAG_SQL = "UPDATE HEROD_ORDER_ITEMS SET FLAG = ? WHERE SERIAL_NUMBER = ?";
-	private static final String INSERT_ORDER_ITEM_SQL = "INSERT INTO HEROD_ORDER_ITEMS (SERIAL_NUMBER,"
+	private static final String UPDATE_ITEM_QUANTITY_SQL = "UPDATE ZRH_ORDER_ITEM SET QUANTITY = ? WHERE SERIAL_NUMBER = ?";
+	private static final String UPDATE_ITEM_FLAG_SQL = "UPDATE ZRH_ORDER_ITEM SET FLAG = ? WHERE SERIAL_NUMBER = ?";
+	private static final String INSERT_ORDER_ITEM_SQL = "INSERT INTO ZRH_ORDER_ITEM (SERIAL_NUMBER,"
 			+ "ORDER_SERIAL_NUMBER,GOODS_ID,GOODS_CODE,AGENT_ID,"
-			+ "SHOP_ID,UNIT_PRICE,QUANTITY,FLAG) "
+			+ "SHOP_ID,SELLING_PRICE,QUANTITY,FLAG) "
 			+ "VALUES (:serialNumber,:orderSerialNumber,:goodsId,"
 			+ ":goodsCode,:agentId,:shopId,:unitPrice,:quantity,:flag) ";
 	@Autowired

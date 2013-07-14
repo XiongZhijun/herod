@@ -37,18 +37,18 @@ import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 		OrderStatusUpdateService, OrderUpdateService, OrderDas {
 	private static final String SELECT_FROM_ORDERS_SQL = "SELECT SERIAL_NUMBER,BUYER_PHONE,BUYER_NAME,AGENT_ID,SHOP_ID,"
-			+ "WORKER_ID,STATUS,SUBMIT_TIME,PREPARE_TIME,COMPLETE_TIME,COMMENT,"
+			+ "DELIVERY_WORKER_ID,STATUS,SUBMIT_TIME,PREPARE_TIME,COMPLETE_TIME,COMMENT,"
 			+ "DELIVERY_ADDRESS,DELIVERY_LONGITUDE,DELIVERY_LATITUDE "
-			+ "FROM HEROD_ORDERS ";
-	private static final String UPDATE_ORDER_STATUS_AND_COMPLETE_TIME_SQL = "UPDATE HEROD_ORDERS SET STATUS = ?, "
+			+ "FROM ZRH_ORDER ";
+	private static final String UPDATE_ORDER_STATUS_AND_COMPLETE_TIME_SQL = "UPDATE ZRH_ORDER SET STATUS = ?, "
 			+ "COMPLETE_TIME = ? WHERE SERIAL_NUMBER = ?";
-	private static final String UPDATE_ORDER_STATUS_AND_WORKER_SQL = "UPDATE HEROD_ORDERS SET STATUS = ?, "
-			+ "WORKER_ID = ? WHERE SERIAL_NUMBER = ?";
-	private static final String UPDATE_ORDER_STATUS_SQL = "UPDATE HEROD_ORDERS SET STATUS = ? WHERE SERIAL_NUMBER = ?";
-	private static final String UPDATE_ORDER_COMMENT_SQL = "UPDATE HEROD_ORDERS SET COMMENT = ? WHERE SERIAL_NUMBER = ?";
-	private static final String INSERT_ORDER_SQL = "INSERT INTO HEROD_ORDERS "
+	private static final String UPDATE_ORDER_STATUS_AND_WORKER_SQL = "UPDATE ZRH_ORDER SET STATUS = ?, "
+			+ "DELIVERY_WORKER_ID = ? WHERE SERIAL_NUMBER = ?";
+	private static final String UPDATE_ORDER_STATUS_SQL = "UPDATE ZRH_ORDER SET STATUS = ? WHERE SERIAL_NUMBER = ?";
+	private static final String UPDATE_ORDER_COMMENT_SQL = "UPDATE ZRH_ORDER SET COMMENT = ? WHERE SERIAL_NUMBER = ?";
+	private static final String INSERT_ORDER_SQL = "INSERT INTO ZRH_ORDER "
 			+ "(SERIAL_NUMBER,BUYER_PHONE,BUYER_NAME,AGENT_ID,"
-			+ "SHOP_ID,WORKER_ID,STATUS,SUBMIT_TIME,PREPARE_TIME,COMPLETE_TIME,"
+			+ "SHOP_ID,DELIVERY_WORKER_ID,STATUS,SUBMIT_TIME,PREPARE_TIME,COMPLETE_TIME,"
 			+ "COMMENT,DELIVERY_ADDRESS,DELIVERY_LONGITUDE,DELIVERY_LATITUDE) "
 			+ "VALUES (:serialNumber,:buyerPhone,:buyerName,:agentId,:shopId,"
 			+ ":workerId,:status,:submitTime,:prepareTime,:completeTime,:comment,"
@@ -65,7 +65,7 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 		RowMapper<OrderStatus> rm = new HerodSingleColumnRowMapper<OrderStatus>(
 				OrderStatus.class);
 		List<OrderStatus> statuses = simpleJdbcTemplate.query(
-				"SELECT STATUS FROM HEROD_ORDERS WHERE SERIAL_NUMBER = ?", rm,
+				"SELECT STATUS FROM ZRH_ORDER WHERE SERIAL_NUMBER = ?", rm,
 				serialNumber);
 		if (CollectionUtils.isNotEmpty(statuses)) {
 			return statuses.get(0);
@@ -125,7 +125,7 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 	@Override
 	public List<Order> findOrdersByWorkerAndStatus(long workerId,
 			OrderStatus status) {
-		return queryOrders(" WHERE WORKER_ID = ? AND STATUS = ?", workerId,
+		return queryOrders(" WHERE DELIVERY_WORKER_ID = ? AND STATUS = ?", workerId,
 				OrderStatus.Acceptted);
 
 	}
@@ -138,7 +138,7 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 		calendar.add(Calendar.DAY_OF_MONTH, -1);
 		Date now = calendar.getTime();
 		return queryOrders(
-				" WHERE SUBMIT_TIME > ? AND WORKER_ID = ? AND STATUS = ?", now,
+				" WHERE SUBMIT_TIME > ? AND DELIVERY_WORKER_ID = ? AND STATUS = ?", now,
 				workerId, OrderStatus.Acceptted);
 	}
 

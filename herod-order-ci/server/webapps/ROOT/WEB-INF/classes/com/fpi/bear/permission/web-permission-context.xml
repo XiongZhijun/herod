@@ -42,7 +42,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 					<bean class="com.fpi.bear.permission.filter.LogoutFilter" />
 				</entry>
 				<entry key="restauthen">
-					<bean class="com.fpi.bear.permission.filter.BearAuthenticationFilter" />
+					<bean class="org.herod.order.filter.HerodAuthenticationFilter" />
 				</entry>
 				<entry key="authcextend">
 					<bean class="com.fpi.bear.permission.filter.FormAuthenticationExtendFilter" />

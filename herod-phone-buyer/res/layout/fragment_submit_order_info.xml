@@ -15,6 +15,44 @@
 
     <View style="@style/LineStyle" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/TextViewStyle2"
+            android:gravity="right"
+            android:text="选购商品数量："
+            android:textSize="14sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/totalQuantity"
+            style="@style/TextViewStyle2"
+            android:textColor="#F00" />
+
+        <TextView
+            style="@style/TextViewStyle2"
+            android:layout_marginLeft="15dip"
+            android:gravity="right"
+            android:text="应付总额："
+            android:textSize="14sp"
+            android:textStyle="normal" />
+
+        <TextView
+            style="@style/TextViewStyle2"
+            android:text="￥"
+            android:textColor="#F00" />
+
+        <TextView
+            android:id="@+id/totalAmount"
+            style="@style/TextViewStyle2"
+            android:textColor="#F00" />
+    </LinearLayout>
+
+    <View style="@style/LineStyle" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dip"
@@ -79,34 +117,6 @@
                 android:layout_marginBottom="10dip"
                 android:ems="10"
                 android:hint="例如：加糖、重辣" />
-
-            <TextView
-                style="@style/TextViewStyle2"
-                android:text="选购商品数量：" />
-
-            <EditText
-                android:id="@+id/totalQuantity"
-                style="@style/TextViewStyle2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dip"
-                android:ems="10"
-                android:enabled="false"
-                android:textColor="#F00" />
-
-            <TextView
-                style="@style/TextViewStyle2"
-                android:text="应付总额：" />
-
-            <EditText
-                android:id="@+id/totalAmount"
-                style="@style/TextViewStyle2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dip"
-                android:ems="10"
-                android:enabled="false"
-                android:textColor="#F00" />
         </LinearLayout>
     </ScrollView>
 

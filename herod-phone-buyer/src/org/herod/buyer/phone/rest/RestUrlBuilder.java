@@ -3,6 +3,7 @@
  */
 package org.herod.buyer.phone.rest;
 
+import org.herod.buyer.phone.BuyerContext;
 import org.herod.buyer.phone.lbs.LocationManager;
 import org.herod.framework.rest.URLBuilder;
 import org.herod.framework.tools.HttpUrlBuilderSupport;
@@ -45,12 +46,12 @@ public class RestUrlBuilder extends HttpUrlBuilderSupport implements URLBuilder 
 
 	@Override
 	protected String getHost() {
-		return "192.168.100.102";
+		return BuyerContext.getRestServerHost();
 	}
 
 	@Override
 	protected int getPort() {
-		return 9191;
+		return BuyerContext.getRestServerPort();
 	}
 
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="RestServerHost">192.168.100.101</string>
+    <string name="RestServerPort">9191</string>
+    <string name="ImageServerHost">192.168.100.101</string>
+    <string name="ImageServerPort">9191</string>
+</resources>

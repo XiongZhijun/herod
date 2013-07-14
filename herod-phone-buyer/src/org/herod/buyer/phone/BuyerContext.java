@@ -17,11 +17,12 @@ import android.preference.PreferenceManager;
  * 
  */
 public class BuyerContext {
-
-	/**  */
 	private static final String ORDER_INDEX = "OrderIndex";
-	/**  */
 	private static final String TERMINAL_ID = "TerminalId";
+	private static String restServerHost;
+	private static int restServerPort;
+	private static String imageServerHost;
+	private static int imageServerPort;
 	private static BuyerService buyerService = new BuyerServiceMock();
 	private static ShopService shopService;
 
@@ -30,6 +31,12 @@ public class BuyerContext {
 				new RestBuyerService(context));
 		buyerService = buyerServiceProxy;
 		shopService = buyerServiceProxy;
+		restServerHost = context.getString(R.string.RestServerHost);
+		restServerPort = Integer.parseInt(context
+				.getString(R.string.RestServerPort));
+		imageServerHost = context.getString(R.string.ImageServerHost);
+		imageServerPort = Integer.parseInt(context
+				.getString(R.string.ImageServerPort));
 	}
 
 	public static BuyerService getBuyerService() {
@@ -71,5 +78,21 @@ public class BuyerContext {
 		editor.putLong(ORDER_INDEX, index);
 		editor.commit();
 		return index;
+	}
+
+	public static String getRestServerHost() {
+		return restServerHost;
+	}
+
+	public static int getRestServerPort() {
+		return restServerPort;
+	}
+
+	public static String getImageServerHost() {
+		return imageServerHost;
+	}
+
+	public static int getImageServerPort() {
+		return imageServerPort;
 	}
 }

@@ -3,6 +3,7 @@
  */
 package org.herod.buyer.phone.adapter;
 
+import org.herod.buyer.phone.BuyerContext;
 import org.herod.framework.rest.URLBuilder;
 import org.herod.framework.tools.HttpUrlBuilderSupport;
 
@@ -27,12 +28,12 @@ public class ImageUrlBuilder extends HttpUrlBuilderSupport implements
 
 	@Override
 	protected String getHost() {
-		return "192.168.100.102";
+		return BuyerContext.getImageServerHost();
 	}
 
 	@Override
 	protected int getPort() {
-		return 9191;
+		return BuyerContext.getImageServerPort();
 	}
 
 }

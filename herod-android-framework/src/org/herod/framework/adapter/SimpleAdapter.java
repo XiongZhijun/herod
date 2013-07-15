@@ -39,7 +39,9 @@ public class SimpleAdapter extends BaseAdapter {
 	public SimpleAdapter(Context context,
 			List<MapWrapper<String, Object>> data, int resource, String[] from,
 			int[] to) {
-		mData.addAll(data);
+		if (data != null) {
+			mData.addAll(data);
+		}
 		mResource = mDropDownResource = resource;
 		mFrom = from;
 		mTo = to;

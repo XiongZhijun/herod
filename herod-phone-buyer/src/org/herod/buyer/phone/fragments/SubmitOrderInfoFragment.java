@@ -135,7 +135,7 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 				order.setBuyerName(buyerName);
 				order.setComment(comment);
 				order.setSubmitTime(new Date());
-				order.setSerialNumber(transactionSN + "-" + i);
+				order.setSerialNumber(transactionSN + "-" + (i + 1));
 			}
 			return BuyerContext.getBuyerService().submitOrders(orders);
 		}

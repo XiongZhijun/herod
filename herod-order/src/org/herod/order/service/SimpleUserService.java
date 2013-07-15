@@ -1,7 +1,7 @@
 /*
  * Copyright © 2013-2014 Xiong Zhijun, All Rights Reserved. 
  */
-package org.herod.order.web.pms;
+package org.herod.order.service;
 
 import java.util.List;
 

@@ -21,6 +21,7 @@ public class OrderUpdateInfo {
 	private List<String> deletedOrderItems = new ArrayList<String>();
 	private List<OrderItem> newOrderItems = new ArrayList<OrderItem>();
 	private Map<String, Integer> quantityChangeMap = new HashMap<String, Integer>();
+	private String reason;
 
 	public String getOrderSerialNumber() {
 		return orderSerialNumber;
@@ -60,6 +61,14 @@ public class OrderUpdateInfo {
 
 	public void setQuantityChangeMap(Map<String, Integer> quantityChangeMap) {
 		this.quantityChangeMap = quantityChangeMap;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 
 }

@@ -3,8 +3,8 @@
  */
 package org.herod.order.web;
 
+import org.herod.order.service.SimpleUserService.UserType;
 import org.herod.order.web.pms.UserDao;
-import org.herod.order.web.pms.SimpleUserService.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

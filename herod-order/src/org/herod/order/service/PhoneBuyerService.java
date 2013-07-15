@@ -3,6 +3,8 @@
  */
 package org.herod.order.service;
 
+import static org.herod.order.MediaType.DEFAULT_MEDIA_TYPE;
+
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +27,6 @@ import org.herod.order.model.Order;
  */
 @Path("/herod/order")
 public interface PhoneBuyerService {
-	public static final String DEFAULT_MEDIA_TYPE = "application/json;charset=utf-8";
 
 	@GET
 	@Path("shopTypes")

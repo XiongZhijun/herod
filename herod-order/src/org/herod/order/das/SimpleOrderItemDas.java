@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.herod.common.das.HerodBeanPropertyRowMapper;
 import org.herod.common.das.HerodBeanPropertySqlParameterSource;
 import org.herod.order.das.SimpleOrderDas.OrderItemQueryService;
 import org.herod.order.model.OrderItem;
@@ -16,6 +17,7 @@ import org.herod.order.service.SimplePhoneAgentWorkerService.OrderItemUpdateServ
 import org.herod.order.service.SimplePhoneBuyerService.OrderItemDas;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
@@ -77,8 +79,11 @@ public class SimpleOrderItemDas implements OrderItemUpdateService,
 	@Override
 	public List<OrderItem> findOrderItemsBySerialNumber(
 			List<String> orderSerialNumbers) {
-		// TODO Auto-generated method stub
-		return null;
+		RowMapper<OrderItem> rm = new HerodBeanPropertyRowMapper<OrderItem>(
+				OrderItem.class);
+		return simpleJdbcTemplate
+				.query("SELECT ID, SERIAL_NUMBER,ORDER_SERIAL_NUMBER,GOODS_ID,GOODS_CODE,AGENT_ID, SHOP_ID, SELLING_PRICE,SUPPLY_PRICE, QUANTITY,FLAG FROM ZRH_ORDER_ITEM WHERE ORDER_SERIAL_NUMBER IN (?)",
+						rm, orderSerialNumbers);
 	}
 
 }

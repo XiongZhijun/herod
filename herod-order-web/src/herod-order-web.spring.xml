@@ -14,7 +14,6 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	<bean id="orderUserDao" class="org.herod.order.web.pms.UserDao"></bean>
 	<bean id="userPasswordEncryptor" class="org.herod.order.web.pms.MD5UserPasswordEncryptor"></bean>
 	<bean id="orderFormDataProcessor" class="org.herod.order.web.OrderFormDataProcessor"></bean>
-	<bean id="userService" class="org.herod.order.web.pms.SimpleUserService"></bean>
 	<bean id="orderDataSetControl" class="org.herod.order.web.OrderDataSetControl">
 		<property name="dataSetContextFactory" ref="dataSetContextFactory" />
 	</bean>

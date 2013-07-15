@@ -6,9 +6,9 @@ package org.herod.order.web;
 import java.util.Arrays;
 import java.util.List;
 
+import org.herod.order.service.UserService;
 import org.herod.order.web.OrderFormDataAccessService.OrderFormDataPostprocessor;
 import org.herod.order.web.OrderFormDataAccessService.OrderFormDataPreprocessor;
-import org.herod.order.web.pms.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fpi.bear.db.data.FormData;

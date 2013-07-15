@@ -86,7 +86,7 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 	}
 
 	@Override
-	public Result updateOrder(OrderUpdateInfo updateInfo, String reason) {
+	public Result updateOrder(OrderUpdateInfo updateInfo) {
 		String serialNumber = updateInfo.getOrderSerialNumber();
 		if (orderStatusChecker.canUpdate(serialNumber)) {
 			return new SimpleResult(

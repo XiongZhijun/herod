@@ -12,7 +12,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.herod.common.das.HerodBeanPropertyRowMapper;
 import org.herod.common.das.HerodBeanPropertySqlParameterSource;
 import org.herod.common.das.HerodSingleColumnRowMapper;
-import org.herod.common.das.SqlUtils;
 import org.herod.order.model.Order;
 import org.herod.order.model.OrderItem;
 import org.herod.order.model.OrderStatus;
@@ -111,22 +110,21 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 
 	@Override
 	public List<Order> findOrdersBySerialNumbers(List<String> serialNumbers) {
-		return queryOrders(" WHERE SERIAL_NUMBER IN "
-				+ SqlUtils.buildInSql(serialNumbers));
+		return queryOrders(" WHERE SERIAL_NUMBER IN ?", serialNumbers);
 	}
 
 	@Override
 	public List<Order> findWaitAcceptOrders(long agentId) {
 		return queryOrders(
 				" WHERE AGENT_ID = ? AND (STATUS = ? OR STATUS = ?)", agentId,
-				OrderStatus.Submitted, OrderStatus.Rejected);
+				OrderStatus.Submitted.name(), OrderStatus.Rejected.name());
 	}
 
 	@Override
 	public List<Order> findOrdersByWorkerAndStatus(long workerId,
 			OrderStatus status) {
-		return queryOrders(" WHERE DELIVERY_WORKER_ID = ? AND STATUS = ?", workerId,
-				OrderStatus.Acceptted);
+		return queryOrders(" WHERE DELIVERY_WORKER_ID = ? AND STATUS = ?",
+				workerId, OrderStatus.Acceptted.name());
 
 	}
 
@@ -138,8 +136,8 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 		calendar.add(Calendar.DAY_OF_MONTH, -1);
 		Date now = calendar.getTime();
 		return queryOrders(
-				" WHERE SUBMIT_TIME > ? AND DELIVERY_WORKER_ID = ? AND STATUS = ?", now,
-				workerId, OrderStatus.Acceptted);
+				" WHERE SUBMIT_TIME > ? AND DELIVERY_WORKER_ID = ? AND STATUS = ?",
+				now, workerId, OrderStatus.Acceptted.name());
 	}
 
 	protected List<Order> queryOrders(String whereConditionSql, Object... args) {

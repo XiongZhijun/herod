@@ -6,7 +6,7 @@ package org.herod.order.web;
 import java.util.Arrays;
 import java.util.List;
 
-import org.herod.order.web.pms.UserService;
+import org.herod.order.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fpi.bear.dataset.control.DataSetControl;

@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.herod.common.das.HerodSingleColumnRowMapper;
-import org.herod.order.web.pms.SimpleUserService.UserType;
+import org.herod.order.service.SimpleUserService.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;

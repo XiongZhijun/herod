@@ -3,15 +3,19 @@
  */
 package org.herod.order.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
- *  
- *
+ * 
+ * 
  * @author Xiong Zhijun
  * @email hust.xzj@gmail.com
- *
+ * 
  */
 public class SimpleAgentWorkerIdentityService implements
 		AgentWorkerIdentityService {
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public long getCurrentWorkerId() {
@@ -27,8 +31,8 @@ public class SimpleAgentWorkerIdentityService implements
 
 	@Override
 	public long getCurrentWorkerAgentId() {
-		// TODO Auto-generated method stub
-		return 0;
+		// TODO 这个需要重新实现的。
+		return userService.getCurrentAgentId();
 	}
 
 }

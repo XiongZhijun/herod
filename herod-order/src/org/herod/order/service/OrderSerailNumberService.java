@@ -3,6 +3,8 @@
  */
 package org.herod.order.service;
 
+import static org.herod.order.MediaType.DEFAULT_MEDIA_TYPE;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -16,7 +18,6 @@ import javax.ws.rs.Produces;
  */
 @Path("/herod/sn")
 public interface OrderSerailNumberService {
-	public static final String DEFAULT_MEDIA_TYPE = "application/json;charset=utf-8";
 
 	@GET
 	@Path("transaction")

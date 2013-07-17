@@ -19,12 +19,15 @@ public class OrderItem {
 	private long goodsId;
 	/** 商品编码 */
 	private String goodsCode;
+	private String goodsName;
 	/** 代理商 */
 	private long agentId;
 	/** 商店 */
 	private long shopId;
+	private String shopName;
 	/** 成交单价 */
-	private double unitPrice;
+	private double sellingPrice;
+	private double supplyPrice;
 	/** 数量 */
 	private int quantity;
 	/** 订单项标记 */
@@ -78,12 +81,20 @@ public class OrderItem {
 		this.shopId = shopId;
 	}
 
-	public double getUnitPrice() {
-		return unitPrice;
+	public double getSellingPrice() {
+		return sellingPrice;
 	}
 
-	public void setUnitPrice(double unitPrice) {
-		this.unitPrice = unitPrice;
+	public void setSellingPrice(double sellingPrice) {
+		this.sellingPrice = sellingPrice;
+	}
+
+	public double getSupplyPrice() {
+		return supplyPrice;
+	}
+
+	public void setSupplyPrice(double supplyPrice) {
+		this.supplyPrice = supplyPrice;
 	}
 
 	public int getQuantity() {
@@ -100,6 +111,22 @@ public class OrderItem {
 
 	public void setFlag(OrderItemFlag flag) {
 		this.flag = flag;
+	}
+
+	public String getGoodsName() {
+		return goodsName;
+	}
+
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
+	}
+
+	public String getShopName() {
+		return shopName;
+	}
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
 	}
 
 }

@@ -1,0 +1,4 @@
+DELIVERY_ADDRESS=deliveryAddress.address
+DELIVERY_LONGITUDE=deliveryAddress.location.longitude
+DELIVERY_LATITUDE=deliveryAddress.location.latitude
+DELIVERY_WORKER_ID=workerId

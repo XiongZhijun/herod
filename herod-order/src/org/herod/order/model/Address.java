@@ -14,7 +14,7 @@ public class Address {
 	/** 地址 */
 	private String address;
 	/** 地理位置 */
-	private Location location;
+	private Location location = new Location();
 
 	public String getAddress() {
 		return address;

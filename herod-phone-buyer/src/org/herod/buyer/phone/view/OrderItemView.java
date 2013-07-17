@@ -81,7 +81,7 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 		this.shopId = orderItem.getShopId();
 		setGoodsName(orderItem.getGoodsName());
 		setQuantity(orderItem.getQuantity());
-		setUnitPrice(orderItem.getUnitPrice());
+		setUnitPrice(orderItem.getSellingPrice());
 		if (order.getStatus() != OrderStatus.Unsubmit) {
 			addButton.setVisibility(View.INVISIBLE);
 			reduceButton.setVisibility(View.INVISIBLE);

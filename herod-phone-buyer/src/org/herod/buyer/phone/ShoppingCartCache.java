@@ -93,8 +93,8 @@ public class ShoppingCartCache {
 		long goodsId = goods.getLong("id");
 		String goodsCode = goods.getString("code");
 		String goodsName = goods.getString("name");
-		double unitPrice = goods.getDouble("sellingPrice");
-		orderItem.setUnitPrice(unitPrice);
+		double sellingPrice = goods.getDouble("sellingPrice");
+		orderItem.setSellingPrice(sellingPrice);
 		orderItem.setGoodsCode(goodsCode);
 		orderItem.setGoodsName(goodsName);
 		orderItem.setGoodsId(goodsId);

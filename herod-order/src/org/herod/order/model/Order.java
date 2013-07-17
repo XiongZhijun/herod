@@ -36,7 +36,7 @@ public class Order {
 	/** 备货时间 */
 	private int prepareTime = 0;
 	/** 送货地址 */
-	private Address deliveryAddress;
+	private Address deliveryAddress = new Address();
 	/** 订单备注 */
 	private String comment;
 	/** 订单项 */

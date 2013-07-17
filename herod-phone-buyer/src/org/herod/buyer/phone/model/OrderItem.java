@@ -24,7 +24,7 @@ public class OrderItem {
 	/** 商店 */
 	private long shopId;
 	/** 成交单价 */
-	private double unitPrice;
+	private double sellingPrice;
 	/** 数量 */
 	private int quantity = 0;
 	/** 订单项标记 */
@@ -78,12 +78,12 @@ public class OrderItem {
 		this.shopId = shopId;
 	}
 
-	public double getUnitPrice() {
-		return unitPrice;
+	public double getSellingPrice() {
+		return sellingPrice;
 	}
 
-	public void setUnitPrice(double unitPrice) {
-		this.unitPrice = unitPrice;
+	public void setSellingPrice(double sellingPrice) {
+		this.sellingPrice = sellingPrice;
 	}
 
 	public int getQuantity() {
@@ -103,7 +103,7 @@ public class OrderItem {
 	}
 
 	public double getTotalAmount() {
-		return unitPrice * quantity;
+		return sellingPrice * quantity;
 	}
 
 }

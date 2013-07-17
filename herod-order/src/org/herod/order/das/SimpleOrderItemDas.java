@@ -4,6 +4,7 @@
 package org.herod.order.das;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -82,8 +83,13 @@ public class SimpleOrderItemDas implements OrderItemUpdateService,
 		RowMapper<OrderItem> rm = new HerodBeanPropertyRowMapper<OrderItem>(
 				OrderItem.class);
 		return simpleJdbcTemplate
-				.query("SELECT ID, SERIAL_NUMBER,ORDER_SERIAL_NUMBER,GOODS_ID,GOODS_CODE,AGENT_ID, SHOP_ID, SELLING_PRICE,SUPPLY_PRICE, QUANTITY,FLAG FROM ZRH_ORDER_ITEM WHERE ORDER_SERIAL_NUMBER IN (?)",
-						rm, orderSerialNumbers);
+				.query("SELECT O.SERIAL_NUMBER,O.ORDER_SERIAL_NUMBER,O.GOODS_ID, "
+						+ "O.GOODS_CODE,O.AGENT_ID,O.SHOP_ID,O.SELLING_PRICE,O.SUPPLY_PRICE, "
+						+ "O.QUANTITY,O.FLAG,G.NAME GOODS_NAME,S.NAME SHOP_NAME "
+						+ "FROM ZRH_ORDER_ITEM O,ZRH_GOODS G, ZRH_SHOP S "
+						+ "WHERE O.ORDER_SERIAL_NUMBER IN (:ids) AND S.ID = O.SHOP_ID "
+						+ "AND G.ID = O.GOODS_ID", rm,
+						Collections.singletonMap("ids", orderSerialNumbers));
 	}
 
 }

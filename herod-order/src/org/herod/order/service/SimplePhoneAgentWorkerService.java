@@ -37,11 +37,12 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 	private OrderUpdateService orderUpdateService;
 	@Autowired
 	private OrderItemUpdateService orderItemUpdateService;
+	@Autowired
+	private LoginService loginService;
 
 	@Override
 	public Token login(String name, String password, String imei) {
-		// TODO Auto-generated method stub
-		return null;
+		return loginService.doLogin(name, password, imei);
 	}
 
 	@Override
@@ -174,6 +175,10 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 	public void setOrderItemUpdateService(
 			OrderItemUpdateService orderItemUpdateService) {
 		this.orderItemUpdateService = orderItemUpdateService;
+	}
+
+	public void setLoginService(LoginService loginService) {
+		this.loginService = loginService;
 	}
 
 	public static interface OrderQueryService {

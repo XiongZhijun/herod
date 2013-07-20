@@ -8,6 +8,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 
 	<aop:aspectj-autoproxy />
 	<context:annotation-config />
+	<bean id="agentWorkerQueryService" class="org.herod.order.das.SimpleAgentWorkerQueryService" />
 	<bean id="logDas" class="org.herod.order.das.SimpleLogDas" />
 	<bean id="agentWorkerIdentityService"
 		class="org.herod.order.service.SimpleAgentWorkerIdentityService" />
@@ -18,6 +19,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	<bean id="userService" class="org.herod.order.service.SimpleUserService"></bean>
 	<bean id="phoneBuyerService" class="org.herod.order.service.SimplePhoneBuyerService"></bean>
 	<bean id="orderSerailNumberService" class="org.herod.order.service.SimpleOrderSerailNumberService"></bean>
+	<bean id="loginService" class="org.herod.order.service.SimpleLoginService"></bean>
 	<!-- -->
 	<bean id="orderStatusChecker" class="org.herod.order.service.SimpleOrderStatusChecker"></bean>
 	<bean id="phoneAgentWorkerService" class="org.herod.order.service.SimplePhoneAgentWorkerService"></bean>

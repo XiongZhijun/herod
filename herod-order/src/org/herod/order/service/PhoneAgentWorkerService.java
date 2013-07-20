@@ -8,6 +8,7 @@ import static org.herod.order.MediaType.DEFAULT_MEDIA_TYPE;
 import java.util.List;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -31,15 +32,20 @@ public interface PhoneAgentWorkerService {
 	/**
 	 * 登录系统
 	 * 
-	 * @param name
-	 *            登录名
+	 * @param phone
+	 *            手机号
 	 * @param password
 	 *            密码
 	 * @param imei
 	 *            手机的imei号
 	 * @return
 	 */
-	Token login(String name, String password, String imei);
+	@POST
+	@Path("login")
+	@Produces(DEFAULT_MEDIA_TYPE)
+	Token login(@QueryParam("workerPhone") String phone,
+			@QueryParam("workerPassword") String password,
+			@QueryParam("imei") String imei);
 
 	@GET
 	@Path("orders/waitaccept")

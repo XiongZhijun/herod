@@ -35,6 +35,11 @@ public class MainActivity extends FragmentActivity {
 		return true;
 	}
 
+	@Override
+	public void onBackPressed() {
+		finish();
+	}
+
 	class OrderGroupAdapter extends FragmentPagerAdapter {
 		public OrderGroupAdapter(FragmentManager fm) {
 			super(fm);

@@ -20,6 +20,8 @@ public class BuyerContext {
 	private static int imageServerPort;
 	private static BuyerService buyerService = new BuyerServiceMock();
 	private static ShopService shopService;
+	private static String restUserName;
+	private static String restPassword;
 
 	public static void init(Context context) {
 		BuyerServiceProxy buyerServiceProxy = new BuyerServiceProxy(
@@ -32,6 +34,8 @@ public class BuyerContext {
 		imageServerHost = context.getString(R.string.ImageServerHost);
 		imageServerPort = Integer.parseInt(context
 				.getString(R.string.ImageServerPort));
+		restUserName = context.getString(R.string.RestUserName);
+		restPassword = context.getString(R.string.RestPassword);
 	}
 
 	public static BuyerService getBuyerService() {
@@ -64,5 +68,13 @@ public class BuyerContext {
 
 	public static int getImageServerPort() {
 		return imageServerPort;
+	}
+
+	public static String getRestUserName() {
+		return restUserName;
+	}
+
+	public static String getRestPassword() {
+		return restPassword;
 	}
 }

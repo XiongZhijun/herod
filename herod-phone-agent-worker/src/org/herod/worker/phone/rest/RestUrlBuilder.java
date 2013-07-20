@@ -1,14 +1,11 @@
 /*
  * Copyright © 2013-2014 Xiong Zhijun, All Rights Reserved. 
  */
-package org.herod.buyer.phone.rest;
+package org.herod.worker.phone.rest;
 
-import org.herod.buyer.phone.BuyerContext;
-import org.herod.buyer.phone.lbs.LocationManager;
 import org.herod.framework.rest.URLBuilder;
 import org.herod.framework.tools.HttpUrlBuilderSupport;
-
-import com.baidu.location.BDLocation;
+import org.herod.worker.phone.WorkerContext;
 
 import android.content.Context;
 
@@ -21,11 +18,9 @@ import android.content.Context;
  */
 public class RestUrlBuilder extends HttpUrlBuilderSupport implements URLBuilder {
 	private static final String REST = "rest";
-	private Context context;
 
 	public RestUrlBuilder(Context context) {
 		super();
-		this.context = context.getApplicationContext();
 	}
 
 	@Override
@@ -35,31 +30,25 @@ public class RestUrlBuilder extends HttpUrlBuilderSupport implements URLBuilder 
 				.appendRelativeUrl(relativeUrl)
 				.appendParams("username", getRestUserName())
 				.appendParams("password", getRestPassword());
-		BDLocation latestLocation = LocationManager.getInstance(context)
-				.getLatestLocation();
-		if (latestLocation != null) {
-			appendParams("latitude", latestLocation.getLatitude());
-			appendParams("longitude", latestLocation.getLongitude());
-		}
 		return getString();
 	}
 
-	private String getRestPassword() {
-		return BuyerContext.getRestPassword();
+	protected String getRestPassword() {
+		return WorkerContext.getRestPassword();
 	}
 
-	private String getRestUserName() {
-		return BuyerContext.getRestUserName();
+	protected String getRestUserName() {
+		return WorkerContext.getRestUserName();
 	}
 
 	@Override
 	protected String getHost() {
-		return BuyerContext.getRestServerHost();
+		return WorkerContext.getRestServerHost();
 	}
 
 	@Override
 	protected int getPort() {
-		return BuyerContext.getRestServerPort();
+		return WorkerContext.getRestServerPort();
 	}
 
 }

@@ -108,7 +108,7 @@ public class LoginActivity extends Activity implements OnEditorActionListener,
 			}
 			Toast.makeText(context, "登录成功！", Toast.LENGTH_SHORT).show();
 			DeviceUtils.setPhoneNumber(context, userName);
-			WorkerContext.setLoginToken(result);
+			WorkerContext.setLoginToken(result.getTokenString());
 			gotoMainActivity(context);
 		}
 

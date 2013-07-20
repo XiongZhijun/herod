@@ -4,7 +4,6 @@
 package org.herod.worker.phone;
 
 import org.herod.framework.utils.StringUtils;
-import org.herod.worker.phone.model.Token;
 import org.herod.worker.phone.rest.RestWorkerService;
 
 import android.content.Context;
@@ -61,10 +60,10 @@ public abstract class WorkerContext {
 		return restPassword;
 	}
 
-	public static void setLoginToken(Token token) {
-		WorkerContext.loginTokenString = token.getTokenString();
+	public static void setLoginToken(String token) {
+		WorkerContext.loginTokenString = token;
 		Editor editor = defaultSharedPreferences.edit();
-		editor.putString(TOKEN, token.getTokenString());
+		editor.putString(TOKEN, token);
 		editor.commit();
 	}
 

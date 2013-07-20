@@ -1,8 +1,10 @@
 package org.herod.worker.phone;
 
+import org.herod.framework.utils.StringUtils;
 import org.herod.framework.widget.TabPageIndicator;
 import org.herod.worker.phone.fragment.OrderListFragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -37,6 +39,12 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.logout) {
+			WorkerContext.setLoginToken(StringUtils.EMPTY);
+			startActivity(new Intent(this, LoginActivity.class));
+			finish();
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
 	}
 

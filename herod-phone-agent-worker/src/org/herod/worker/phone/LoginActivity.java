@@ -37,6 +37,9 @@ public class LoginActivity extends Activity implements OnEditorActionListener,
 		findViewById(R.id.cancelButton).setOnClickListener(this);
 		String phoneNumber = DeviceUtils.getPhoneNumber(this);
 		userNameEditor.setText(phoneNumber);
+		if (WorkerContext.isInLogin()) {
+			gotoMainActivity(this);
+		}
 	}
 
 	@Override
@@ -79,6 +82,11 @@ public class LoginActivity extends Activity implements OnEditorActionListener,
 		userNameEditor.setText(StringUtils.EMPTY);
 	}
 
+	private void gotoMainActivity(Context context) {
+		startActivity(new Intent(context, MainActivity.class));
+		finish();
+	}
+
 	class LoginAsyncTask extends AsyncTask<Object, Object, Token> {
 		String userName;
 		String password;
@@ -99,10 +107,9 @@ public class LoginActivity extends Activity implements OnEditorActionListener,
 				return;
 			}
 			Toast.makeText(context, "登录成功！", Toast.LENGTH_SHORT).show();
-			WorkerContext.setLoginToken(result);
-			startActivity(new Intent(context, MainActivity.class));
 			DeviceUtils.setPhoneNumber(context, userName);
-			finish();
+			WorkerContext.setLoginToken(result);
+			gotoMainActivity(context);
 		}
 
 		@Override

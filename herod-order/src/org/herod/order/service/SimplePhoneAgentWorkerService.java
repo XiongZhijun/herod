@@ -16,15 +16,11 @@ import org.herod.order.model.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 
- * 
  * @author Xiong Zhijun
  * @email hust.xzj@gmail.com
  * 
  */
 public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
-	@Autowired
-	private AgentWorkerIdentityService identityService;
 	@Autowired
 	private OrderStatusChecker orderStatusChecker;
 	@Autowired
@@ -46,48 +42,49 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 	}
 
 	@Override
-	public List<Order> findWaitAcceptOrders() {
-		long agentId = identityService.getCurrentWorkerAgentId();
+	public List<Order> findWaitAcceptOrders(String token, String imei) {
+		long agentId = loginService.getWorkerAgentId(token, imei);
 		return orderQueryService.findWaitAcceptOrders(agentId);
 	}
 
 	@Override
-	public List<Order> findWaitCompleteOrders() {
-		long workerId = identityService.getCurrentWorkerId();
+	public List<Order> findWaitCompleteOrders(String token, String imei) {
+		long workerId = loginService.getWorkerId(token, imei);
 		return orderQueryService.findOrdersByWorkerAndStatus(workerId,
 				OrderStatus.Acceptted);
 	}
 
 	@Override
-	public List<Order> findCompletedOrders() {
-		long workerId = identityService.getCurrentWorkerId();
+	public List<Order> findCompletedOrders(String token, String imei) {
+		long workerId = loginService.getWorkerId(token, imei);
 		return orderQueryService.findOrdersByWorkerAndStatusWithOneDay(
 				workerId, OrderStatus.Completed);
 	}
 
 	@Override
-	public List<Order> findCanceledOrders() {
-		long workerId = identityService.getCurrentWorkerId();
+	public List<Order> findCanceledOrders(String token, String imei) {
+		long workerId = loginService.getWorkerId(token, imei);
 		return orderQueryService.findOrdersByWorkerAndStatusWithOneDay(
 				workerId, OrderStatus.Cancelled);
 	}
 
 	@Override
-	public Result acceptOrder(String serialNumber) {
+	public Result acceptOrder(String serialNumber, String token, String imei) {
 		if (orderStatusChecker.canChangeStatus(serialNumber,
 				OrderStatus.Acceptted)) {
 			return new SimpleResult(
 					ResultCode.CurrentStatusCanNotDoSuchOperate, serialNumber);
 		}
-		long currentWorkerId = identityService.getCurrentWorkerId();
+		long workerId = loginService.getWorkerId(token, imei);
 		orderStatusUpdateService.updateOrderStatusAndWorker(serialNumber,
-				currentWorkerId, OrderStatus.Acceptted);
+				workerId, OrderStatus.Acceptted);
 		orderLogService.agentWorkerlog(serialNumber, Operation.Accept, null);
 		return Result.SUCCESS;
 	}
 
 	@Override
-	public Result updateOrder(OrderUpdateInfo updateInfo) {
+	public Result updateOrder(OrderUpdateInfo updateInfo, String token,
+			String imei) {
 		String serialNumber = updateInfo.getOrderSerialNumber();
 		if (orderStatusChecker.canUpdate(serialNumber)) {
 			return new SimpleResult(
@@ -109,7 +106,8 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 	}
 
 	@Override
-	public Result rejectOrder(String serialNumber, String reason) {
+	public Result rejectOrder(String serialNumber, String reason, String token,
+			String imei) {
 		if (orderStatusChecker.canChangeStatus(serialNumber,
 				OrderStatus.Rejected)) {
 			return new SimpleResult(
@@ -122,7 +120,8 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 	}
 
 	@Override
-	public Result cancelOrder(String serialNumber, String reason) {
+	public Result cancelOrder(String serialNumber, String reason, String token,
+			String imei) {
 		if (orderStatusChecker.canChangeStatus(serialNumber,
 				OrderStatus.Cancelled)) {
 			return new SimpleResult(
@@ -135,7 +134,7 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 	}
 
 	@Override
-	public Result completeOrder(String serialNumber) {
+	public Result completeOrder(String serialNumber, String token, String imei) {
 		if (orderStatusChecker.canChangeStatus(serialNumber,
 				OrderStatus.Completed)) {
 			return new SimpleResult(
@@ -145,10 +144,6 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 				OrderStatus.Completed, new Date());
 		orderLogService.agentWorkerlog(serialNumber, Operation.Complete, null);
 		return Result.SUCCESS;
-	}
-
-	public void setIdentityService(AgentWorkerIdentityService identityService) {
-		this.identityService = identityService;
 	}
 
 	public void setOrderStatusChecker(OrderStatusChecker orderStatusChecker) {

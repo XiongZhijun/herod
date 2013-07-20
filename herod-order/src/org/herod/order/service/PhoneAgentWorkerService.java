@@ -50,22 +50,26 @@ public interface PhoneAgentWorkerService {
 	@GET
 	@Path("orders/waitaccept")
 	@Produces(DEFAULT_MEDIA_TYPE)
-	List<Order> findWaitAcceptOrders();
+	List<Order> findWaitAcceptOrders(@QueryParam("token") String token,
+			@QueryParam("imei") String imei);
 
 	@GET
 	@Path("orders/waitcomplete")
 	@Produces(DEFAULT_MEDIA_TYPE)
-	List<Order> findWaitCompleteOrders();
+	List<Order> findWaitCompleteOrders(@QueryParam("token") String token,
+			@QueryParam("imei") String imei);
 
 	@GET
 	@Path("orders/completed")
 	@Produces(DEFAULT_MEDIA_TYPE)
-	List<Order> findCompletedOrders();
+	List<Order> findCompletedOrders(@QueryParam("token") String token,
+			@QueryParam("imei") String imei);
 
 	@GET
 	@Path("orders/canceled")
 	@Produces(DEFAULT_MEDIA_TYPE)
-	List<Order> findCanceledOrders();
+	List<Order> findCanceledOrders(@QueryParam("token") String token,
+			@QueryParam("imei") String imei);
 
 	/**
 	 * 受理订单
@@ -76,7 +80,8 @@ public interface PhoneAgentWorkerService {
 	@PUT
 	@Path("orders/{serialNumber}/accept")
 	@Produces(DEFAULT_MEDIA_TYPE)
-	Result acceptOrder(@PathParam("serialNumber") String serialNumber);
+	Result acceptOrder(@PathParam("serialNumber") String serialNumber,
+			@QueryParam("token") String token, @QueryParam("imei") String imei);
 
 	/**
 	 * 更新订单
@@ -88,7 +93,8 @@ public interface PhoneAgentWorkerService {
 	@PUT
 	@Path("orders/{serialNumber}/update")
 	@Produces(DEFAULT_MEDIA_TYPE)
-	Result updateOrder(OrderUpdateInfo updateInfo);
+	Result updateOrder(OrderUpdateInfo updateInfo,
+			@QueryParam("token") String token, @QueryParam("imei") String imei);
 
 	/**
 	 * 拒绝订单
@@ -101,7 +107,8 @@ public interface PhoneAgentWorkerService {
 	@Path("orders/{serialNumber}/reject")
 	@Produces(DEFAULT_MEDIA_TYPE)
 	Result rejectOrder(@PathParam("serialNumber") String serialNumber,
-			@QueryParam("reason") String reason);
+			@QueryParam("reason") String reason,
+			@QueryParam("token") String token, @QueryParam("imei") String imei);
 
 	/**
 	 * 取消订单
@@ -114,7 +121,8 @@ public interface PhoneAgentWorkerService {
 	@Path("orders/{serialNumber}/cancel")
 	@Produces(DEFAULT_MEDIA_TYPE)
 	Result cancelOrder(@PathParam("serialNumber") String serialNumber,
-			@QueryParam("reason") String reason);
+			@QueryParam("reason") String reason,
+			@QueryParam("token") String token, @QueryParam("imei") String imei);
 
 	/**
 	 * 完成订单
@@ -125,5 +133,6 @@ public interface PhoneAgentWorkerService {
 	@PUT
 	@Path("orders/{serialNumber}/complete")
 	@Produces(DEFAULT_MEDIA_TYPE)
-	Result completeOrder(@PathParam("serialNumber") String serialNumber);
+	Result completeOrder(@PathParam("serialNumber") String serialNumber,
+			@QueryParam("token") String token, @QueryParam("imei") String imei);
 }

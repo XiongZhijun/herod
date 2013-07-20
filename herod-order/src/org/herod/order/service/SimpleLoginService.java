@@ -35,7 +35,8 @@ public class SimpleLoginService implements LoginService {
 		if (worker == null) {
 			return null;
 		}
-		WorkerLoginInfo workerLoginInfo = buildWorkerLoginInfo(name, imei);
+		WorkerLoginInfo workerLoginInfo = buildWorkerLoginInfo(name, imei,
+				worker);
 		addToSet(workerLoginInfo);
 		return new Token(workerLoginInfo.tokenString);
 	}
@@ -50,20 +51,36 @@ public class SimpleLoginService implements LoginService {
 	}
 
 	@Override
-	public boolean isUserValid(Token token, String imei) {
+	public boolean isUserValid(String token, String imei) {
+		WorkerLoginInfo workerLoginInfo = getWorkerLoginInfo(token, imei);
+		return workerLoginInfo != null;
+	}
+
+	@Override
+	public long getWorkerAgentId(String token, String imei) {
+		WorkerLoginInfo workerLoginInfo = getWorkerLoginInfo(token, imei);
+		return workerLoginInfo == null ? 0 : workerLoginInfo.agentId;
+	}
+
+	@Override
+	public long getWorkerId(String token, String imei) {
+		WorkerLoginInfo workerLoginInfo = getWorkerLoginInfo(token, imei);
+		return workerLoginInfo == null ? 0 : workerLoginInfo.workerId;
+	}
+
+	private WorkerLoginInfo getWorkerLoginInfo(String token, String imei) {
 		readLock.lock();
 		try {
 			for (WorkerLoginInfo loginInfo : loginInfoSet) {
 				if (StringUtils.equals(loginInfo.imei, imei)
-						&& StringUtils.equals(loginInfo.tokenString,
-								token.getTokenString())) {
-					return true;
+						&& StringUtils.equals(loginInfo.tokenString, token)) {
+					return loginInfo;
 				}
 			}
 		} finally {
 			readLock.unlock();
 		}
-		return false;
+		return null;
 	}
 
 	public void setAgentWorkerQueryService(
@@ -71,8 +88,11 @@ public class SimpleLoginService implements LoginService {
 		this.agentWorkerQueryService = agentWorkerQueryService;
 	}
 
-	private WorkerLoginInfo buildWorkerLoginInfo(String name, String imei) {
+	private WorkerLoginInfo buildWorkerLoginInfo(String name, String imei,
+			Map<String, Object> worker) {
 		WorkerLoginInfo workerLoginInfo = new WorkerLoginInfo();
+		workerLoginInfo.workerId = (Long) worker.get("ID");
+		workerLoginInfo.agentId = (Long) worker.get("AGENT_ID");
 		workerLoginInfo.name = name;
 		workerLoginInfo.imei = imei;
 		workerLoginInfo.tokenString = UUID.randomUUID().toString();
@@ -86,6 +106,8 @@ public class SimpleLoginService implements LoginService {
 	}
 
 	class WorkerLoginInfo {
+		long workerId;
+		long agentId;
 		String name;
 		String tokenString;
 		Date loginTime;

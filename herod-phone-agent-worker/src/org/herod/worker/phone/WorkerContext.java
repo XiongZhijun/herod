@@ -3,10 +3,14 @@
  */
 package org.herod.worker.phone;
 
+import org.herod.framework.utils.StringUtils;
 import org.herod.worker.phone.model.Token;
 import org.herod.worker.phone.rest.RestWorkerService;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.preference.PreferenceManager;
 
 /**
  * 
@@ -14,12 +18,17 @@ import android.content.Context;
  * @email hust.xzj@gmail.com
  */
 public abstract class WorkerContext {
+	/**
+	 * 
+	 */
+	private static final String TOKEN = "TOKEN";
 	private static WorkerService workerService;
 	private static String restServerHost;
 	private static int restServerPort;
 	private static String restUserName;
 	private static String restPassword;
-	private static Token loginToken;
+	private static String loginTokenString;
+	private static SharedPreferences defaultSharedPreferences;
 
 	public static void init(Context context) {
 		workerService = new RestWorkerService(context);
@@ -28,6 +37,8 @@ public abstract class WorkerContext {
 				.getString(R.string.RestServerPort));
 		restUserName = context.getString(R.string.RestUserName);
 		restPassword = context.getString(R.string.RestPassword);
+		defaultSharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(context.getApplicationContext());
 	}
 
 	public static WorkerService getWorkerService() {
@@ -51,11 +62,22 @@ public abstract class WorkerContext {
 	}
 
 	public static void setLoginToken(Token token) {
-		WorkerContext.loginToken = token;
+		WorkerContext.loginTokenString = token.getTokenString();
+		Editor editor = defaultSharedPreferences.edit();
+		editor.putString(TOKEN, token.getTokenString());
+		editor.commit();
 	}
 
-	public static Token getLoginToken() {
-		return loginToken;
+	public static String getLoginTokenString() {
+		if (StringUtils.isBlank(loginTokenString)) {
+			loginTokenString = defaultSharedPreferences.getString(TOKEN,
+					StringUtils.EMPTY);
+		}
+		return loginTokenString;
+	}
+
+	public static boolean isInLogin() {
+		return StringUtils.isNotBlank(getLoginTokenString());
 	}
 
 }

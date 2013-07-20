@@ -36,9 +36,8 @@ public class RestWorkerService extends RestServiceSupport implements
 	@Override
 	public Token login(String phone, String password) {
 		return postForObject(
-				"/herod/agentworker/login?workerPhone={workerPhone}&workerPassword={workerPassword}&imei={imei}",
-				Token.class, null, phone, password,
-				DeviceUtils.getImei(applicationContext));
+				"/herod/agentworker/login?workerPhone={workerPhone}&workerPassword={workerPassword}",
+				Token.class, null, phone, password);
 	}
 
 	@Override

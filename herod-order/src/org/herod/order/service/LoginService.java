@@ -14,6 +14,10 @@ public interface LoginService {
 
 	Token doLogin(String name, String password, String imei);
 
-	boolean isUserValid(Token token, String imei);
+	long getWorkerAgentId(String token, String imei);
+
+	long getWorkerId(String token, String imei);
+
+	boolean isUserValid(String token, String imei);
 
 }

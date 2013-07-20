@@ -77,7 +77,7 @@
 	       compression="on"
 	       compressionMinSize="2048"
 	       noCompressionUserAgents="gozilla,traviata"
-               compressableMimeType="text/html,text/xml,text/javascript,text/css,text/plain"/>
+               compressableMimeType="text/html,text/xml,text/javascript,text/css,text/plain,application/json"/>
     <!-- A "Connector" using the shared thread pool-->
     <!--
     <Connector executor="tomcatThreadPool"

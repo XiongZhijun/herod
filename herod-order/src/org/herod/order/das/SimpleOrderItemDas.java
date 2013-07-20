@@ -37,7 +37,7 @@ public class SimpleOrderItemDas implements OrderItemUpdateService,
 			+ "ORDER_SERIAL_NUMBER,GOODS_ID,GOODS_CODE,AGENT_ID,"
 			+ "SHOP_ID,SELLING_PRICE,QUANTITY,FLAG) "
 			+ "VALUES (:serialNumber,:orderSerialNumber,:goodsId,"
-			+ ":goodsCode,:agentId,:shopId,:unitPrice,:quantity,:flag) ";
+			+ ":goodsCode,:agentId,:shopId,:sellingPrice,:quantity,:flag) ";
 	@Autowired
 	@Qualifier("simpleJdbcTemplate")
 	private SimpleJdbcTemplate simpleJdbcTemplate;

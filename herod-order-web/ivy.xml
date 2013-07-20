@@ -19,6 +19,8 @@
 		<artifact type="component" ext="component.xml" conf="component" />
 	</publications>
 	<dependencies>
+		<dependency name="herod-order" rev="1.0+"
+			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
 		<dependency name="herod-common" rev="1.0+"
 			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
 		<dependency org="servlets.com" name="cos" rev="05Nov2002"

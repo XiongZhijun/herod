@@ -15,6 +15,10 @@
 			m:classifier="sources" />
 	</publications>
 	<dependencies>
+		<dependency name="herod-order-web" rev="1.0+"
+			conf="runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
+		<dependency name="herod-order" rev="1.0+"
+			conf="runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
 		<dependency org="com.fpi.bear" name="bear-permission-web"
 			rev="1.6.1+"
 			conf="runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />

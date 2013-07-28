@@ -17,6 +17,7 @@ import org.apache.wink.common.annotations.Workspace;
 import org.herod.common.das.HerodColumnMapRowMapper;
 import org.herod.common.das.SqlUtils;
 import org.herod.order.model.Address;
+import org.herod.order.model.AgentWorker;
 import org.herod.order.model.Location;
 import org.herod.order.model.Order;
 import org.herod.order.model.OrderItem;
@@ -49,6 +50,8 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 	@Autowired
 	private OrderLogService orderLogService;
 	@Autowired
+	private DeliveryWorkerAllocationStrategy deliveryWorkerAllocationStrategy;
+	@Autowired
 	@Qualifier("simpleJdbcTemplate")
 	private SimpleJdbcTemplate simpleJdbcTemplate;
 
@@ -59,6 +62,8 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 				new TypeToken<List<Order>>() {
 				}.getType());
 		List<OrderItem> orderItems = new ArrayList<OrderItem>();
+		Map<String, AgentWorker> deliveryWorkersMap = deliveryWorkerAllocationStrategy
+				.allocate(orders);
 		for (Order order : orders) {
 			Address deliveryAddress = order.getDeliveryAddress();
 			if (deliveryAddress == null) {
@@ -68,6 +73,13 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 			order.setSubmitTime(new Date());
 			order.initOrderItemProperties();
 			order.setStatus(OrderStatus.Submitted);
+			AgentWorker agentWorker = deliveryWorkersMap.get(order
+					.getSerialNumber());
+			if (agentWorker != null) {
+				order.setWorkerId(agentWorker.getId());
+				order.setWorkerName(agentWorker.getName());
+				order.setWorkerPhone(agentWorker.getPhone());
+			}
 			orderItems.addAll(order.getOrderItems());
 		}
 		orderDas.addOrders(orders);
@@ -205,10 +217,19 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 		this.orderLogService = orderLogService;
 	}
 
+	public void setDeliveryWorkerAllocationStrategy(
+			DeliveryWorkerAllocationStrategy deliveryWorkerAllocationStrategy) {
+		this.deliveryWorkerAllocationStrategy = deliveryWorkerAllocationStrategy;
+	}
+
 	public static interface OrderDas {
 		void addOrders(List<Order> orders);
 
 		List<Order> findOrdersBySerialNumbers(List<String> serialNumbers);
+	}
+
+	public static interface DeliveryWorkerAllocationStrategy {
+		Map<String, AgentWorker> allocate(List<Order> orders);
 	}
 
 	public static interface OrderItemDas {

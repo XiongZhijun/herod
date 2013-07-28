@@ -27,6 +27,8 @@ public class Order {
 	private long shopId;
 	/** 处理的人 */
 	private long workerId;
+	private String workerName;
+	private String workerPhone;
 	/** 订单状态 */
 	private OrderStatus status = OrderStatus.Unsubmit;
 	/** 提交时间 */
@@ -88,6 +90,22 @@ public class Order {
 
 	public void setWorkerId(long workerId) {
 		this.workerId = workerId;
+	}
+
+	public String getWorkerName() {
+		return workerName;
+	}
+
+	public void setWorkerName(String workerName) {
+		this.workerName = workerName;
+	}
+
+	public String getWorkerPhone() {
+		return workerPhone;
+	}
+
+	public void setWorkerPhone(String workerPhone) {
+		this.workerPhone = workerPhone;
 	}
 
 	public OrderStatus getStatus() {

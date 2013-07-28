@@ -20,6 +20,8 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	<bean id="phoneBuyerService" class="org.herod.order.service.SimplePhoneBuyerService"></bean>
 	<bean id="orderSerailNumberService" class="org.herod.order.service.SimpleOrderSerailNumberService"></bean>
 	<bean id="loginService" class="org.herod.order.service.SimpleLoginService"></bean>
+	<bean id="deliveryWorkerAllocationStrategy"
+		class="org.herod.order.service.SimpleDeliveryWorkerAllocationStrategy"></bean>
 	<!-- -->
 	<bean id="orderStatusChecker" class="org.herod.order.service.SimpleOrderStatusChecker"></bean>
 	<bean id="phoneAgentWorkerService" class="org.herod.order.service.SimplePhoneAgentWorkerService"></bean>

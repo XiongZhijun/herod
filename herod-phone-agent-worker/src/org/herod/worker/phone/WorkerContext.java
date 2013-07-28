@@ -17,9 +17,6 @@ import android.preference.PreferenceManager;
  * @email hust.xzj@gmail.com
  */
 public abstract class WorkerContext {
-	/**
-	 * 
-	 */
 	private static final String TOKEN = "TOKEN";
 	private static WorkerService workerService;
 	private static String restServerHost;

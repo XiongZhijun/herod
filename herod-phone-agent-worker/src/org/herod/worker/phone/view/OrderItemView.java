@@ -31,7 +31,7 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 	@InjectView(R.id.goodsName)
 	private TextView goodsNameView;
 	@InjectView(R.id.unitPrice)
-	private TextView unitPriceView;
+	private TextView sellingPriceView;
 	@InjectView(R.id.quantity)
 	private TextView quantityView;
 	@InjectView(R.id.addButton)
@@ -71,11 +71,11 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 		this.shopId = orderItem.getShopId();
 		setGoodsName(orderItem.getGoodsName());
 		setQuantity(orderItem.getQuantity());
-		setUnitPrice(orderItem.getUnitPrice());
+		setSellingPrice(orderItem.getSellingPrice());
 	}
 
-	public void setUnitPrice(double unitPrice) {
-		unitPriceView.setText(Double.toString(unitPrice));
+	public void setSellingPrice(double unitPrice) {
+		sellingPriceView.setText(Double.toString(unitPrice));
 	}
 
 	public void setQuantity(int quantity) {

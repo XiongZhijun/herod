@@ -1,8 +1,13 @@
 package org.herod.worker.phone;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.herod.framework.utils.StringUtils;
 import org.herod.framework.widget.TabPageIndicator;
 import org.herod.worker.phone.fragment.OrderListFragment;
+import org.herod.worker.phone.fragment.OrderListFragment.FragmentType;
+import org.herod.worker.phone.view.OrderTabPageIndicator;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,20 +20,40 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends FragmentActivity {
-	private static final String[] CONTENT = new String[] { "待受理订单", "待完成订单" };
+	private List<OrderListFragment> orderListFragments;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		orderListFragments = createOrderListFragments();
 		FragmentPagerAdapter adapter = new OrderGroupAdapter(
 				getSupportFragmentManager());
 
 		ViewPager pager = (ViewPager) findViewById(R.id.pager);
 		pager.setAdapter(adapter);
-
 		TabPageIndicator indicator = (TabPageIndicator) findViewById(R.id.indicator);
 		indicator.setViewPager(pager);
+	}
+
+	protected List<OrderListFragment> createOrderListFragments() {
+		OrderTabPageIndicator indicator = (OrderTabPageIndicator) findViewById(R.id.indicator);
+		List<OrderListFragment> fragments = new ArrayList<OrderListFragment>();
+		fragments.add(createFragment("待受理订单", FragmentType.WaitAccept,
+				indicator, 0));
+		fragments.add(createFragment("待完成订单", FragmentType.WaitComplete,
+				indicator, 1));
+		return fragments;
+	}
+
+	private OrderListFragment createFragment(String title, FragmentType type,
+			OrderTabPageIndicator indicator, int index) {
+		OrderListFragment fragment = new OrderListFragment();
+		fragment.setTitle(title);
+		fragment.setType(type);
+		fragment.setIndex(index);
+		fragment.setTabPageIndicator(indicator);
+		return fragment;
 	}
 
 	@Override
@@ -60,17 +85,17 @@ public class MainActivity extends FragmentActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-			return new OrderListFragment();
+			return orderListFragments.get(position);
 		}
 
 		@Override
 		public CharSequence getPageTitle(int position) {
-			return CONTENT[position % CONTENT.length].toUpperCase();
+			return orderListFragments.get(position).getTitle();
 		}
 
 		@Override
 		public int getCount() {
-			return CONTENT.length;
+			return orderListFragments.size();
 		}
 	}
 

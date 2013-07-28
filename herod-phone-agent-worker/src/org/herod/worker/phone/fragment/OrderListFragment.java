@@ -1,15 +1,15 @@
 package org.herod.worker.phone.fragment;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 
+import org.herod.framework.HerodTask;
+import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.worker.phone.R;
-import org.herod.worker.phone.model.Address;
+import org.herod.worker.phone.WorkerContext;
+import org.herod.worker.phone.fragment.OrderListFragment.FragmentType;
 import org.herod.worker.phone.model.Order;
-import org.herod.worker.phone.model.OrderItem;
+import org.herod.worker.phone.view.OrderTabPageIndicator;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,9 +18,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-public class OrderListFragment extends Fragment {
+public class OrderListFragment extends Fragment implements
+		AsyncTaskable<FragmentType, List<Order>> {
 
 	private ListView ordersListView;
+	private String title;
+	private FragmentType type;
+	private int index = 0;
+	private OrderTabPageIndicator indicator;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,38 +44,52 @@ public class OrderListFragment extends Fragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		List<Order> orders = createOrders();
-		ordersListView.setAdapter(new OrderListAdapter(getActivity(), orders));
+		new HerodTask<FragmentType, List<Order>>(this).execute(type);
 	}
 
-	private List<Order> createOrders() {
-		List<Order> orders = new ArrayList<Order>();
-		DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-		for (int i = 0; i < 2; i++) {
-			Order order = new Order();
-			Date now = new Date();
-			order.setSerialNumber(dateFormat.format(now) + "-0000" + i);
-			order.setShopName("外婆家");
-			order.setShopPhone("15967119516");
-			order.setBuyerName("张三");
-			order.setBuyerPhone("15967119516");
-			order.setSubmitTime(now);
-			order.addOrderItem(createOrderItem());
-			order.addOrderItem(createOrderItem());
-			order.setCostOfRunErrands(5);
-			Address deliveryAddress = new Address();
-			deliveryAddress.setAddress("滨安路760号");
-			order.setDeliveryAddress(deliveryAddress);
-			orders.add(order);
+	@Override
+	public List<Order> runOnBackground(FragmentType... params) {
+		switch (params[0]) {
+		case WaitAccept:
+			return WorkerContext.getWorkerService().findWaitAcceptOrders();
+		case WaitComplete:
+			return WorkerContext.getWorkerService().findWaitCompleteOrders();
+		default:
+			return Collections.emptyList();
 		}
-		return orders;
 	}
 
-	private OrderItem createOrderItem() {
-		OrderItem orderItem = new OrderItem();
-		orderItem.setGoodsName("麻婆豆腐");
-		orderItem.setQuantity(2);
-		orderItem.setUnitPrice(10);
-		return orderItem;
+	@Override
+	public void onPostExecute(List<Order> orders) {
+		if (orders == null) {
+			return;
+		}
+		ordersListView.setAdapter(new OrderListAdapter(getActivity(), orders));
+		indicator.setTabQauntity(index, orders.size());
 	}
+
+	public void setTabPageIndicator(OrderTabPageIndicator indicator) {
+		this.indicator = indicator;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setType(FragmentType type) {
+		this.type = type;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	public static enum FragmentType {
+		WaitAccept, WaitComplete
+	}
+
 }

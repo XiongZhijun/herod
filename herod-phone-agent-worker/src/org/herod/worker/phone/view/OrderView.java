@@ -119,7 +119,7 @@ public class OrderView extends LinearLayout implements
 
 	private void updateOrderSummationInfo() {
 		summationView.setQuantity(order.getTotalQuantity());
-		summationView.setUnitPrice(order.getTotalAmount());
+		summationView.setSellingPrice(order.getTotalAmount());
 		setText(R.id.costOfRunErrands, order.getCostOfRunErrands());
 		setText(R.id.totalWithCostOfRunErrands,
 				Double.toString(order.getTotalAmountWithCostOfRunErrands()));

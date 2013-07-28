@@ -8,6 +8,7 @@ import org.herod.worker.phone.R;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import android.widget.TextView;
  * 
  */
 public class OrderTabPageIndicator extends TabPageIndicator {
+	private SparseArray<TabView> tableViewMap = new SparseArray<TabView>();
 
 	public OrderTabPageIndicator(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -28,11 +30,18 @@ public class OrderTabPageIndicator extends TabPageIndicator {
 	}
 
 	protected View createTabView(int index, CharSequence text, int iconResId) {
-		final View tabView = new TabView(getContext());
+		final TabView tabView = new TabView(getContext());
 		tabView.setFocusable(true);
 		((TextView) tabView.findViewById(R.id.text)).setText(text);
-
+		tableViewMap.put(index, tabView);
 		return tabView;
+	}
+
+	public void setTabQauntity(int index, int quantity) {
+		TabView tabView = tableViewMap.get(index);
+		if (tabView != null) {
+			tabView.setQuantity(quantity);
+		}
 	}
 
 	protected class TabView extends RelativeLayout implements Indexable {
@@ -52,6 +61,11 @@ public class OrderTabPageIndicator extends TabPageIndicator {
 				super.onMeasure(MeasureSpec.makeMeasureSpec(mMaxTabWidth,
 						MeasureSpec.EXACTLY), heightMeasureSpec);
 			}
+		}
+
+		public void setQuantity(int quantity) {
+			quantity = quantity > 0 ? quantity : 0;
+			((TextView) findViewById(R.id.quantity)).setText(quantity + "");
 		}
 
 		public int getIndex() {

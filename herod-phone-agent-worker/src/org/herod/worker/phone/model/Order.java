@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.herod.framework.utils.StringUtils;
+
 /**
  * 订单
  * 
@@ -27,6 +29,8 @@ public class Order {
 	private long shopId;
 	/** 处理的人 */
 	private long workerId;
+	private String workerName;
+	private String workerPhone;
 	/** 订单状态 */
 	private OrderStatus status = OrderStatus.Unsubmit;
 	/** 提交时间 */
@@ -53,7 +57,14 @@ public class Order {
 	}
 
 	public void setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
+		if (StringUtils.isBlank(this.serialNumber)) {
+			this.serialNumber = serialNumber;
+		}
+		for (int i = 0; i < orderItems.size(); i++) {
+			OrderItem orderItem = orderItems.get(i);
+			orderItem.setOrderSerialNumber(this.serialNumber);
+			orderItem.setSerialNumber(this.serialNumber + "-" + (i + 1));
+		}
 	}
 
 	public String getBuyerPhone() {
@@ -95,6 +106,22 @@ public class Order {
 
 	public void setWorkerId(long workerId) {
 		this.workerId = workerId;
+	}
+
+	public String getWorkerName() {
+		return workerName;
+	}
+
+	public void setWorkerName(String workerName) {
+		this.workerName = workerName;
+	}
+
+	public String getWorkerPhone() {
+		return workerPhone;
+	}
+
+	public void setWorkerPhone(String workerPhone) {
+		this.workerPhone = workerPhone;
 	}
 
 	public OrderStatus getStatus() {

@@ -5,8 +5,9 @@ package org.herod.buyer.phone;
 
 import java.util.List;
 
-import org.herod.buyer.phone.HerodTask.AsyncTaskable;
 import org.herod.buyer.phone.fragments.ShopListFragment;
+import org.herod.framework.HerodTask;
+import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.widget.TitlePageIndicator;
 

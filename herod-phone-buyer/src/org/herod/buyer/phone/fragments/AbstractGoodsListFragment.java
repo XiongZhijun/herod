@@ -6,10 +6,10 @@ package org.herod.buyer.phone.fragments;
 import java.util.List;
 
 import org.herod.buyer.phone.BaseActivity;
-import org.herod.buyer.phone.HerodTask;
-import org.herod.buyer.phone.HerodTask.AsyncTaskable;
 import org.herod.buyer.phone.R;
 import org.herod.buyer.phone.ShoppingCartCache;
+import org.herod.framework.HerodTask;
+import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.adapter.SimpleAdapter;
 import org.herod.framework.adapter.SimpleAdapter.ViewBinder;

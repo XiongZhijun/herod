@@ -7,10 +7,10 @@ import java.util.List;
 
 import org.herod.buyer.phone.BuyerContext;
 import org.herod.buyer.phone.GoodsListActivity;
-import org.herod.buyer.phone.HerodTask;
-import org.herod.buyer.phone.HerodTask.AsyncTaskable;
 import org.herod.buyer.phone.R;
 import org.herod.buyer.phone.adapter.ImageLoaderAdapter;
+import org.herod.framework.HerodTask;
+import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
 
 import android.content.Intent;

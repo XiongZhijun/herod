@@ -2,13 +2,14 @@ package org.herod.buyer.phone;
 
 import java.util.List;
 
-import org.herod.buyer.phone.HerodTask.AsyncTaskable;
 import org.herod.buyer.phone.adapter.ImageLoaderAdapter;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
 import org.herod.buyer.phone.lbs.LocationManager;
 import org.herod.buyer.phone.lbs.SimpleLocationPlan;
 import org.herod.buyer.phone.lbs.SimpleLocationPlan.OnLocationSuccessListener;
+import org.herod.framework.HerodTask;
+import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.tools.NetworkStatusTools;
 import org.herod.framework.tools.NetworkStatusTools.ConnectType;

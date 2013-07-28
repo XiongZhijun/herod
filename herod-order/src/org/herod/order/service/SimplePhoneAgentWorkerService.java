@@ -43,8 +43,8 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 
 	@Override
 	public List<Order> findWaitAcceptOrders(String token, String imei) {
-		long agentId = loginService.getWorkerAgentId(token, imei);
-		return orderQueryService.findWaitAcceptOrders(agentId);
+		long workerId = loginService.getWorkerId(token, imei);
+		return orderQueryService.findWaitAcceptOrders(workerId);
 	}
 
 	@Override
@@ -177,7 +177,7 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 	}
 
 	public static interface OrderQueryService {
-		List<Order> findWaitAcceptOrders(long agentId);
+		List<Order> findWaitAcceptOrders(long workerId);
 
 		List<Order> findOrdersByWorkerAndStatus(long workerId,
 				OrderStatus status);

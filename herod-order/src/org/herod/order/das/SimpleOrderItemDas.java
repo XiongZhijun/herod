@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.herod.common.das.HerodBeanPropertyRowMapper;
 import org.herod.common.das.HerodBeanPropertySqlParameterSource;
 import org.herod.order.das.SimpleOrderDas.OrderItemQueryService;
@@ -80,6 +81,9 @@ public class SimpleOrderItemDas implements OrderItemUpdateService,
 	@Override
 	public List<OrderItem> findOrderItemsBySerialNumber(
 			List<String> orderSerialNumbers) {
+		if (CollectionUtils.isEmpty(orderSerialNumbers)) {
+			return Collections.emptyList();
+		}
 		RowMapper<OrderItem> rm = new HerodBeanPropertyRowMapper<OrderItem>(
 				OrderItem.class);
 		return simpleJdbcTemplate

@@ -114,9 +114,9 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 	}
 
 	@Override
-	public List<Order> findWaitAcceptOrders(long agentId) {
+	public List<Order> findWaitAcceptOrders(long workerId) {
 		return queryOrders(
-				" WHERE AGENT_ID = ? AND (STATUS = ? OR STATUS = ?)", agentId,
+				" WHERE DELIVERY_WORKER_ID = ? AND (STATUS = ? OR STATUS = ?)", workerId,
 				OrderStatus.Submitted.name(), OrderStatus.Rejected.name());
 	}
 

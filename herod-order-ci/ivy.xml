@@ -57,8 +57,6 @@
 			rev="1.6.1+" conf="server->server" />
 		<dependency org="com.fpi.bear" name="bear-database-sql"
 			rev="1.6.1+" conf="runtime->runtime;sql->sql" />
-		<dependency org="com.fpi.bear" name="bear-cas" rev="1.6.1+"
-			conf="server->server" branch="trunk" />
 
 		<dependency org="org.testng" name="testng" rev="6.1.1"
 			conf="test->master,runtime;sources->sources" />

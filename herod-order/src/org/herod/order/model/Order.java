@@ -41,6 +41,9 @@ public class Order {
 	private Address deliveryAddress = new Address();
 	/** 订单备注 */
 	private String comment;
+	private double costOfRunErrands = 0;
+	private double shopCostOfRunErrands = 0;
+	private double shopMinChargeForFreeDelivery = 0;
 	/** 订单项 */
 	private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 
@@ -169,6 +172,31 @@ public class Order {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public double getCostOfRunErrands() {
+		return costOfRunErrands;
+	}
+
+	public void setCostOfRunErrands(double costOfRunErrands) {
+		this.costOfRunErrands = costOfRunErrands;
+	}
+
+	public double getShopCostOfRunErrands() {
+		return shopCostOfRunErrands;
+	}
+
+	public void setShopCostOfRunErrands(double shopCostOfRunErrands) {
+		this.shopCostOfRunErrands = shopCostOfRunErrands;
+	}
+
+	public double getShopMinChargeForFreeDelivery() {
+		return shopMinChargeForFreeDelivery;
+	}
+
+	public void setShopMinChargeForFreeDelivery(
+			double shopMinChargeForFreeDelivery) {
+		this.shopMinChargeForFreeDelivery = shopMinChargeForFreeDelivery;
 	}
 
 	public void initOrderItemProperties() {

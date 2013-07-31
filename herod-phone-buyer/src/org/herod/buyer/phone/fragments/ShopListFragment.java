@@ -61,6 +61,7 @@ public class ShopListFragment extends Fragment implements
 
 	@Override
 	public void onPostExecute(List<MapWrapper<String, Object>> data) {
+		// TODO 出错时处理
 		ImageLoaderAdapter adapter = new ImageLoaderAdapter(getActivity(),
 				data, R.layout.fragment_shop_list_shop_item, new String[] {
 						"name", "imageUrl" },

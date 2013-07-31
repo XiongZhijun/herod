@@ -15,9 +15,11 @@ import org.herod.buyer.phone.model.Address;
 import org.herod.buyer.phone.model.Order;
 import org.herod.buyer.phone.model.OrderStatus;
 import org.herod.buyer.phone.model.Result;
+import org.herod.buyer.phone.service.SimpleAddressSelectService;
 import org.herod.framework.db.DatabaseOpenHelper;
 import org.herod.framework.utils.StringUtils;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -42,6 +44,7 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 	private static final String[] EDIT_TEXT_ERROR_INFOS = new String[] {
 			"请输入送货地址！", "请输入正确的手机号！", "请输入联系人姓名！" };
 	private TextView commentView;
+	private AddressSelectService addressSelectService = new SimpleAddressSelectService();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,14 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 		commentView = (TextView) view.findViewById(R.id.comment);
 		view.findViewById(R.id.submitOrdersButton).setOnClickListener(this);
 		view.findViewById(R.id.cancelButton).setOnClickListener(this);
+
+		Address selectedAddress = addressSelectService
+				.selectAddress(getActivity());
+		if (selectedAddress != null) {
+			setText(R.id.buyerName, selectedAddress.getName());
+			setText(R.id.buyerPhone, selectedAddress.getPhone());
+			setText(R.id.buyerAddress, selectedAddress.getAddress());
+		}
 	}
 
 	protected void setText(int viewId, Object text) {
@@ -155,17 +166,33 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 			for (Order order : orders) {
 				order.setStatus(OrderStatus.Submitted);
 			}
-			SQLiteOpenHelper openHelper = new DatabaseOpenHelper(activity);
-			OrderDao orderDao = new OrderDao(openHelper);
-			orderDao.addOrders(orders);
-			openHelper.close();
+			addOrdersToDatabase(activity, orders);
 			Toast.makeText(activity, "下单成功", Toast.LENGTH_SHORT).show();
 			ShoppingCartCache.getInstance().clearOrders();
 			dismiss();
 			if (activity instanceof AbstractOrdersActivity) {
 				((AbstractOrdersActivity) activity).refreshOrders();
 			}
+			addressSelectService.addCurrentAddress(activity, buyerName,
+					buyerPhone, buyerAddress);
 		}
+	}
 
+	private void addOrdersToDatabase(Context context, List<Order> orders) {
+		SQLiteOpenHelper openHelper = new DatabaseOpenHelper(context);
+		try {
+			OrderDao orderDao = new OrderDao(openHelper);
+			orderDao.addOrders(orders);
+		} finally {
+			if (openHelper != null)
+				openHelper.close();
+		}
+	}
+
+	public static interface AddressSelectService {
+		Address selectAddress(Context context);
+
+		void addCurrentAddress(Context context, String buyerName,
+				String buyerPhone, String buyerAddress);
 	}
 }

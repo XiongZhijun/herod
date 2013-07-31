@@ -38,7 +38,8 @@ public class GoodsListFragment extends AbstractGoodsListFragment {
 	@Override
 	public void onPostExecute(List<MapWrapper<String, Object>> data) {
 		super.onPostExecute(data);
-		count += data.size();
+		if (data != null)
+			count += data.size();
 	}
 
 	@Override

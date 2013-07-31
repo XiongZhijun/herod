@@ -36,7 +36,7 @@ public class RestUrlBuilder extends HttpUrlBuilderSupport implements URLBuilder 
 				.appendParams("username", getRestUserName())
 				.appendParams("password", getRestPassword());
 		BDLocation latestLocation = LocationManager.getInstance(context)
-				.getLatestLocation();
+				.getLatestBDLocation();
 		if (latestLocation != null) {
 			appendParams("latitude", latestLocation.getLatitude());
 			appendParams("longitude", latestLocation.getLongitude());

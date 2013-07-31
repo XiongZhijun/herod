@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.herod.buyer.phone.model.Address;
 import org.herod.framework.db.DatabaseAccessSupport;
 import org.herod.framework.db.DatabaseUtils;
 
@@ -14,7 +15,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.location.Address;
 
 /**
  * 
@@ -53,11 +53,17 @@ public class AddressDao extends DatabaseAccessSupport {
 		}
 
 		public void write(SQLiteDatabase db) {
+			db.execSQL("DELETE FROM ADDRESS WHERE ADDRESS = ?",
+					new Object[] { address.getAddress() });
+
 			List<String> columns = getAllColumnsByDatabase(db, ADDRESS);
 			ContentValues values = DatabaseUtils.toContentValues(address,
 					columns);
 			values.put("SAVE_TIME", getNow());
 			db.insert(ADDRESS, null, values);
+			db.execSQL(
+					"DELETE FROM ADDRESS WHERE ID NOT IN (SELECT ID FROM ADDRESS ORDER BY ID DESC LIMIT 0, ?)",
+					new Object[] { 20 });
 		}
 	}
 
@@ -65,7 +71,7 @@ public class AddressDao extends DatabaseAccessSupport {
 		@Override
 		public List<Address> read(SQLiteDatabase db) {
 			Cursor cursor = db.query(ADDRESS, null, null, null, null, null,
-					"SAVE_TIME");
+					"ID DESC");
 			return DatabaseUtils.toList(cursor, -1, -1, Address.class);
 		}
 

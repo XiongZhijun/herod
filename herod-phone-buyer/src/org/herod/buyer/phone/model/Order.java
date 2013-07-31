@@ -48,9 +48,9 @@ public class Order {
 	/** 跑腿费 */
 	private double costOfRunErrands = 0;
 	private transient String shopName;
-	private transient double shopCostOfRunErrands = 0;
-	private transient double shopMinChargeForFreeDelivery = 0;
-	private String shopPhone;
+	private double shopCostOfRunErrands = 0;
+	private double shopMinChargeForFreeDelivery = 0;
+	private transient String shopPhone;
 
 	public String getSerialNumber() {
 		return serialNumber;

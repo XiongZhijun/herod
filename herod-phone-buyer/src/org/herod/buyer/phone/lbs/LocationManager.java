@@ -3,6 +3,8 @@
  */
 package org.herod.buyer.phone.lbs;
 
+import org.herod.framework.Location;
+
 import android.content.Context;
 
 import com.baidu.location.BDLocation;
@@ -80,8 +82,16 @@ public class LocationManager implements BDLocationListener {
 	public void onReceivePoi(BDLocation location) {
 	}
 
-	public BDLocation getLatestLocation() {
+	public BDLocation getLatestBDLocation() {
 		return latestLocation;
+	}
+
+	public Location getLatestLocation() {
+		if (latestLocation == null) {
+			return null;
+		}
+		return new Location(latestLocation.getLongitude(),
+				latestLocation.getLatitude());
 	}
 
 	public void executeWithPlan(LocationPlan plan) {

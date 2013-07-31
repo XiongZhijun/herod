@@ -79,6 +79,7 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 			batchArgs[i] = new HerodBeanPropertySqlParameterSource(
 					orders.get(i));
 		}
+		// TODO 需要把跑腿费等信息保存到数据库中
 		simpleJdbcTemplate.batchUpdate(INSERT_ORDER_SQL, batchArgs);
 	}
 

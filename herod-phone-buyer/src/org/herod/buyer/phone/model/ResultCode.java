@@ -13,6 +13,6 @@ package org.herod.buyer.phone.model;
 public interface ResultCode {
 
 	int Success = 1;
-
 	int CurrentStatusCanNotDoSuchOperate = 2;
+	int SomeOrderIsExists = 3;
 }

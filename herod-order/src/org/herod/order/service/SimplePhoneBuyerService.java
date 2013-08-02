@@ -61,6 +61,10 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 		List<Order> orders = new Gson().fromJson(ordersJson,
 				new TypeToken<List<Order>>() {
 				}.getType());
+		Set<String> serialNumbers = getSerialNumbers(orders);
+		if (orderDas.isOrderExists(serialNumbers)) {
+			return new SimpleResult(ResultCode.SomeOrderIsExists);
+		}
 		List<OrderItem> orderItems = new ArrayList<OrderItem>();
 		Map<String, AgentWorker> deliveryWorkersMap = deliveryWorkerAllocationStrategy
 				.allocate(orders);
@@ -86,6 +90,14 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 		orderItemDas.addOrderItems(orderItems);
 		orderLogService.buyerSubmitLog(orders);
 		return Result.SUCCESS;
+	}
+
+	private Set<String> getSerialNumbers(List<Order> orders) {
+		Set<String> serialNumbers = new HashSet<String>();
+		for (Order order : orders) {
+			serialNumbers.add(order.getSerialNumber());
+		}
+		return serialNumbers;
 	}
 
 	@Override
@@ -226,6 +238,8 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 		void addOrders(List<Order> orders);
 
 		List<Order> findOrdersBySerialNumbers(List<String> serialNumbers);
+
+		boolean isOrderExists(Set<String> serialNumbers);
 	}
 
 	public static interface DeliveryWorkerAllocationStrategy {

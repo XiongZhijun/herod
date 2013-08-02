@@ -215,7 +215,9 @@ public class SimpleJdbcTemplateWrapper implements HerodJdbcTemplate {
 		for (Entry<String, ?> entry : args.entrySet()) {
 			Object value = entry.getValue();
 			if (value != null && value instanceof Enum) {
-				results.put(entry.getKey(), ((Enum<?>) entry.getValue()).name());
+				results.put(entry.getKey(), ((Enum<?>) value).name());
+			} else {
+				results.put(entry.getKey(), value);
 			}
 		}
 		return results;

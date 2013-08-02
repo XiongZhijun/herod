@@ -5,12 +5,15 @@ package org.herod.order.das;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.herod.common.das.HerodBeanPropertyRowMapper;
 import org.herod.common.das.HerodBeanPropertySqlParameterSource;
+import org.herod.common.das.HerodJdbcTemplate;
 import org.herod.common.das.HerodSingleColumnRowMapper;
 import org.herod.order.model.Order;
 import org.herod.order.model.OrderItem;
@@ -21,10 +24,8 @@ import org.herod.order.service.SimplePhoneAgentWorkerService.OrderStatusUpdateSe
 import org.herod.order.service.SimplePhoneAgentWorkerService.OrderUpdateService;
 import org.herod.order.service.SimplePhoneBuyerService.OrderDas;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
 /**
  * 
@@ -54,8 +55,7 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 			+ ":deliveryAddress.address,:deliveryAddress.location.longitude,"
 			+ ":deliveryAddress.location.latitude)";
 	@Autowired
-	@Qualifier("simpleJdbcTemplate")
-	private SimpleJdbcTemplate simpleJdbcTemplate;
+	private HerodJdbcTemplate herodJdbcTemplate;
 	@Autowired
 	private OrderItemQueryService orderItemQueryService;
 
@@ -63,7 +63,7 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 	public OrderStatus findOrderStatus(String serialNumber) {
 		RowMapper<OrderStatus> rm = new HerodSingleColumnRowMapper<OrderStatus>(
 				OrderStatus.class);
-		List<OrderStatus> statuses = simpleJdbcTemplate.query(
+		List<OrderStatus> statuses = herodJdbcTemplate.query(
 				"SELECT STATUS FROM ZRH_ORDER WHERE SERIAL_NUMBER = ?", rm,
 				serialNumber);
 		if (CollectionUtils.isNotEmpty(statuses)) {
@@ -80,32 +80,31 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 					orders.get(i));
 		}
 		// TODO 需要把跑腿费等信息保存到数据库中
-		simpleJdbcTemplate.batchUpdate(INSERT_ORDER_SQL, batchArgs);
+		herodJdbcTemplate.batchUpdate(INSERT_ORDER_SQL, batchArgs);
 	}
 
 	@Override
 	public void updateOrderComment(String serialNumber, String newComment) {
-		simpleJdbcTemplate.update(UPDATE_ORDER_COMMENT_SQL, newComment,
+		herodJdbcTemplate.update(UPDATE_ORDER_COMMENT_SQL, newComment,
 				serialNumber);
 	}
 
 	@Override
 	public void updateOrderStatus(String serialNumber, OrderStatus status) {
-		simpleJdbcTemplate
-				.update(UPDATE_ORDER_STATUS_SQL, status, serialNumber);
+		herodJdbcTemplate.update(UPDATE_ORDER_STATUS_SQL, status, serialNumber);
 	}
 
 	@Override
 	public void updateOrderStatusAndWorker(String serialNumber,
 			long agentWorker, OrderStatus status) {
-		simpleJdbcTemplate.update(UPDATE_ORDER_STATUS_AND_WORKER_SQL, status,
+		herodJdbcTemplate.update(UPDATE_ORDER_STATUS_AND_WORKER_SQL, status,
 				agentWorker, serialNumber);
 	}
 
 	@Override
 	public void updateOrderStatusAndCompleteTime(String serialNumber,
 			OrderStatus status, Date completeTime) {
-		simpleJdbcTemplate.update(UPDATE_ORDER_STATUS_AND_COMPLETE_TIME_SQL,
+		herodJdbcTemplate.update(UPDATE_ORDER_STATUS_AND_COMPLETE_TIME_SQL,
 				status, completeTime, serialNumber);
 	}
 
@@ -117,15 +116,15 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 	@Override
 	public List<Order> findWaitAcceptOrders(long workerId) {
 		return queryOrders(
-				" WHERE DELIVERY_WORKER_ID = ? AND (STATUS = ? OR STATUS = ?)", workerId,
-				OrderStatus.Submitted.name(), OrderStatus.Rejected.name());
+				" WHERE DELIVERY_WORKER_ID = ? AND (STATUS = ? OR STATUS = ?)",
+				workerId, OrderStatus.Submitted, OrderStatus.Rejected);
 	}
 
 	@Override
 	public List<Order> findOrdersByWorkerAndStatus(long workerId,
 			OrderStatus status) {
 		return queryOrders(" WHERE DELIVERY_WORKER_ID = ? AND STATUS = ?",
-				workerId, OrderStatus.Acceptted.name());
+				workerId, OrderStatus.Acceptted);
 
 	}
 
@@ -138,12 +137,12 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 		Date now = calendar.getTime();
 		return queryOrders(
 				" WHERE SUBMIT_TIME > ? AND DELIVERY_WORKER_ID = ? AND STATUS = ?",
-				now, workerId, OrderStatus.Acceptted.name());
+				now, workerId, OrderStatus.Acceptted);
 	}
 
 	protected List<Order> queryOrders(String whereConditionSql, Object... args) {
 		RowMapper<Order> rm = new HerodBeanPropertyRowMapper<Order>(Order.class);
-		List<Order> orders = simpleJdbcTemplate.query(SELECT_FROM_ORDERS_SQL
+		List<Order> orders = herodJdbcTemplate.query(SELECT_FROM_ORDERS_SQL
 				+ whereConditionSql, rm, args);
 		List<String> serialNumbers = getOrderSerialNumbers(orders);
 		List<OrderItem> orderItems = orderItemQueryService
@@ -168,13 +167,28 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 		return serialNumbers;
 	}
 
+	@Override
+	public boolean isOrderExists(Set<String> serialNumbers) {
+		int count = herodJdbcTemplate
+				.queryForInt(
+						"SELECT COUNT(1) FROM ZRH_ORDER WHERE SERIAL_NUMBER IN (:SERIALNUMBERS)",
+						Collections
+								.singletonMap("SERIALNUMBERS", serialNumbers));
+		return count > 0;
+	}
+
 	public static interface OrderItemQueryService {
 		List<OrderItem> findOrderItemsBySerialNumber(
 				List<String> orderSerialNumbers);
 	}
 
-	public void setSimpleJdbcTemplate(SimpleJdbcTemplate simpleJdbcTemplate) {
-		this.simpleJdbcTemplate = simpleJdbcTemplate;
+	public void setHerodJdbcTemplate(HerodJdbcTemplate herodJdbcTemplate) {
+		this.herodJdbcTemplate = herodJdbcTemplate;
+	}
+
+	public void setOrderItemQueryService(
+			OrderItemQueryService orderItemQueryService) {
+		this.orderItemQueryService = orderItemQueryService;
 	}
 
 }

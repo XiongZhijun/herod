@@ -15,6 +15,7 @@ import org.herod.buyer.phone.model.Address;
 import org.herod.buyer.phone.model.Order;
 import org.herod.buyer.phone.model.OrderStatus;
 import org.herod.buyer.phone.model.Result;
+import org.herod.buyer.phone.model.ResultCode;
 import org.herod.buyer.phone.service.SimpleAddressSelectService;
 import org.herod.framework.db.DatabaseOpenHelper;
 import org.herod.framework.utils.StringUtils;
@@ -158,11 +159,15 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 		@Override
 		protected void onPostExecute(Result result) {
 			FragmentActivity activity = getActivity();
-			if (result == null || !result.isSuccess()) {
-				Toast.makeText(activity, "下单失败，请重试！", Toast.LENGTH_SHORT)
-						.show();
+			if (result != null
+					&& (result.isSuccess() || result.getCode() == ResultCode.SomeOrderIsExists)) {
+				onSubmitSuccess(activity);
 				return;
 			}
+			Toast.makeText(activity, "下单失败，请重试！", Toast.LENGTH_SHORT).show();
+		}
+
+		private void onSubmitSuccess(FragmentActivity activity) {
 			for (Order order : orders) {
 				order.setStatus(OrderStatus.Submitted);
 			}

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
-http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd http://www.springframework.org/schema/tx 
+http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
+	<context:annotation-config />
+	<tx:annotation-driven transaction-manager="transactionManager" />
 	<bean class="com.fpi.bear.tools.db.DatabaseInitToolBeanPostProcessor"
 		lazy-init="false">
 		<property name="serverType" value="info" />
@@ -82,4 +85,5 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	<bean id="herodJdbcTemplate" class="org.herod.common.das.SimpleJdbcTemplateWrapper">
 		<property name="simpleJdbcTemplate" ref="simpleJdbcTemplate" />
 	</bean>
+
 </beans>

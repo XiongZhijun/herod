@@ -3,19 +3,28 @@
  */
 package org.herod.worker.phone.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.herod.framework.HerodTask;
+import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
 import org.herod.framework.utils.DateUtils;
+import org.herod.worker.phone.MainActivity;
 import org.herod.worker.phone.R;
+import org.herod.worker.phone.Result;
+import org.herod.worker.phone.WorkerContext;
 import org.herod.worker.phone.fragment.ConfirmDialogFragment;
-import org.herod.worker.phone.fragment.PlaceInfoDialogFragment;
 import org.herod.worker.phone.fragment.ConfirmDialogFragment.OnOkButtonClickListener;
+import org.herod.worker.phone.fragment.PlaceInfoDialogFragment;
 import org.herod.worker.phone.model.Order;
 import org.herod.worker.phone.model.OrderItem;
 import org.herod.worker.phone.view.OrderItemView.GoodsQuantityChangedListener;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -40,6 +49,12 @@ public class OrderView extends LinearLayout implements
 	private Order order;
 	private OrderItemView summationView;
 	private FragmentActivity activity;
+
+	private Handler handler;
+
+	private OrderEditor orderEditor;
+
+	private List<OrderItemView> orderItemViews;
 
 	public OrderView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -78,26 +93,31 @@ public class OrderView extends LinearLayout implements
 
 	public void setOrder(Order order) {
 		this.order = order;
+		orderEditor = new OrderEditor(order);
 		setText(R.id.serialNumber, order.getSerialNumber());
 		setText(R.id.submitTime,
 				DateUtils.format("MM-dd HH:mm", order.getSubmitTime()));
 		orderItemsContainer.removeAllViews();
 		setText(R.id.shopName, order.getShopName());
 		setText(R.id.buyerName, order.getBuyerName());
+		setText(R.id.comment, order.getComment());
 
 		setText(R.id.shopTips, createShopTips(order));
 		summationView = new OrderItemView(getContext());
-		summationView.disableButtons();
+		summationView.setCanEdit(false);
 		summationView.setGoodsName("合计");
 		updateOrderSummationInfo();
+		orderItemViews = new ArrayList<OrderItemView>();
 
 		for (OrderItem item : order.getOrderItems()) {
 			addLineToOrderItemListView(orderItemsContainer);
 			OrderItemView child = new OrderItemView(getContext());
+			child.setOrderEditor(orderEditor);
 			child.setOrderAndOrderItem(order, item);
 			child.setGoodsQuantityChangedListener(this);
 			LayoutParams param = new LayoutParams(LayoutParams.MATCH_PARENT,
 					LayoutParams.WRAP_CONTENT);
+			orderItemViews.add(child);
 			orderItemsContainer.addView(child, param);
 		}
 		addLineToOrderItemListView(orderItemsContainer);
@@ -141,9 +161,9 @@ public class OrderView extends LinearLayout implements
 		} else if (v.getId() == R.id.deleteOrderButton) {
 			onDeleteOrderButtonClick();
 		} else if (v.getId() == R.id.cancelButton) {
-			onCancelButtonClick();
+			onCancelEditButtonClick();
 		} else if (v.getId() == R.id.confirmButton) {
-			onConfirmButtonClick();
+			onConfirmEditButtonClick();
 		} else if (v.getId() == R.id.shopName) {
 			onShopNameClickListener();
 		} else if (v.getId() == R.id.buyerName) {
@@ -167,7 +187,6 @@ public class OrderView extends LinearLayout implements
 		args.putString("locationName", order.getShopName());
 		fragment.setArguments(args);
 		fragment.show(activity.getSupportFragmentManager(), null);
-
 	}
 
 	private void onDeleteOrderButtonClick() {
@@ -184,28 +203,45 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void onAcceptOrderButtonClick() {
-		// TODO Auto-generated method stub
+		new HerodTask<Object, Result>(new AsyncTaskable<Object, Result>() {
+			public Result runOnBackground(Object... params) {
+				return WorkerContext.getWorkerService().acceptOrder(
+						order.getSerialNumber());
+			}
+
+			@Override
+			public void onPostExecute(Result result) {
+				String message;
+				if (result != null && result.isSuccess()) {
+					handler.sendMessage(handler
+							.obtainMessage(MainActivity.MESSAGE_KEY_REFRESH_ORDER_LIST));
+					message = "成功受理订单！";
+				} else {
+					message = "受理订单失败，请重试！";
+				}
+				Toast.makeText(getContext(), message, Toast.LENGTH_SHORT)
+						.show();
+			}
+		}).execute();
 
 	}
 
-	private void onCancelButtonClick() {
-		enableOperationButtons();
-		// TODO
+	private void onCancelEditButtonClick() {
+		disableOperationButtons();
+		Order order = orderEditor.restore();
+		setOrder(order);
 	}
 
-	private void onConfirmButtonClick() {
-		enableOperationButtons();
-		// TODO
+	private void onConfirmEditButtonClick() {
+		disableOperationButtons();
 	}
 
-	private void enableOperationButtons() {
+	private void disableOperationButtons() {
 		setVisibility(View.VISIBLE, R.id.acceptOrderButton,
 				R.id.editOrderButton, R.id.deleteOrderButton);
 		setVisibility(View.GONE, R.id.cancelButton, R.id.confirmButton);
-		for (int i = 0; i < orderItemsContainer.getChildCount(); i++) {
-			View view = orderItemsContainer.getChildAt(i);
-			setVisibility(View.INVISIBLE, view.findViewById(R.id.addButton));
-			setVisibility(View.INVISIBLE, view.findViewById(R.id.reduceButton));
+		for (OrderItemView orderItemView : orderItemViews) {
+			orderItemView.disableEditButtons();
 		}
 	}
 
@@ -213,11 +249,13 @@ public class OrderView extends LinearLayout implements
 		setVisibility(View.GONE, R.id.acceptOrderButton, R.id.editOrderButton,
 				R.id.deleteOrderButton);
 		setVisibility(View.VISIBLE, R.id.cancelButton, R.id.confirmButton);
-		for (int i = 0; i < orderItemsContainer.getChildCount(); i++) {
-			View view = orderItemsContainer.getChildAt(i);
-			setVisibility(View.VISIBLE, view.findViewById(R.id.addButton));
-			setVisibility(View.VISIBLE, view.findViewById(R.id.reduceButton));
+		for (OrderItemView orderItemView : orderItemViews) {
+			orderItemView.enableEditButtons();
 		}
+	}
+
+	public void setHandler(Handler handler) {
+		this.handler = handler;
 	}
 
 	private void setText(int id, Object data) {

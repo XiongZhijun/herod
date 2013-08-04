@@ -46,14 +46,14 @@
 
         <Button
             android:id="@+id/loginButton"
-            style="@style/ActionButtonStyle"
+            style="@style/ButtonStyle"
             android:layout_width="140dip"
             android:layout_height="wrap_content"
             android:text="登录" />
 
         <Button
             android:id="@+id/cancelButton"
-            style="@style/ActionButtonStyle"
+            style="@style/ButtonStyle"
             android:layout_width="140dip"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dip"

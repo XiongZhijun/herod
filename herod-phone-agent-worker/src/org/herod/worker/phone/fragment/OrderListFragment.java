@@ -12,6 +12,9 @@ import org.herod.worker.phone.model.Order;
 import org.herod.worker.phone.view.OrderTabPageIndicator;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Handler.Callback;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,12 +23,12 @@ import android.widget.ListView;
 
 public class OrderListFragment extends Fragment implements
 		AsyncTaskable<FragmentType, List<Order>> {
-
 	private ListView ordersListView;
 	private String title;
 	private FragmentType type;
 	private int index = 0;
 	private OrderTabPageIndicator indicator;
+	private Handler handler;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,15 @@ public class OrderListFragment extends Fragment implements
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		refreshOrderList();
+	}
+
+	public void refreshOrderList() {
 		new HerodTask<FragmentType, List<Order>>(this).execute(type);
 	}
 
@@ -64,7 +76,8 @@ public class OrderListFragment extends Fragment implements
 		if (orders == null) {
 			return;
 		}
-		ordersListView.setAdapter(new OrderListAdapter(getActivity(), orders));
+		ordersListView.setAdapter(new OrderListAdapter(getActivity(), orders,
+				handler));
 		indicator.setTabQauntity(index, orders.size());
 	}
 
@@ -86,6 +99,10 @@ public class OrderListFragment extends Fragment implements
 
 	public void setIndex(int index) {
 		this.index = index;
+	}
+
+	public void setHandler(Handler handler) {
+		this.handler = handler;
 	}
 
 	public static enum FragmentType {

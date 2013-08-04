@@ -133,4 +133,16 @@ public class OrderItem {
 		return sellingPrice * quantity;
 	}
 
+	public void increaseQuantity() {
+		quantity++;
+	}
+
+	public void decreaseQuantity() {
+		if (quantity <= 0) {
+			quantity = 0;
+		} else {
+			quantity--;
+		}
+	}
+
 }

@@ -12,6 +12,7 @@ import org.herod.framework.rest.URLBuilder;
 import org.herod.framework.tools.DateTypeAdapter;
 import org.herod.framework.tools.GsonUtils;
 import org.herod.worker.phone.Result;
+import org.herod.worker.phone.SimpleResult;
 import org.herod.worker.phone.WorkerService;
 import org.herod.worker.phone.model.Order;
 import org.herod.worker.phone.model.OrderUpdateInfo;
@@ -85,32 +86,33 @@ public class RestWorkerService extends RestServiceSupport implements
 
 	@Override
 	public Result acceptOrder(String serialNumber) {
-		// TODO Auto-generated method stub
-		return null;
+		return postForObject("/herod/agentworker/orders/{serialNumber}/accept",
+				SimpleResult.class, null, serialNumber);
 	}
 
 	@Override
 	public Result updateOrder(OrderUpdateInfo updateInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		return postForObject("/herod/agentworker/orders/{serialNumber}/update",
+				SimpleResult.class, updateInfo);
 	}
 
 	@Override
 	public Result rejectOrder(String serialNumber, String reason) {
-		// TODO Auto-generated method stub
-		return null;
+		return postForObject("/herod/agentworker/orders/{serialNumber}/reject",
+				SimpleResult.class, null, serialNumber);
 	}
 
 	@Override
 	public Result cancelOrder(String serialNumber, String reason) {
-		// TODO Auto-generated method stub
-		return null;
+		return postForObject("/herod/agentworker/orders/{serialNumber}/cancel",
+				SimpleResult.class, null, serialNumber);
 	}
 
 	@Override
 	public Result completeOrder(String serialNumber) {
-		// TODO Auto-generated method stub
-		return null;
+		return postForObject(
+				"/herod/agentworker/orders/{serialNumber}/complete",
+				SimpleResult.class, null, serialNumber);
 	}
 
 	@Override

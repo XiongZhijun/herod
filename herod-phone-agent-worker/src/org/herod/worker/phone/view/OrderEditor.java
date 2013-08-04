@@ -21,43 +21,40 @@ import org.herod.worker.phone.model.OrderUpdateInfo;
  */
 public class OrderEditor {
 	private Order order;
-	private Map<String, Integer> oldOrderItemQuantityMap = new HashMap<String, Integer>();
+	private Map<String, Integer> newOrderItemQuantityMap = new HashMap<String, Integer>();
 	private List<OrderItem> newOrderItems = new ArrayList<OrderItem>();
 
 	public OrderEditor(Order order) {
 		super();
 		this.order = order;
+		init(order);
+	}
+
+	private void init(Order order) {
 		for (OrderItem orderItem : order.getOrderItems()) {
-			oldOrderItemQuantityMap.put(orderItem.getSerialNumber(),
+			newOrderItemQuantityMap.put(orderItem.getSerialNumber(),
 					orderItem.getQuantity());
 		}
 	}
 
 	public int increaseItem(String serialNumber) {
-		OrderItem orderItem = order.findOrderItemBySerialNumber(serialNumber);
-		if (orderItem != null) {
-			orderItem.increaseQuantity();
-			return orderItem.getQuantity();
+		if (newOrderItemQuantityMap.containsKey(serialNumber)) {
+			int quantity = newOrderItemQuantityMap.get(serialNumber);
+			quantity++;
+			newOrderItemQuantityMap.put(serialNumber, quantity);
+			return quantity;
 		}
 		return 0;
 	}
 
 	public int decreaseItem(String serialNumber) {
-		OrderItem orderItem = order.findOrderItemBySerialNumber(serialNumber);
-		if (orderItem != null) {
-			orderItem.decreaseQuantity();
-			return orderItem.getQuantity();
+		if (newOrderItemQuantityMap.containsKey(serialNumber)) {
+			int quantity = newOrderItemQuantityMap.get(serialNumber);
+			quantity = quantity > 0 ? quantity - 1 : 0;
+			newOrderItemQuantityMap.put(serialNumber, quantity);
+			return quantity;
 		}
 		return 0;
-	}
-
-	public Order restore() {
-		for (OrderItem orderItem : order.getOrderItems()) {
-			orderItem.setQuantity(oldOrderItemQuantityMap.get(orderItem
-					.getSerialNumber()));
-		}
-		newOrderItems.clear();
-		return order;
 	}
 
 	public OrderUpdateInfo toUpdateInfo(String newComment, String reason) {
@@ -69,13 +66,13 @@ public class OrderEditor {
 				.getQuantityChangeMap();
 		for (OrderItem orderItem : order.getOrderItems()) {
 			String serialNumber = orderItem.getSerialNumber();
-			if (oldOrderItemQuantityMap.keySet().contains(serialNumber)) {
-				int oldQuantity = oldOrderItemQuantityMap.get(serialNumber);
-				if (orderItem.getQuantity() <= 0) {
+			if (newOrderItemQuantityMap.keySet().contains(serialNumber)) {
+				int newQuantity = newOrderItemQuantityMap.get(serialNumber);
+				if (newQuantity <= 0) {
 					deletedOrderItems.add(serialNumber);
-				} else if (oldQuantity != orderItem.getQuantity()) {
-					quantityChangeMap
-							.put(serialNumber, orderItem.getQuantity());
+				} else if (newQuantity != orderItem.getQuantity()) {
+					quantityChangeMap.put(serialNumber,
+							newOrderItemQuantityMap.get(serialNumber));
 				}
 			} else {
 				newOrderItems.add(orderItem);
@@ -88,5 +85,9 @@ public class OrderEditor {
 
 	public void submitUpdateInfo() {
 
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
 	}
 }

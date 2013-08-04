@@ -87,7 +87,7 @@ public class RestWorkerService extends RestServiceSupport implements
 	@Override
 	public Result updateOrder(OrderUpdateInfo updateInfo) {
 		return postForObject("/herod/agentworker/orders/{serialNumber}/update",
-				SimpleResult.class, updateInfo);
+				SimpleResult.class, updateInfo, updateInfo.getOrderSerialNumber());
 	}
 
 	@Override

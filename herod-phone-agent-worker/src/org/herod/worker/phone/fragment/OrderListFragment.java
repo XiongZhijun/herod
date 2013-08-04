@@ -45,12 +45,12 @@ public class OrderListFragment extends Fragment implements
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		refreshOrderList();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		refreshOrderList();
 	}
 
 	public void refreshOrderList() {

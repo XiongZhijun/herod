@@ -22,6 +22,16 @@
             android:src="@drawable/accept" />
 
         <ImageButton
+            android:id="@+id/completeOrderButton"
+            style="@style/OrderButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dip"
+            android:contentDescription="@null"
+            android:src="@drawable/accept"
+            android:visibility="gone" />
+
+        <ImageButton
             android:id="@+id/editOrderButton"
             style="@style/OrderButtonStyle"
             android:layout_width="wrap_content"
@@ -31,7 +41,7 @@
             android:src="@android:drawable/ic_menu_edit" />
 
         <ImageButton
-            android:id="@+id/deleteOrderButton"
+            android:id="@+id/cancelOrderButton"
             style="@style/OrderButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,7 +50,7 @@
             android:src="@android:drawable/ic_menu_delete" />
 
         <ImageButton
-            android:id="@+id/cancelButton"
+            android:id="@+id/cancelEditButton"
             style="@style/OrderButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,7 +65,7 @@
             android:layout_weight="1" />
 
         <ImageButton
-            android:id="@+id/confirmButton"
+            android:id="@+id/confirmEditButton"
             style="@style/OrderButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

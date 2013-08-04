@@ -38,7 +38,6 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 	@InjectView(R.id.deletedLine)
 	private View deletedLine;
 	private GoodsQuantityChangedListener goodsQuantityChangedListener;
-	private OrderEditor orderEditor;
 	private OrderItem orderItem;
 	private boolean canEdit = true;
 
@@ -96,13 +95,23 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 	}
 
 	protected void decreaseQuantity() {
-		int newQuantity = orderEditor.decreaseItem(orderItem.getSerialNumber());
-		setQuantity(newQuantity);
+		OrderEditor orderEditor = OrderEditorManager.getInstance()
+				.findOrderEditor(orderItem.getOrderSerialNumber());
+		if (orderEditor != null) {
+			int newQuantity = orderEditor.decreaseItem(orderItem
+					.getSerialNumber());
+			setQuantity(newQuantity);
+		}
 	}
 
 	protected void increaseQuantity() {
-		int newQuantity = orderEditor.increaseItem(orderItem.getSerialNumber());
-		setQuantity(newQuantity);
+		OrderEditor orderEditor = OrderEditorManager.getInstance()
+				.findOrderEditor(orderItem.getOrderSerialNumber());
+		if (orderEditor != null) {
+			int newQuantity = orderEditor.increaseItem(orderItem
+					.getSerialNumber());
+			setQuantity(newQuantity);
+		}
 	}
 
 	public void setGoodsQuantityChangedListener(
@@ -124,10 +133,6 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 			addButton.setVisibility(View.VISIBLE);
 			reduceButton.setVisibility(View.VISIBLE);
 		}
-	}
-
-	public void setOrderEditor(OrderEditor orderEditor) {
-		this.orderEditor = orderEditor;
 	}
 
 	public void setCanEdit(boolean canEdit) {

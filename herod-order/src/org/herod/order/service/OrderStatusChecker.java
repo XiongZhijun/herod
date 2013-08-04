@@ -23,7 +23,7 @@ public interface OrderStatusChecker {
 	 *            目标状态
 	 * @return
 	 */
-	boolean canChangeStatus(String serialNumber, OrderStatus destStatus);
+	boolean canNotChangeStatus(String serialNumber, OrderStatus destStatus);
 
 	/**
 	 * 判断订单能否进行更新
@@ -32,5 +32,5 @@ public interface OrderStatusChecker {
 	 *            订单流水号
 	 * @return
 	 */
-	boolean canUpdate(String serialNumber);
+	boolean canNotUpdate(String serialNumber);
 }

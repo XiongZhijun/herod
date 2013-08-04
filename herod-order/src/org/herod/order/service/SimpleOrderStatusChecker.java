@@ -29,18 +29,19 @@ public class SimpleOrderStatusChecker implements OrderStatusChecker {
 	private OrderStatusFinder orderStatusFinder;
 
 	@Override
-	public boolean canChangeStatus(String serialNumber, OrderStatus destStatus) {
+	public boolean canNotChangeStatus(String serialNumber,
+			OrderStatus destStatus) {
 		OrderStatus orderStatus = orderStatusFinder
 				.findOrderStatus(serialNumber);
 		List<OrderStatus> statuses = findStatusbyCurrentStatus(destStatus);
-		return statuses.contains(orderStatus);
+		return !statuses.contains(orderStatus);
 	}
 
 	@Override
-	public boolean canUpdate(String serialNumber) {
+	public boolean canNotUpdate(String serialNumber) {
 		OrderStatus orderStatus = orderStatusFinder
 				.findOrderStatus(serialNumber);
-		return CAN_UPDATE_STATUS.contains(orderStatus);
+		return !CAN_UPDATE_STATUS.contains(orderStatus);
 	}
 
 	@SuppressWarnings("unchecked")

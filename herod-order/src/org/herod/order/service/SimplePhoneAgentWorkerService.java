@@ -70,7 +70,7 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 
 	@Override
 	public Result acceptOrder(String serialNumber, String token, String imei) {
-		if (orderStatusChecker.canChangeStatus(serialNumber,
+		if (orderStatusChecker.canNotChangeStatus(serialNumber,
 				OrderStatus.Acceptted)) {
 			return new SimpleResult(
 					ResultCode.CurrentStatusCanNotDoSuchOperate, serialNumber);
@@ -86,7 +86,7 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 	public Result updateOrder(OrderUpdateInfo updateInfo, String token,
 			String imei) {
 		String serialNumber = updateInfo.getOrderSerialNumber();
-		if (orderStatusChecker.canUpdate(serialNumber)) {
+		if (orderStatusChecker.canNotUpdate(serialNumber)) {
 			return new SimpleResult(
 					ResultCode.CurrentStatusCanNotDoSuchOperate, serialNumber);
 		}
@@ -108,7 +108,7 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 	@Override
 	public Result rejectOrder(String serialNumber, String reason, String token,
 			String imei) {
-		if (orderStatusChecker.canChangeStatus(serialNumber,
+		if (orderStatusChecker.canNotChangeStatus(serialNumber,
 				OrderStatus.Rejected)) {
 			return new SimpleResult(
 					ResultCode.CurrentStatusCanNotDoSuchOperate, serialNumber);
@@ -122,7 +122,7 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 	@Override
 	public Result cancelOrder(String serialNumber, String reason, String token,
 			String imei) {
-		if (orderStatusChecker.canChangeStatus(serialNumber,
+		if (orderStatusChecker.canNotChangeStatus(serialNumber,
 				OrderStatus.Cancelled)) {
 			return new SimpleResult(
 					ResultCode.CurrentStatusCanNotDoSuchOperate, serialNumber);
@@ -135,7 +135,7 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 
 	@Override
 	public Result completeOrder(String serialNumber, String token, String imei) {
-		if (orderStatusChecker.canChangeStatus(serialNumber,
+		if (orderStatusChecker.canNotChangeStatus(serialNumber,
 				OrderStatus.Completed)) {
 			return new SimpleResult(
 					ResultCode.CurrentStatusCanNotDoSuchOperate, serialNumber);

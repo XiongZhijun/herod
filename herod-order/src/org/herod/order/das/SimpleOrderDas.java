@@ -98,7 +98,7 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 	@Override
 	public void updateOrderStatusAndWorker(String serialNumber,
 			long agentWorker, OrderStatus status) {
-		simpleJdbcTemplate.update(UPDATE_ORDER_STATUS_AND_WORKER_SQL, status,
+		simpleJdbcTemplate.update(UPDATE_ORDER_STATUS_AND_WORKER_SQL, status.name(),
 				agentWorker, serialNumber);
 	}
 
@@ -106,7 +106,7 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 	public void updateOrderStatusAndCompleteTime(String serialNumber,
 			OrderStatus status, Date completeTime) {
 		simpleJdbcTemplate.update(UPDATE_ORDER_STATUS_AND_COMPLETE_TIME_SQL,
-				status, completeTime, serialNumber);
+				status.name(), completeTime, serialNumber);
 	}
 
 	@Override

@@ -12,9 +12,13 @@ package org.herod.order.service;
  */
 public interface ResultCode {
 
+	int Failed = 0;
+
 	int Success = 1;
 
 	int CurrentStatusCanNotDoSuchOperate = 2;
 
 	int SomeOrderIsExists = 3;
+
+	int NoOrderSubmitted = 4;
 }

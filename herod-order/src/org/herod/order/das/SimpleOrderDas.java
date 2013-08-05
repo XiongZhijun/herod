@@ -169,6 +169,9 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 
 	@Override
 	public boolean isOrderExists(Set<String> serialNumbers) {
+		if (CollectionUtils.isEmpty(serialNumbers)) {
+			return true;
+		}
 		int count = herodJdbcTemplate
 				.queryForInt(
 						"SELECT COUNT(1) FROM ZRH_ORDER WHERE SERIAL_NUMBER IN (:SERIALNUMBERS)",

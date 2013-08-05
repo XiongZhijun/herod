@@ -12,7 +12,13 @@ package org.herod.buyer.phone.model;
  */
 public interface ResultCode {
 
+	int Failed = 0;
+
 	int Success = 1;
+
 	int CurrentStatusCanNotDoSuchOperate = 2;
+
 	int SomeOrderIsExists = 3;
+
+	int NoOrderSubmitted = 4;
 }

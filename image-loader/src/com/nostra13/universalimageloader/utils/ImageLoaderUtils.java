@@ -6,6 +6,9 @@ package com.nostra13.universalimageloader.utils;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -31,6 +34,10 @@ public abstract class ImageLoaderUtils {
 	private static ImageLoader imageLoader = ImageLoader.getInstance();
 	private static DisplayImageOptions defaultOptions;
 	private static ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
+	private static ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+	private static Lock readLock = readWriteLock.readLock();
+	private static Lock writeLock = readWriteLock.writeLock();
+	private static boolean inited = false;
 
 	public static void initImageLoader(Context context) {
 		ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(
@@ -40,8 +47,14 @@ public abstract class ImageLoaderUtils {
 
 	public static void initImageLoader(Context context,
 			ImageLoaderConfiguration configuration) {
-		imageLoader.init(configuration);
-		defaultOptions = buildDefaultDisplayOptions();
+		writeLock.lock();
+		try {
+			imageLoader.init(configuration);
+			defaultOptions = buildDefaultDisplayOptions();
+			inited = true;
+		} finally {
+			writeLock.unlock();
+		}
 	}
 
 	public static DisplayImageOptions buildDefaultDisplayOptions() {
@@ -61,7 +74,18 @@ public abstract class ImageLoaderUtils {
 			DisplayImageOptions options) {
 		imageLoader.displayImage(url, imageView, options, animateFirstListener);
 	}
-	
+
+	protected static void checkAndInit(Context context) {
+		readLock.lock();
+		try {
+			if (!inited) {
+				initImageLoader(context);
+			}
+		} finally {
+			readLock.unlock();
+		}
+	}
+
 	public static ImageLoader getImageLoader() {
 		return imageLoader;
 	}

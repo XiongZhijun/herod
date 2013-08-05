@@ -61,6 +61,9 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 		List<Order> orders = new Gson().fromJson(ordersJson,
 				new TypeToken<List<Order>>() {
 				}.getType());
+		if (CollectionUtils.isEmpty(orders)) {
+			return new SimpleResult(ResultCode.NoOrderSubmitted);
+		}
 		Set<String> serialNumbers = getSerialNumbers(orders);
 		if (orderDas.isOrderExists(serialNumbers)) {
 			return new SimpleResult(ResultCode.SomeOrderIsExists);

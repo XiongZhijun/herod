@@ -274,4 +274,12 @@ public class Order {
 		return this.shopPhone;
 	}
 
+	public OrderItem findOrderItemBySerialNumber(String serialNumber) {
+		for (OrderItem item : orderItems) {
+			if (item.getSerialNumber().equals(serialNumber)) {
+				return item;
+			}
+		}
+		return null;
+	}
 }

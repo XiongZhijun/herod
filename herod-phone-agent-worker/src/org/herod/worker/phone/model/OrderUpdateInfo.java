@@ -23,6 +23,15 @@ public class OrderUpdateInfo {
 	private Map<String, Integer> quantityChangeMap = new HashMap<String, Integer>();
 	private String reason;
 
+	public OrderUpdateInfo() {
+		super();
+	}
+
+	public OrderUpdateInfo(String orderSerialNumber) {
+		super();
+		this.orderSerialNumber = orderSerialNumber;
+	}
+
 	public String getOrderSerialNumber() {
 		return orderSerialNumber;
 	}

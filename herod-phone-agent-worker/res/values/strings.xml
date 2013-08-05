@@ -5,4 +5,24 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
 
+    <!-- layout -->
+    <string name="label_PhoneNumber">手机号：</string>
+    <string name="hint_PleaseInputPhoneNumber">请输入手机号</string>
+    <string name="label_Password">密码：</string>
+    <string name="hint_PleaseInputPassword">请输入用户密码</string>
+    <string name="text_Login">登录</string>
+    <string name="text_Cancel">取消</string>
+    <string name="text_Warn">提醒</string>
+    <string name="text_Confirm">确定</string>
+    <string name="text_Goods">商品</string>
+    <string name="text_UnitPrice">单价</string>
+    <string name="text_Quantity">数量</string>
+    <string name="label_TotalAmount">总计：</string>
+    <string name="lable_Amount_1">元（其中配送费：</string>
+    <string name="lable_Amount_2">元）</string>
+    <string name="label_OrderStatus">订单状态：</string>
+    <string name="label_OrderSN">订单号：</string>
+    <string name="label_SubmitTime">提交时间：</string>
+    <string name="label_OrderComment">订单备注：</string>
+
 </resources>

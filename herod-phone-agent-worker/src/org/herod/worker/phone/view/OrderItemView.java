@@ -6,13 +6,10 @@ package org.herod.worker.phone.view;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
 import org.herod.worker.phone.R;
-import org.herod.worker.phone.fragment.ConfirmDialogFragment.OnOkButtonClickListener;
 import org.herod.worker.phone.model.Order;
 import org.herod.worker.phone.model.OrderItem;
-import org.herod.worker.phone.model.OrderStatus;
 
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,8 +38,8 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 	@InjectView(R.id.deletedLine)
 	private View deletedLine;
 	private GoodsQuantityChangedListener goodsQuantityChangedListener;
-	private long shopId;
-	private long goodsId;
+	private OrderItem orderItem;
+	private boolean canEdit = true;
 
 	public OrderItemView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -67,8 +64,7 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 	}
 
 	public void setOrderAndOrderItem(Order order, OrderItem orderItem) {
-		this.goodsId = orderItem.getGoodsId();
-		this.shopId = orderItem.getShopId();
+		this.orderItem = orderItem;
 		setGoodsName(orderItem.getGoodsName());
 		setQuantity(orderItem.getQuantity());
 		setSellingPrice(orderItem.getSellingPrice());
@@ -99,20 +95,23 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 	}
 
 	protected void decreaseQuantity() {
-		// TODO
-
-	}
-
-	private class OnDeleteOrderItemByOkListener implements
-			OnOkButtonClickListener {
-		public void onOk() {
-			// TODO
+		OrderEditor orderEditor = OrderEditorManager.getInstance()
+				.findOrderEditor(orderItem.getOrderSerialNumber());
+		if (orderEditor != null) {
+			int newQuantity = orderEditor.decreaseItem(orderItem
+					.getSerialNumber());
+			setQuantity(newQuantity);
 		}
-
 	}
 
 	protected void increaseQuantity() {
-		// TODO
+		OrderEditor orderEditor = OrderEditorManager.getInstance()
+				.findOrderEditor(orderItem.getOrderSerialNumber());
+		if (orderEditor != null) {
+			int newQuantity = orderEditor.increaseItem(orderItem
+					.getSerialNumber());
+			setQuantity(newQuantity);
+		}
 	}
 
 	public void setGoodsQuantityChangedListener(
@@ -124,8 +123,22 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 		void onGoodsQuantityChanged();
 	}
 
-	public void disableButtons() {
+	public void disableEditButtons() {
 		addButton.setVisibility(View.INVISIBLE);
 		reduceButton.setVisibility(View.INVISIBLE);
+	}
+
+	public void enableEditButtons() {
+		if (canEdit) {
+			addButton.setVisibility(View.VISIBLE);
+			reduceButton.setVisibility(View.VISIBLE);
+		}
+	}
+
+	public void setCanEdit(boolean canEdit) {
+		this.canEdit = canEdit;
+		if (!canEdit) {
+			disableEditButtons();
+		}
 	}
 }

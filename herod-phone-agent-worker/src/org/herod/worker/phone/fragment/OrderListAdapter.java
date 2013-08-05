@@ -10,6 +10,7 @@ import org.herod.worker.phone.model.Order;
 import org.herod.worker.phone.view.OrderView;
 
 import android.content.Context;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -23,10 +24,12 @@ public class OrderListAdapter extends BaseAdapter {
 
 	private List<Order> orders = new ArrayList<Order>();
 	private Context context;
+	private Handler handler;
 
-	public OrderListAdapter(Context context, List<Order> orders) {
+	public OrderListAdapter(Context context, List<Order> orders, Handler handler) {
 		this.orders = orders;
 		this.context = context;
+		this.handler = handler;
 	}
 
 	@Override
@@ -46,11 +49,12 @@ public class OrderListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View view;
+		OrderView view;
 		if (convertView == null) {
 			view = new OrderView(context);
+			view.setHandler(handler);
 		} else {
-			view = convertView;
+			view = (OrderView) convertView;
 		}
 		bindView((OrderView) view, position);
 		return view;

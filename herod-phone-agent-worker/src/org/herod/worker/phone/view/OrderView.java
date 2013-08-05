@@ -3,19 +3,33 @@
  */
 package org.herod.worker.phone.view;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.herod.framework.HerodTask;
+import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
 import org.herod.framework.utils.DateUtils;
+import org.herod.worker.phone.MainActivity;
 import org.herod.worker.phone.R;
+import org.herod.worker.phone.Result;
+import org.herod.worker.phone.WorkerContext;
+import org.herod.worker.phone.fragment.CancelOrderDialogFragment;
 import org.herod.worker.phone.fragment.ConfirmDialogFragment;
+import org.herod.worker.phone.fragment.FormFragment.OnCancelButtonClickListener;
+import org.herod.worker.phone.fragment.FormFragment.OnOkButtonClickListener;
 import org.herod.worker.phone.fragment.PlaceInfoDialogFragment;
-import org.herod.worker.phone.fragment.ConfirmDialogFragment.OnOkButtonClickListener;
+import org.herod.worker.phone.fragment.UpdateOrderDialogFragment;
 import org.herod.worker.phone.model.Order;
 import org.herod.worker.phone.model.OrderItem;
+import org.herod.worker.phone.model.OrderUpdateInfo;
 import org.herod.worker.phone.view.OrderItemView.GoodsQuantityChangedListener;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -41,6 +55,9 @@ public class OrderView extends LinearLayout implements
 	private OrderItemView summationView;
 	private FragmentActivity activity;
 
+	private Handler handler;
+	private List<OrderItemView> orderItemViews;
+
 	public OrderView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		initView(context);
@@ -64,11 +81,13 @@ public class OrderView extends LinearLayout implements
 		new InjectViewHelper().injectViews(this);
 		findViewById(R.id.editOrderButton).setOnClickListener(this);
 		findViewById(R.id.acceptOrderButton).setOnClickListener(this);
-		findViewById(R.id.deleteOrderButton).setOnClickListener(this);
-		findViewById(R.id.cancelButton).setOnClickListener(this);
-		findViewById(R.id.confirmButton).setOnClickListener(this);
+		findViewById(R.id.completeOrderButton).setOnClickListener(this);
+		findViewById(R.id.cancelOrderButton).setOnClickListener(this);
+		findViewById(R.id.cancelEditButton).setOnClickListener(this);
+		findViewById(R.id.confirmEditButton).setOnClickListener(this);
 		findViewById(R.id.shopName).setOnClickListener(this);
 		findViewById(R.id.buyerName).setOnClickListener(this);
+
 	}
 
 	@Override
@@ -78,18 +97,21 @@ public class OrderView extends LinearLayout implements
 
 	public void setOrder(Order order) {
 		this.order = order;
+		handleButtons(order);
 		setText(R.id.serialNumber, order.getSerialNumber());
 		setText(R.id.submitTime,
 				DateUtils.format("MM-dd HH:mm", order.getSubmitTime()));
 		orderItemsContainer.removeAllViews();
 		setText(R.id.shopName, order.getShopName());
 		setText(R.id.buyerName, order.getBuyerName());
+		setText(R.id.comment, order.getComment());
 
 		setText(R.id.shopTips, createShopTips(order));
 		summationView = new OrderItemView(getContext());
-		summationView.disableButtons();
+		summationView.setCanEdit(false);
 		summationView.setGoodsName("合计");
 		updateOrderSummationInfo();
+		orderItemViews = new ArrayList<OrderItemView>();
 
 		for (OrderItem item : order.getOrderItems()) {
 			addLineToOrderItemListView(orderItemsContainer);
@@ -98,12 +120,27 @@ public class OrderView extends LinearLayout implements
 			child.setGoodsQuantityChangedListener(this);
 			LayoutParams param = new LayoutParams(LayoutParams.MATCH_PARENT,
 					LayoutParams.WRAP_CONTENT);
+			orderItemViews.add(child);
 			orderItemsContainer.addView(child, param);
 		}
 		addLineToOrderItemListView(orderItemsContainer);
 		LayoutParams param = new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT);
 		orderItemsContainer.addView(summationView, param);
+	}
+
+	private void handleButtons(Order order) {
+		switch (order.getStatus()) {
+		case Submitted:
+			findViewById(R.id.acceptOrderButton).setVisibility(View.VISIBLE);
+			findViewById(R.id.completeOrderButton).setVisibility(View.GONE);
+			break;
+		case Acceptted:
+			findViewById(R.id.acceptOrderButton).setVisibility(View.GONE);
+			findViewById(R.id.completeOrderButton).setVisibility(View.VISIBLE);
+		default:
+			break;
+		}
 	}
 
 	private String createShopTips(Order order) {
@@ -138,16 +175,18 @@ public class OrderView extends LinearLayout implements
 			onEditOrderButtonClick();
 		} else if (v.getId() == R.id.acceptOrderButton) {
 			onAcceptOrderButtonClick();
-		} else if (v.getId() == R.id.deleteOrderButton) {
-			onDeleteOrderButtonClick();
-		} else if (v.getId() == R.id.cancelButton) {
-			onCancelButtonClick();
-		} else if (v.getId() == R.id.confirmButton) {
-			onConfirmButtonClick();
+		} else if (v.getId() == R.id.cancelOrderButton) {
+			onCancelOrderButtonClick();
+		} else if (v.getId() == R.id.cancelEditButton) {
+			onCancelEditButtonClick();
+		} else if (v.getId() == R.id.confirmEditButton) {
+			onConfirmEditButtonClick();
 		} else if (v.getId() == R.id.shopName) {
 			onShopNameClickListener();
 		} else if (v.getId() == R.id.buyerName) {
 			onBuyerNameClickListener();
+		} else if (v.getId() == R.id.completeOrderButton) {
+			onCompleteOrderButtonClick();
 		}
 	}
 
@@ -167,57 +206,128 @@ public class OrderView extends LinearLayout implements
 		args.putString("locationName", order.getShopName());
 		fragment.setArguments(args);
 		fragment.show(activity.getSupportFragmentManager(), null);
-
 	}
 
-	private void onDeleteOrderButtonClick() {
-		ConfirmDialogFragment.showDialog(activity, "确定删除该订单？",
-				new OnDeleteOrderByOkListener());
+	private void onCancelOrderButtonClick() {
+		CancelOrderDialogFragment.showDialog(activity,
+				new OnCancelOrderByOkListener());
 	}
 
-	private class OnDeleteOrderByOkListener implements OnOkButtonClickListener {
+	private class OnCancelOrderByOkListener implements OnOkButtonClickListener {
 		@Override
+		public void onOk(final Map<String, String> formDatas) {
+			new HerodTask<Object, Result>(new AbstracAsyncTaskable("取消订单成功！",
+					"取消订单失败，请重试！") {
+				public Result runOnBackground(Object... params) {
+					return WorkerContext.getWorkerService().cancelOrder(
+							order.getSerialNumber(), formDatas.get("reason"));
+				}
+			}).execute();
+		}
+	}
+
+	private void onCompleteOrderButtonClick() {
+		ConfirmDialogFragment.showDialog(activity, "确定完成该订单？",
+				new OnCompleteOrderByOkListener());
+
+	}
+
+	class OnCompleteOrderByOkListener
+			implements
+			org.herod.worker.phone.fragment.ConfirmDialogFragment.OnOkButtonClickListener {
 		public void onOk() {
-			// TODO
-			Toast.makeText(getContext(), "成功删除订单！", Toast.LENGTH_SHORT).show();
+			new HerodTask<Object, Result>(new AbstracAsyncTaskable("成功完成订单！",
+					"完成订单失败，请重试！") {
+				public Result runOnBackground(Object... params) {
+					return WorkerContext.getWorkerService().completeOrder(
+							order.getSerialNumber());
+				}
+			}).execute();
 		}
 	}
 
 	private void onAcceptOrderButtonClick() {
-		// TODO Auto-generated method stub
+		new HerodTask<Object, Result>(new AbstracAsyncTaskable("成功受理订单！",
+				"受理订单失败，请重试！") {
+			public Result runOnBackground(Object... params) {
+				return WorkerContext.getWorkerService().acceptOrder(
+						order.getSerialNumber());
+			}
+		}).execute();
 
 	}
 
-	private void onCancelButtonClick() {
-		enableOperationButtons();
-		// TODO
+	private void onCancelEditButtonClick() {
+		disableOperationButtons();
+		setOrder(order);
 	}
 
-	private void onConfirmButtonClick() {
-		enableOperationButtons();
-		// TODO
+	private void onConfirmEditButtonClick() {
+		UpdateOrderDialogFragment.showDialog(activity, order.getComment(),
+				new OnUpdateOrderByOkListener(),
+				new OnCancelButtonClickListener() {
+					public void onCancel() {
+						disableOperationButtons();
+					}
+				});
 	}
 
-	private void enableOperationButtons() {
-		setVisibility(View.VISIBLE, R.id.acceptOrderButton,
-				R.id.editOrderButton, R.id.deleteOrderButton);
-		setVisibility(View.GONE, R.id.cancelButton, R.id.confirmButton);
-		for (int i = 0; i < orderItemsContainer.getChildCount(); i++) {
-			View view = orderItemsContainer.getChildAt(i);
-			setVisibility(View.INVISIBLE, view.findViewById(R.id.addButton));
-			setVisibility(View.INVISIBLE, view.findViewById(R.id.reduceButton));
+	class OnUpdateOrderByOkListener implements OnOkButtonClickListener {
+		public void onOk(final Map<String, String> formDatas) {
+			new HerodTask<Object, Result>(new AbstracAsyncTaskable("修改订单成功！",
+					"修改订单失败，请重试！") {
+				public Result runOnBackground(Object... params) {
+					OrderEditor orderEditor = OrderEditorManager.getInstance()
+							.findOrderEditor(order.getSerialNumber());
+					if (orderEditor == null) {
+						return null;
+					}
+					OrderUpdateInfo updateInfo = orderEditor.toUpdateInfo(
+							formDatas.get("comment"), formDatas.get("reason"));
+					return WorkerContext.getWorkerService().updateOrder(
+							updateInfo);
+				}
+
+				public void onPostExecute(Result result) {
+					super.onPostExecute(result);
+					if (result != null && result.isSuccess()) {
+						OrderEditorManager.getInstance().removeOrderEditor(
+								order.getSerialNumber());
+					}
+					// TODO 失败之后要考虑：1、order view已经恢复到原始状态了，需要根据更新的状态进行界面更新。
+				}
+			}).execute();
 		}
+
+	}
+
+	private void disableOperationButtons() {
+		setVisibility(View.VISIBLE, R.id.acceptOrderButton,
+				R.id.editOrderButton, R.id.cancelOrderButton,
+				R.id.completeOrderButton);
+		setVisibility(View.GONE, R.id.cancelEditButton, R.id.confirmEditButton);
+		handleButtons(order);
+		for (OrderItemView orderItemView : orderItemViews) {
+			orderItemView.disableEditButtons();
+		}
+		OrderEditorManager.getInstance().removeOrderEditor(
+				order.getSerialNumber());
 	}
 
 	private void onEditOrderButtonClick() {
 		setVisibility(View.GONE, R.id.acceptOrderButton, R.id.editOrderButton,
-				R.id.deleteOrderButton);
-		setVisibility(View.VISIBLE, R.id.cancelButton, R.id.confirmButton);
-		for (int i = 0; i < orderItemsContainer.getChildCount(); i++) {
-			View view = orderItemsContainer.getChildAt(i);
-			setVisibility(View.VISIBLE, view.findViewById(R.id.addButton));
-			setVisibility(View.VISIBLE, view.findViewById(R.id.reduceButton));
+				R.id.cancelOrderButton, R.id.completeOrderButton);
+		setVisibility(View.VISIBLE, R.id.cancelEditButton,
+				R.id.confirmEditButton);
+		for (OrderItemView orderItemView : orderItemViews) {
+			orderItemView.enableEditButtons();
 		}
+
+		OrderEditorManager.getInstance().addOrderEditor(order);
+	}
+
+	public void setHandler(Handler handler) {
+		this.handler = handler;
 	}
 
 	private void setText(int id, Object data) {
@@ -238,6 +348,31 @@ public class OrderView extends LinearLayout implements
 			if (view != null) {
 				view.setVisibility(visibility);
 			}
+		}
+	}
+
+	abstract class AbstracAsyncTaskable implements
+			AsyncTaskable<Object, Result> {
+		private String successMessage;
+		private String failedMessage;
+
+		public AbstracAsyncTaskable(String successMessage, String failedMessage) {
+			super();
+			this.successMessage = successMessage;
+			this.failedMessage = failedMessage;
+		}
+
+		@Override
+		public void onPostExecute(Result result) {
+			String message;
+			if (result != null && result.isSuccess()) {
+				handler.sendMessage(handler
+						.obtainMessage(MainActivity.MESSAGE_KEY_REFRESH_ORDER_LIST));
+				message = successMessage;
+			} else {
+				message = failedMessage;
+			}
+			Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
 		}
 	}
 

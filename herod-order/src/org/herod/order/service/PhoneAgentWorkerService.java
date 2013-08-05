@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -77,7 +76,7 @@ public interface PhoneAgentWorkerService {
 	 * @param serialNumber
 	 * @return
 	 */
-	@PUT
+	@POST
 	@Path("orders/{serialNumber}/accept")
 	@Produces(DEFAULT_MEDIA_TYPE)
 	Result acceptOrder(@PathParam("serialNumber") String serialNumber,
@@ -90,7 +89,7 @@ public interface PhoneAgentWorkerService {
 	 * @param reason
 	 * @return
 	 */
-	@PUT
+	@POST
 	@Path("orders/{serialNumber}/update")
 	@Produces(DEFAULT_MEDIA_TYPE)
 	Result updateOrder(OrderUpdateInfo updateInfo,
@@ -103,7 +102,7 @@ public interface PhoneAgentWorkerService {
 	 * @param reason
 	 * @return
 	 */
-	@PUT
+	@POST
 	@Path("orders/{serialNumber}/reject")
 	@Produces(DEFAULT_MEDIA_TYPE)
 	Result rejectOrder(@PathParam("serialNumber") String serialNumber,
@@ -117,7 +116,7 @@ public interface PhoneAgentWorkerService {
 	 * @param reason
 	 * @return
 	 */
-	@PUT
+	@POST
 	@Path("orders/{serialNumber}/cancel")
 	@Produces(DEFAULT_MEDIA_TYPE)
 	Result cancelOrder(@PathParam("serialNumber") String serialNumber,
@@ -130,7 +129,7 @@ public interface PhoneAgentWorkerService {
 	 * @param serialNumber
 	 * @return
 	 */
-	@PUT
+	@POST
 	@Path("orders/{serialNumber}/complete")
 	@Produces(DEFAULT_MEDIA_TYPE)
 	Result completeOrder(@PathParam("serialNumber") String serialNumber,

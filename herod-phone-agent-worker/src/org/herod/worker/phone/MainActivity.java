@@ -11,6 +11,9 @@ import org.herod.worker.phone.view.OrderTabPageIndicator;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Handler.Callback;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -19,13 +22,15 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements Callback {
 	private List<OrderListFragment> orderListFragments;
+	private Handler handler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		handler = new Handler(this);
 		orderListFragments = createOrderListFragments();
 		FragmentPagerAdapter adapter = new OrderGroupAdapter(
 				getSupportFragmentManager());
@@ -53,6 +58,7 @@ public class MainActivity extends FragmentActivity {
 		fragment.setType(type);
 		fragment.setIndex(index);
 		fragment.setTabPageIndicator(indicator);
+		fragment.setHandler(handler);
 		return fragment;
 	}
 
@@ -98,5 +104,21 @@ public class MainActivity extends FragmentActivity {
 			return orderListFragments.size();
 		}
 	}
+
+	@Override
+	public boolean handleMessage(Message msg) {
+		switch (msg.what) {
+		case MESSAGE_KEY_REFRESH_ORDER_LIST:
+			for (OrderListFragment fragment : orderListFragments) {
+				fragment.refreshOrderList();
+			}
+			break;
+		default:
+			break;
+		}
+		return true;
+	}
+
+	public static final int MESSAGE_KEY_REFRESH_ORDER_LIST = 1;
 
 }

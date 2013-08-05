@@ -3,15 +3,14 @@
  */
 package org.herod.worker.phone.rest;
 
-import java.util.Date;
 import java.util.List;
 
 import org.herod.framework.rest.GZipRestTemplateBuilder;
 import org.herod.framework.rest.RestServiceSupport;
 import org.herod.framework.rest.URLBuilder;
-import org.herod.framework.tools.DateTypeAdapter;
 import org.herod.framework.tools.GsonUtils;
 import org.herod.worker.phone.Result;
+import org.herod.worker.phone.SimpleResult;
 import org.herod.worker.phone.WorkerService;
 import org.herod.worker.phone.model.Order;
 import org.herod.worker.phone.model.OrderUpdateInfo;
@@ -20,8 +19,6 @@ import org.springframework.web.client.RestTemplate;
 
 import android.content.Context;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -35,13 +32,11 @@ public class RestWorkerService extends RestServiceSupport implements
 		WorkerService {
 	private RestTemplate restTemplate;
 	private URLBuilder urlBuilder;
-	private Context applicationContext;
 
 	public RestWorkerService(Context context) {
 		super();
 		this.restTemplate = new GZipRestTemplateBuilder().buildRestTemplate();
 		this.urlBuilder = new RestUrlBuilder(context);
-		this.applicationContext = context.getApplicationContext();
 	}
 
 	@Override
@@ -85,32 +80,33 @@ public class RestWorkerService extends RestServiceSupport implements
 
 	@Override
 	public Result acceptOrder(String serialNumber) {
-		// TODO Auto-generated method stub
-		return null;
+		return postForObject("/herod/agentworker/orders/{serialNumber}/accept",
+				SimpleResult.class, null, serialNumber);
 	}
 
 	@Override
 	public Result updateOrder(OrderUpdateInfo updateInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		return postForObject("/herod/agentworker/orders/{serialNumber}/update",
+				SimpleResult.class, updateInfo, updateInfo.getOrderSerialNumber());
 	}
 
 	@Override
 	public Result rejectOrder(String serialNumber, String reason) {
-		// TODO Auto-generated method stub
-		return null;
+		return postForObject("/herod/agentworker/orders/{serialNumber}/reject",
+				SimpleResult.class, null, serialNumber);
 	}
 
 	@Override
 	public Result cancelOrder(String serialNumber, String reason) {
-		// TODO Auto-generated method stub
-		return null;
+		return postForObject("/herod/agentworker/orders/{serialNumber}/cancel",
+				SimpleResult.class, null, serialNumber);
 	}
 
 	@Override
 	public Result completeOrder(String serialNumber) {
-		// TODO Auto-generated method stub
-		return null;
+		return postForObject(
+				"/herod/agentworker/orders/{serialNumber}/complete",
+				SimpleResult.class, null, serialNumber);
 	}
 
 	@Override

@@ -12,14 +12,14 @@
         android:layout_height="wrap_content"
         android:layout_weight="4"
         android:gravity="left"
-        android:text="商品" />
+        android:text="@string/text_Goods" />
 
     <TextView
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="单价" />
+        android:text="@string/text_UnitPrice" />
 
     <ImageView
         android:layout_width="45dip"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="数量" />
+        android:text="@string/text_Quantity" />
 
     <ImageView
         android:layout_width="45dip"

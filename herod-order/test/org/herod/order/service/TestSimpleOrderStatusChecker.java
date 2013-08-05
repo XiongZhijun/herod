@@ -50,7 +50,7 @@ public class TestSimpleOrderStatusChecker {
 				currentStatus);
 		control.replay();
 		assertEquals(expected,
-				checker.canChangeStatus(serialNumber, destStatus));
+				checker.canNotChangeStatus(serialNumber, destStatus));
 		control.verify();
 	}
 
@@ -70,7 +70,7 @@ public class TestSimpleOrderStatusChecker {
 		expect(orderStatusFinder.findOrderStatus(serialNumber)).andReturn(
 				currentStatus);
 		control.replay();
-		assertEquals(expected, checker.canUpdate(serialNumber));
+		assertEquals(expected, checker.canNotUpdate(serialNumber));
 		control.verify();
 	}
 }

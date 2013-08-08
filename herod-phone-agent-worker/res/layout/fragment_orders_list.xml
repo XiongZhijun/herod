@@ -5,7 +5,7 @@
     android:background="#E5E5E5"
     android:orientation="vertical" >
 
-    <ListView
+    <org.herod.framework.widget.XListView
         android:id="@+id/ordersListView"
         android:layout_width="match_parent"
         android:layout_height="0dip"
@@ -13,6 +13,6 @@
         android:layout_weight="1"
         android:divider="#E5E5E5"
         android:dividerHeight="10dip" >
-    </ListView>
+    </org.herod.framework.widget.XListView>
 
 </LinearLayout>

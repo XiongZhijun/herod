@@ -1,10 +1,15 @@
 package org.herod.worker.phone.fragment;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.herod.framework.HerodTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
+import org.herod.framework.widget.XListView;
+import org.herod.framework.widget.XListView.IXListViewListener;
 import org.herod.worker.phone.R;
 import org.herod.worker.phone.WorkerContext;
 import org.herod.worker.phone.fragment.OrderListFragment.FragmentType;
@@ -17,11 +22,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 public class OrderListFragment extends Fragment implements
-		AsyncTaskable<FragmentType, List<Order>> {
-	private ListView ordersListView;
+		AsyncTaskable<FragmentType, List<Order>>, IXListViewListener {
+	private DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	private XListView ordersListView;
 	private String title;
 	private FragmentType type;
 	private int index = 0;
@@ -38,7 +43,10 @@ public class OrderListFragment extends Fragment implements
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_orders_list, container,
 				false);
-		ordersListView = (ListView) view.findViewById(R.id.ordersListView);
+		ordersListView = (XListView) view.findViewById(R.id.ordersListView);
+		ordersListView.setPullRefreshEnable(true);
+		ordersListView.setPullLoadEnable(false);
+		ordersListView.setXListViewListener(this);
 		return view;
 	}
 
@@ -77,6 +85,19 @@ public class OrderListFragment extends Fragment implements
 		ordersListView.setAdapter(new OrderListAdapter(getActivity(), orders,
 				handler));
 		indicator.setTabQauntity(index, orders.size());
+		ordersListView.stopRefresh();
+		ordersListView.setRefreshTime(dateFormat.format(new Date()));
+	}
+
+	@Override
+	public void onRefresh() {
+		refreshOrderList();
+	}
+
+	@Override
+	public void onLoadMore() {
+		// TODO Auto-generated method stub
+
 	}
 
 	public void setTabPageIndicator(OrderTabPageIndicator indicator) {

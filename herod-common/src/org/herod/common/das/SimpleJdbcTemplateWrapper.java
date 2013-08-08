@@ -233,7 +233,7 @@ public class SimpleJdbcTemplateWrapper implements HerodJdbcTemplate {
 				results[i] = arg;
 			}
 		}
-		return args;
+		return results;
 	}
 
 	protected static SqlParameterSource[] convert(SqlParameterSource[] args) {

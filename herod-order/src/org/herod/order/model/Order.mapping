@@ -2,3 +2,6 @@ DELIVERY_ADDRESS=deliveryAddress.address
 DELIVERY_LONGITUDE=deliveryAddress.location.longitude
 DELIVERY_LATITUDE=deliveryAddress.location.latitude
 DELIVERY_WORKER_ID=workerId
+SHOP_ADDRESS=shopAddress.address
+SHOP_LONGITUDE=shopAddress.location.longitude
+SHOP_LATITUDE=shopAddress.location.latitude

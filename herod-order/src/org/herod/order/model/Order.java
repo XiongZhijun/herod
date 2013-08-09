@@ -25,6 +25,9 @@ public class Order {
 	private long agentId;
 	/** 商店 */
 	private long shopId;
+	private String shopName;
+	private String shopPhone;
+	private Address shopAddress = new Address();
 	/** 处理的人 */
 	private long workerId;
 	private String workerName;
@@ -85,6 +88,30 @@ public class Order {
 
 	public void setShopId(long shopId) {
 		this.shopId = shopId;
+	}
+
+	public String getShopName() {
+		return shopName;
+	}
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
+
+	public String getShopPhone() {
+		return shopPhone;
+	}
+
+	public void setShopPhone(String shopPhone) {
+		this.shopPhone = shopPhone;
+	}
+
+	public Address getShopAddress() {
+		return shopAddress;
+	}
+
+	public void setShopAddress(Address shopAddress) {
+		this.shopAddress = shopAddress;
 	}
 
 	public long getWorkerId() {

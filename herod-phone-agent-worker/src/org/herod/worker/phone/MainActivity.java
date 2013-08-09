@@ -3,11 +3,16 @@ package org.herod.worker.phone;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.herod.framework.lbs.LocationManager;
+import org.herod.framework.lbs.SimpleLocationPlan;
+import org.herod.framework.lbs.SimpleLocationPlan.OnLocationSuccessListener;
 import org.herod.framework.utils.StringUtils;
 import org.herod.framework.widget.TabPageIndicator;
 import org.herod.worker.phone.fragment.OrderListFragment;
 import org.herod.worker.phone.fragment.OrderListFragment.FragmentType;
 import org.herod.worker.phone.view.OrderTabPageIndicator;
+
+import com.baidu.location.BDLocation;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +27,8 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends FragmentActivity implements Callback {
+public class MainActivity extends FragmentActivity implements Callback,
+		OnLocationSuccessListener {
 	private List<OrderListFragment> orderListFragments;
 	private Handler handler;
 
@@ -30,6 +36,8 @@ public class MainActivity extends FragmentActivity implements Callback {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		SimpleLocationPlan locationPlan = new SimpleLocationPlan(this);
+		LocationManager.getInstance(this).executeWithPlan(locationPlan);
 		handler = new Handler(this);
 		orderListFragments = createOrderListFragments();
 		FragmentPagerAdapter adapter = new OrderGroupAdapter(
@@ -117,6 +125,11 @@ public class MainActivity extends FragmentActivity implements Callback {
 			break;
 		}
 		return true;
+	}
+
+	@Override
+	public void onLocationSuccess(BDLocation location) {
+
 	}
 
 	public static final int MESSAGE_KEY_REFRESH_ORDER_LIST = 1;

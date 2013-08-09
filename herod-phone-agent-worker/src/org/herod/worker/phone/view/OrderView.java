@@ -195,6 +195,7 @@ public class OrderView extends LinearLayout implements
 		Bundle args = new Bundle();
 		args.putString("phone", order.getBuyerPhone());
 		args.putString("locationName", order.getDeliveryAddress().getAddress());
+		args.putSerializable("address", order.getDeliveryAddress());
 		fragment.setArguments(args);
 		fragment.show(activity.getSupportFragmentManager(), null);
 	}
@@ -203,7 +204,8 @@ public class OrderView extends LinearLayout implements
 		PlaceInfoDialogFragment fragment = new PlaceInfoDialogFragment();
 		Bundle args = new Bundle();
 		args.putString("phone", order.getShopPhone());
-		args.putString("locationName", order.getShopName());
+		args.putString("locationName", order.getShopAddress().getAddress());
+		args.putSerializable("address", order.getShopAddress());
 		fragment.setArguments(args);
 		fragment.show(activity.getSupportFragmentManager(), null);
 	}

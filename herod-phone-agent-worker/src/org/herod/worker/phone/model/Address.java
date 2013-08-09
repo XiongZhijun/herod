@@ -3,6 +3,10 @@
  */
 package org.herod.worker.phone.model;
 
+import java.io.Serializable;
+
+import org.herod.framework.Location;
+
 /**
  * 买家常用地址
  * 
@@ -10,11 +14,22 @@ package org.herod.worker.phone.model;
  * @email hust.xzj@gmail.com
  * 
  */
-public class Address {
+public class Address implements Serializable {
+	private static final long serialVersionUID = -348084199235297187L;
 	/** 地址 */
 	private String address;
 	/** 地理位置 */
 	private Location location;
+
+	public Address() {
+		super();
+	}
+
+	public Address(String address, Location location) {
+		super();
+		this.address = address;
+		this.location = location;
+	}
 
 	public String getAddress() {
 		return address;

@@ -27,6 +27,7 @@ public class Order {
 	private long agentId;
 	/** 商店 */
 	private long shopId;
+	private Address shopAddress = new Address();
 	/** 处理的人 */
 	private long workerId;
 	private String workerName;
@@ -47,10 +48,10 @@ public class Order {
 	private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 	/** 跑腿费 */
 	private double costOfRunErrands = 0;
-	private transient String shopName;
+	private String shopName;
+	private String shopPhone;
 	private transient double shopCostOfRunErrands = 0;
 	private transient double shopMinChargeForFreeDelivery = 0;
-	private String shopPhone;
 
 	public String getSerialNumber() {
 		return serialNumber;
@@ -98,6 +99,14 @@ public class Order {
 	public void setShopId(long shopId) {
 		this.shopId = shopId;
 		updateShopIdWithItems();
+	}
+
+	public Address getShopAddress() {
+		return shopAddress;
+	}
+
+	public void setShopAddress(Address shopAddress) {
+		this.shopAddress = shopAddress;
 	}
 
 	public long getWorkerId() {

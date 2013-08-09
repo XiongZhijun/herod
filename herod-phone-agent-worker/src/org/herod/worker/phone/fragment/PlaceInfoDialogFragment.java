@@ -3,7 +3,9 @@
  */
 package org.herod.worker.phone.fragment;
 
+import org.herod.worker.phone.MapActivity;
 import org.herod.worker.phone.R;
+import org.herod.worker.phone.model.Address;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -24,6 +26,7 @@ public class PlaceInfoDialogFragment extends DialogFragment implements
 		OnClickListener {
 	private String phone;
 	private String locationName;
+	private Address address;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,7 @@ public class PlaceInfoDialogFragment extends DialogFragment implements
 		view.findViewById(R.id.location).setOnClickListener(this);
 		phone = getArguments().getString("phone");
 		locationName = getArguments().getString("locationName");
+		address = (Address) getArguments().getSerializable("address");
 		((TextView) view.findViewById(R.id.phone)).setText(phone);
 		((TextView) view.findViewById(R.id.location)).setText(locationName);
 	}
@@ -60,7 +64,9 @@ public class PlaceInfoDialogFragment extends DialogFragment implements
 	}
 
 	private void onLocationClickListener() {
-		// TODO Auto-generated method stub
+		Intent intent = new Intent(getActivity(), MapActivity.class);
+		intent.putExtra("address", address);
+		startActivity(intent);
 
 	}
 

@@ -3,12 +3,15 @@
  */
 package org.herod.framework;
 
+import java.io.Serializable;
+
 /**
  * @author Xiong Zhijun
  * @email hust.xzj@gmail.com
  * 
  */
-public class Location {
+public class Location implements Serializable {
+	private static final long serialVersionUID = 8597305990067275881L;
 	/** 经度 */
 	private double longitude;
 	/** 纬度 */

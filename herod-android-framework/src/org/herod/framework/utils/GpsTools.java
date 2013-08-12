@@ -5,7 +5,7 @@
  */
 package org.herod.framework.utils;
 
-import org.herod.framework.Location;
+import org.herod.framework.lbs.Location;
 
 /**
  * @author Xiong Zhijun

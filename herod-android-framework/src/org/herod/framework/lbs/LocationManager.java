@@ -3,8 +3,6 @@
  */
 package org.herod.framework.lbs;
 
-import org.herod.framework.Location;
-
 import android.content.Context;
 
 import com.baidu.location.BDLocation;

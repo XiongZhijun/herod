@@ -3,7 +3,7 @@
  */
 package org.herod.buyer.phone.model;
 
-import org.herod.framework.Location;
+import org.herod.framework.lbs.Location;
 
 /**
  * 买家常用地址

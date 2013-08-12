@@ -1,7 +1,7 @@
 /*
  * Copyright © 2013-2014 Xiong Zhijun, All Rights Reserved. 
  */
-package org.herod.framework;
+package org.herod.framework.lbs;
 
 import java.io.Serializable;
 

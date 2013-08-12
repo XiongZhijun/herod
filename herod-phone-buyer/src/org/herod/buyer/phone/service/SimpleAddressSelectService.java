@@ -7,10 +7,10 @@ import java.util.List;
 
 import org.herod.buyer.phone.db.AddressDao;
 import org.herod.buyer.phone.fragments.SubmitOrderInfoFragment.AddressSelectService;
-import org.herod.buyer.phone.lbs.LocationManager;
 import org.herod.buyer.phone.model.Address;
-import org.herod.framework.Location;
 import org.herod.framework.db.DatabaseOpenHelper;
+import org.herod.framework.lbs.Location;
+import org.herod.framework.lbs.LocationManager;
 import org.herod.framework.utils.GpsTools;
 import org.springframework.util.CollectionUtils;
 

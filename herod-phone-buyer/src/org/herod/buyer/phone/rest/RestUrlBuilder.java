@@ -4,13 +4,13 @@
 package org.herod.buyer.phone.rest;
 
 import org.herod.buyer.phone.BuyerContext;
-import org.herod.buyer.phone.lbs.LocationManager;
+import org.herod.framework.lbs.LocationManager;
 import org.herod.framework.rest.URLBuilder;
 import org.herod.framework.tools.HttpUrlBuilderSupport;
 
-import com.baidu.location.BDLocation;
-
 import android.content.Context;
+
+import com.baidu.location.BDLocation;
 
 /**
  * 

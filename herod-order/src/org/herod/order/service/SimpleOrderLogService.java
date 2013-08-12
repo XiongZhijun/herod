@@ -21,17 +21,15 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class SimpleOrderLogService implements OrderLogService {
 	@Autowired
-	private AgentWorkerIdentityService agentWorkerIdentityService;
-	@Autowired
 	private LogDas logDas;
 
 	@Override
-	public void agentWorkerlog(String orderSerialNumber, Operation operation,
-			String reason) {
+	public void agentWorkerlog(long workerId, String orderSerialNumber,
+			Operation operation, String reason) {
 		OrderLog log = new OrderLog();
 		log.setOrderSerialNumber(orderSerialNumber);
 		log.setOperation(operation);
-		log.setOperator(agentWorkerIdentityService.getCurrentWorkerId() + "");
+		log.setOperator(workerId + "");
 		log.setOperatorType(OperatorType.AgentWorker);
 		log.setReason(reason);
 		logDas.addLog(log);
@@ -49,11 +47,6 @@ public class SimpleOrderLogService implements OrderLogService {
 			logs.add(log);
 		}
 		logDas.addLogs(logs);
-	}
-
-	public void setAgentWorkerIdentityService(
-			AgentWorkerIdentityService agentWorkerIdentityService) {
-		this.agentWorkerIdentityService = agentWorkerIdentityService;
 	}
 
 	public void setLogDas(LogDas logDas) {

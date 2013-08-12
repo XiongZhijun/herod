@@ -26,8 +26,8 @@ public interface OrderLogService {
 	 * @param operation
 	 * @param reason
 	 */
-	void agentWorkerlog(String orderSerialNumber, Operation operation,
-			String reason);
+	void agentWorkerlog(long workerId, String orderSerialNumber,
+			Operation operation, String reason);
 
 	/**
 	 * 保存{@link Buyer} 的提交日志

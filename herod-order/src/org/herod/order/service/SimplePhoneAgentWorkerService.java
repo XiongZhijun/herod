@@ -78,7 +78,8 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 		long workerId = loginService.getWorkerId(token, imei);
 		orderStatusUpdateService.updateOrderStatusAndWorker(serialNumber,
 				workerId, OrderStatus.Acceptted);
-		orderLogService.agentWorkerlog(serialNumber, Operation.Accept, null);
+		orderLogService.agentWorkerlog(workerId, serialNumber,
+				Operation.Accept, null);
 		return Result.SUCCESS;
 	}
 
@@ -101,7 +102,9 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 		orderItemUpdateService.addOrderItems(newOrderItems);
 		orderItemUpdateService.changeOrderItemQuantity(quantityChangeMap);
 
-		orderLogService.agentWorkerlog(serialNumber, Operation.Update, null);
+		long workerId = loginService.getWorkerId(token, imei);
+		orderLogService.agentWorkerlog(workerId, serialNumber,
+				Operation.Update, null);
 		return Result.SUCCESS;
 	}
 
@@ -115,7 +118,9 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 		}
 		orderStatusUpdateService.updateOrderStatus(serialNumber,
 				OrderStatus.Rejected);
-		orderLogService.agentWorkerlog(serialNumber, Operation.Reject, reason);
+		long workerId = loginService.getWorkerId(token, imei);
+		orderLogService.agentWorkerlog(workerId, serialNumber,
+				Operation.Reject, reason);
 		return Result.SUCCESS;
 	}
 
@@ -129,7 +134,9 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 		}
 		orderStatusUpdateService.updateOrderStatus(serialNumber,
 				OrderStatus.Cancelled);
-		orderLogService.agentWorkerlog(serialNumber, Operation.Cancel, reason);
+		long workerId = loginService.getWorkerId(token, imei);
+		orderLogService.agentWorkerlog(workerId, serialNumber,
+				Operation.Cancel, reason);
 		return Result.SUCCESS;
 	}
 
@@ -142,7 +149,9 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 		}
 		orderStatusUpdateService.updateOrderStatusAndCompleteTime(serialNumber,
 				OrderStatus.Completed, new Date());
-		orderLogService.agentWorkerlog(serialNumber, Operation.Complete, null);
+		long workerId = loginService.getWorkerId(token, imei);
+		orderLogService.agentWorkerlog(workerId, serialNumber,
+				Operation.Complete, null);
 		return Result.SUCCESS;
 	}
 

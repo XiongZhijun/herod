@@ -10,8 +10,6 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	<context:annotation-config />
 	<bean id="agentWorkerQueryService" class="org.herod.order.das.SimpleAgentWorkerQueryService" />
 	<bean id="logDas" class="org.herod.order.das.SimpleLogDas" />
-	<bean id="agentWorkerIdentityService"
-		class="org.herod.order.service.SimpleAgentWorkerIdentityService" />
 	<bean id="orderLogService" class="org.herod.order.service.SimpleOrderLogService" />
 	<bean id="buyerDas" class="org.herod.order.das.SimpleBuyerDas" />
 	<bean id="orderItemDas" class="org.herod.order.das.SimpleOrderItemDas" />

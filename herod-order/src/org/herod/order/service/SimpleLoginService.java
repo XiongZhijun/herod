@@ -35,15 +35,18 @@ public class SimpleLoginService implements LoginService {
 		if (worker == null) {
 			return null;
 		}
-		WorkerLoginInfo workerLoginInfo = buildWorkerLoginInfo(name, imei,
-				worker);
-		addToSet(workerLoginInfo);
+		WorkerLoginInfo workerLoginInfo = getWorkerLoginInfoByName(name, imei);
+		if (workerLoginInfo == null) {
+			workerLoginInfo = buildWorkerLoginInfo(name, imei, worker);
+			addToSet(workerLoginInfo);
+		}
 		return new Token(workerLoginInfo.tokenString);
 	}
 
 	private void addToSet(WorkerLoginInfo workerLoginInfo) {
 		writeLock.lock();
 		try {
+			loginInfoSet.remove(workerLoginInfo);
 			loginInfoSet.add(workerLoginInfo);
 		} finally {
 			writeLock.unlock();
@@ -66,6 +69,21 @@ public class SimpleLoginService implements LoginService {
 	public long getWorkerId(String token, String imei) {
 		WorkerLoginInfo workerLoginInfo = getWorkerLoginInfo(token, imei);
 		return workerLoginInfo == null ? 0 : workerLoginInfo.workerId;
+	}
+
+	private WorkerLoginInfo getWorkerLoginInfoByName(String name, String imei) {
+		readLock.lock();
+		try {
+			for (WorkerLoginInfo loginInfo : loginInfoSet) {
+				if (StringUtils.equals(loginInfo.imei, imei)
+						&& StringUtils.equals(loginInfo.name, name)) {
+					return loginInfo;
+				}
+			}
+		} finally {
+			readLock.unlock();
+		}
+		return null;
 	}
 
 	private WorkerLoginInfo getWorkerLoginInfo(String token, String imei) {

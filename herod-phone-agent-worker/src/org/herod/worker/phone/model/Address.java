@@ -5,7 +5,7 @@ package org.herod.worker.phone.model;
 
 import java.io.Serializable;
 
-import org.herod.framework.Location;
+import org.herod.framework.lbs.Location;
 
 /**
  * 买家常用地址

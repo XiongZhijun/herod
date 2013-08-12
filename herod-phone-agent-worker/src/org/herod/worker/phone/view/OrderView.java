@@ -9,10 +9,13 @@ import java.util.Map;
 
 import org.herod.framework.HerodTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
+import org.herod.framework.ViewFindable;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
 import org.herod.framework.utils.DateUtils;
+import org.herod.framework.utils.TextViewUtils;
 import org.herod.worker.phone.MainActivity;
+import org.herod.worker.phone.MapActivity;
 import org.herod.worker.phone.R;
 import org.herod.worker.phone.Result;
 import org.herod.worker.phone.WorkerContext;
@@ -22,12 +25,14 @@ import org.herod.worker.phone.fragment.FormFragment.OnCancelButtonClickListener;
 import org.herod.worker.phone.fragment.FormFragment.OnOkButtonClickListener;
 import org.herod.worker.phone.fragment.PlaceInfoDialogFragment;
 import org.herod.worker.phone.fragment.UpdateOrderDialogFragment;
+import org.herod.worker.phone.model.Address;
 import org.herod.worker.phone.model.Order;
 import org.herod.worker.phone.model.OrderItem;
 import org.herod.worker.phone.model.OrderUpdateInfo;
 import org.herod.worker.phone.view.OrderItemView.GoodsQuantityChangedListener;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -36,7 +41,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -47,7 +51,7 @@ import android.widget.Toast;
  * 
  */
 public class OrderView extends LinearLayout implements
-		GoodsQuantityChangedListener, OnClickListener {
+		GoodsQuantityChangedListener, OnClickListener, ViewFindable {
 	@InjectView(R.id.orderItemsListView)
 	private LinearLayout orderItemsContainer;
 
@@ -87,6 +91,7 @@ public class OrderView extends LinearLayout implements
 		findViewById(R.id.confirmEditButton).setOnClickListener(this);
 		findViewById(R.id.shopName).setOnClickListener(this);
 		findViewById(R.id.buyerName).setOnClickListener(this);
+		findViewById(R.id.route).setOnClickListener(this);
 
 	}
 
@@ -98,15 +103,15 @@ public class OrderView extends LinearLayout implements
 	public void setOrder(Order order) {
 		this.order = order;
 		handleButtons(order);
-		setText(R.id.serialNumber, order.getSerialNumber());
-		setText(R.id.submitTime,
+		TextViewUtils.setText(this, R.id.serialNumber, order.getSerialNumber());
+		TextViewUtils.setText(this, R.id.submitTime,
 				DateUtils.format("MM-dd HH:mm", order.getSubmitTime()));
 		orderItemsContainer.removeAllViews();
-		setText(R.id.shopName, order.getShopName());
-		setText(R.id.buyerName, order.getBuyerName());
-		setText(R.id.comment, order.getComment());
+		TextViewUtils.setText(this, R.id.shopName, order.getShopName());
+		TextViewUtils.setText(this, R.id.buyerName, order.getBuyerName());
+		TextViewUtils.setText(this, R.id.comment, order.getComment());
 
-		setText(R.id.shopTips, createShopTips(order));
+		TextViewUtils.setText(this, R.id.shopTips, createShopTips(order));
 		summationView = new OrderItemView(getContext());
 		summationView.setCanEdit(false);
 		summationView.setGoodsName("合计");
@@ -157,8 +162,9 @@ public class OrderView extends LinearLayout implements
 	private void updateOrderSummationInfo() {
 		summationView.setQuantity(order.getTotalQuantity());
 		summationView.setSellingPrice(order.getTotalAmount());
-		setText(R.id.costOfRunErrands, order.getCostOfRunErrands());
-		setText(R.id.totalWithCostOfRunErrands,
+		TextViewUtils.setText(this, R.id.costOfRunErrands,
+				order.getCostOfRunErrands());
+		TextViewUtils.setText(this, R.id.totalWithCostOfRunErrands,
 				Double.toString(order.getTotalAmountWithCostOfRunErrands()));
 	}
 
@@ -187,6 +193,13 @@ public class OrderView extends LinearLayout implements
 			onBuyerNameClickListener();
 		} else if (v.getId() == R.id.completeOrderButton) {
 			onCompleteOrderButtonClick();
+		} else if (v.getId() == R.id.route) {
+			Intent intent = new Intent(getContext(), MapActivity.class);
+			intent.putExtra("destAddress", order.getDeliveryAddress());
+			ArrayList<Address> wpAddresses = new ArrayList<Address>();
+			wpAddresses.add(order.getShopAddress());
+			intent.putExtra("wpAddresses", wpAddresses);
+			getContext().startActivity(intent);
 		}
 	}
 
@@ -330,12 +343,6 @@ public class OrderView extends LinearLayout implements
 
 	public void setHandler(Handler handler) {
 		this.handler = handler;
-	}
-
-	private void setText(int id, Object data) {
-		if (data != null) {
-			((TextView) findViewById(id)).setText(data.toString());
-		}
 	}
 
 	private void setVisibility(int visibility, int... ids) {

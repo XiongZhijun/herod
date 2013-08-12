@@ -65,7 +65,7 @@ public class PlaceInfoDialogFragment extends DialogFragment implements
 
 	private void onLocationClickListener() {
 		Intent intent = new Intent(getActivity(), MapActivity.class);
-		intent.putExtra("address", address);
+		intent.putExtra("destAddress", address);
 		startActivity(intent);
 
 	}

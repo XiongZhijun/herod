@@ -17,20 +17,72 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="25dp"
-        android:layout_marginTop="10dip"
+        android:layout_marginTop="60dip"
         android:background="@null"
         android:contentDescription="@null"
         android:src="@drawable/custom_loc" />
-    <ImageButton
+
+    <ImageButton
         android:id="@+id/route"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="25dp"
-        android:layout_marginTop="70dip"
+        android:layout_marginTop="120dip"
         android:background="@null"
         android:contentDescription="@null"
         android:src="@drawable/route" />
+
+    <LinearLayout
+        android:id="@+id/routeInfo"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:background="#6E6E6E6E"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dip"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFF"
+            android:textSize="14sp" />
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="："
+            android:textColor="#FFF"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="分钟/"
+            android:textColor="#FFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="米"
+            android:textColor="#FFF"
+            android:textSize="14sp" />
+    </LinearLayout>
 
 </RelativeLayout>

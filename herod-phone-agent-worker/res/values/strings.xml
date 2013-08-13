@@ -25,4 +25,11 @@
     <string name="label_SubmitTime">提交时间：</string>
     <string name="label_OrderComment">订单备注：</string>
 
-</resources>
+    <!-- Order Status -->
+    <string name="OrderStatus_Unsubmit">待提交</string>
+    <string name="OrderStatus_Submitted">待受理</string>
+    <string name="OrderStatus_Acceptted">待完成</string>
+    <string name="OrderStatus_Completed">已完成</string>
+    <string name="OrderStatus_Rejected">被拒绝</string>
+    <string name="OrderStatus_Cancelled">已取消</string>
+</resources>

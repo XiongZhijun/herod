@@ -121,6 +121,7 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 		long workerId = loginService.getWorkerId(token, imei);
 		orderLogService.agentWorkerlog(workerId, serialNumber,
 				Operation.Reject, reason);
+		// TODO 这个地方还需要重新分配worker
 		return Result.SUCCESS;
 	}
 

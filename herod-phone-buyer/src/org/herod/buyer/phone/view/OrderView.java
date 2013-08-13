@@ -12,10 +12,12 @@ import org.herod.buyer.phone.model.Order;
 import org.herod.buyer.phone.model.OrderItem;
 import org.herod.buyer.phone.model.OrderStatus;
 import org.herod.buyer.phone.view.OrderItemView.GoodsQuantityChangedListener;
+import org.herod.framework.ViewFindable;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
 import org.herod.framework.utils.DateUtils;
 import org.herod.framework.utils.ResourcesUtils;
+import org.herod.framework.utils.TextViewUtils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +36,7 @@ import android.widget.TextView;
  * 
  */
 public class OrderView extends LinearLayout implements
-		GoodsQuantityChangedListener {
+		GoodsQuantityChangedListener, ViewFindable {
 	@InjectView(R.id.shopName)
 	private TextView shopNameView;
 	@InjectView(R.id.shopPhone)
@@ -109,6 +111,8 @@ public class OrderView extends LinearLayout implements
 		setText(shopNameView, order.getShopName());
 		setText(shopPhoneView, order.getShopPhone());
 		setText(shopTipsView, createShopTips(order));
+		TextViewUtils.setText(getContext(), this, R.id.status,
+				order.getStatus());
 		summationView = new OrderItemView(getContext());
 		summationView.disableButtons();
 		summationView.setGoodsName("合计");

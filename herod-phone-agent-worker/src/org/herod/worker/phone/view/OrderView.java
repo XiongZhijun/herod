@@ -110,6 +110,8 @@ public class OrderView extends LinearLayout implements
 		TextViewUtils.setText(this, R.id.shopName, order.getShopName());
 		TextViewUtils.setText(this, R.id.buyerName, order.getBuyerName());
 		TextViewUtils.setText(this, R.id.comment, order.getComment());
+		TextViewUtils.setText(getContext(), this, R.id.status,
+				order.getStatus());
 
 		TextViewUtils.setText(this, R.id.shopTips, createShopTips(order));
 		summationView = new OrderItemView(getContext());

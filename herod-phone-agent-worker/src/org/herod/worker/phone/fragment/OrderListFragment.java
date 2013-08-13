@@ -6,10 +6,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.herod.framework.HerodTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.widget.XListView;
 import org.herod.framework.widget.XListView.IXListViewListener;
+import org.herod.worker.phone.AgentWorkerTask;
 import org.herod.worker.phone.R;
 import org.herod.worker.phone.WorkerContext;
 import org.herod.worker.phone.fragment.OrderListFragment.FragmentType;
@@ -62,7 +62,8 @@ public class OrderListFragment extends Fragment implements
 	}
 
 	public void refreshOrderList() {
-		new HerodTask<FragmentType, List<Order>>(this).execute(type);
+		new AgentWorkerTask<FragmentType, List<Order>>(getActivity(), this)
+				.execute(type);
 	}
 
 	@Override

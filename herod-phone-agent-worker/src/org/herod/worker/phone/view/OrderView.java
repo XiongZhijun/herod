@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.herod.framework.HerodTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.ViewFindable;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
 import org.herod.framework.utils.DateUtils;
 import org.herod.framework.utils.TextViewUtils;
+import org.herod.worker.phone.AgentWorkerTask;
 import org.herod.worker.phone.MainActivity;
 import org.herod.worker.phone.MapActivity;
 import org.herod.worker.phone.R;
@@ -231,13 +231,14 @@ public class OrderView extends LinearLayout implements
 	private class OnCancelOrderByOkListener implements OnOkButtonClickListener {
 		@Override
 		public void onOk(final Map<String, String> formDatas) {
-			new HerodTask<Object, Result>(new AbstracAsyncTaskable("取消订单成功！",
-					"取消订单失败，请重试！") {
-				public Result runOnBackground(Object... params) {
-					return WorkerContext.getWorkerService().cancelOrder(
-							order.getSerialNumber(), formDatas.get("reason"));
-				}
-			}).execute();
+			new AgentWorkerTask<Object, Result>(getContext(),
+					new AbstracAsyncTaskable("取消订单成功！", "取消订单失败，请重试！") {
+						public Result runOnBackground(Object... params) {
+							return WorkerContext.getWorkerService()
+									.cancelOrder(order.getSerialNumber(),
+											formDatas.get("reason"));
+						}
+					}).execute();
 		}
 	}
 
@@ -251,24 +252,24 @@ public class OrderView extends LinearLayout implements
 			implements
 			org.herod.worker.phone.fragment.ConfirmDialogFragment.OnOkButtonClickListener {
 		public void onOk() {
-			new HerodTask<Object, Result>(new AbstracAsyncTaskable("成功完成订单！",
-					"完成订单失败，请重试！") {
-				public Result runOnBackground(Object... params) {
-					return WorkerContext.getWorkerService().completeOrder(
-							order.getSerialNumber());
-				}
-			}).execute();
+			new AgentWorkerTask<Object, Result>(getContext(),
+					new AbstracAsyncTaskable("成功完成订单！", "完成订单失败，请重试！") {
+						public Result runOnBackground(Object... params) {
+							return WorkerContext.getWorkerService()
+									.completeOrder(order.getSerialNumber());
+						}
+					}).execute();
 		}
 	}
 
 	private void onAcceptOrderButtonClick() {
-		new HerodTask<Object, Result>(new AbstracAsyncTaskable("成功受理订单！",
-				"受理订单失败，请重试！") {
-			public Result runOnBackground(Object... params) {
-				return WorkerContext.getWorkerService().acceptOrder(
-						order.getSerialNumber());
-			}
-		}).execute();
+		new AgentWorkerTask<Object, Result>(getContext(),
+				new AbstracAsyncTaskable("成功受理订单！", "受理订单失败，请重试！") {
+					public Result runOnBackground(Object... params) {
+						return WorkerContext.getWorkerService().acceptOrder(
+								order.getSerialNumber());
+					}
+				}).execute();
 
 	}
 
@@ -289,29 +290,33 @@ public class OrderView extends LinearLayout implements
 
 	class OnUpdateOrderByOkListener implements OnOkButtonClickListener {
 		public void onOk(final Map<String, String> formDatas) {
-			new HerodTask<Object, Result>(new AbstracAsyncTaskable("修改订单成功！",
-					"修改订单失败，请重试！") {
-				public Result runOnBackground(Object... params) {
-					OrderEditor orderEditor = OrderEditorManager.getInstance()
-							.findOrderEditor(order.getSerialNumber());
-					if (orderEditor == null) {
-						return null;
-					}
-					OrderUpdateInfo updateInfo = orderEditor.toUpdateInfo(
-							formDatas.get("comment"), formDatas.get("reason"));
-					return WorkerContext.getWorkerService().updateOrder(
-							updateInfo);
-				}
+			new AgentWorkerTask<Object, Result>(getContext(),
+					new AbstracAsyncTaskable("修改订单成功！", "修改订单失败，请重试！") {
+						public Result runOnBackground(Object... params) {
+							OrderEditor orderEditor = OrderEditorManager
+									.getInstance().findOrderEditor(
+											order.getSerialNumber());
+							if (orderEditor == null) {
+								return null;
+							}
+							OrderUpdateInfo updateInfo = orderEditor
+									.toUpdateInfo(formDatas.get("comment"),
+											formDatas.get("reason"));
+							return WorkerContext.getWorkerService()
+									.updateOrder(updateInfo);
+						}
 
-				public void onPostExecute(Result result) {
-					super.onPostExecute(result);
-					if (result != null && result.isSuccess()) {
-						OrderEditorManager.getInstance().removeOrderEditor(
-								order.getSerialNumber());
-					}
-					// TODO 失败之后要考虑：1、order view已经恢复到原始状态了，需要根据更新的状态进行界面更新。
-				}
-			}).execute();
+						public void onPostExecute(Result result) {
+							super.onPostExecute(result);
+							if (result != null && result.isSuccess()) {
+								OrderEditorManager.getInstance()
+										.removeOrderEditor(
+												order.getSerialNumber());
+							}
+							// TODO 失败之后要考虑：1、order
+							// view已经恢复到原始状态了，需要根据更新的状态进行界面更新。
+						}
+					}).execute();
 		}
 
 	}

@@ -47,6 +47,7 @@
         <activity
             android:name="org.herod.worker.phone.LoginActivity"
             android:label="@string/app_name"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.PageIndicatorDefaults" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,11 +57,15 @@
         </activity>
         <activity
             android:name="org.herod.worker.phone.MainActivity"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.PageIndicatorDefaults" >
         </activity>
-        <activity android:name="org.herod.worker.phone.MapActivity" >
+        <activity
+            android:name="org.herod.worker.phone.MapActivity"
+            android:launchMode="singleTop" >
         </activity>
-        <service
+
+        <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" >

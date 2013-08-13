@@ -30,6 +30,8 @@ public class OrderItem {
 	private double supplyPrice;
 	/** 数量 */
 	private int quantity;
+	/** 原始数量 */
+	private int originalQuantity;
 	/** 订单项标记 */
 	private OrderItemFlag flag = OrderItemFlag.Common;
 
@@ -103,6 +105,14 @@ public class OrderItem {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	public int getOriginalQuantity() {
+		return originalQuantity;
+	}
+
+	public void setOriginalQuantity(int originalQuantity) {
+		this.originalQuantity = originalQuantity;
 	}
 
 	public OrderItemFlag getFlag() {

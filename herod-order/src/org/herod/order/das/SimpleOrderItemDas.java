@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import org.apache.commons.collections.CollectionUtils;
 import org.herod.common.das.HerodBeanPropertyRowMapper;
 import org.herod.common.das.HerodBeanPropertySqlParameterSource;
+import org.herod.common.das.HerodJdbcTemplate;
 import org.herod.order.das.SimpleOrderDas.OrderItemQueryService;
 import org.herod.order.model.OrderItem;
 import org.herod.order.model.OrderItemFlag;
@@ -21,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
 /**
  * 
@@ -32,16 +32,16 @@ import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
  */
 public class SimpleOrderItemDas implements OrderItemUpdateService,
 		OrderItemDas, OrderItemQueryService {
-	private static final String UPDATE_ITEM_QUANTITY_SQL = "UPDATE ZRH_ORDER_ITEM SET QUANTITY = ? WHERE SERIAL_NUMBER = ?";
-	private static final String UPDATE_ITEM_FLAG_SQL = "UPDATE ZRH_ORDER_ITEM SET FLAG = ? WHERE SERIAL_NUMBER = ?";
+	private static final String UPDATE_ITEM_QUANTITY_SQL = "UPDATE ZRH_ORDER_ITEM SET QUANTITY = ?, FLAG = ? WHERE SERIAL_NUMBER = ?";
+	private static final String DELETE_ITEM_SQL = "UPDATE ZRH_ORDER_ITEM SET QUANTITY = 0, FLAG = ? WHERE SERIAL_NUMBER = ?";
 	private static final String INSERT_ORDER_ITEM_SQL = "INSERT INTO ZRH_ORDER_ITEM (SERIAL_NUMBER,"
 			+ "ORDER_SERIAL_NUMBER,GOODS_ID,GOODS_CODE,AGENT_ID,"
-			+ "SHOP_ID,SELLING_PRICE,QUANTITY,FLAG) "
+			+ "SHOP_ID,SELLING_PRICE,QUANTITY,FLAG,ORIGINAL_QUANTITY) "
 			+ "VALUES (:serialNumber,:orderSerialNumber,:goodsId,"
-			+ ":goodsCode,:agentId,:shopId,:sellingPrice,:quantity,:flag) ";
+			+ ":goodsCode,:agentId,:shopId,:sellingPrice,:quantity,:flag,:quantity) ";
 	@Autowired
-	@Qualifier("simpleJdbcTemplate")
-	private SimpleJdbcTemplate simpleJdbcTemplate;
+	@Qualifier("herodJdbcTemplate")
+	private HerodJdbcTemplate herodJdbcTemplate;
 
 	@Override
 	public void addOrderItems(List<OrderItem> orderItems) {
@@ -51,7 +51,7 @@ public class SimpleOrderItemDas implements OrderItemUpdateService,
 			batchArgs[i] = new HerodBeanPropertySqlParameterSource(
 					orderItems.get(i));
 		}
-		simpleJdbcTemplate.batchUpdate(INSERT_ORDER_ITEM_SQL, batchArgs);
+		herodJdbcTemplate.batchUpdate(INSERT_ORDER_ITEM_SQL, batchArgs);
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class SimpleOrderItemDas implements OrderItemUpdateService,
 		for (String serialNumber : orderItemSerialNumbers) {
 			batchArgs.add(new Object[] { OrderItemFlag.Deleted, serialNumber });
 		}
-		simpleJdbcTemplate.batchUpdate(UPDATE_ITEM_FLAG_SQL, batchArgs);
+		herodJdbcTemplate.batchUpdate(DELETE_ITEM_SQL, batchArgs);
 	}
 
 	@Override
@@ -69,13 +69,14 @@ public class SimpleOrderItemDas implements OrderItemUpdateService,
 		List<Object[]> batchArgs = new ArrayList<Object[]>();
 		for (Entry<String, Integer> entry : orderItemQuantityChangeMap
 				.entrySet()) {
-			batchArgs.add(new Object[] { entry.getValue(), entry.getKey() });
+			batchArgs.add(new Object[] { entry.getValue(),
+					OrderItemFlag.Updated, entry.getKey() });
 		}
-		simpleJdbcTemplate.batchUpdate(UPDATE_ITEM_QUANTITY_SQL, batchArgs);
+		herodJdbcTemplate.batchUpdate(UPDATE_ITEM_QUANTITY_SQL, batchArgs);
 	}
 
-	public void setSimpleJdbcTemplate(SimpleJdbcTemplate simpleJdbcTemplate) {
-		this.simpleJdbcTemplate = simpleJdbcTemplate;
+	public void setHerodJdbcTemplate(HerodJdbcTemplate herodJdbcTemplate) {
+		this.herodJdbcTemplate = herodJdbcTemplate;
 	}
 
 	@Override
@@ -86,7 +87,7 @@ public class SimpleOrderItemDas implements OrderItemUpdateService,
 		}
 		RowMapper<OrderItem> rm = new HerodBeanPropertyRowMapper<OrderItem>(
 				OrderItem.class);
-		return simpleJdbcTemplate
+		return herodJdbcTemplate
 				.query("SELECT O.SERIAL_NUMBER,O.ORDER_SERIAL_NUMBER,O.GOODS_ID, "
 						+ "O.GOODS_CODE,O.AGENT_ID,O.SHOP_ID,O.SELLING_PRICE,O.SUPPLY_PRICE, "
 						+ "O.QUANTITY,O.FLAG,G.NAME GOODS_NAME,S.NAME SHOP_NAME "

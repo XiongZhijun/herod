@@ -13,6 +13,8 @@ package org.herod.buyer.phone.model;
 public enum OrderItemFlag {
 	/** 普通状态，说明该订单项是正常的 */
 	Common,
+	/** 被更新过 */
+	Updated,
 	/** 该订单项处在缺货的状态 */
 	Stockout,
 	/** 说明订单项已经本删除 */

@@ -20,25 +20,22 @@ public class SimpleRestResponseErrorHandler extends DefaultResponseErrorHandler 
 
 	@Override
 	public void handleError(ClientHttpResponse response) throws IOException {
-		try {
-			if (response == null) {
-				throw new NoResponseException("response is null.");
-			}
-			HttpStatus statusCode = response.getStatusCode();
-			if (statusCode == null) {
-				throw new NoResponseException("response status code is null.");
-			}
-			switch (statusCode.series()) {
-			case SERVER_ERROR:
-				throw new RestServerException(statusCode,
-						response.getStatusText());
-			case CLIENT_ERROR:
-			default:
-				throw new RestClientException(statusCode,
-						response.getStatusText());
-			}
-		} catch (RuntimeException e) {
-			throw new NoResponseException("服务器没有返回！", e);
+		if (response == null) {
+			throw new NoResponseException("response is null.");
+		}
+		HttpStatus statusCode = response.getStatusCode();
+		if (statusCode == null) {
+			throw new NoResponseException("response status code is null.");
+		}
+		if (statusCode.value() == 403) {
+			throw new AuthenticationException();
+		}
+		switch (statusCode.series()) {
+		case SERVER_ERROR:
+			throw new RestServerException(statusCode, response.getStatusText());
+		case CLIENT_ERROR:
+		default:
+			throw new RestClientException(statusCode, response.getStatusText());
 		}
 
 	}

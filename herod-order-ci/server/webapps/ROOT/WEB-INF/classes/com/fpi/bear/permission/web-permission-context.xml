@@ -14,7 +14,12 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="cacheManager" ref="cacheManager" />
 		<property name="rememberMeManager" ref="rememberMeManager" />
-		<property name="realm" ref="realm" />
+		<property name="realms">
+			<list>
+				<ref bean="realm" />
+				<bean class="org.herod.order.pms.AgentWorkerAuthorizingRealm" />
+			</list>
+		</property>
 	</bean>
 
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
@@ -24,12 +29,14 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 				/**/*.ico = anon
 				/**/*.css = anon
 				/**/*.js = anon
-				/**/*.jpg =	anon
-				/**/*.png =	anon
+				/**/*.jpg = anon
+				/**/*.png = anon
 				/**/*.gif = anon
 				/dwr/** = anon
 				/mobile/** = anon
+				/loginError.jsp = anon
 				/ = anon
+				/rest/herod/agentworker/** = agentworkerauthen
 				/rest/** = restauthen
 				/login.jsp = authcextend
 				/logout = logout
@@ -42,11 +49,19 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 					<bean class="com.fpi.bear.permission.filter.LogoutFilter" />
 				</entry>
 				<entry key="restauthen">
-					<bean class="org.herod.order.filter.HerodAuthenticationFilter" />
+					<bean class="org.herod.order.filter.HerodAuthenticationFilter">
+						<property name="loginUrl" value="/loginError.jsp" />
+					</bean>
+				</entry>
+				<entry key="agentworkerauthen">
+					<bean class="org.herod.order.filter.AgentWorkerAuthenticationFilter">
+						<property name="loginUrl" value="/loginError.jsp" />
+					</bean>
 				</entry>
 				<entry key="authcextend">
-					<bean class="com.fpi.bear.permission.filter.FormAuthenticationExtendFilter" />
-				</entry>				
+					<bean
+						class="com.fpi.bear.permission.filter.FormAuthenticationExtendFilter" />
+				</entry>
 			</map>
 		</property>
 		<property name="loginUrl">

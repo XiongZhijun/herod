@@ -3,7 +3,6 @@
  */
 package org.herod.buyer.phone;
 
-import org.herod.buyer.phone.mocks.BuyerServiceMock;
 import org.herod.buyer.phone.rest.RestBuyerService;
 import org.herod.order.common.OrderContext;
 
@@ -19,7 +18,7 @@ public class BuyerContext {
 	private static int restServerPort;
 	private static String imageServerHost;
 	private static int imageServerPort;
-	private static BuyerService buyerService = new BuyerServiceMock();
+	private static BuyerService buyerService;
 	private static ShopService shopService;
 	private static String restUserName;
 	private static String restPassword;

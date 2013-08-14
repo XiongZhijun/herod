@@ -1,7 +1,7 @@
 /*
  * Copyright © 2013-2014 Xiong Zhijun, All Rights Reserved. 
  */
-package org.herod.buyer.phone.model;
+package org.herod.buyer.phone.db;
 
 import org.herod.framework.lbs.Location;
 
@@ -12,7 +12,7 @@ import org.herod.framework.lbs.Location;
  * @email hust.xzj@gmail.com
  * 
  */
-public class Address {
+public class LocalAddress {
 	/** 联系人 */
 	private String name;
 	/** 联系电话 */

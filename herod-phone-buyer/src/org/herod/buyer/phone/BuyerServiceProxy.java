@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.herod.buyer.phone.model.Order;
 import org.herod.buyer.phone.model.Result;
 import org.herod.framework.MapWrapper;
+import org.herod.order.common.model.Order;
 
 /**
  * 

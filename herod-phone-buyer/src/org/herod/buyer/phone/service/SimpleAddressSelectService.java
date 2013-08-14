@@ -6,8 +6,8 @@ package org.herod.buyer.phone.service;
 import java.util.List;
 
 import org.herod.buyer.phone.db.AddressDao;
+import org.herod.buyer.phone.db.LocalAddress;
 import org.herod.buyer.phone.fragments.SubmitOrderInfoFragment.AddressSelectService;
-import org.herod.buyer.phone.model.Address;
 import org.herod.framework.db.DatabaseOpenHelper;
 import org.herod.framework.lbs.Location;
 import org.herod.framework.lbs.LocationManager;
@@ -25,8 +25,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SimpleAddressSelectService implements AddressSelectService {
 
 	@Override
-	public Address selectAddress(Context context) {
-		List<Address> allAddresses;
+	public LocalAddress selectAddress(Context context) {
+		List<LocalAddress> allAddresses;
 		SQLiteOpenHelper openHelper = new DatabaseOpenHelper(context);
 		try {
 			AddressDao addressDao = new AddressDao(openHelper);
@@ -38,9 +38,9 @@ public class SimpleAddressSelectService implements AddressSelectService {
 		if (CollectionUtils.isEmpty(allAddresses)) {
 			return null;
 		}
-		Address defaultAddress = allAddresses.get(0);
+		LocalAddress defaultAddress = allAddresses.get(0);
 		for (int i = 1; i < allAddresses.size(); i++) {
-			Address newAddress = allAddresses.get(i);
+			LocalAddress newAddress = allAddresses.get(i);
 			Location currentLocation = LocationManager.getInstance(context)
 					.getLatestLocation();
 			if (GpsTools.calculateDistance(defaultAddress.getLocation(),
@@ -58,7 +58,7 @@ public class SimpleAddressSelectService implements AddressSelectService {
 		SQLiteOpenHelper openHelper = new DatabaseOpenHelper(context);
 		Location location = LocationManager.getInstance(context)
 				.getLatestLocation();
-		Address address = new Address();
+		LocalAddress address = new LocalAddress();
 		address.setName(buyerName);
 		address.setPhone(buyerPhone);
 		address.setAddress(buyerAddress);

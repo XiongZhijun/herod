@@ -6,10 +6,10 @@ package org.herod.buyer.phone.db;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.herod.buyer.phone.model.Order;
-import org.herod.buyer.phone.model.OrderItem;
 import org.herod.framework.db.DatabaseAccessSupport;
 import org.herod.framework.db.DatabaseUtils;
+import org.herod.order.common.model.Order;
+import org.herod.order.common.model.OrderItem;
 
 import android.content.ContentValues;
 import android.database.Cursor;

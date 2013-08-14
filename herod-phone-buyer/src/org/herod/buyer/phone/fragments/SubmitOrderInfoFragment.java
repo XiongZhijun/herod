@@ -10,15 +10,16 @@ import org.herod.buyer.phone.AbstractOrdersActivity;
 import org.herod.buyer.phone.BuyerContext;
 import org.herod.buyer.phone.R;
 import org.herod.buyer.phone.ShoppingCartCache;
+import org.herod.buyer.phone.db.LocalAddress;
 import org.herod.buyer.phone.db.OrderDao;
-import org.herod.buyer.phone.model.Address;
-import org.herod.buyer.phone.model.Order;
-import org.herod.buyer.phone.model.OrderStatus;
 import org.herod.buyer.phone.model.Result;
 import org.herod.buyer.phone.model.ResultCode;
 import org.herod.buyer.phone.service.SimpleAddressSelectService;
 import org.herod.framework.db.DatabaseOpenHelper;
 import org.herod.framework.utils.StringUtils;
+import org.herod.order.common.model.Address;
+import org.herod.order.common.model.Order;
+import org.herod.order.common.model.OrderStatus;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -72,7 +73,7 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 		view.findViewById(R.id.submitOrdersButton).setOnClickListener(this);
 		view.findViewById(R.id.cancelButton).setOnClickListener(this);
 
-		Address selectedAddress = addressSelectService
+		LocalAddress selectedAddress = addressSelectService
 				.selectAddress(getActivity());
 		if (selectedAddress != null) {
 			setText(R.id.buyerName, selectedAddress.getName());
@@ -195,7 +196,7 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 	}
 
 	public static interface AddressSelectService {
-		Address selectAddress(Context context);
+		LocalAddress selectAddress(Context context);
 
 		void addCurrentAddress(Context context, String buyerName,
 				String buyerPhone, String buyerAddress);

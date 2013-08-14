@@ -7,11 +7,11 @@ import org.herod.buyer.phone.R;
 import org.herod.buyer.phone.ShoppingCartCache;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
-import org.herod.buyer.phone.model.Order;
-import org.herod.buyer.phone.model.OrderItem;
-import org.herod.buyer.phone.model.OrderStatus;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
+import org.herod.order.common.model.Order;
+import org.herod.order.common.model.OrderItem;
+import org.herod.order.common.model.OrderStatus;
 
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;

@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.herod.buyer.phone.model.Address;
 import org.herod.framework.db.DatabaseAccessSupport;
 import org.herod.framework.db.DatabaseUtils;
 
@@ -30,11 +29,11 @@ public class AddressDao extends DatabaseAccessSupport {
 		super(openHelper);
 	}
 
-	public void addAddress(Address address) {
+	public void addAddress(LocalAddress address) {
 		executeWrite(new NewAddressWriter(address));
 	}
 
-	public List<Address> getAllAddresses() {
+	public List<LocalAddress> getAllAddresses() {
 		return executeRead(new AllAddressReader());
 	}
 
@@ -45,9 +44,9 @@ public class AddressDao extends DatabaseAccessSupport {
 	}
 
 	class NewAddressWriter implements Writer {
-		private Address address;
+		private LocalAddress address;
 
-		public NewAddressWriter(Address address) {
+		public NewAddressWriter(LocalAddress address) {
 			super();
 			this.address = address;
 		}
@@ -67,12 +66,12 @@ public class AddressDao extends DatabaseAccessSupport {
 		}
 	}
 
-	class AllAddressReader implements Reader<List<Address>> {
+	class AllAddressReader implements Reader<List<LocalAddress>> {
 		@Override
-		public List<Address> read(SQLiteDatabase db) {
+		public List<LocalAddress> read(SQLiteDatabase db) {
 			Cursor cursor = db.query(ADDRESS, null, null, null, null, null,
 					"ID DESC");
-			return DatabaseUtils.toList(cursor, -1, -1, Address.class);
+			return DatabaseUtils.toList(cursor, -1, -1, LocalAddress.class);
 		}
 
 	}

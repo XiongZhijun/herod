@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.herod.buyer.phone.AbstractOrdersActivity;
-import org.herod.buyer.phone.model.Order;
 import org.herod.buyer.phone.view.OrderView;
+import org.herod.order.common.model.Order;
 
 import android.view.View;
 import android.view.ViewGroup;

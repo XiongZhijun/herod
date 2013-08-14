@@ -9,8 +9,8 @@ import org.herod.buyer.phone.adapter.OrderListAdapter;
 import org.herod.buyer.phone.db.OrderDao;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
-import org.herod.buyer.phone.model.Order;
 import org.herod.framework.db.DatabaseOpenHelper;
+import org.herod.order.common.model.Order;
 
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;

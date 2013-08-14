@@ -5,9 +5,9 @@ package org.herod.buyer.phone;
 
 import java.util.List;
 
-import org.herod.buyer.phone.model.Order;
 import org.herod.buyer.phone.model.Result;
 import org.herod.framework.MapWrapper;
+import org.herod.order.common.model.Order;
 
 /**
  * @author Xiong Zhijun

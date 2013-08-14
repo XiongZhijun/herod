@@ -6,7 +6,7 @@ import org.herod.buyer.phone.adapter.OrderListAdapter;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
 import org.herod.buyer.phone.fragments.SubmitOrderInfoFragment;
-import org.herod.buyer.phone.model.Order;
+import org.herod.order.common.model.Order;
 
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +16,6 @@ import android.widget.ListView;
 public class ShoppingCartActivity extends AbstractOrdersActivity {
 	private ListView orderListView;
 
-	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

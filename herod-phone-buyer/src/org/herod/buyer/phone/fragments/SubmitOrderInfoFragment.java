@@ -12,14 +12,14 @@ import org.herod.buyer.phone.R;
 import org.herod.buyer.phone.ShoppingCartCache;
 import org.herod.buyer.phone.db.LocalAddress;
 import org.herod.buyer.phone.db.OrderDao;
-import org.herod.buyer.phone.model.Result;
-import org.herod.buyer.phone.model.ResultCode;
 import org.herod.buyer.phone.service.SimpleAddressSelectService;
 import org.herod.framework.db.DatabaseOpenHelper;
 import org.herod.framework.utils.StringUtils;
 import org.herod.order.common.model.Address;
 import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderStatus;
+import org.herod.order.common.model.Result;
+import org.herod.order.common.model.ResultCode;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;

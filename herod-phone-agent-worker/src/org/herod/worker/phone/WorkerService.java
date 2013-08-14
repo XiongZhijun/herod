@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.herod.framework.MapWrapper;
 import org.herod.order.common.model.Order;
+import org.herod.order.common.model.Result;
 import org.herod.worker.phone.model.OrderUpdateInfo;
 import org.herod.worker.phone.model.Token;
 

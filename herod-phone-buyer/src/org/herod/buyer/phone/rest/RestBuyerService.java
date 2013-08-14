@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.herod.buyer.phone.BuyerService;
-import org.herod.buyer.phone.model.Result;
-import org.herod.buyer.phone.model.SimpleResult;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.rest.GZipRestTemplateBuilder;
 import org.herod.framework.rest.RestServiceSupport;
 import org.herod.framework.rest.URLBuilder;
 import org.herod.order.common.model.Order;
+import org.herod.order.common.model.Result;
+import org.herod.order.common.model.SimpleResult;
 import org.springframework.web.client.RestTemplate;
 
 import android.content.Context;

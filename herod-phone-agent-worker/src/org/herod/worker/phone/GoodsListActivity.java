@@ -8,7 +8,7 @@ import java.util.List;
 import org.herod.framework.MapWrapper;
 import org.herod.order.common.AbstractGoodsListActivity;
 import org.herod.order.common.AbstractGoodsListFragment.IShoppingCartCache;
-import org.herod.order.common.CommonGoodsListFragment;
+import org.herod.order.common.AbstractGoodsTypeGoodsListFragment;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -27,7 +27,7 @@ public class GoodsListActivity extends AbstractGoodsListActivity implements
 	}
 
 	@Override
-	protected CommonGoodsListFragment createGoodsListFragment() {
+	protected AbstractGoodsTypeGoodsListFragment createGoodsListFragment() {
 		return new GoodsListFragment();
 	}
 
@@ -40,7 +40,8 @@ public class GoodsListActivity extends AbstractGoodsListActivity implements
 		activity.startActivityForResult(intent, NEW_ORDER_ITEMS);
 	}
 
-	public static class GoodsListFragment extends CommonGoodsListFragment {
+	public static class GoodsListFragment extends
+			AbstractGoodsTypeGoodsListFragment {
 
 		@Override
 		protected List<MapWrapper<String, Object>> findGoodsesByType(

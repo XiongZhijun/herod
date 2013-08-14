@@ -3,7 +3,6 @@
  */
 package org.herod.buyer.phone;
 
-import org.herod.order.common.AbstractGoodsListFragment.IShoppingCartCache;
 import org.herod.order.common.AbstractGoodsListFragment.QuantityChangedListener;
 
 import android.app.ActionBar;

@@ -16,31 +16,18 @@ import android.support.v4.app.FragmentActivity;
  * @email hust.xzj@gmail.com
  * 
  */
-public abstract class CommonGoodsListFragment extends AbstractGoodsListFragment {
+public abstract class AbstractGoodsTypeGoodsListFragment extends
+		AbstractGoodsListFragment {
 	private MapWrapper<String, Object> goodsType;
-	private int count = 0;
 
 	@Override
-	public void onResume() {
-		super.onResume();
-		count = 0;
-	}
-
-	@Override
-	public List<MapWrapper<String, Object>> runOnBackground(Long... params) {
+	public List<MapWrapper<String, Object>> findPageGoods(int begin, int count) {
 		long id = goodsType.getLong("id");
-		return findGoodsesByType(id, count, 20);
+		return findGoodsesByType(id, begin, count);
 	}
 
 	protected abstract List<MapWrapper<String, Object>> findGoodsesByType(
 			long goodsTypeId, int begin, int count);
-
-	@Override
-	public void onPostExecute(List<MapWrapper<String, Object>> data) {
-		super.onPostExecute(data);
-		if (data != null)
-			count += data.size();
-	}
 
 	@Override
 	protected SimpleAdapter createAdapter(FragmentActivity activity) {

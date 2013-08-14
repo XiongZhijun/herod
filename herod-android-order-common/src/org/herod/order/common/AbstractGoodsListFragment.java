@@ -31,11 +31,13 @@ import android.widget.Toast;
  * 
  */
 public abstract class AbstractGoodsListFragment extends Fragment implements
-		AsyncTaskable<Long, List<MapWrapper<String, Object>>>,
+		AsyncTaskable<Object, List<MapWrapper<String, Object>>>,
 		IXListViewListener, ViewBinder {
 	protected XListView goodsListView;
 	protected SimpleAdapter adapter;
 	private boolean isFirstLoad = true;
+	private int begin = 0;
+	private int count = 30;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,17 +54,25 @@ public abstract class AbstractGoodsListFragment extends Fragment implements
 		return view;
 	}
 
-	protected abstract SimpleAdapter createAdapter(FragmentActivity activity);
-
 	@Override
 	public void onResume() {
 		super.onResume();
+		begin = 0;
 		isFirstLoad = true;
 		if (isLoadOnResume()) {
-			new HerodTask<Long, List<MapWrapper<String, Object>>>(this)
-					.execute();
+			loadGoods();
 		}
 	}
+
+	protected abstract SimpleAdapter createAdapter(FragmentActivity activity);
+
+	@Override
+	public List<MapWrapper<String, Object>> runOnBackground(Object... params) {
+		return findPageGoods(begin, count);
+	}
+
+	protected abstract List<MapWrapper<String, Object>> findPageGoods(
+			int begin, int count);
 
 	protected abstract boolean isLoadOnResume();
 
@@ -77,6 +87,7 @@ public abstract class AbstractGoodsListFragment extends Fragment implements
 			goodsListView.setPullLoadEnable(false);
 		} else {
 			adapter.addData(data);
+			begin += data.size();
 			goodsListView.stopLoadMore();
 		}
 		isFirstLoad = false;
@@ -144,13 +155,23 @@ public abstract class AbstractGoodsListFragment extends Fragment implements
 		}
 	}
 
+	public void clear() {
+		if (adapter != null)
+			adapter.clear();
+		begin = 0;
+	}
+
 	@Override
 	public void onRefresh() {
 	}
 
 	@Override
 	public void onLoadMore() {
-		new HerodTask<Long, List<MapWrapper<String, Object>>>(this).execute();
+		loadGoods();
+	}
+
+	public void loadGoods() {
+		new HerodTask<Object, List<MapWrapper<String, Object>>>(this).execute();
 	}
 
 	protected IShoppingCartCache getShoppingCartCache() {

@@ -33,6 +33,9 @@ public class GoodsSearchActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		if (searchview != null) {
+			searchview.setQuery(queryString, false);
+		}
 	}
 
 	@Override

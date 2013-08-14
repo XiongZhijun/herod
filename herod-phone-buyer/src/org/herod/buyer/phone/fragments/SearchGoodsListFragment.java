@@ -9,7 +9,6 @@ import java.util.List;
 import org.herod.buyer.phone.BuyerContext;
 import org.herod.buyer.phone.R;
 import org.herod.buyer.phone.ShoppingCartCache;
-import org.herod.framework.HerodTask;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.adapter.SimpleAdapter;
 import org.herod.order.common.AbstractGoodsListFragment;
@@ -26,18 +25,10 @@ import android.support.v4.app.FragmentActivity;
  */
 public class SearchGoodsListFragment extends AbstractGoodsListFragment {
 
-	private int begin = 0;
-	private int count = 30;
 	private String goodsName;
 
 	@Override
-	public void onResume() {
-		super.onResume();
-		begin = 0;
-	}
-
-	@Override
-	public List<MapWrapper<String, Object>> runOnBackground(Long... params) {
+	public List<MapWrapper<String, Object>> findPageGoods(int begin, int count) {
 		List<MapWrapper<String, Object>> goodses = BuyerContext
 				.getBuyerService().searchGoodses(goodsName, begin, count);
 		begin += count;
@@ -57,8 +48,8 @@ public class SearchGoodsListFragment extends AbstractGoodsListFragment {
 
 	public void query(String query) {
 		goodsName = query;
-		adapter.clear();
-		new HerodTask<Long, List<MapWrapper<String, Object>>>(this).execute();
+		clear();
+		loadGoods();
 	}
 
 	@Override

@@ -78,7 +78,7 @@ public abstract class AbstractGoodsListActivity extends BaseActivity implements
 		super.onBackPressed();
 	}
 
-	protected abstract CommonGoodsListFragment createGoodsListFragment();
+	protected abstract AbstractGoodsTypeGoodsListFragment createGoodsListFragment();
 
 	class GoodsFragmentAdapter extends FragmentPagerAdapter {
 		private List<MapWrapper<String, Object>> goodsTypes;
@@ -94,7 +94,7 @@ public abstract class AbstractGoodsListActivity extends BaseActivity implements
 
 		@Override
 		public Fragment getItem(int position) {
-			CommonGoodsListFragment fragment = createGoodsListFragment();
+			AbstractGoodsTypeGoodsListFragment fragment = createGoodsListFragment();
 			fragment.setGoodsType(goodsTypes.get(position));
 			Bundle args = new Bundle();
 			args.putAll(getIntent().getExtras());

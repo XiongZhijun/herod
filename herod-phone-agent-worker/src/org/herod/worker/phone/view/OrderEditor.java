@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import org.herod.worker.phone.model.Order;
-import org.herod.worker.phone.model.OrderItem;
+import org.herod.framework.utils.StringUtils;
+import org.herod.order.common.model.Order;
+import org.herod.order.common.model.OrderItem;
 import org.herod.worker.phone.model.OrderUpdateInfo;
 
 /**
@@ -22,6 +24,7 @@ import org.herod.worker.phone.model.OrderUpdateInfo;
 public class OrderEditor {
 	private Order order;
 	private Map<String, Integer> newOrderItemQuantityMap = new HashMap<String, Integer>();
+	private Map<Long, String> goodsIdSerialNumberMap = new HashMap<Long, String>();
 	private List<OrderItem> newOrderItems = new ArrayList<OrderItem>();
 
 	public OrderEditor(Order order) {
@@ -34,6 +37,21 @@ public class OrderEditor {
 		for (OrderItem orderItem : order.getOrderItems()) {
 			newOrderItemQuantityMap.put(orderItem.getSerialNumber(),
 					orderItem.getQuantity());
+			goodsIdSerialNumberMap.put(orderItem.getGoodsId(),
+					orderItem.getSerialNumber());
+		}
+	}
+
+	public void addNewOrderItems(Map<Long, OrderItem> newOrderItemMap) {
+		for (Entry<Long, OrderItem> entry : newOrderItemMap.entrySet()) {
+			String serialNumber = goodsIdSerialNumberMap.get(entry.getKey());
+			if (StringUtils.isBlank(serialNumber)) {
+				newOrderItems.add(entry.getValue());
+			} else {
+				Integer quantity = newOrderItemQuantityMap.get(serialNumber);
+				quantity += entry.getValue().getQuantity();
+				newOrderItemQuantityMap.put(serialNumber, quantity);
+			}
 		}
 	}
 

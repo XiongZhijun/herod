@@ -13,7 +13,11 @@ import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
 import org.herod.framework.utils.DateUtils;
 import org.herod.framework.utils.TextViewUtils;
+import org.herod.order.common.model.Address;
+import org.herod.order.common.model.Order;
+import org.herod.order.common.model.OrderItem;
 import org.herod.worker.phone.AgentWorkerTask;
+import org.herod.worker.phone.GoodsListActivity;
 import org.herod.worker.phone.MainActivity;
 import org.herod.worker.phone.MapActivity;
 import org.herod.worker.phone.R;
@@ -25,9 +29,6 @@ import org.herod.worker.phone.fragment.FormFragment.OnCancelButtonClickListener;
 import org.herod.worker.phone.fragment.FormFragment.OnOkButtonClickListener;
 import org.herod.worker.phone.fragment.PlaceInfoDialogFragment;
 import org.herod.worker.phone.fragment.UpdateOrderDialogFragment;
-import org.herod.worker.phone.model.Address;
-import org.herod.worker.phone.model.Order;
-import org.herod.worker.phone.model.OrderItem;
 import org.herod.worker.phone.model.OrderUpdateInfo;
 import org.herod.worker.phone.view.OrderItemView.GoodsQuantityChangedListener;
 
@@ -89,6 +90,7 @@ public class OrderView extends LinearLayout implements
 		findViewById(R.id.cancelOrderButton).setOnClickListener(this);
 		findViewById(R.id.cancelEditButton).setOnClickListener(this);
 		findViewById(R.id.confirmEditButton).setOnClickListener(this);
+		findViewById(R.id.addNewItemButton).setOnClickListener(this);
 		findViewById(R.id.shopName).setOnClickListener(this);
 		findViewById(R.id.buyerName).setOnClickListener(this);
 		findViewById(R.id.route).setOnClickListener(this);
@@ -189,6 +191,9 @@ public class OrderView extends LinearLayout implements
 			onCancelEditButtonClick();
 		} else if (v.getId() == R.id.confirmEditButton) {
 			onConfirmEditButtonClick();
+		} else if (v.getId() == R.id.addNewItemButton) {
+			GoodsListActivity.startGoodsActivity(activity, order.getShopId(),
+					order.getShopName(), order.getSerialNumber());
 		} else if (v.getId() == R.id.shopName) {
 			onShopNameClickListener();
 		} else if (v.getId() == R.id.buyerName) {
@@ -327,7 +332,8 @@ public class OrderView extends LinearLayout implements
 		setVisibility(View.VISIBLE, R.id.acceptOrderButton,
 				R.id.editOrderButton, R.id.cancelOrderButton,
 				R.id.completeOrderButton);
-		setVisibility(View.GONE, R.id.cancelEditButton, R.id.confirmEditButton);
+		setVisibility(View.GONE, R.id.cancelEditButton, R.id.confirmEditButton,
+				R.id.addNewItemButton);
 		handleButtons(order);
 		for (OrderItemView orderItemView : orderItemViews) {
 			orderItemView.disableEditButtons();
@@ -340,7 +346,7 @@ public class OrderView extends LinearLayout implements
 		setVisibility(View.GONE, R.id.acceptOrderButton, R.id.editOrderButton,
 				R.id.cancelOrderButton, R.id.completeOrderButton);
 		setVisibility(View.VISIBLE, R.id.cancelEditButton,
-				R.id.confirmEditButton);
+				R.id.confirmEditButton, R.id.addNewItemButton);
 		for (OrderItemView orderItemView : orderItemViews) {
 			orderItemView.enableEditButtons();
 		}

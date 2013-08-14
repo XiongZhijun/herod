@@ -5,9 +5,9 @@ package org.herod.worker.phone.view;
 
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
+import org.herod.order.common.model.Order;
+import org.herod.order.common.model.OrderItem;
 import org.herod.worker.phone.R;
-import org.herod.worker.phone.model.Order;
-import org.herod.worker.phone.model.OrderItem;
 
 import android.content.Context;
 import android.util.AttributeSet;

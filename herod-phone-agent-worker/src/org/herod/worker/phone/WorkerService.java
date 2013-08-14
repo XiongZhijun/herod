@@ -5,7 +5,8 @@ package org.herod.worker.phone;
 
 import java.util.List;
 
-import org.herod.worker.phone.model.Order;
+import org.herod.framework.MapWrapper;
+import org.herod.order.common.model.Order;
 import org.herod.worker.phone.model.OrderUpdateInfo;
 import org.herod.worker.phone.model.Token;
 
@@ -68,4 +69,9 @@ public interface WorkerService {
 	 * @return
 	 */
 	Result completeOrder(String serialNumber);
+
+	List<MapWrapper<String, Object>> findGoodsTypesByShop(long shopId);
+
+	List<MapWrapper<String, Object>> findGoodsesByType(long goodsTypeId,
+			int begin, int count);
 }

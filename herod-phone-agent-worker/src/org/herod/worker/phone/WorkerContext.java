@@ -4,6 +4,7 @@
 package org.herod.worker.phone;
 
 import org.herod.framework.utils.StringUtils;
+import org.herod.order.common.OrderContext;
 import org.herod.worker.phone.rest.RestWorkerService;
 
 import android.content.Context;
@@ -21,8 +22,8 @@ public abstract class WorkerContext {
 	private static WorkerService workerService;
 	private static String restServerHost;
 	private static int restServerPort;
-	private static String restUserName;
-	private static String restPassword;
+	private static String imageServerHost;
+	private static int imageServerPort;
 	private static String loginTokenString;
 	private static SharedPreferences defaultSharedPreferences;
 
@@ -31,10 +32,14 @@ public abstract class WorkerContext {
 		restServerHost = context.getString(R.string.RestServerHost);
 		restServerPort = Integer.parseInt(context
 				.getString(R.string.RestServerPort));
-		restUserName = context.getString(R.string.RestUserName);
-		restPassword = context.getString(R.string.RestPassword);
+		imageServerHost = context.getString(R.string.ImageServerHost);
+		imageServerPort = Integer.parseInt(context
+				.getString(R.string.ImageServerPort));
 		defaultSharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(context.getApplicationContext());
+
+		OrderContext.setImageServerHost(imageServerHost);
+		OrderContext.setImageServerPort(imageServerPort);
 	}
 
 	public static WorkerService getWorkerService() {
@@ -49,12 +54,12 @@ public abstract class WorkerContext {
 		return restServerPort;
 	}
 
-	public static String getRestUserName() {
-		return restUserName;
+	public static String getImageServerHost() {
+		return imageServerHost;
 	}
 
-	public static String getRestPassword() {
-		return restPassword;
+	public static int getImageServerPort() {
+		return imageServerPort;
 	}
 
 	public static void setLoginToken(String token) {

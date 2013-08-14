@@ -6,7 +6,7 @@ package org.herod.worker.phone.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.herod.worker.phone.model.Order;
+import org.herod.order.common.model.Order;
 import org.herod.worker.phone.view.OrderView;
 
 import android.content.Context;

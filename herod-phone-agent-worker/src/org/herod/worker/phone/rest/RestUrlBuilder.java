@@ -31,8 +31,6 @@ public class RestUrlBuilder extends HttpUrlBuilderSupport implements URLBuilder 
 		clean();
 		appendHttpServerUrl().appendRelativeUrl(REST)
 				.appendRelativeUrl(relativeUrl)
-//				.appendParams("username", WorkerContext.getRestUserName())
-//				.appendParams("password", WorkerContext.getRestPassword())
 				.appendParams("token", WorkerContext.getLoginTokenString())
 				.appendParams("imei", imei);
 		return getString();

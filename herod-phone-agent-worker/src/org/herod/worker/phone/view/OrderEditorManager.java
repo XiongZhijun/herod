@@ -6,7 +6,7 @@ package org.herod.worker.phone.view;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.herod.worker.phone.model.Order;
+import org.herod.order.common.model.Order;
 
 /**
  * 

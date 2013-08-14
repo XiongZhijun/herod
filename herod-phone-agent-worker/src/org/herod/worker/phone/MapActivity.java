@@ -10,15 +10,15 @@ import org.herod.framework.ViewFindable;
 import org.herod.framework.lbs.Location;
 import org.herod.framework.lbs.LocationManager;
 import org.herod.framework.utils.TextViewUtils;
+import org.herod.order.common.BaseActivity;
+import org.herod.order.common.model.Address;
 import org.herod.worker.phone.lbs.LocationItem;
 import org.herod.worker.phone.lbs.LocationOverlay;
 import org.herod.worker.phone.lbs.LocationUtils;
 import org.herod.worker.phone.lbs.MKSearchHelper;
 import org.herod.worker.phone.lbs.MKSearchListenerWrapper;
-import org.herod.worker.phone.model.Address;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -35,7 +35,7 @@ import com.baidu.platform.comapi.basestruct.GeoPoint;
  * @author Xiong Zhijun
  * @email hust.xzj@gmail.com
  */
-public class MapActivity extends FragmentActivity implements OnClickListener,
+public class MapActivity extends BaseActivity implements OnClickListener,
 		ViewFindable {
 	BMapManager mBMapMan = null;
 	MapView mMapView = null;

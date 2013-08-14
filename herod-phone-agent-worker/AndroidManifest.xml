@@ -64,6 +64,11 @@
             android:name="org.herod.worker.phone.MapActivity"
             android:launchMode="singleTop" >
         </activity>
+        <activity
+            android:name="org.herod.worker.phone.GoodsListActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.PageIndicatorDefaults" >
+        </activity>
 
         <service
             android:name="com.baidu.location.f"

@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.herod.framework.lbs.Location;
 import org.herod.framework.lbs.LocationManager;
-import org.herod.worker.phone.model.Address;
+import org.herod.order.common.model.Address;
 import org.springframework.util.CollectionUtils;
 
 import android.content.Context;

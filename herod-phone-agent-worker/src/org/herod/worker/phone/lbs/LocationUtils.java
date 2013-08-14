@@ -4,7 +4,7 @@
 package org.herod.worker.phone.lbs;
 
 import org.herod.framework.lbs.Location;
-import org.herod.worker.phone.model.Address;
+import org.herod.order.common.model.Address;
 
 import com.baidu.mapapi.search.MKPlanNode;
 import com.baidu.mapapi.search.MKWpNode;

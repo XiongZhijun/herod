@@ -9,11 +9,11 @@ import java.util.List;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.widget.XListView;
 import org.herod.framework.widget.XListView.IXListViewListener;
+import org.herod.order.common.model.Order;
 import org.herod.worker.phone.AgentWorkerTask;
 import org.herod.worker.phone.R;
 import org.herod.worker.phone.WorkerContext;
 import org.herod.worker.phone.fragment.OrderListFragment.FragmentType;
-import org.herod.worker.phone.model.Order;
 import org.herod.worker.phone.view.OrderTabPageIndicator;
 
 import android.os.Bundle;

@@ -3,9 +3,9 @@
  */
 package org.herod.worker.phone.fragment;
 
+import org.herod.order.common.model.Address;
 import org.herod.worker.phone.MapActivity;
 import org.herod.worker.phone.R;
-import org.herod.worker.phone.model.Address;
 
 import android.content.Intent;
 import android.net.Uri;

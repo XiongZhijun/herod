@@ -1,6 +1,7 @@
 package org.herod.worker.phone;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.herod.framework.lbs.LocationManager;
@@ -8,11 +9,13 @@ import org.herod.framework.lbs.SimpleLocationPlan;
 import org.herod.framework.lbs.SimpleLocationPlan.OnLocationSuccessListener;
 import org.herod.framework.utils.StringUtils;
 import org.herod.framework.widget.TabPageIndicator;
+import org.herod.order.common.BaseActivity;
+import org.herod.order.common.model.OrderItem;
 import org.herod.worker.phone.fragment.OrderListFragment;
 import org.herod.worker.phone.fragment.OrderListFragment.FragmentType;
+import org.herod.worker.phone.view.OrderEditor;
+import org.herod.worker.phone.view.OrderEditorManager;
 import org.herod.worker.phone.view.OrderTabPageIndicator;
-
-import com.baidu.location.BDLocation;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,14 +23,16 @@ import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends FragmentActivity implements Callback,
+import com.baidu.location.BDLocation;
+import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
+
+public class MainActivity extends BaseActivity implements Callback,
 		OnLocationSuccessListener {
 	private List<OrderListFragment> orderListFragments;
 	private Handler handler;
@@ -36,6 +41,7 @@ public class MainActivity extends FragmentActivity implements Callback,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		ImageLoaderUtils.initImageLoader(this);
 		SimpleLocationPlan locationPlan = new SimpleLocationPlan(this);
 		LocationManager.getInstance(this).executeWithPlan(locationPlan);
 		handler = new Handler(this);
@@ -87,9 +93,25 @@ public class MainActivity extends FragmentActivity implements Callback,
 		return super.onOptionsItemSelected(item);
 	}
 
+	protected boolean canBack() {
+		return false;
+	}
+
 	@Override
 	public void onBackPressed() {
 		finish();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		String serialNumber = data.getStringExtra("serialNumber");
+		HashMap<Long, OrderItem> newOrderItemsMap = (HashMap<Long, OrderItem>) data
+				.getSerializableExtra("newOrderItemsMap");
+		OrderEditor orderEditor = OrderEditorManager.getInstance().findOrderEditor(serialNumber);
+//		if(orderEditor != null) {
+//			orderEditor.
+//		}
 	}
 
 	class OrderGroupAdapter extends FragmentPagerAdapter {
@@ -133,5 +155,10 @@ public class MainActivity extends FragmentActivity implements Callback,
 	}
 
 	public static final int MESSAGE_KEY_REFRESH_ORDER_LIST = 1;
+
+	@Override
+	protected int getMenuConfigResource() {
+		return R.menu.main;
+	}
 
 }

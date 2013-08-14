@@ -72,6 +72,7 @@ public abstract class ImageLoaderUtils {
 
 	public static void loadImage(ImageView imageView, String url,
 			DisplayImageOptions options) {
+		checkAndInit(imageView.getContext());
 		imageLoader.displayImage(url, imageView, options, animateFirstListener);
 	}
 

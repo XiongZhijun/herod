@@ -22,7 +22,7 @@ public abstract class BaseActivity extends FragmentActivity {
 		showBackAction(canBack());
 	}
 
-	private void showBackAction(boolean canBack) {
+	protected void showBackAction(boolean canBack) {
 		ActionBar actionBar = getActionBar();
 		if (actionBar != null) {
 			actionBar.setHomeButtonEnabled(canBack);
@@ -49,10 +49,6 @@ public abstract class BaseActivity extends FragmentActivity {
 			return false;
 		}
 		getMenuInflater().inflate(menuConfigResource, menu);
-		return true;
-	}
-
-	protected boolean isSearchViewIconified() {
 		return true;
 	}
 

@@ -5,6 +5,7 @@ package org.herod.buyer.phone;
 
 import org.herod.buyer.phone.mocks.BuyerServiceMock;
 import org.herod.buyer.phone.rest.RestBuyerService;
+import org.herod.order.common.OrderContext;
 
 import android.content.Context;
 
@@ -36,6 +37,9 @@ public class BuyerContext {
 				.getString(R.string.ImageServerPort));
 		restUserName = context.getString(R.string.RestUserName);
 		restPassword = context.getString(R.string.RestPassword);
+
+		OrderContext.setImageServerHost(imageServerHost);
+		OrderContext.setImageServerPort(imageServerPort);
 	}
 
 	public static BuyerService getBuyerService() {

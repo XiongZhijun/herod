@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.herod.framework.MapWrapper;
 import org.herod.order.common.AbstractGoodsListActivity;
+import org.herod.order.common.AbstractGoodsListFragment.IShoppingCartCache;
 import org.herod.order.common.CommonGoodsListFragment;
 
 import android.app.Activity;
@@ -17,7 +18,8 @@ import android.content.Intent;
  * @author Xiong Zhijun
  * @email hust.xzj@gmail.com
  */
-public class GoodsListActivity extends AbstractGoodsListActivity {
+public class GoodsListActivity extends AbstractGoodsListActivity implements
+		IShoppingCartCache {
 
 	@Override
 	protected List<MapWrapper<String, Object>> findGoodsTypesByShop(long shopId) {
@@ -47,6 +49,24 @@ public class GoodsListActivity extends AbstractGoodsListActivity {
 					goodsTypeId, begin, count);
 		}
 
+	}
+
+	@Override
+	public int getQuantity(long shopId, long goodsId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int increase(long shopId, MapWrapper<String, ?> dataSet) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int decrease(long shopId, long goodsId) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

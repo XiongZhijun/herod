@@ -3,6 +3,9 @@
  */
 package org.herod.buyer.phone;
 
+import org.herod.order.common.AbstractGoodsListFragment.IShoppingCartCache;
+import org.herod.order.common.AbstractGoodsListFragment.QuantityChangedListener;
+
 import android.app.ActionBar;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
@@ -24,7 +27,8 @@ import android.widget.TextView;
  * @email hust.xzj@gmail.com
  * 
  */
-public class BaseActivity extends FragmentActivity {
+public class BaseActivity extends FragmentActivity implements
+		QuantityChangedListener {
 	private Menu menu;
 	protected SearchView searchview;
 

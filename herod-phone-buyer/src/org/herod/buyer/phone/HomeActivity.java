@@ -2,7 +2,6 @@ package org.herod.buyer.phone;
 
 import java.util.List;
 
-import org.herod.buyer.phone.adapter.ImageLoaderAdapter;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
 import org.herod.framework.HerodTask;
@@ -14,6 +13,7 @@ import org.herod.framework.lbs.SimpleLocationPlan.OnLocationSuccessListener;
 import org.herod.framework.tools.NetworkStatusTools;
 import org.herod.framework.tools.NetworkStatusTools.ConnectType;
 import org.herod.framework.tools.NetworkStatusTools.NetworkConnectInfo;
+import org.herod.order.common.ImageLoaderAdapter;
 
 import android.content.Intent;
 import android.os.Bundle;

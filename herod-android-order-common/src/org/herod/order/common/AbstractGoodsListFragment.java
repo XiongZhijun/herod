@@ -84,40 +84,46 @@ public abstract class AbstractGoodsListFragment extends Fragment implements
 
 	@Override
 	public boolean setViewValue(final View dataSetView,
-			final MapWrapper<String, Object> dataSet, final View view,
+			final MapWrapper<String, Object> goods, final View view,
 			String from, int to, int position, Object data,
 			String textRepresentation) {
-		final long goodsId = dataSet.getLong("id");
+		final long goodsId = goods.getLong("id");
 		if (to == R.id.quantity) {
-			int quantity = getShoppingCartCache().getQuantity(goodsId);
+			int quantity = getShoppingCartCache().getQuantity(getShopId(goods),
+					goodsId);
 			setQuantity(dataSetView, quantity);
 			return true;
 		}
 		if (to == R.id.reduceButton) {
 			view.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					decrease(dataSetView, dataSet, goodsId);
+					decrease(dataSetView, goods, goodsId);
 				}
 			});
 		}
 		if (to == R.id.addButton) {
 			view.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					increase(dataSetView, dataSet);
+					increase(dataSetView, goods);
 				}
 			});
 		}
 		return false;
 	}
 
-	private void increase(View dataSetView, MapWrapper<String, Object> dataSet) {
-		int quantity = getShoppingCartCache().increase(dataSet);
+	protected long getShopId(MapWrapper<String, Object> goods) {
+		return goods.getLong("shopId");
+	}
+
+	private void increase(View dataSetView, MapWrapper<String, Object> goods) {
+		int quantity = getShoppingCartCache().increase(getShopId(goods), goods);
 		setQuantity(dataSetView, quantity);
 	}
 
-	private void decrease(View dataSetView, MapWrapper<String, Object> dataSet,
+	private void decrease(View dataSetView, MapWrapper<String, Object> goods,
 			long goodsId) {
-		int quantity = getShoppingCartCache().decrease(goodsId);
+		int quantity = getShoppingCartCache().decrease(getShopId(goods),
+				goodsId);
 		setQuantity(dataSetView, quantity);
 	}
 
@@ -133,6 +139,9 @@ public abstract class AbstractGoodsListFragment extends Fragment implements
 			quantityView.setVisibility(View.INVISIBLE);
 			reduceButton.setVisibility(View.INVISIBLE);
 		}
+		if (getActivity() instanceof QuantityChangedListener) {
+			((QuantityChangedListener) getActivity()).updateTotalQuantity();
+		}
 	}
 
 	@Override
@@ -144,8 +153,21 @@ public abstract class AbstractGoodsListFragment extends Fragment implements
 		new HerodTask<Long, List<MapWrapper<String, Object>>>(this).execute();
 	}
 
-	protected AbstractGoodsListActivity getShoppingCartCache() {
-		return (AbstractGoodsListActivity) getActivity();
+	protected IShoppingCartCache getShoppingCartCache() {
+		return (IShoppingCartCache) getActivity();
 	}
 
+	public static interface QuantityChangedListener {
+		void updateTotalQuantity();
+	}
+
+	public static interface IShoppingCartCache {
+
+		int getQuantity(long shopId, long goodsId);
+
+		int increase(long shopId, MapWrapper<String, ?> goods);
+
+		int decrease(long shopId, long goodsId);
+
+	}
 }

@@ -11,13 +11,14 @@ import java.util.Map;
 import org.herod.buyer.phone.model.Order;
 import org.herod.buyer.phone.model.OrderItem;
 import org.herod.framework.MapWrapper;
+import org.herod.order.common.AbstractGoodsListFragment.IShoppingCartCache;
 
 /**
  * @author Xiong Zhijun
  * @email hust.xzj@gmail.com
  * 
  */
-public class ShoppingCartCache {
+public class ShoppingCartCache implements IShoppingCartCache {
 	private static ShoppingCartCache instance = new ShoppingCartCache();
 	private Map<Long, Order> orderCaches = new HashMap<Long, Order>();
 	private List<GoodsQuantityChangedListener> listeners = new ArrayList<ShoppingCartCache.GoodsQuantityChangedListener>();

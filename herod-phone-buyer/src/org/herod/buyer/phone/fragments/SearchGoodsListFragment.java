@@ -8,10 +8,12 @@ import java.util.List;
 
 import org.herod.buyer.phone.BuyerContext;
 import org.herod.buyer.phone.R;
-import org.herod.buyer.phone.adapter.ImageLoaderAdapter;
+import org.herod.buyer.phone.ShoppingCartCache;
 import org.herod.framework.HerodTask;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.adapter.SimpleAdapter;
+import org.herod.order.common.AbstractGoodsListFragment;
+import org.herod.order.common.ImageLoaderAdapter;
 
 import android.support.v4.app.FragmentActivity;
 
@@ -53,11 +55,6 @@ public class SearchGoodsListFragment extends AbstractGoodsListFragment {
 						R.id.reduceButton, R.id.shopName, R.id.unit });
 	}
 
-	@Override
-	protected long getGoodsShopId(MapWrapper<String, Object> goods) {
-		return goods.getLong("shopId");
-	}
-
 	public void query(String query) {
 		goodsName = query;
 		adapter.clear();
@@ -69,4 +66,7 @@ public class SearchGoodsListFragment extends AbstractGoodsListFragment {
 		return false;
 	}
 
+	protected IShoppingCartCache getShoppingCartCache() {
+		return ShoppingCartCache.getInstance();
+	}
 }

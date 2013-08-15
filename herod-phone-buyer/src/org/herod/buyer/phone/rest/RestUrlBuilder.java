@@ -31,10 +31,8 @@ public class RestUrlBuilder extends HttpUrlBuilderSupport implements URLBuilder 
 	@Override
 	public String build(String relativeUrl) {
 		clean();
-		appendHttpServerUrl().appendRelativeUrl(REST)
-				.appendRelativeUrl(relativeUrl)
-				.appendParams("username", getRestUserName())
-				.appendParams("password", getRestPassword());
+		appendHttpServerUrl().appendRelativeUrl(REST).appendRelativeUrl(
+				relativeUrl);
 		BDLocation latestLocation = LocationManager.getInstance(context)
 				.getLatestBDLocation();
 		if (latestLocation != null) {
@@ -42,14 +40,6 @@ public class RestUrlBuilder extends HttpUrlBuilderSupport implements URLBuilder 
 			appendParams("longitude", latestLocation.getLongitude());
 		}
 		return getString();
-	}
-
-	private String getRestPassword() {
-		return BuyerContext.getRestPassword();
-	}
-
-	private String getRestUserName() {
-		return BuyerContext.getRestUserName();
 	}
 
 	@Override

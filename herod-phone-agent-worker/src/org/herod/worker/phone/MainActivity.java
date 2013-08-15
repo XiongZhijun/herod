@@ -1,7 +1,6 @@
 package org.herod.worker.phone;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.herod.framework.lbs.LocationManager;
@@ -10,11 +9,8 @@ import org.herod.framework.lbs.SimpleLocationPlan.OnLocationSuccessListener;
 import org.herod.framework.utils.StringUtils;
 import org.herod.framework.widget.TabPageIndicator;
 import org.herod.order.common.BaseActivity;
-import org.herod.order.common.model.OrderItem;
 import org.herod.worker.phone.fragment.OrderListFragment;
 import org.herod.worker.phone.fragment.OrderListFragment.FragmentType;
-import org.herod.worker.phone.view.OrderEditor;
-import org.herod.worker.phone.view.OrderEditorManager;
 import org.herod.worker.phone.view.OrderTabPageIndicator;
 
 import android.content.Intent;
@@ -100,18 +96,6 @@ public class MainActivity extends BaseActivity implements Callback,
 	@Override
 	public void onBackPressed() {
 		finish();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		String serialNumber = data.getStringExtra("serialNumber");
-		HashMap<Long, OrderItem> newOrderItemsMap = (HashMap<Long, OrderItem>) data
-				.getSerializableExtra("newOrderItemsMap");
-		OrderEditor orderEditor = OrderEditorManager.getInstance().findOrderEditor(serialNumber);
-//		if(orderEditor != null) {
-//			orderEditor.
-//		}
 	}
 
 	class OrderGroupAdapter extends FragmentPagerAdapter {

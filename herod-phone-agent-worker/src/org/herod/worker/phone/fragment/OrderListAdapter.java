@@ -25,10 +25,13 @@ public class OrderListAdapter extends BaseAdapter {
 	private List<Order> orders = new ArrayList<Order>();
 	private Context context;
 	private Handler handler;
+	private OrderListFragment fragment;
 
-	public OrderListAdapter(Context context, List<Order> orders, Handler handler) {
+	public OrderListAdapter(OrderListFragment fragment, List<Order> orders,
+			Handler handler) {
 		this.orders = orders;
-		this.context = context;
+		this.context = fragment.getActivity();
+		this.fragment = fragment;
 		this.handler = handler;
 	}
 
@@ -52,6 +55,7 @@ public class OrderListAdapter extends BaseAdapter {
 		OrderView view;
 		if (convertView == null) {
 			view = new OrderView(context);
+			view.setFragment(fragment);
 			view.setHandler(handler);
 		} else {
 			view = (OrderView) convertView;

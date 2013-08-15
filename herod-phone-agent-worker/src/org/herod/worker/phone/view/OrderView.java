@@ -18,7 +18,6 @@ import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderItem;
 import org.herod.order.common.model.Result;
 import org.herod.worker.phone.AgentWorkerTask;
-import org.herod.worker.phone.GoodsListActivity;
 import org.herod.worker.phone.MainActivity;
 import org.herod.worker.phone.MapActivity;
 import org.herod.worker.phone.R;
@@ -27,6 +26,7 @@ import org.herod.worker.phone.fragment.CancelOrderDialogFragment;
 import org.herod.worker.phone.fragment.ConfirmDialogFragment;
 import org.herod.worker.phone.fragment.FormFragment.OnCancelButtonClickListener;
 import org.herod.worker.phone.fragment.FormFragment.OnOkButtonClickListener;
+import org.herod.worker.phone.fragment.OrderListFragment;
 import org.herod.worker.phone.fragment.PlaceInfoDialogFragment;
 import org.herod.worker.phone.fragment.UpdateOrderDialogFragment;
 import org.herod.worker.phone.model.OrderUpdateInfo;
@@ -62,6 +62,8 @@ public class OrderView extends LinearLayout implements
 
 	private Handler handler;
 	private List<OrderItemView> orderItemViews;
+
+	private OrderListFragment fragment;
 
 	public OrderView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -192,7 +194,7 @@ public class OrderView extends LinearLayout implements
 		} else if (v.getId() == R.id.confirmEditButton) {
 			onConfirmEditButtonClick();
 		} else if (v.getId() == R.id.addNewItemButton) {
-			GoodsListActivity.startGoodsActivity(activity, order.getShopId(),
+			fragment.startGoodsActivity(this, order.getShopId(),
 					order.getShopName(), order.getSerialNumber());
 		} else if (v.getId() == R.id.shopName) {
 			onShopNameClickListener();
@@ -396,6 +398,10 @@ public class OrderView extends LinearLayout implements
 			}
 			Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
 		}
+	}
+
+	public void setFragment(OrderListFragment fragment) {
+		this.fragment = fragment;
 	}
 
 }

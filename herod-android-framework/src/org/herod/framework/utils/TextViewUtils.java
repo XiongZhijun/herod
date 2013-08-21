@@ -14,12 +14,6 @@ import android.widget.TextView;
  */
 public abstract class TextViewUtils {
 
-	public static void setTextWithObject(ViewFindable viewFindable, int id,
-			Object data) {
-		String value = data == null ? StringUtils.EMPTY : data.toString();
-		((TextView) viewFindable.findViewById(id)).setText(value);
-	}
-
 	public static void setText(ViewFindable viewFindable, int id, Object data) {
 		if (data != null) {
 			((TextView) viewFindable.findViewById(id)).setText(toString(data));
@@ -27,9 +21,12 @@ public abstract class TextViewUtils {
 	}
 
 	private static String toString(Object data) {
-		if (data instanceof Enum) {
+		if (data == null) {
+			return StringUtils.EMPTY;
+		} else if (data instanceof Enum) {
 			return ResourcesUtils.getEnumShowName((Enum<?>) data);
+		} else {
+			return data.toString();
 		}
-		return data.toString();
 	}
 }

@@ -59,7 +59,7 @@ public class FormHelper {
 			Object value = BeanUtils
 					.getProperty(target, getterMap.get(from[i]));
 			Serializer serializer = findSerializer(value);
-			TextViewUtils.setTextWithObject(viewFindable, to[i],
+			TextViewUtils.setText(viewFindable, to[i],
 					serializer.serialize(value));
 		}
 	}

@@ -102,7 +102,7 @@ public class OrderView extends LinearLayout implements
 			findViewById(R.id.historyInfo).setVisibility(View.VISIBLE);
 			findViewById(R.id.cancelOrderButton).setVisibility(View.INVISIBLE);
 			setText(statusView,
-					ResourcesUtils.getEnumShowName(activity, order.getStatus()));
+					ResourcesUtils.getEnumShowName(order.getStatus()));
 			setText(serialNumberView, order.getSerialNumber());
 			setText(submitTimeView,
 					DateUtils.format("MM-dd HH:mm", order.getSubmitTime()));
@@ -111,8 +111,7 @@ public class OrderView extends LinearLayout implements
 		setText(shopNameView, order.getShopName());
 		setText(shopPhoneView, order.getShopPhone());
 		setText(shopTipsView, createShopTips(order));
-		TextViewUtils.setText(getContext(), this, R.id.status,
-				order.getStatus());
+		TextViewUtils.setText(this, R.id.status, order.getStatus());
 		summationView = new OrderItemView(getContext());
 		summationView.disableButtons();
 		summationView.setGoodsName("合计");

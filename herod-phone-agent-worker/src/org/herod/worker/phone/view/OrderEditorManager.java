@@ -3,8 +3,8 @@
  */
 package org.herod.worker.phone.view;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.herod.order.common.model.Order;
 
@@ -17,26 +17,47 @@ import org.herod.order.common.model.Order;
  */
 public class OrderEditorManager {
 	private static OrderEditorManager manager = new OrderEditorManager();
-	private Map<String, OrderEditor> editorMap = new HashMap<String, OrderEditor>();
+	private Lock lock = new ReentrantLock();
+	private OrderEditor orderEditor;
+	private boolean inEdit = false;
 
 	public static OrderEditorManager getInstance() {
 		return manager;
 	}
 
-	public void addOrderEditor(Order order) {
-		OrderEditor editor = editorMap.get(order.getSerialNumber());
-		if (editor == null) {
-			editorMap.put(order.getSerialNumber(), new OrderEditor(order));
-		} else {
-			editor.setOrder(order);
+	public boolean startEdit(Order order) {
+		lock.lock();
+		try {
+			if (inEdit) {
+				return false;
+			}
+			orderEditor = new OrderEditor(order);
+			inEdit = true;
+			return true;
+		} finally {
+			lock.unlock();
 		}
 	}
 
-	public OrderEditor findOrderEditor(String serialNumber) {
-		return editorMap.get(serialNumber);
+	public OrderEditor getOrderEditor() {
+		lock.lock();
+		try {
+			if (inEdit) {
+				return orderEditor;
+			}
+			return null;
+		} finally {
+			lock.unlock();
+		}
 	}
 
-	public OrderEditor removeOrderEditor(String serialNumber) {
-		return editorMap.remove(serialNumber);
+	public void stopEdit() {
+		lock.lock();
+		try {
+			inEdit = false;
+			orderEditor = null;
+		} finally {
+			lock.unlock();
+		}
 	}
 }

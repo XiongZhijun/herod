@@ -95,7 +95,7 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 
 	protected void decreaseQuantity() {
 		OrderEditor orderEditor = OrderEditorManager.getInstance()
-				.findOrderEditor(orderItem.getOrderSerialNumber());
+				.getOrderEditor();
 		if (orderEditor != null) {
 			int newQuantity = orderEditor.decreaseItem(orderItem
 					.getSerialNumber());
@@ -105,7 +105,7 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 
 	protected void increaseQuantity() {
 		OrderEditor orderEditor = OrderEditorManager.getInstance()
-				.findOrderEditor(orderItem.getOrderSerialNumber());
+				.getOrderEditor();
 		if (orderEditor != null) {
 			int newQuantity = orderEditor.increaseItem(orderItem
 					.getSerialNumber());

@@ -308,8 +308,7 @@ public class OrderView extends LinearLayout implements
 					new AbstracAsyncTaskable("修改订单成功！", "修改订单失败，请重试！") {
 						public Result runOnBackground(Object... params) {
 							OrderEditor orderEditor = OrderEditorManager
-									.getInstance().findOrderEditor(
-											order.getSerialNumber());
+									.getInstance().getOrderEditor();
 							if (orderEditor == null) {
 								return null;
 							}
@@ -323,9 +322,7 @@ public class OrderView extends LinearLayout implements
 						public void onPostExecute(Result result) {
 							super.onPostExecute(result);
 							if (result != null && result.isSuccess()) {
-								OrderEditorManager.getInstance()
-										.removeOrderEditor(
-												order.getSerialNumber());
+								OrderEditorManager.getInstance().stopEdit();
 							}
 							// TODO 失败之后要考虑：1、order
 							// view已经恢复到原始状态了，需要根据更新的状态进行界面更新。
@@ -345,8 +342,7 @@ public class OrderView extends LinearLayout implements
 		for (OrderItemView orderItemView : orderItemViews) {
 			orderItemView.disableEditButtons();
 		}
-		OrderEditorManager.getInstance().removeOrderEditor(
-				order.getSerialNumber());
+		OrderEditorManager.getInstance().stopEdit();
 	}
 
 	private void onEditOrderButtonClick() {
@@ -358,7 +354,7 @@ public class OrderView extends LinearLayout implements
 			orderItemView.enableEditButtons();
 		}
 
-		OrderEditorManager.getInstance().addOrderEditor(order);
+		OrderEditorManager.getInstance().startEdit(order);
 	}
 
 	public void setHandler(Handler handler) {

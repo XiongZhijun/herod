@@ -103,17 +103,21 @@ public abstract class BeanUtils {
 		Class<?> clazz = target.getClass();
 		Method getter = ClassUtils.findGetter(clazz, propertyName);
 		if (getter != null) {
-			try {
-				return getter.invoke(target);
-			} catch (RuntimeException e) {
-				throw e;
-			} catch (Exception e) {
-				throw new ClassException(StringUtils.join("Get property",
-						propertyName + "'s value from target",
-						target.toString() + "failed"));
-			}
+			return getProperty(target, getter);
 		}
 		return getFieldValue(target, propertyName);
+	}
+
+	public static Object getProperty(Object target, Method getter) {
+		try {
+			return getter.invoke(target);
+		} catch (RuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ClassException(StringUtils.join("Get property",
+					getter.getName() + "'s value from target",
+					target.toString() + "failed"));
+		}
 	}
 
 	/**

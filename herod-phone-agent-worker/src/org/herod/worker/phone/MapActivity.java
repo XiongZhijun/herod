@@ -140,10 +140,11 @@ public class MapActivity extends BaseActivity implements OnClickListener,
 
 	private void showRouteInfo(MKRoutePlan plan, RouteType type) {
 		findViewById(R.id.routeInfo).setVisibility(View.VISIBLE);
-		TextViewUtils.setText(this, R.id.type, type.getName());
-		TextViewUtils.setText(this, R.id.time,
+		TextViewUtils.setTextWithObject(this, R.id.type, type.getName());
+		TextViewUtils.setTextWithObject(this, R.id.time,
 				(int) Math.ceil(plan.getTime() / 60.0d));
-		TextViewUtils.setText(this, R.id.distance, plan.getDistance());
+		TextViewUtils
+				.setTextWithObject(this, R.id.distance, plan.getDistance());
 	}
 
 	class MKSearchListener extends MKSearchListenerWrapper {

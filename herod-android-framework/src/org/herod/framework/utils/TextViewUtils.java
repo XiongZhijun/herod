@@ -5,7 +5,6 @@ package org.herod.framework.utils;
 
 import org.herod.framework.ViewFindable;
 
-import android.content.Context;
 import android.widget.TextView;
 
 /**
@@ -15,23 +14,21 @@ import android.widget.TextView;
  */
 public abstract class TextViewUtils {
 
+	public static void setTextWithObject(ViewFindable viewFindable, int id,
+			Object data) {
+		String value = data == null ? StringUtils.EMPTY : data.toString();
+		((TextView) viewFindable.findViewById(id)).setText(value);
+	}
+
 	public static void setText(ViewFindable viewFindable, int id, Object data) {
 		if (data != null) {
-			((TextView) viewFindable.findViewById(id)).setText(data.toString());
+			((TextView) viewFindable.findViewById(id)).setText(toString(data));
 		}
 	}
 
-	public static void setText(Context context, ViewFindable viewFindable,
-			int id, Object data) {
-		if (data != null) {
-			((TextView) viewFindable.findViewById(id)).setText(toString(
-					context, data));
-		}
-	}
-
-	private static String toString(Context context, Object data) {
+	private static String toString(Object data) {
 		if (data instanceof Enum) {
-			return ResourcesUtils.getEnumShowName(context, (Enum<?>) data);
+			return ResourcesUtils.getEnumShowName((Enum<?>) data);
 		}
 		return data.toString();
 	}

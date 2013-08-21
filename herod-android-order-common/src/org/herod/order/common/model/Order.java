@@ -291,4 +291,15 @@ public class Order {
 		}
 		return null;
 	}
+
+	public String getShopTips() {
+		StringBuilder sb = new StringBuilder();
+		double charge = getShopMinChargeForFreeDelivery();
+		if (charge > 0) {
+			sb.append("消费满").append(charge).append("免跑腿费");
+		} else {
+			sb.append("免跑腿费");
+		}
+		return sb.toString();
+	}
 }

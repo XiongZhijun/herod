@@ -5,7 +5,6 @@ package org.herod.worker.phone.view;
 
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
-import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderItem;
 import org.herod.worker.phone.R;
 
@@ -63,7 +62,7 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 		reduceButton.setOnClickListener(this);
 	}
 
-	public void setOrderAndOrderItem(Order order, OrderItem orderItem) {
+	public void setOrderAndOrderItem(OrderItem orderItem) {
 		this.orderItem = orderItem;
 		setGoodsName(orderItem.getGoodsName());
 		setQuantity(orderItem.getQuantity());

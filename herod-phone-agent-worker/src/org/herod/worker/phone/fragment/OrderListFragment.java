@@ -66,23 +66,6 @@ public class OrderListFragment extends Fragment implements
 		super.onResume();
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		// super.onActivityResult(requestCode, resultCode, data);
-		// String serialNumber = data.getStringExtra("serialNumber");
-		// HashMap<Long, OrderItem> newOrderItemsMap = (HashMap<Long,
-		// OrderItem>) data
-		// .getSerializableExtra("newOrderItemsMap");
-		// OrderEditor orderEditor = OrderEditorManager.getInstance()
-		// .findOrderEditor(serialNumber);
-		// // if(orderEditor != null) {
-		// // orderEditor.
-		// // }
-		Toast.makeText(getActivity(), "on activity result", Toast.LENGTH_SHORT)
-				.show();
-	}
-
 	public void refreshOrderList() {
 		new AgentWorkerTask<FragmentType, List<Order>>(getActivity(), this)
 				.execute(type);
@@ -118,6 +101,23 @@ public class OrderListFragment extends Fragment implements
 		intent.putExtra("shopName", shopName);
 		intent.putExtra("serialNumber", serialNumber);
 		startActivityForResult(intent, NEW_ORDER_ITEMS);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		// super.onActivityResult(requestCode, resultCode, data);
+		// String serialNumber = data.getStringExtra("serialNumber");
+		// HashMap<Long, OrderItem> newOrderItemsMap = (HashMap<Long,
+		// OrderItem>) data
+		// .getSerializableExtra("newOrderItemsMap");
+		// OrderEditor orderEditor = OrderEditorManager.getInstance()
+		// .findOrderEditor(serialNumber);
+		// // if(orderEditor != null) {
+		// // orderEditor.
+		// // }
+		Toast.makeText(getActivity(), "on activity result", Toast.LENGTH_SHORT)
+				.show();
 	}
 
 	@Override

@@ -3,6 +3,22 @@
  */
 package org.herod.worker.phone.view;
 
+import static org.herod.worker.phone.R.id.acceptOrderButton;
+import static org.herod.worker.phone.R.id.addNewItemButton;
+import static org.herod.worker.phone.R.id.buyerName;
+import static org.herod.worker.phone.R.id.cancelEditButton;
+import static org.herod.worker.phone.R.id.cancelOrderButton;
+import static org.herod.worker.phone.R.id.comment;
+import static org.herod.worker.phone.R.id.completeOrderButton;
+import static org.herod.worker.phone.R.id.confirmEditButton;
+import static org.herod.worker.phone.R.id.editOrderButton;
+import static org.herod.worker.phone.R.id.route;
+import static org.herod.worker.phone.R.id.serialNumber;
+import static org.herod.worker.phone.R.id.shopName;
+import static org.herod.worker.phone.R.id.shopTips;
+import static org.herod.worker.phone.R.id.status;
+import static org.herod.worker.phone.R.id.submitTime;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +27,10 @@ import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.ViewFindable;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
-import org.herod.framework.utils.DateUtils;
+import org.herod.framework.form.FormHelper;
+import org.herod.framework.form.FormHelper.FormHelperBuilder;
 import org.herod.framework.utils.TextViewUtils;
+import org.herod.framework.utils.ViewUtils;
 import org.herod.order.common.model.Address;
 import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderItem;
@@ -53,6 +71,19 @@ import android.widget.Toast;
  */
 public class OrderView extends LinearLayout implements
 		GoodsQuantityChangedListener, OnClickListener, ViewFindable {
+	private static final int[] FORM_TO = new int[] { serialNumber, submitTime,
+			shopName, buyerName, comment, status, shopTips };
+	private static final String[] FORM_FROM = new String[] { "serialNumber",
+			"submitTime", "shopName", "buyerName", "comment", "status",
+			"shopTips" };
+	private static final int[] NEED_SET_ON_CLICK_LISTENER_VIEW_IDS = new int[] {
+			editOrderButton, acceptOrderButton, completeOrderButton,
+			cancelOrderButton, cancelEditButton, confirmEditButton,
+			addNewItemButton, shopName, buyerName, route };
+
+	private static FormHelper formHelper = new FormHelperBuilder(FORM_FROM,
+			FORM_TO, Order.class).addDateSerializer("MM-dd HH:mm").build();
+
 	@InjectView(R.id.orderItemsListView)
 	private LinearLayout orderItemsContainer;
 
@@ -86,16 +117,8 @@ public class OrderView extends LinearLayout implements
 		}
 		LayoutInflater.from(getContext()).inflate(R.layout.order, this);
 		new InjectViewHelper().injectViews(this);
-		findViewById(R.id.editOrderButton).setOnClickListener(this);
-		findViewById(R.id.acceptOrderButton).setOnClickListener(this);
-		findViewById(R.id.completeOrderButton).setOnClickListener(this);
-		findViewById(R.id.cancelOrderButton).setOnClickListener(this);
-		findViewById(R.id.cancelEditButton).setOnClickListener(this);
-		findViewById(R.id.confirmEditButton).setOnClickListener(this);
-		findViewById(R.id.addNewItemButton).setOnClickListener(this);
-		findViewById(R.id.shopName).setOnClickListener(this);
-		findViewById(R.id.buyerName).setOnClickListener(this);
-		findViewById(R.id.route).setOnClickListener(this);
+
+		ViewUtils.setOnClickListener(this, NEED_SET_ON_CLICK_LISTENER_VIEW_IDS);
 
 	}
 
@@ -107,17 +130,10 @@ public class OrderView extends LinearLayout implements
 	public void setOrder(Order order) {
 		this.order = order;
 		handleButtons(order);
-		TextViewUtils.setText(this, R.id.serialNumber, order.getSerialNumber());
-		TextViewUtils.setText(this, R.id.submitTime,
-				DateUtils.format("MM-dd HH:mm", order.getSubmitTime()));
-		orderItemsContainer.removeAllViews();
-		TextViewUtils.setText(this, R.id.shopName, order.getShopName());
-		TextViewUtils.setText(this, R.id.buyerName, order.getBuyerName());
-		TextViewUtils.setText(this, R.id.comment, order.getComment());
-		TextViewUtils.setText(getContext(), this, R.id.status,
-				order.getStatus());
 
-		TextViewUtils.setText(this, R.id.shopTips, createShopTips(order));
+		formHelper.setValues(order, this);
+
+		orderItemsContainer.removeAllViews();
 		summationView = new OrderItemView(getContext());
 		summationView.setCanEdit(false);
 		summationView.setGoodsName("合计");
@@ -127,7 +143,7 @@ public class OrderView extends LinearLayout implements
 		for (OrderItem item : order.getOrderItems()) {
 			addLineToOrderItemListView(orderItemsContainer);
 			OrderItemView child = new OrderItemView(getContext());
-			child.setOrderAndOrderItem(order, item);
+			child.setOrderAndOrderItem(item);
 			child.setGoodsQuantityChangedListener(this);
 			LayoutParams param = new LayoutParams(LayoutParams.MATCH_PARENT,
 					LayoutParams.WRAP_CONTENT);
@@ -154,23 +170,12 @@ public class OrderView extends LinearLayout implements
 		}
 	}
 
-	private String createShopTips(Order order) {
-		StringBuilder sb = new StringBuilder();
-		double charge = order.getShopMinChargeForFreeDelivery();
-		if (charge > 0) {
-			sb.append("消费满").append(charge).append("免跑腿费");
-		} else {
-			sb.append("免跑腿费");
-		}
-		return sb.toString();
-	}
-
 	private void updateOrderSummationInfo() {
 		summationView.setQuantity(order.getTotalQuantity());
 		summationView.setSellingPrice(order.getTotalAmount());
-		TextViewUtils.setText(this, R.id.costOfRunErrands,
+		TextViewUtils.setTextWithObject(this, R.id.costOfRunErrands,
 				order.getCostOfRunErrands());
-		TextViewUtils.setText(this, R.id.totalWithCostOfRunErrands,
+		TextViewUtils.setTextWithObject(this, R.id.totalWithCostOfRunErrands,
 				Double.toString(order.getTotalAmountWithCostOfRunErrands()));
 	}
 
@@ -213,21 +218,21 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void onBuyerNameClickListener() {
-		PlaceInfoDialogFragment fragment = new PlaceInfoDialogFragment();
-		Bundle args = new Bundle();
-		args.putString("phone", order.getBuyerPhone());
-		args.putString("locationName", order.getDeliveryAddress().getAddress());
-		args.putSerializable("address", order.getDeliveryAddress());
-		fragment.setArguments(args);
-		fragment.show(activity.getSupportFragmentManager(), null);
+		showPlaceInfoDialogFragment(order.getDeliveryAddress(),
+				order.getBuyerPhone());
 	}
 
 	private void onShopNameClickListener() {
+		Address shopAddress = order.getShopAddress();
+		showPlaceInfoDialogFragment(shopAddress, order.getShopPhone());
+	}
+
+	private void showPlaceInfoDialogFragment(Address address, String phone) {
 		PlaceInfoDialogFragment fragment = new PlaceInfoDialogFragment();
 		Bundle args = new Bundle();
-		args.putString("phone", order.getShopPhone());
-		args.putString("locationName", order.getShopAddress().getAddress());
-		args.putSerializable("address", order.getShopAddress());
+		args.putString("phone", phone);
+		args.putString("locationName", address.getAddress());
+		args.putSerializable("address", address);
 		fragment.setArguments(args);
 		fragment.show(activity.getSupportFragmentManager(), null);
 	}

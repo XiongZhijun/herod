@@ -68,8 +68,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		for (int i = oldVersion + 1; i <= newVersion; i++) {
-			String sqls = ResourcesUtils.getString(context,
-					buildVersionResourceName(databaseName, i));
+			String sqls = ResourcesUtils.getString(buildVersionResourceName(
+					databaseName, i));
 			if (sqls != null) {
 				SqlTokenizer tokenizer = new SqlTokenizer(sqls);
 				while (tokenizer.hasMoreStatements()) {
@@ -94,8 +94,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 			version++;
 			String versionResouce = buildVersionResourceName(databaseName,
 					version);
-			resId = ResourcesUtils
-					.getStringResourcesId(context, versionResouce);
+			resId = ResourcesUtils.getStringResourcesId(versionResouce);
 		} while (resId != Integer.MIN_VALUE);
 		return version - 1;
 	}

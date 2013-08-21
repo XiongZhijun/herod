@@ -103,8 +103,7 @@ public class InjectViewHelper {
 		int resourcesId = annotation.value();
 		if (resourcesId <= 0) {
 			String resourceName = annotation.resourceName();
-			resourcesId = ResourcesUtils
-					.getIdResourcesId(context, resourceName);
+			resourcesId = ResourcesUtils.getIdResourcesId(resourceName);
 		}
 		View view = viewFindable.findViewById(resourcesId);
 		if (view != null) {

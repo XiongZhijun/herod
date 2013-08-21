@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 
 import org.herod.framework.AndroidException;
 
-import android.content.Context;
+import android.app.Application;
 import android.util.Log;
 
 /**
@@ -21,6 +21,7 @@ public abstract class ResourcesUtils {
 	private static final String ID = "id";
 	private static final String STRING = "string";
 	private static final String LAYOUT = "layout";
+	private static Application application;
 
 	/**
 	 * 枚举类型是系统中常用的状态变量。该方法的目的是可以根据枚举类型对象获取该对象在Android系统资源中的字符串资源。
@@ -53,9 +54,9 @@ public abstract class ResourcesUtils {
 	 *            枚举对象
 	 * @return
 	 */
-	public static String getEnumShowName(Context context, Enum<?> _enum) {
-		return ResourcesUtils.getString(context, _enum.getClass()
-				.getSimpleName() + "_" + _enum.name());
+	public static String getEnumShowName(Enum<?> _enum) {
+		return ResourcesUtils.getString(_enum.getClass().getSimpleName() + "_"
+				+ _enum.name());
 	}
 
 	/**
@@ -67,12 +68,12 @@ public abstract class ResourcesUtils {
 	 *            字符串资源的名称
 	 * @return 返回字符串资源的值，如果没有找到则返回null。
 	 */
-	public static String getString(Context context, String resourceName) {
-		int resId = getStringResourcesId(context, resourceName);
+	public static String getString(String resourceName) {
+		int resId = getStringResourcesId(resourceName);
 		if (resId == Integer.MIN_VALUE) {
 			return null;
 		}
-		return context.getString(resId);
+		return application.getString(resId);
 	}
 
 	/**
@@ -84,8 +85,8 @@ public abstract class ResourcesUtils {
 	 *            资源名称
 	 * @return
 	 */
-	public static int getLayoutResourcesId(Context context, String resourceName) {
-		return getResourcesIdByType(context, resourceName, LAYOUT);
+	public static int getLayoutResourcesId(String resourceName) {
+		return getResourcesIdByType(resourceName, LAYOUT);
 	}
 
 	/**
@@ -97,8 +98,8 @@ public abstract class ResourcesUtils {
 	 *            资源名称
 	 * @return
 	 */
-	public static int getStringResourcesId(Context context, String resourceName) {
-		return getResourcesIdByType(context, resourceName, STRING);
+	public static int getStringResourcesId(String resourceName) {
+		return getResourcesIdByType(resourceName, STRING);
 	}
 
 	/**
@@ -110,8 +111,8 @@ public abstract class ResourcesUtils {
 	 *            资源名称
 	 * @return
 	 */
-	public static int getIdResourcesId(Context context, String resourceName) {
-		return getResourcesIdByType(context, resourceName, ID);
+	public static int getIdResourcesId(String resourceName) {
+		return getResourcesIdByType(resourceName, ID);
 	}
 
 	/**
@@ -125,10 +126,9 @@ public abstract class ResourcesUtils {
 	 *            资源类型，一般有：layout/string/id等android支持的资源类型，也就是在R.java文件中支持的资源类型。
 	 * @return
 	 */
-	public static int getResourcesIdByType(Context context,
-			String resourceName, String type) {
+	public static int getResourcesIdByType(String resourceName, String type) {
 		Field field = null;
-		Class<?> clazz = getResouceClass(context, type);
+		Class<?> clazz = getResouceClass(type);
 		try {
 			field = clazz.getField(resourceName);
 			return (Integer) field.get(null);
@@ -139,8 +139,8 @@ public abstract class ResourcesUtils {
 		}
 	}
 
-	private static Class<?> getResouceClass(Context context, String type) {
-		String packageName = context.getPackageName();
+	private static Class<?> getResouceClass(String type) {
+		String packageName = application.getPackageName();
 		StringBuilder sb = new StringBuilder();
 		sb.append(packageName).append(".R$").append(type);
 		String className = sb.toString();
@@ -150,6 +150,10 @@ public abstract class ResourcesUtils {
 			throw new AndroidException("resouce class is not found. class is "
 					+ className, e);
 		}
+	}
+
+	public static void setApplication(Application application) {
+		ResourcesUtils.application = application;
 	}
 
 	private static final String TAG = ResourcesUtils.class.getName();

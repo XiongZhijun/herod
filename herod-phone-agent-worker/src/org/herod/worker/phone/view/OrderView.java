@@ -333,11 +333,11 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void disableOperationButtons() {
-		setVisibility(View.VISIBLE, R.id.acceptOrderButton,
+		ViewUtils.setVisibility(this, View.VISIBLE, R.id.acceptOrderButton,
 				R.id.editOrderButton, R.id.cancelOrderButton,
 				R.id.completeOrderButton);
-		setVisibility(View.GONE, R.id.cancelEditButton, R.id.confirmEditButton,
-				R.id.addNewItemButton);
+		ViewUtils.setVisibility(this, View.GONE, R.id.cancelEditButton,
+				R.id.confirmEditButton, R.id.addNewItemButton);
 		handleButtons(order);
 		for (OrderItemView orderItemView : orderItemViews) {
 			orderItemView.disableEditButtons();
@@ -346,9 +346,10 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void onEditOrderButtonClick() {
-		setVisibility(View.GONE, R.id.acceptOrderButton, R.id.editOrderButton,
-				R.id.cancelOrderButton, R.id.completeOrderButton);
-		setVisibility(View.VISIBLE, R.id.cancelEditButton,
+		ViewUtils.setVisibility(this, View.GONE, R.id.acceptOrderButton,
+				R.id.editOrderButton, R.id.cancelOrderButton,
+				R.id.completeOrderButton);
+		ViewUtils.setVisibility(this, View.VISIBLE, R.id.cancelEditButton,
 				R.id.confirmEditButton, R.id.addNewItemButton);
 		for (OrderItemView orderItemView : orderItemViews) {
 			orderItemView.enableEditButtons();
@@ -359,21 +360,6 @@ public class OrderView extends LinearLayout implements
 
 	public void setHandler(Handler handler) {
 		this.handler = handler;
-	}
-
-	private void setVisibility(int visibility, int... ids) {
-		for (int id : ids) {
-			View view = findViewById(id);
-			setVisibility(visibility, view);
-		}
-	}
-
-	private void setVisibility(int visibility, View... views) {
-		for (View view : views) {
-			if (view != null) {
-				view.setVisibility(visibility);
-			}
-		}
 	}
 
 	abstract class AbstracAsyncTaskable implements

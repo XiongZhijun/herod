@@ -11,10 +11,10 @@ import org.herod.order.common.AbstractGoodsListActivity;
 import org.herod.order.common.AbstractGoodsListFragment.IShoppingCartCache;
 import org.herod.order.common.AbstractGoodsTypeGoodsListFragment;
 import org.herod.order.common.model.OrderItem;
-import org.herod.worker.phone.fragment.OrderListFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 /**
  * 
@@ -23,7 +23,7 @@ import android.os.Bundle;
  */
 public class GoodsListActivity extends AbstractGoodsListActivity implements
 		IShoppingCartCache {
-
+	public static final int NEW_ORDER_ITEMS = 1;
 	private HashMap<Long, OrderItem> orderItemsMap;
 	private String serialNumber;
 
@@ -61,7 +61,7 @@ public class GoodsListActivity extends AbstractGoodsListActivity implements
 		Intent data = new Intent();
 		data.putExtra("serialNumber", serialNumber);
 		data.putExtra("newOrderItemsMap", orderItemsMap);
-		setResult(OrderListFragment.NEW_ORDER_ITEMS, data);
+		setResult(NEW_ORDER_ITEMS, data);
 		super.onBackPressed();
 	}
 
@@ -122,6 +122,16 @@ public class GoodsListActivity extends AbstractGoodsListActivity implements
 			current = 0;
 		}
 		return current;
+	}
+
+	public static void show(Fragment fragment, long shopId, String shopName,
+			String serialNumber) {
+		Intent intent = new Intent(fragment.getActivity(),
+				GoodsListActivity.class);
+		intent.putExtra("shopId", shopId);
+		intent.putExtra("shopName", shopName);
+		intent.putExtra("serialNumber", serialNumber);
+		fragment.startActivityForResult(intent, NEW_ORDER_ITEMS);
 	}
 
 }

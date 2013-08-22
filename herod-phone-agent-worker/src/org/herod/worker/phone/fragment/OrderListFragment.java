@@ -11,12 +11,11 @@ import org.herod.framework.widget.XListView;
 import org.herod.framework.widget.XListView.IXListViewListener;
 import org.herod.order.common.model.Order;
 import org.herod.worker.phone.AgentWorkerTask;
-import org.herod.worker.phone.GoodsListActivity;
 import org.herod.worker.phone.R;
 import org.herod.worker.phone.WorkerContext;
 import org.herod.worker.phone.fragment.OrderListFragment.FragmentType;
+import org.herod.worker.phone.handler.HerodHandler;
 import org.herod.worker.phone.view.OrderTabPageIndicator;
-import org.herod.worker.phone.view.OrderView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,7 +28,6 @@ import android.widget.Toast;
 
 public class OrderListFragment extends Fragment implements
 		AsyncTaskable<FragmentType, List<Order>>, IXListViewListener {
-	public static final int NEW_ORDER_ITEMS = 1;
 	private DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 	private XListView ordersListView;
 	private String title;
@@ -94,15 +92,6 @@ public class OrderListFragment extends Fragment implements
 		ordersListView.setRefreshTime(dateFormat.format(new Date()));
 	}
 
-	public void startGoodsActivity(OrderView orderView, long shopId,
-			String shopName, String serialNumber) {
-		Intent intent = new Intent(getActivity(), GoodsListActivity.class);
-		intent.putExtra("shopId", shopId);
-		intent.putExtra("shopName", shopName);
-		intent.putExtra("serialNumber", serialNumber);
-		startActivityForResult(intent, NEW_ORDER_ITEMS);
-	}
-
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
@@ -152,7 +141,7 @@ public class OrderListFragment extends Fragment implements
 	}
 
 	public void setHandler(Handler handler) {
-		this.handler = handler;
+		this.handler = new HerodHandler(handler);
 	}
 
 	public static enum FragmentType {

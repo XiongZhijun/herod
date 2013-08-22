@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.herod.order.common.model.Order;
+import org.herod.worker.phone.handler.HerodHandler;
 import org.herod.worker.phone.view.OrderView;
 
 import android.content.Context;
@@ -32,7 +33,7 @@ public class OrderListAdapter extends BaseAdapter {
 		this.orders = orders;
 		this.context = fragment.getActivity();
 		this.fragment = fragment;
-		this.handler = handler;
+		this.handler = new HerodHandler(handler);
 	}
 
 	@Override

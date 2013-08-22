@@ -6,9 +6,19 @@ package org.herod.worker.phone.fragment;
 import java.util.Collections;
 import java.util.Map;
 
+import org.herod.framework.HerodTask.AsyncTaskable;
+import org.herod.order.common.model.Result;
+import org.herod.worker.phone.AgentWorkerTask;
+import org.herod.worker.phone.MainActivity;
 import org.herod.worker.phone.R;
+import org.herod.worker.phone.WorkerContext;
+import org.herod.worker.phone.fragment.FormFragment.OnOkButtonClickListener;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
+import android.widget.Toast;
 
 /**
  * 
@@ -17,7 +27,19 @@ import android.support.v4.app.FragmentActivity;
  * @email hust.xzj@gmail.com
  * 
  */
-public class CancelOrderDialogFragment extends FormFragment {
+public class CancelOrderDialogFragment extends FormFragment implements
+		OnOkButtonClickListener, AsyncTaskable<String, Result> {
+
+	private String serialNumber;
+	private Handler handler;
+	private Context applicationContext;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		applicationContext = getActivity().getApplicationContext();
+		setOnOkButtonClickListener(this);
+	}
 
 	@Override
 	protected int getLayout() {
@@ -34,10 +56,37 @@ public class CancelOrderDialogFragment extends FormFragment {
 		return Collections.singletonMap(R.id.reason, "reason");
 	}
 
-	public static void showDialog(FragmentActivity activity,
-			OnOkButtonClickListener onOkButtonClickListener) {
+	@Override
+	public void onOk(Map<String, String> formDatas) {
+		new AgentWorkerTask<String, Result>(getActivity(), this)
+				.execute(formDatas.get("reason"));
+
+	}
+
+	@Override
+	public Result runOnBackground(String... reasons) {
+		return WorkerContext.getWorkerService().cancelOrder(serialNumber,
+				reasons[0]);
+	}
+
+	@Override
+	public void onPostExecute(Result result) {
+		String message;
+		if (result != null && result.isSuccess()) {
+			handler.sendMessage(handler
+					.obtainMessage(MainActivity.MESSAGE_KEY_REFRESH_ORDER_LIST));
+			message = "取消订单成功！";
+		} else {
+			message = "取消订单失败，请重试！";
+		}
+		Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show();
+	}
+
+	public static void showDialog(FragmentActivity activity, Handler handler,
+			String serialNumber) {
 		CancelOrderDialogFragment fragment = new CancelOrderDialogFragment();
-		fragment.setOnOkButtonClickListener(onOkButtonClickListener);
+		fragment.handler = handler;
+		fragment.serialNumber = serialNumber;
 		fragment.show(activity.getSupportFragmentManager(), null);
 	}
 }

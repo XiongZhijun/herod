@@ -54,4 +54,8 @@ public class AgentWorkerTask<P, R> extends HerodTask<P, R> {
 
 		}
 	}
+
+	public Context getContext() {
+		return context;
+	}
 }

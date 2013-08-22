@@ -11,11 +11,11 @@ import org.herod.framework.widget.TabPageIndicator;
 import org.herod.order.common.BaseActivity;
 import org.herod.worker.phone.fragment.OrderListFragment;
 import org.herod.worker.phone.fragment.OrderListFragment.FragmentType;
+import org.herod.worker.phone.handler.HerodHandler;
 import org.herod.worker.phone.view.OrderTabPageIndicator;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -31,7 +31,7 @@ import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
 public class MainActivity extends BaseActivity implements Callback,
 		OnLocationSuccessListener {
 	private List<OrderListFragment> orderListFragments;
-	private Handler handler;
+	private HerodHandler handler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class MainActivity extends BaseActivity implements Callback,
 		ImageLoaderUtils.initImageLoader(this);
 		SimpleLocationPlan locationPlan = new SimpleLocationPlan(this);
 		LocationManager.getInstance(this).executeWithPlan(locationPlan);
-		handler = new Handler(this);
+		handler = new HerodHandler(this);
 		orderListFragments = createOrderListFragments();
 		FragmentPagerAdapter adapter = new OrderGroupAdapter(
 				getSupportFragmentManager());
@@ -126,11 +126,11 @@ public class MainActivity extends BaseActivity implements Callback,
 			for (OrderListFragment fragment : orderListFragments) {
 				fragment.refreshOrderList();
 			}
-			break;
+			return true;
 		default:
-			break;
+			return false;
 		}
-		return true;
+
 	}
 
 	@Override

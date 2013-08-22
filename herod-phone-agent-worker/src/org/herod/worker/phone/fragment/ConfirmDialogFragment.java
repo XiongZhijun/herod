@@ -45,7 +45,6 @@ public class ConfirmDialogFragment extends DialogFragment implements
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		new InjectViewHelper().injectViews(view);
-		message = getArguments().getString("message");
 		((TextView) view.findViewById(R.id.message)).setText(message);
 		view.findViewById(R.id.okButton).setOnClickListener(this);
 		view.findViewById(R.id.cancelButton).setOnClickListener(this);
@@ -65,6 +64,20 @@ public class ConfirmDialogFragment extends DialogFragment implements
 		dismiss();
 	}
 
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public void setOnOkButtonClickListener(
+			OnOkButtonClickListener onOkButtonClickListener) {
+		this.onOkButtonClickListener = onOkButtonClickListener;
+	}
+
+	public void setOnCancelButtonClickListener(
+			OnCancelButtonClickListener onCancelButtonClickListener) {
+		this.onCancelButtonClickListener = onCancelButtonClickListener;
+	}
+
 	public static interface OnOkButtonClickListener {
 		void onOk();
 	}
@@ -76,9 +89,7 @@ public class ConfirmDialogFragment extends DialogFragment implements
 	public static void showDialog(FragmentActivity activity, String message,
 			OnOkButtonClickListener onOkButtonClickListener) {
 		ConfirmDialogFragment fragment = new ConfirmDialogFragment();
-		Bundle args = new Bundle();
-		args.putString("message", message);
-		fragment.setArguments(args);
+		fragment.setMessage(message);
 		fragment.onOkButtonClickListener = onOkButtonClickListener;
 		fragment.show(activity.getSupportFragmentManager(), null);
 	}

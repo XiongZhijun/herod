@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -74,5 +75,16 @@ public class PlaceInfoDialogFragment extends DialogFragment implements
 		Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"
 				+ phone));
 		startActivity(phoneIntent);
+	}
+
+	public static void showFragment(FragmentActivity activity, Address address,
+			String phone) {
+		PlaceInfoDialogFragment fragment = new PlaceInfoDialogFragment();
+		Bundle args = new Bundle();
+		args.putString("phone", phone);
+		args.putString("locationName", address.getAddress());
+		args.putSerializable("address", address);
+		fragment.setArguments(args);
+		fragment.show(activity.getSupportFragmentManager(), null);
 	}
 }

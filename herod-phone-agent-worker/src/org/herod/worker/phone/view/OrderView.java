@@ -128,7 +128,7 @@ public class OrderView extends LinearLayout implements
 
 	public void setOrder(Order order) {
 		this.order = order;
-		handleButtons(order);
+		initButtonStatus(order);
 
 		formHelper.setValues(order, this);
 
@@ -155,20 +155,6 @@ public class OrderView extends LinearLayout implements
 		View line = new View(getContext());
 		line.setBackgroundColor(0xFFE5E5E5);
 		orderItemsListView.addView(line, new LayoutParams(MATCH_PARENT, 1));
-	}
-
-	private void handleButtons(Order order) {
-		switch (order.getStatus()) {
-		case Submitted:
-			findViewById(R.id.acceptOrderButton).setVisibility(View.VISIBLE);
-			findViewById(R.id.completeOrderButton).setVisibility(View.GONE);
-			break;
-		case Acceptted:
-			findViewById(R.id.acceptOrderButton).setVisibility(View.GONE);
-			findViewById(R.id.completeOrderButton).setVisibility(View.VISIBLE);
-		default:
-			break;
-		}
 	}
 
 	@Override
@@ -248,13 +234,27 @@ public class OrderView extends LinearLayout implements
 		setOrder(order);
 	}
 
+	private void initButtonStatus(Order order) {
+		switch (order.getStatus()) {
+		case Submitted:
+			findViewById(R.id.acceptOrderButton).setVisibility(View.VISIBLE);
+			findViewById(R.id.completeOrderButton).setVisibility(View.GONE);
+			break;
+		case Acceptted:
+			findViewById(R.id.acceptOrderButton).setVisibility(View.GONE);
+			findViewById(R.id.completeOrderButton).setVisibility(View.VISIBLE);
+		default:
+			break;
+		}
+	}
+
 	private void disableOperationButtons() {
 		ViewUtils.setVisibility(this, View.VISIBLE, R.id.acceptOrderButton,
 				R.id.editOrderButton, R.id.cancelOrderButton,
 				R.id.completeOrderButton);
 		ViewUtils.setVisibility(this, View.GONE, R.id.cancelEditButton,
 				R.id.confirmEditButton, R.id.addNewItemButton);
-		handleButtons(order);
+		initButtonStatus(order);
 		for (OrderItemView orderItemView : orderItemViews) {
 			orderItemView.disableEditButtons();
 		}

@@ -46,7 +46,7 @@ public class MapActivity extends BaseActivity implements OnClickListener,
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mBMapMan = new BMapManager(getApplication());
-		mBMapMan.init("F5451f7dee03f65b9d1f7f6812a69e12", null);
+		mBMapMan.init(getString(R.string.BaiDuMapKey), null);
 		setContentView(R.layout.activity_map);
 		mMapView = (MapView) findViewById(R.id.bmapsView);
 		mMapView.setBuiltInZoomControls(true);

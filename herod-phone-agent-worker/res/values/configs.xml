@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Bai Du -->
+    <string name="BaiDuMapKey">F5451f7dee03f65b9d1f7f6812a69e12</string>
+    <!-- Server -->
     <string name="RestServerHost">172.19.33.88</string>
     <string name="RestServerPort">9191</string>
     <string name="ImageServerHost">172.19.33.88</string>

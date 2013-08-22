@@ -3,8 +3,10 @@
  */
 package org.herod.worker.phone.view;
 
+import org.herod.framework.ViewFindable;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
+import org.herod.framework.utils.TextViewUtils;
 import org.herod.order.common.model.OrderItem;
 import org.herod.worker.phone.R;
 
@@ -14,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 /**
  * 
@@ -23,13 +24,8 @@ import android.widget.TextView;
  * @email hust.xzj@gmail.com
  * 
  */
-public class OrderItemView extends RelativeLayout implements OnClickListener {
-	@InjectView(R.id.goodsName)
-	private TextView goodsNameView;
-	@InjectView(R.id.unitPrice)
-	private TextView sellingPriceView;
-	@InjectView(R.id.quantity)
-	private TextView quantityView;
+public class OrderItemView extends RelativeLayout implements OnClickListener,
+		ViewFindable {
 	@InjectView(R.id.addButton)
 	private View addButton;
 	@InjectView(R.id.reduceButton)
@@ -38,7 +34,6 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 	private View deletedLine;
 	private GoodsQuantityChangedListener goodsQuantityChangedListener;
 	private OrderItem orderItem;
-	private boolean canEdit = true;
 
 	public OrderItemView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -70,18 +65,23 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 	}
 
 	public void setSellingPrice(double unitPrice) {
-		sellingPriceView.setText(Double.toString(unitPrice));
+		TextViewUtils.setText(this, R.id.unitPrice, unitPrice);
 	}
 
 	public void setQuantity(int quantity) {
-		quantityView.setText(Integer.toString(quantity));
+		TextViewUtils.setText(this, R.id.quantity, quantity);
+		if (quantity > 0) {
+			deletedLine.setVisibility(View.GONE);
+		} else {
+			deletedLine.setVisibility(View.VISIBLE);
+		}
 		if (goodsQuantityChangedListener != null) {
 			goodsQuantityChangedListener.onGoodsQuantityChanged();
 		}
 	}
 
 	public void setGoodsName(String goodsName) {
-		goodsNameView.setText(goodsName);
+		TextViewUtils.setText(this, R.id.goodsName, goodsName);
 	}
 
 	@Override
@@ -128,16 +128,8 @@ public class OrderItemView extends RelativeLayout implements OnClickListener {
 	}
 
 	public void enableEditButtons() {
-		if (canEdit) {
-			addButton.setVisibility(View.VISIBLE);
-			reduceButton.setVisibility(View.VISIBLE);
-		}
+		addButton.setVisibility(View.VISIBLE);
+		reduceButton.setVisibility(View.VISIBLE);
 	}
 
-	public void setCanEdit(boolean canEdit) {
-		this.canEdit = canEdit;
-		if (!canEdit) {
-			disableEditButtons();
-		}
-	}
 }

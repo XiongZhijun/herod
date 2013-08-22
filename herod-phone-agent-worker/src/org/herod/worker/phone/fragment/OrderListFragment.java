@@ -17,6 +17,7 @@ import org.herod.worker.phone.WorkerContext;
 import org.herod.worker.phone.fragment.OrderListFragment.FragmentType;
 import org.herod.worker.phone.handler.HerodHandler;
 import org.herod.worker.phone.view.OrderTabPageIndicator;
+import org.springframework.util.CollectionUtils;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,13 +25,16 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 public class OrderListFragment extends Fragment implements
-		AsyncTaskable<FragmentType, List<Order>>, IXListViewListener {
+		AsyncTaskable<FragmentType, List<Order>>, IXListViewListener,
+		OnClickListener {
 	private DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 	private XListView ordersListView;
+	private View refreshButton;
 	private String title;
 	private FragmentType type;
 	private int index = 0;
@@ -47,6 +51,8 @@ public class OrderListFragment extends Fragment implements
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_orders_list, container,
 				false);
+		refreshButton = view.findViewById(R.id.refreshButton);
+		refreshButton.setOnClickListener(this);
 		ordersListView = (XListView) view.findViewById(R.id.ordersListView);
 		ordersListView.setPullRefreshEnable(true);
 		ordersListView.setPullLoadEnable(false);
@@ -71,6 +77,12 @@ public class OrderListFragment extends Fragment implements
 	}
 
 	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.refreshButton)
+			refreshOrderList();
+	}
+
+	@Override
 	public List<Order> runOnBackground(FragmentType... params) {
 		switch (params[0]) {
 		case WaitAccept:
@@ -84,9 +96,13 @@ public class OrderListFragment extends Fragment implements
 
 	@Override
 	public void onPostExecute(List<Order> orders) {
-		if (orders == null) {
+		if (CollectionUtils.isEmpty(orders)) {
+			refreshButton.setVisibility(View.VISIBLE);
+			ordersListView.setVisibility(View.GONE);
 			return;
 		}
+		refreshButton.setVisibility(View.GONE);
+		ordersListView.setVisibility(View.VISIBLE);
 		ordersListView.setAdapter(new OrderListAdapter(this, orders, handler));
 		indicator.setTabQauntity(index, orders.size());
 		ordersListView.stopRefresh();

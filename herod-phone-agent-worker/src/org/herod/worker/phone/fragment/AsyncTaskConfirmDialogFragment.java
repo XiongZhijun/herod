@@ -5,12 +5,12 @@ package org.herod.worker.phone.fragment;
 
 import org.herod.framework.HerodTask.BackgroudRunnable;
 import org.herod.framework.HerodTask.PostExecutor;
+import org.herod.framework.utils.ToastUtils;
 import org.herod.order.common.model.Result;
 import org.herod.worker.phone.AgentWorkerTask;
 import org.herod.worker.phone.MainActivity;
 import org.herod.worker.phone.fragment.ConfirmDialogFragment.OnOkButtonClickListener;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -27,7 +27,6 @@ public class AsyncTaskConfirmDialogFragment extends ConfirmDialogFragment
 	private String failedMessage;
 	private Handler handler;
 	private BackgroudRunnable<Object, Result> backgroundRunnable;
-	private Context applicationContext;
 
 	public AsyncTaskConfirmDialogFragment() {
 		setOnOkButtonClickListener(this);
@@ -36,13 +35,12 @@ public class AsyncTaskConfirmDialogFragment extends ConfirmDialogFragment
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		applicationContext = getActivity().getApplicationContext();
 	}
 
 	@Override
 	public void onOk() {
-		new AgentWorkerTask<Object, Result>(applicationContext,
-				backgroundRunnable, this).execute();
+		new AgentWorkerTask<Object, Result>(getActivity(), backgroundRunnable,
+				this).execute();
 	}
 
 	@Override
@@ -55,7 +53,7 @@ public class AsyncTaskConfirmDialogFragment extends ConfirmDialogFragment
 		} else {
 			message = failedMessage;
 		}
-		Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show();
+		ToastUtils.showToast(message, Toast.LENGTH_SHORT);
 	}
 
 	public static void show(FragmentActivity activity, Handler handler,

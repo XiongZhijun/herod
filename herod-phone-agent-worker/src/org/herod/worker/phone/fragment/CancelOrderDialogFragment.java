@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.herod.framework.HerodTask.AsyncTaskable;
+import org.herod.framework.utils.ToastUtils;
 import org.herod.order.common.model.Result;
 import org.herod.worker.phone.AgentWorkerTask;
 import org.herod.worker.phone.MainActivity;
@@ -14,7 +15,6 @@ import org.herod.worker.phone.R;
 import org.herod.worker.phone.WorkerContext;
 import org.herod.worker.phone.fragment.FormFragment.OnOkButtonClickListener;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -32,12 +32,10 @@ public class CancelOrderDialogFragment extends FormFragment implements
 
 	private String serialNumber;
 	private Handler handler;
-	private Context applicationContext;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		applicationContext = getActivity().getApplicationContext();
 		setOnOkButtonClickListener(this);
 	}
 
@@ -79,7 +77,7 @@ public class CancelOrderDialogFragment extends FormFragment implements
 		} else {
 			message = "取消订单失败，请重试！";
 		}
-		Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show();
+		ToastUtils.showToast(message, Toast.LENGTH_SHORT);
 	}
 
 	public static void showDialog(FragmentActivity activity, Handler handler,

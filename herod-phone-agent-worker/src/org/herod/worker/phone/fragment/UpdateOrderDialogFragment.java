@@ -6,7 +6,9 @@ package org.herod.worker.phone.fragment;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.herod.framework.HerodTask.AsyncTaskable;
+import org.herod.framework.utils.ToastUtils;
 import org.herod.order.common.model.Result;
 import org.herod.worker.phone.AgentWorkerTask;
 import org.herod.worker.phone.MainActivity;
@@ -17,8 +19,8 @@ import org.herod.worker.phone.fragment.FormFragment.OnOkButtonClickListener;
 import org.herod.worker.phone.model.OrderUpdateInfo;
 import org.herod.worker.phone.view.OrderEditor;
 import org.herod.worker.phone.view.OrderEditorManager;
+
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -36,12 +38,10 @@ public class UpdateOrderDialogFragment extends FormFragment implements
 		AsyncTaskable<Map<String, String>, Result> {
 
 	private Handler handler;
-	private Context applicationContext;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		applicationContext = getActivity().getApplicationContext();
 		setOnOkButtonClickListener(this);
 		setOnCancelButtonClickListener(this);
 	}
@@ -99,7 +99,7 @@ public class UpdateOrderDialogFragment extends FormFragment implements
 		} else {
 			message = "修改订单失败，请重试！";
 		}
-		Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show();
+		ToastUtils.showToast(message, Toast.LENGTH_SHORT);
 		if (result != null && result.isSuccess()) {
 			OrderEditorManager.getInstance().stopEdit();
 		}

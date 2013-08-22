@@ -4,6 +4,7 @@
 package org.herod.framework;
 
 import org.herod.framework.utils.ResourcesUtils;
+import org.herod.framework.utils.ToastUtils;
 
 import android.app.Application;
 
@@ -18,6 +19,7 @@ public class HerodApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		ResourcesUtils.setApplication(this);
+		ToastUtils.setApplicationContext(this);
 	}
 
 }

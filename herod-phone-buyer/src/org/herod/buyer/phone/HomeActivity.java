@@ -13,6 +13,7 @@ import org.herod.framework.lbs.SimpleLocationPlan.OnLocationSuccessListener;
 import org.herod.framework.tools.NetworkStatusTools;
 import org.herod.framework.tools.NetworkStatusTools.ConnectType;
 import org.herod.framework.tools.NetworkStatusTools.NetworkConnectInfo;
+import org.herod.framework.utils.ToastUtils;
 import org.herod.order.common.ImageLoaderAdapter;
 
 import android.content.Intent;
@@ -54,7 +55,7 @@ public class HomeActivity extends BaseActivity implements
 			return;
 		}
 		if (networkConnectInfo.connectType == ConnectType._2G) {
-			Toast.makeText(this, "当前为2G网络", Toast.LENGTH_SHORT).show();
+			ToastUtils.showToast("当前为2G网络", Toast.LENGTH_SHORT);
 		}
 	}
 

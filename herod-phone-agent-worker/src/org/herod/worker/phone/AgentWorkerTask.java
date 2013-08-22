@@ -5,6 +5,7 @@ package org.herod.worker.phone;
 
 import org.herod.framework.HerodTask;
 import org.herod.framework.rest.AuthenticationException;
+import org.herod.framework.utils.ToastUtils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -42,8 +43,7 @@ public class AgentWorkerTask<P, R> extends HerodTask<P, R> {
 				public void run() {
 					context.startActivity(new Intent(context,
 							LoginActivity.class));
-					Toast.makeText(context, "当前用户没有登录，请重新登录！",
-							Toast.LENGTH_LONG).show();
+					ToastUtils.showToast("当前用户没有登录，请重新登录！", Toast.LENGTH_LONG);
 					WorkerContext.setLoginToken(null);
 					if (context instanceof Activity
 							&& !((Activity) context).isFinishing()) {

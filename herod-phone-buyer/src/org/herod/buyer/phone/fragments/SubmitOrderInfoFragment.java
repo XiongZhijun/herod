@@ -15,6 +15,7 @@ import org.herod.buyer.phone.db.OrderDao;
 import org.herod.buyer.phone.service.SimpleAddressSelectService;
 import org.herod.framework.db.DatabaseOpenHelper;
 import org.herod.framework.utils.StringUtils;
+import org.herod.framework.utils.ToastUtils;
 import org.herod.order.common.model.Address;
 import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderStatus;
@@ -165,7 +166,7 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 				onSubmitSuccess(activity);
 				return;
 			}
-			Toast.makeText(activity, "下单失败，请重试！", Toast.LENGTH_SHORT).show();
+			ToastUtils.showToast("下单失败，请重试！", Toast.LENGTH_SHORT);
 		}
 
 		private void onSubmitSuccess(FragmentActivity activity) {
@@ -173,7 +174,7 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 				order.setStatus(OrderStatus.Submitted);
 			}
 			addOrdersToDatabase(activity, orders);
-			Toast.makeText(activity, "下单成功", Toast.LENGTH_SHORT).show();
+			ToastUtils.showToast("下单成功", Toast.LENGTH_SHORT);
 			ShoppingCartCache.getInstance().clearOrders();
 			dismiss();
 			if (activity instanceof AbstractOrdersActivity) {

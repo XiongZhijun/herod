@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.herod.framework.HerodTask.AsyncTaskable;
+import org.herod.framework.utils.ToastUtils;
 import org.herod.framework.widget.XListView;
 import org.herod.framework.widget.XListView.IXListViewListener;
 import org.herod.order.common.model.Order;
@@ -105,8 +106,8 @@ public class OrderListFragment extends Fragment implements
 		// // if(orderEditor != null) {
 		// // orderEditor.
 		// // }
-		Toast.makeText(getActivity(), "on activity result", Toast.LENGTH_SHORT)
-				.show();
+		ToastUtils.showToast("on activity result", Toast.LENGTH_SHORT);
+
 	}
 
 	@Override

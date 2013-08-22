@@ -4,6 +4,7 @@ import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
 import org.herod.framework.utils.DeviceUtils;
 import org.herod.framework.utils.StringUtils;
+import org.herod.framework.utils.ToastUtils;
 import org.herod.worker.phone.model.Token;
 
 import android.app.Activity;
@@ -79,7 +80,6 @@ public class LoginActivity extends Activity implements OnEditorActionListener,
 
 	private void reset() {
 		passwordEditor.setText(StringUtils.EMPTY);
-		userNameEditor.setText(StringUtils.EMPTY);
 	}
 
 	private void gotoMainActivity(Context context) {
@@ -101,12 +101,11 @@ public class LoginActivity extends Activity implements OnEditorActionListener,
 		protected void onPostExecute(Token result) {
 			Context context = LoginActivity.this;
 			if (result == null || StringUtils.isBlank(result.getTokenString())) {
-				Toast.makeText(context, "登录失败，手机号或者密码错误！", Toast.LENGTH_LONG)
-						.show();
+				ToastUtils.showToast("登录失败，手机号或者密码错误！", Toast.LENGTH_LONG);
 				reset();
 				return;
 			}
-			Toast.makeText(context, "登录成功！", Toast.LENGTH_SHORT).show();
+			ToastUtils.showToast("登录成功！", Toast.LENGTH_SHORT);
 			DeviceUtils.setPhoneNumber(context, userName);
 			WorkerContext.setLoginToken(result.getTokenString());
 			gotoMainActivity(context);

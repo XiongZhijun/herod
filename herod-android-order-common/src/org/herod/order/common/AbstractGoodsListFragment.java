@@ -10,6 +10,7 @@ import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.adapter.SimpleAdapter;
 import org.herod.framework.adapter.SimpleAdapter.ViewBinder;
+import org.herod.framework.utils.ToastUtils;
 import org.herod.framework.widget.XListView;
 import org.herod.framework.widget.XListView.IXListViewListener;
 
@@ -80,8 +81,7 @@ public abstract class AbstractGoodsListFragment extends Fragment implements
 	public void onPostExecute(List<MapWrapper<String, Object>> data) {
 		if (data == null || data.size() == 0) {
 			if (!isFirstLoad) {
-				Toast.makeText(getActivity(), "没有更多商品了！", Toast.LENGTH_SHORT)
-						.show();
+				ToastUtils.showToast("没有更多商品了！", Toast.LENGTH_SHORT);
 			}
 			goodsListView.stopLoadMore();
 			goodsListView.setPullLoadEnable(false);

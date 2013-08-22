@@ -33,6 +33,7 @@ import org.herod.framework.ci.annotation.InjectView;
 import org.herod.framework.form.FormHelper;
 import org.herod.framework.form.FormHelper.FormHelperBuilder;
 import org.herod.framework.utils.TextViewUtils;
+import org.herod.framework.utils.ToastUtils;
 import org.herod.framework.utils.ViewUtils;
 import org.herod.order.common.model.Address;
 import org.herod.order.common.model.Order;
@@ -59,6 +60,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 /**
  * 
@@ -128,8 +130,6 @@ public class OrderView extends LinearLayout implements
 
 	public void setOrder(Order order) {
 		this.order = order;
-		initButtonStatus(order);
-
 		formHelper.setValues(order, this);
 
 		orderItemsContainer.removeAllViews();
@@ -142,6 +142,7 @@ public class OrderView extends LinearLayout implements
 			orderItemsContainer.addView(orderItemView, new LayoutParams(
 					MATCH_PARENT, WRAP_CONTENT));
 		}
+		OrderViewButtonsTools.refreshButtonStatus(order, this, orderItemViews);
 	}
 
 	private OrderItemView createOrderItemView(OrderItem item) {
@@ -230,48 +231,17 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void onCancelEditButtonClick() {
-		disableOperationButtons();
+		OrderEditorManager.getInstance().stopEdit();
 		setOrder(order);
 	}
 
-	private void initButtonStatus(Order order) {
-		switch (order.getStatus()) {
-		case Submitted:
-			findViewById(R.id.acceptOrderButton).setVisibility(View.VISIBLE);
-			findViewById(R.id.completeOrderButton).setVisibility(View.GONE);
-			break;
-		case Acceptted:
-			findViewById(R.id.acceptOrderButton).setVisibility(View.GONE);
-			findViewById(R.id.completeOrderButton).setVisibility(View.VISIBLE);
-		default:
-			break;
-		}
-	}
-
-	private void disableOperationButtons() {
-		ViewUtils.setVisibility(this, View.VISIBLE, R.id.acceptOrderButton,
-				R.id.editOrderButton, R.id.cancelOrderButton,
-				R.id.completeOrderButton);
-		ViewUtils.setVisibility(this, View.GONE, R.id.cancelEditButton,
-				R.id.confirmEditButton, R.id.addNewItemButton);
-		initButtonStatus(order);
-		for (OrderItemView orderItemView : orderItemViews) {
-			orderItemView.disableEditButtons();
-		}
-		OrderEditorManager.getInstance().stopEdit();
-	}
-
 	private void onEditOrderButtonClick() {
-		ViewUtils.setVisibility(this, View.GONE, R.id.acceptOrderButton,
-				R.id.editOrderButton, R.id.cancelOrderButton,
-				R.id.completeOrderButton);
-		ViewUtils.setVisibility(this, View.VISIBLE, R.id.cancelEditButton,
-				R.id.confirmEditButton, R.id.addNewItemButton);
-		for (OrderItemView orderItemView : orderItemViews) {
-			orderItemView.enableEditButtons();
+		boolean startEdit = OrderEditorManager.getInstance().startEdit(order);
+		if (!startEdit) {
+			ToastUtils.showToast("不能同时对多个订单进行修改！", Toast.LENGTH_SHORT);
+			return;
 		}
-
-		OrderEditorManager.getInstance().startEdit(order);
+		OrderViewButtonsTools.refreshButtonStatus(order, this, orderItemViews);
 	}
 
 	public void setHandler(Handler handler) {

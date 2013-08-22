@@ -101,8 +101,8 @@ public class OrderEditor {
 		return updateInfo;
 	}
 
-	public void submitUpdateInfo() {
-
+	public Order getOrder() {
+		return order;
 	}
 
 	public void setOrder(Order order) {

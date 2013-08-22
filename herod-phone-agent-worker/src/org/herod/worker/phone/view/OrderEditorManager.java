@@ -6,6 +6,7 @@ package org.herod.worker.phone.view;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.herod.framework.utils.StringUtils;
 import org.herod.order.common.model.Order;
 
 /**
@@ -49,6 +50,16 @@ public class OrderEditorManager {
 		} finally {
 			lock.unlock();
 		}
+	}
+
+	public boolean isInEdit(String orderSN) {
+		if (!inEdit || orderEditor == null) {
+			return false;
+		}
+		Order order = orderEditor.getOrder();
+		return order != null
+				&& StringUtils.equals(order.getSerialNumber(), orderSN);
+
 	}
 
 	public void stopEdit() {

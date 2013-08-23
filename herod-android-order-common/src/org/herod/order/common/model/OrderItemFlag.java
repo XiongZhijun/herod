@@ -18,5 +18,7 @@ public enum OrderItemFlag {
 	/** 该订单项处在缺货的状态 */
 	Stockout,
 	/** 说明订单项已经被删除 */
-	Deleted
+	Deleted,
+	/** 新增的 */
+	Added
 }

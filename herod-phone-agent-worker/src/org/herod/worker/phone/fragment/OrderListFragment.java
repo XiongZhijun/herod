@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.herod.framework.HerodTask.AsyncTaskable;
-import org.herod.framework.utils.ToastUtils;
 import org.herod.framework.widget.XListView;
 import org.herod.framework.widget.XListView.IXListViewListener;
 import org.herod.order.common.model.Order;
@@ -27,7 +26,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 public class OrderListFragment extends Fragment implements
 		AsyncTaskable<FragmentType, List<Order>>, IXListViewListener,
@@ -40,6 +38,7 @@ public class OrderListFragment extends Fragment implements
 	private int index = 0;
 	private OrderTabPageIndicator indicator;
 	private Handler handler;
+	private OrderListAdapter orderListAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -103,7 +102,8 @@ public class OrderListFragment extends Fragment implements
 		}
 		refreshButton.setVisibility(View.GONE);
 		ordersListView.setVisibility(View.VISIBLE);
-		ordersListView.setAdapter(new OrderListAdapter(this, orders, handler));
+		orderListAdapter = new OrderListAdapter(this, orders, handler);
+		ordersListView.setAdapter(orderListAdapter);
 		indicator.setTabQauntity(index, orders.size());
 		ordersListView.stopRefresh();
 		ordersListView.setRefreshTime(dateFormat.format(new Date()));
@@ -111,19 +111,9 @@ public class OrderListFragment extends Fragment implements
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		// super.onActivityResult(requestCode, resultCode, data);
-		// String serialNumber = data.getStringExtra("serialNumber");
-		// HashMap<Long, OrderItem> newOrderItemsMap = (HashMap<Long,
-		// OrderItem>) data
-		// .getSerializableExtra("newOrderItemsMap");
-		// OrderEditor orderEditor = OrderEditorManager.getInstance()
-		// .findOrderEditor(serialNumber);
-		// // if(orderEditor != null) {
-		// // orderEditor.
-		// // }
-		ToastUtils.showToast("on activity result", Toast.LENGTH_SHORT);
-
+		if (orderListAdapter != null) {
+			orderListAdapter.notifyDataSetChanged();
+		}
 	}
 
 	@Override

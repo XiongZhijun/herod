@@ -4,6 +4,7 @@
 package org.herod.worker.phone.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,8 +63,9 @@ public class OrderUpdateInfo {
 		return newOrderItems;
 	}
 
-	public void setNewOrderItems(List<OrderItem> newOrderItems) {
-		this.newOrderItems = newOrderItems;
+	public void setNewOrderItems(Collection<OrderItem> newOrderItems) {
+		this.newOrderItems.clear();
+		this.newOrderItems.addAll(newOrderItems);
 	}
 
 	public Map<String, Integer> getQuantityChangeMap() {

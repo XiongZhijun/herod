@@ -14,12 +14,14 @@ import org.herod.order.model.OrderStatus;
 import org.herod.order.model.OrderUpdateInfo;
 import org.herod.order.model.Token;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Xiong Zhijun
  * @email hust.xzj@gmail.com
  * 
  */
+@Transactional
 public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 	@Autowired
 	private OrderStatusChecker orderStatusChecker;

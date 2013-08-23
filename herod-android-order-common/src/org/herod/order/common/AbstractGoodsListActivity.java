@@ -87,7 +87,7 @@ public abstract class AbstractGoodsListActivity extends BaseActivity implements
 
 		@Override
 		public int getCount() {
-			return goodsTypes.size();
+			return goodsTypes != null ? goodsTypes.size() : 0;
 		}
 
 		@Override

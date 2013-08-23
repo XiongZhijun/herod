@@ -5,6 +5,8 @@ package org.herod.order.common.model;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 /**
  * 订单项
  * 
@@ -12,6 +14,7 @@ import java.io.Serializable;
  * @email hust.xzj@gmail.com
  * 
  */
+@JsonIgnoreProperties({ "totalAmount" })
 public class OrderItem implements Serializable {
 	private static final long serialVersionUID = -3497838304695783267L;
 	/** 流水号 */

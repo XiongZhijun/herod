@@ -3,10 +3,13 @@
  */
 package org.herod.worker.phone.view;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.herod.framework.utils.StringUtils;
+import org.herod.order.common.SerialNumberUtils;
 import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderItem;
 
@@ -79,5 +82,27 @@ public class OrderEditorManager {
 		} finally {
 			lock.unlock();
 		}
+	}
+
+	public int getQuantity(long shopId, long goodsId) {
+		Order order = getOrder();
+		if (!inEdit || order.getShopId() != shopId) {
+			return 0;
+		}
+		String orderItemSerialNumber = SerialNumberUtils
+				.buildOrderItemSerialNumber(order.getSerialNumber(), goodsId);
+		return orderEditor.getOrderItemQuantity(orderItemSerialNumber);
+
+	}
+
+	public Collection<OrderItem> getNewOrderItems() {
+		if (inEdit) {
+			return orderEditor.getNewOrderItems();
+		}
+		return Collections.emptyList();
+	}
+
+	private Order getOrder() {
+		return orderEditor.getOrder();
 	}
 }

@@ -8,7 +8,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static org.herod.worker.phone.R.id.acceptOrderButton;
 import static org.herod.worker.phone.R.id.addNewItemButton;
 import static org.herod.worker.phone.R.id.buyerName;
-import static org.herod.worker.phone.R.id.cancelEditButton;
+import static org.herod.worker.phone.R.id.*;
 import static org.herod.worker.phone.R.id.cancelOrderButton;
 import static org.herod.worker.phone.R.id.comment;
 import static org.herod.worker.phone.R.id.completeOrderButton;
@@ -73,10 +73,11 @@ public class OrderView extends LinearLayout implements
 		GoodsQuantityChangedListener, OnClickListener, ViewFindable {
 	private static final int[] FORM_TO = new int[] { serialNumber, submitTime,
 			shopName, buyerName, comment, status, shopTips, costOfRunErrands,
-			totalWithCostOfRunErrands };
+			totalWithCostOfRunErrands, totalQuantity };
 	private static final String[] FORM_FROM = new String[] { "serialNumber",
 			"submitTime", "shopName", "buyerName", "comment", "status",
-			"shopTips", "costOfRunErrands", "totalAmountWithCostOfRunErrands" };
+			"shopTips", "costOfRunErrands", "totalAmountWithCostOfRunErrands",
+			"totalQuantity" };
 	private static final int[] NEED_SET_ON_CLICK_LISTENER_VIEW_IDS = new int[] {
 			editOrderButton, acceptOrderButton, completeOrderButton,
 			cancelOrderButton, cancelEditButton, confirmEditButton,
@@ -134,14 +135,18 @@ public class OrderView extends LinearLayout implements
 
 		orderItemsContainer.removeAllViews();
 		orderItemViews.clear();
+		List<OrderItem> orderItems = new ArrayList<OrderItem>();
+		orderItems.addAll(order.getOrderItems());
+		orderItems.addAll(OrderEditorManager.getInstance().getNewOrderItems());
 
-		for (OrderItem item : order.getOrderItems()) {
+		for (OrderItem item : orderItems) {
 			addLineToOrderItemListView(orderItemsContainer);
 			OrderItemView orderItemView = createOrderItemView(item);
 			orderItemViews.add(orderItemView);
 			orderItemsContainer.addView(orderItemView, new LayoutParams(
 					MATCH_PARENT, WRAP_CONTENT));
 		}
+
 		OrderViewButtonsTools.refreshButtonStatus(order, this, orderItemViews);
 	}
 

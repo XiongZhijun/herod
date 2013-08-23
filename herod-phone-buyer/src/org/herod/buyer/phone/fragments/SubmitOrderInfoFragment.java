@@ -16,6 +16,7 @@ import org.herod.buyer.phone.service.SimpleAddressSelectService;
 import org.herod.framework.db.DatabaseOpenHelper;
 import org.herod.framework.utils.StringUtils;
 import org.herod.framework.utils.ToastUtils;
+import org.herod.order.common.SerialNumberUtils;
 import org.herod.order.common.model.Address;
 import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderStatus;
@@ -140,8 +141,7 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 		protected Result doInBackground(Object... params) {
 			orders = ShoppingCartCache.getInstance().getAllOrders();
 			String transactionSN = getTransactionSerialNumber();
-			for (int i = 0; i < orders.size(); i++) {
-				Order order = orders.get(i);
+			for (Order order : orders) {
 				Address deliveryAddress = new Address();
 				deliveryAddress.setAddress(buyerAddress);
 				order.setDeliveryAddress(deliveryAddress);
@@ -149,7 +149,8 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 				order.setBuyerName(buyerName);
 				order.setComment(comment);
 				order.setSubmitTime(new Date());
-				order.setSerialNumber(transactionSN + "-" + (i + 1));
+				order.setSerialNumber(SerialNumberUtils.buildOrderSerialNumber(
+						transactionSN, order.getShopId()));
 			}
 			return BuyerContext.getBuyerService().submitOrders(orders);
 		}

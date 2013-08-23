@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.herod.framework.utils.StringUtils;
+import org.herod.order.common.SerialNumberUtils;
 
 /**
  * 订单
@@ -58,13 +58,12 @@ public class Order {
 	}
 
 	public void setSerialNumber(String serialNumber) {
-		if (StringUtils.isBlank(this.serialNumber)) {
-			this.serialNumber = serialNumber;
-		}
-		for (int i = 0; i < orderItems.size(); i++) {
-			OrderItem orderItem = orderItems.get(i);
+		this.serialNumber = serialNumber;
+		for (OrderItem orderItem : orderItems) {
 			orderItem.setOrderSerialNumber(this.serialNumber);
-			orderItem.setSerialNumber(this.serialNumber + "-" + (i + 1));
+			String itemSN = SerialNumberUtils.buildOrderItemSerialNumber(
+					serialNumber, orderItem.getGoodsId());
+			orderItem.setSerialNumber(itemSN);
 		}
 	}
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd"
+	xmlns:m="http://ant.apache.org/ivy/maven">
+	<info organisation="org.herod" module="herod-communication-common" />
+	<configurations>
+		<include file="../bear-builds/ivy-configurations.xml" />
+	</configurations>
+	<publications>
+		<artifact conf="master" />
+		<artifact type="javadoc" ext="jar" conf="javadoc"
+			m:classifier="javadoc" />
+		<artifact type="source" ext="jar" conf="sources"
+			m:classifier="sources" />
+	</publications>
+	<dependencies>
+		<dependency org="org.testng" name="testng" rev="6.1.1"
+			conf="test->master,runtime;sources->sources" />
+		<dependency org="com.fpi.bear" name="bear-test" rev="1.6.1+"
+			conf="test->master,runtime" />
+	</dependencies>
+</ivy-module>

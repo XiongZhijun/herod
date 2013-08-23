@@ -101,6 +101,18 @@ public class OrderEditor {
 		return updateInfo;
 	}
 
+	public int getOrderItemQuantity(String orderItemSN) {
+		if (newOrderItemQuantityMap.containsKey(orderItemSN)) {
+			return newOrderItemQuantityMap.get(orderItemSN);
+		}
+		for (OrderItem orderItem : newOrderItems) {
+			if (StringUtils.equals(orderItemSN, orderItem.getSerialNumber())) {
+				return orderItem.getQuantity();
+			}
+		}
+		return 0;
+	}
+
 	public Order getOrder() {
 		return order;
 	}

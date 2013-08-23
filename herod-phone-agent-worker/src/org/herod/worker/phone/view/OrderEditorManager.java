@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.herod.framework.utils.StringUtils;
 import org.herod.order.common.model.Order;
+import org.herod.order.common.model.OrderItem;
 
 /**
  * 
@@ -60,6 +61,14 @@ public class OrderEditorManager {
 		return order != null
 				&& StringUtils.equals(order.getSerialNumber(), orderSN);
 
+	}
+
+	public int getOrderItemQuantity(OrderItem orderItem) {
+		if (isInEdit(orderItem.getOrderSerialNumber())) {
+			return orderEditor
+					.getOrderItemQuantity(orderItem.getSerialNumber());
+		}
+		return orderItem.getQuantity();
 	}
 
 	public void stopEdit() {

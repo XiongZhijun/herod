@@ -60,7 +60,9 @@ public class OrderItemView extends RelativeLayout implements OnClickListener,
 	public void setOrderAndOrderItem(OrderItem orderItem) {
 		this.orderItem = orderItem;
 		setGoodsName(orderItem.getGoodsName());
-		setQuantity(orderItem.getQuantity());
+		int quantity = OrderEditorManager.getInstance().getOrderItemQuantity(
+				orderItem);
+		setQuantity(quantity);
 		setSellingPrice(orderItem.getSellingPrice());
 	}
 

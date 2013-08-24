@@ -18,8 +18,16 @@
 	<dependencies>
 		<dependency name="herod-common" rev="1.0+"
 			conf="compile->master,compile;sources->sources" />
-		<dependency org="com.fpi.bear" name="bear-permission"
-			rev="1.6.1.6" conf="compile->master,compile;sources->sources" />
+		<dependency name="herod-communication-server" rev="1.0+"
+			conf="compile->master,compile;sources->sources" />
+		<dependency name="herod-event" rev="1.0+"
+			conf="compile->master,compile;sources->sources" />
+
+		<dependency org="org.apache.mina" name="mina-core" rev="2.0.0-M1"
+			conf="compile->master;runtime->runtime;sources->sources" />
+
+		<dependency org="com.fpi.bear" name="bear-permission" rev="1.6.1.6"
+			conf="compile->master,compile;sources->sources" />
 		<dependency org="com.fpi.bear" name="bear-common-third-web"
 			rev="1.6.1.6" conf="compile->compile;sources->sources" />
 		<dependency org="com.fpi.bear" name="bear-common-rest" rev="1.6.1.6"

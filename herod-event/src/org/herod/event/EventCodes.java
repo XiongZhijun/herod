@@ -11,13 +11,7 @@ package org.herod.event;
  */
 public interface EventCodes {
 
-	String REGIST_COMMAND = "regist";
+	String REGIST_COMMAND = "R";
+	String HEARTBEAT_COMMAND = "H";
 
-	String TRANSACTION_ORDERED_COMMAND = "transactionOrdered";
-	String TRANSACTION_ORDER_STATUS_UPDATE_COMMAND = "transactionOrderStatusUpdate";
-
-	String ORDER_ORDERED_COMMAND = "orderOrdered";
-
-	String ORDER_QUANTITY_UPDATE_COMMAND = "orderQuantityUpdate";
-	String ORDER_STATUS_UPDATE_COMMAND = "orderStatusUpdate";
 }

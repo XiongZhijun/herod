@@ -33,4 +33,28 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 			</set>
 		</property>
 	</bean>
+
+	<bean id="orderEventCenter" class="org.herod.order.event.EventCenter"
+		init-method="start">
+		<property name="initialDelay" value="1" />
+		<property name="period" value="1" />
+	</bean>
+	<bean id="eventHeadTailHandler" class="org.herod.order.event.EventHeadTailHandler"></bean>
+	<bean id="eventServer" class="org.herod.communication.server.Server"
+		init-method="start">
+		<property name="port" value="19991" />
+		<property name="ioHandler">
+			<bean class="org.herod.order.event.EventServerIoHandler" />
+		</property>
+		<property name="frameFilter">
+			<bean class="org.apache.mina.filter.codec.ProtocolCodecFilter">
+				<constructor-arg>
+					<bean class="org.herod.communication.server.SimpleProtocolCodecFactory">
+						<property name="frameEncoder" ref="eventHeadTailHandler" />
+						<property name="byteCacheVisitor" ref="eventHeadTailHandler" />
+					</bean>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
 </beans>

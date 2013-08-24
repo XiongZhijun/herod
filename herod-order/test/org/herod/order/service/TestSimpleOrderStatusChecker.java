@@ -28,19 +28,19 @@ public class TestSimpleOrderStatusChecker {
 	@DataProvider
 	public Object[][] canChangeStatusProvider() {
 		return new Object[][] {
-				{ "123", OrderStatus.Unsubmit, OrderStatus.Submitted, true },
-				{ "123", OrderStatus.Unsubmit, OrderStatus.Acceptted, false },
-				{ "123", OrderStatus.Unsubmit, OrderStatus.Cancelled, true },
-				{ "123", OrderStatus.Submitted, OrderStatus.Acceptted, true },
-				{ "123", OrderStatus.Submitted, OrderStatus.Rejected, false },
-				{ "123", OrderStatus.Submitted, OrderStatus.Completed, false },
-				{ "123", OrderStatus.Submitted, OrderStatus.Cancelled, true },
-				{ "123", OrderStatus.Acceptted, OrderStatus.Completed, true },
-				{ "123", OrderStatus.Acceptted, OrderStatus.Unsubmit, false },
-				{ "123", OrderStatus.Acceptted, OrderStatus.Submitted, false },
-				{ "123", OrderStatus.Acceptted, OrderStatus.Cancelled, true },
-				{ "123", OrderStatus.Acceptted, OrderStatus.Rejected, true },
-				{ "123", OrderStatus.Completed, OrderStatus.Acceptted, false } };
+				{ "123", OrderStatus.Unsubmit, OrderStatus.Submitted, false },
+				{ "123", OrderStatus.Unsubmit, OrderStatus.Acceptted, true },
+				{ "123", OrderStatus.Unsubmit, OrderStatus.Cancelled, false },
+				{ "123", OrderStatus.Submitted, OrderStatus.Acceptted, false },
+				{ "123", OrderStatus.Submitted, OrderStatus.Rejected, true },
+				{ "123", OrderStatus.Submitted, OrderStatus.Completed, true },
+				{ "123", OrderStatus.Submitted, OrderStatus.Cancelled, false },
+				{ "123", OrderStatus.Acceptted, OrderStatus.Completed, false },
+				{ "123", OrderStatus.Acceptted, OrderStatus.Unsubmit, true },
+				{ "123", OrderStatus.Acceptted, OrderStatus.Submitted, true },
+				{ "123", OrderStatus.Acceptted, OrderStatus.Cancelled, false },
+				{ "123", OrderStatus.Acceptted, OrderStatus.Rejected, false },
+				{ "123", OrderStatus.Completed, OrderStatus.Acceptted, true } };
 	}
 
 	@Test(dataProvider = "canChangeStatusProvider")
@@ -56,12 +56,12 @@ public class TestSimpleOrderStatusChecker {
 
 	@DataProvider
 	public Object[][] canUpdateDataProvider() {
-		return new Object[][] { { "123", OrderStatus.Unsubmit, true },
-				{ "123", OrderStatus.Submitted, true },
-				{ "123", OrderStatus.Acceptted, true },
-				{ "123", OrderStatus.Completed, false },
-				{ "123", OrderStatus.Rejected, true },
-				{ "123", OrderStatus.Cancelled, false }, };
+		return new Object[][] { { "123", OrderStatus.Unsubmit, false },
+				{ "123", OrderStatus.Submitted, false },
+				{ "123", OrderStatus.Acceptted, false },
+				{ "123", OrderStatus.Completed, true },
+				{ "123", OrderStatus.Rejected, false },
+				{ "123", OrderStatus.Cancelled, true }, };
 	}
 
 	@Test(dataProvider = "canUpdateDataProvider")

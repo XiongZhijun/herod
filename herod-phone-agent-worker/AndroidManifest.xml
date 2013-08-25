@@ -69,6 +69,14 @@
         </activity>
 
         <service
+            android:name="org.herod.worker.phone.event.EventClientService"
+            android:enabled="true" >
+        </service>
+
+        <receiver android:name="org.herod.worker.phone.event.EventReceiver" >
+        </receiver>
+
+        <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" >

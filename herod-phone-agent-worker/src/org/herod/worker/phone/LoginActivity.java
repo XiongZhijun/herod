@@ -5,6 +5,7 @@ import org.herod.framework.ci.annotation.InjectView;
 import org.herod.framework.utils.DeviceUtils;
 import org.herod.framework.utils.StringUtils;
 import org.herod.framework.utils.ToastUtils;
+import org.herod.worker.phone.event.EventClientService;
 import org.herod.worker.phone.model.Token;
 
 import android.app.Activity;
@@ -31,6 +32,7 @@ public class LoginActivity extends Activity implements OnEditorActionListener,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		startService(new Intent(this, EventClientService.class));
 		WorkerContext.init(this);
 		new InjectViewHelper().injectViews(this);
 		passwordEditor.setOnEditorActionListener(this);
@@ -98,16 +100,16 @@ public class LoginActivity extends Activity implements OnEditorActionListener,
 		}
 
 		@Override
-		protected void onPostExecute(Token result) {
+		protected void onPostExecute(Token token) {
 			Context context = LoginActivity.this;
-			if (result == null || StringUtils.isBlank(result.getTokenString())) {
+			if (token == null || StringUtils.isBlank(token.getTokenString())) {
 				ToastUtils.showToast("登录失败，手机号或者密码错误！", Toast.LENGTH_LONG);
 				reset();
 				return;
 			}
 			ToastUtils.showToast("登录成功！", Toast.LENGTH_SHORT);
 			DeviceUtils.setPhoneNumber(context, userName);
-			WorkerContext.setLoginToken(result.getTokenString());
+			WorkerContext.setLoginToken(token);
 			gotoMainActivity(context);
 		}
 

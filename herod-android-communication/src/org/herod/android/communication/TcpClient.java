@@ -9,12 +9,14 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.herod.communication.common.ByteCache;
+import org.herod.communication.common.ByteCacheVisitor;
 import org.herod.communication.common.ByteFrame;
 import org.herod.communication.common.Callback;
 import org.herod.communication.common.FrameEncoder;
+import org.herod.communication.common.simple.SimpleByteCache;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 public class TcpClient implements Runnable {
@@ -27,30 +29,31 @@ public class TcpClient implements Runnable {
 	private Handler handler;
 	private int delayMillis;
 	private ByteBuffer buffer = ByteBuffer.allocate(1024);
-	private ByteCache cache;
+	private SimpleByteCache cache = new SimpleByteCache();
 	private FrameEncoder frameEncoder;
 	private Callback frameCallback;
 
 	public TcpClient(String serverHost, int serverPort, Handler handler,
-			int delayMillis, ByteCache cache, FrameEncoder frameEncoder,
-			Callback frameCallback) {
+			int delayMillis, ByteCacheVisitor visitor,
+			FrameEncoder frameEncoder, Callback frameCallback) {
 		super();
 		this.serverHost = serverHost;
 		this.serverPort = serverPort;
 		this.handler = handler;
 		this.delayMillis = delayMillis;
-		this.cache = cache;
+		this.cache.setVisitor(visitor);
 		this.frameEncoder = frameEncoder;
 		this.frameCallback = frameCallback;
 	}
 
 	@Override
 	public void run() {
+		Looper.prepare();
 		connectToServer();
 		try {
 			readDatas();
 		} catch (Exception e) {
-			Log.w("TcpClient", "read from server failed.");
+			Log.w("TcpClient", "read from server failed.", e);
 			handler.sendEmptyMessage(TcpClientService.READ_DATA_FROM_SERVER_FAILED);
 		}
 	}
@@ -119,8 +122,7 @@ public class TcpClient implements Runnable {
 			return false;
 		}
 		try {
-			frameEncoder.encode(frame);
-			byte[] bytes = frame.getBytes();
+			byte[] bytes = frameEncoder.encode(frame);
 			ByteBuffer bytebuf = ByteBuffer.allocate(bytes.length);
 			bytebuf = ByteBuffer.wrap(bytes);
 			client.write(bytebuf);
@@ -132,16 +134,4 @@ public class TcpClient implements Runnable {
 		}
 	}
 
-	public boolean sendMessage(String msg) {
-		try {
-			ByteBuffer bytebuf = ByteBuffer.allocate(1024);
-			bytebuf = ByteBuffer.wrap(msg.getBytes("UTF-8"));
-			client.write(bytebuf);
-			bytebuf.flip();
-			return true;
-		} catch (Exception e) {
-			Log.w("TcpClient", "send data to server failed.");
-			return false;
-		}
-	}
 }

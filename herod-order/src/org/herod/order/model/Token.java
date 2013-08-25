@@ -13,14 +13,16 @@ package org.herod.order.model;
 public class Token {
 
 	private String tokenString;
+	private long workerId;
 
 	public Token() {
 		super();
 	}
 
-	public Token(String tokenString) {
+	public Token(String tokenString, long workerId) {
 		super();
 		this.tokenString = tokenString;
+		this.workerId = workerId;
 	}
 
 	public String getTokenString() {
@@ -29,6 +31,14 @@ public class Token {
 
 	public void setTokenString(String tokenString) {
 		this.tokenString = tokenString;
+	}
+
+	public long getWorkerId() {
+		return workerId;
+	}
+
+	public void setWorkerId(long workerId) {
+		this.workerId = workerId;
 	}
 
 }

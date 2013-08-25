@@ -8,5 +8,8 @@
     <string name="RestServerPort">9191</string>
     <string name="ImageServerHost">192.168.100.102</string>
     <string name="ImageServerPort">9191</string>
-
-</resources>
+    <!-- Event Server -->
+    <string name="TcpServerHost">192.168.100.102</string>
+    <string name="TcpServerPort">19991</string>
+    <string name="TcpServerReconnectDelay">1000</string>
+</resources>

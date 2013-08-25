@@ -40,7 +40,7 @@ public class SimpleLoginService implements LoginService {
 			workerLoginInfo = buildWorkerLoginInfo(name, imei, worker);
 			addToSet(workerLoginInfo);
 		}
-		return new Token(workerLoginInfo.tokenString);
+		return new Token(workerLoginInfo.tokenString, workerLoginInfo.workerId);
 	}
 
 	private void addToSet(WorkerLoginInfo workerLoginInfo) {

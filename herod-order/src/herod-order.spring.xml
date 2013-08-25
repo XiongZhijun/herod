@@ -36,10 +36,10 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 
 	<bean id="orderEventCenter" class="org.herod.order.event.EventCenter"
 		init-method="start">
-		<property name="initialDelay" value="1" />
-		<property name="period" value="1" />
+		<property name="initialDelay" value="10" />
+		<property name="period" value="10" />
 	</bean>
-	<bean id="eventHeadTailHandler" class="org.herod.order.event.EventHeadTailHandler"></bean>
+	<bean id="eventHeadTailHandler" class="org.herod.event.EventHeadTailHandler"></bean>
 	<bean id="eventServer" class="org.herod.communication.server.Server"
 		init-method="start">
 		<property name="port" value="19991" />

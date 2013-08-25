@@ -3,10 +3,12 @@
  */
 package org.herod.android.communication;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.herod.communication.common.ByteCache;
+import org.herod.communication.common.ByteCacheVisitor;
 import org.herod.communication.common.ByteFrame;
 import org.herod.communication.common.FrameEncoder;
 
@@ -16,6 +18,7 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 
 /**
@@ -35,31 +38,35 @@ public abstract class TcpClientService extends Service implements Callback,
 	private final IBinder mBinder = new LocalBinder();
 	private Handler handler;
 	private TcpClient client;
-	private ExecutorService executor = Executors.newSingleThreadExecutor();
+	private ExecutorService messageSenderExecutor = Executors
+			.newSingleThreadExecutor();
+	private Set<ByteFrame> waitSendFrames = new HashSet<ByteFrame>();
 
 	public void onCreate() {
 		super.onCreate();
-		handler = new Handler(this);
-		start();
+		handler = new Handler(Looper.getMainLooper(), this);
+		connect();
 	}
 
 	public void onDestroy() {
 		super.onDestroy();
-		stop();
+		waitSendFrames.clear();
+		disconnect();
 	}
 
-	protected void restart() {
-		stop();
-		start();
+	public void reconnect() {
+		disconnect();
+		connect();
 	}
 
-	protected void start() {
+	public void connect() {
 		client = new TcpClient(getServerHost(), getServerPort(), handler,
-				getDelayMillis(), getByteCache(), getFrameEncoder(), this);
-		executor.execute(client);
+				getDelayMillis(), getByteCacheVisitor(), getFrameEncoder(),
+				this);
+		new Thread(client).start();
 	}
 
-	protected abstract ByteCache getByteCache();
+	protected abstract ByteCacheVisitor getByteCacheVisitor();
 
 	protected abstract FrameEncoder getFrameEncoder();
 
@@ -70,7 +77,7 @@ public abstract class TcpClientService extends Service implements Callback,
 
 	protected abstract void onReceiveMessage(ByteFrame byteFrame);
 
-	protected void stop() {
+	public void disconnect() {
 		if (client != null) {
 			client.stop();
 			client = null;
@@ -99,25 +106,46 @@ public abstract class TcpClientService extends Service implements Callback,
 	}
 
 	protected void onConnectSuccess() {
+		for (ByteFrame frame : waitSendFrames) {
+			sendMessageCertainly(frame);
+		}
 	}
 
 	protected void onConnectFailed() {
-		restart();
+		reconnect();
 	}
 
 	protected void onReadDataFailed() {
-		restart();
+		reconnect();
 	}
 
-	public boolean sendMessage(String msg) {
+	public boolean sendMessage(final ByteFrame byteFrame) {
 		if (client != null) {
-			return client.sendMessage(msg);
+			messageSenderExecutor.execute(new Runnable() {
+				public void run() {
+					client.sendFrame(byteFrame);
+				}
+			});
+			return true;
 		}
 		return false;
 	}
 
+	public void sendMessageCertainly(final ByteFrame byteFrame) {
+		if (client != null) {
+			messageSenderExecutor.execute(new Runnable() {
+				public void run() {
+					boolean success = client.sendFrame(byteFrame);
+					if (!success) {
+						waitSendFrames.add(byteFrame);
+					}
+				}
+			});
+		}
+	}
+
 	public class LocalBinder extends Binder {
-		TcpClientService getService() {
+		public TcpClientService getService() {
 			return TcpClientService.this;
 		}
 	}

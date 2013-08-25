@@ -3,20 +3,25 @@ package org.herod.worker.phone;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.herod.android.communication.TcpClientService.LocalBinder;
 import org.herod.framework.lbs.LocationManager;
 import org.herod.framework.lbs.SimpleLocationPlan;
 import org.herod.framework.lbs.SimpleLocationPlan.OnLocationSuccessListener;
-import org.herod.framework.utils.StringUtils;
 import org.herod.framework.widget.TabPageIndicator;
 import org.herod.order.common.BaseActivity;
+import org.herod.worker.phone.event.EventClientService;
 import org.herod.worker.phone.fragment.OrderListFragment;
 import org.herod.worker.phone.fragment.OrderListFragment.FragmentType;
 import org.herod.worker.phone.handler.HerodHandler;
 import org.herod.worker.phone.view.OrderTabPageIndicator;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler.Callback;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,8 +35,31 @@ import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
 
 public class MainActivity extends BaseActivity implements Callback,
 		OnLocationSuccessListener {
+	public static final int MESSAGE_KEY_REFRESH_ORDER_LIST = 1;
 	private List<OrderListFragment> orderListFragments;
 	private HerodHandler handler;
+	private ServiceConnection registServiceConnection = new ServiceConnection() {
+		public void onServiceDisconnected(ComponentName name) {
+		}
+
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			EventClientService eventService = (EventClientService) ((LocalBinder) service)
+					.getService();
+			eventService.registToServer();
+			unbindService(registServiceConnection);
+		}
+	};
+	private ServiceConnection reconnectServiceConnection = new ServiceConnection() {
+		public void onServiceDisconnected(ComponentName name) {
+		}
+
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			EventClientService eventService = (EventClientService) ((LocalBinder) service)
+					.getService();
+			eventService.reconnect();
+			unbindService(reconnectServiceConnection);
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +72,13 @@ public class MainActivity extends BaseActivity implements Callback,
 		orderListFragments = createOrderListFragments();
 		FragmentPagerAdapter adapter = new OrderGroupAdapter(
 				getSupportFragmentManager());
-
 		ViewPager pager = (ViewPager) findViewById(R.id.pager);
 		pager.setAdapter(adapter);
 		TabPageIndicator indicator = (TabPageIndicator) findViewById(R.id.indicator);
 		indicator.setViewPager(pager);
+
+		bindService(new Intent(this, EventClientService.class),
+				registServiceConnection, Context.BIND_AUTO_CREATE);
 	}
 
 	protected List<OrderListFragment> createOrderListFragments() {
@@ -73,6 +103,11 @@ public class MainActivity extends BaseActivity implements Callback,
 	}
 
 	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
@@ -81,7 +116,9 @@ public class MainActivity extends BaseActivity implements Callback,
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.logout) {
-			WorkerContext.setLoginToken(StringUtils.EMPTY);
+			WorkerContext.setLoginToken(null);
+			bindService(new Intent(this, EventClientService.class),
+					reconnectServiceConnection, BIND_AUTO_CREATE);
 			startActivity(new Intent(this, LoginActivity.class));
 			finish();
 			return true;
@@ -137,8 +174,6 @@ public class MainActivity extends BaseActivity implements Callback,
 	public void onLocationSuccess(BDLocation location) {
 
 	}
-
-	public static final int MESSAGE_KEY_REFRESH_ORDER_LIST = 1;
 
 	@Override
 	protected int getMenuConfigResource() {

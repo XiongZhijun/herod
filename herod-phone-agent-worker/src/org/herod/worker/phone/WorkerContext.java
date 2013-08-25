@@ -5,6 +5,7 @@ package org.herod.worker.phone;
 
 import org.herod.framework.utils.StringUtils;
 import org.herod.order.common.OrderContext;
+import org.herod.worker.phone.model.Token;
 import org.herod.worker.phone.rest.RestWorkerService;
 
 import android.content.Context;
@@ -18,14 +19,15 @@ import android.preference.PreferenceManager;
  * @email hust.xzj@gmail.com
  */
 public abstract class WorkerContext {
-	private static final String TOKEN = "TOKEN";
+	private static final String WORKER_ID = "WORKER_ID";
+	private static final String TOKEN_STRING = "TOKEN_STRING";
 	private static WorkerService workerService;
 	private static String restServerHost;
 	private static int restServerPort;
 	private static String imageServerHost;
 	private static int imageServerPort;
-	private static String loginTokenString;
 	private static SharedPreferences defaultSharedPreferences;
+	private static Token token;
 
 	public static void init(Context context) {
 		workerService = new RestWorkerService(context);
@@ -62,23 +64,45 @@ public abstract class WorkerContext {
 		return imageServerPort;
 	}
 
-	public static void setLoginToken(String token) {
-		WorkerContext.loginTokenString = token;
+	public static void setLoginToken(Token token) {
+		WorkerContext.token = token;
+		long workerId = 0;
+		String tokenString = StringUtils.EMPTY;
+		if (token != null) {
+			workerId = token.getWorkerId();
+			tokenString = token.getTokenString();
+		}
 		Editor editor = defaultSharedPreferences.edit();
-		editor.putString(TOKEN, token);
+		editor.putLong(WORKER_ID, workerId);
+		editor.putString(TOKEN_STRING, tokenString);
 		editor.commit();
 	}
 
-	public static String getLoginTokenString() {
-		if (StringUtils.isBlank(loginTokenString)) {
-			loginTokenString = defaultSharedPreferences.getString(TOKEN,
-					StringUtils.EMPTY);
+	public static Token getLoginToken() {
+		if (token != null || defaultSharedPreferences == null) {
+			return token;
 		}
-		return loginTokenString;
+		String tokenString = defaultSharedPreferences.getString(TOKEN_STRING,
+				StringUtils.EMPTY);
+		long workerId = defaultSharedPreferences.getLong(WORKER_ID, 0);
+		if (workerId > 0 && StringUtils.isNotBlank(tokenString)) {
+			token = new Token(tokenString, workerId);
+		}
+		return token;
 	}
 
 	public static boolean isInLogin() {
-		return StringUtils.isNotBlank(getLoginTokenString());
+		return getLoginToken() != null;
+	}
+
+	public static String getLoginTokenString() {
+		Token token = getLoginToken();
+		return token != null ? token.getTokenString() : null;
+	}
+
+	public static long getWorkerId() {
+		Token token = getLoginToken();
+		return token != null ? token.getWorkerId() : 0;
 	}
 
 }

@@ -3,8 +3,11 @@
  */
 package org.herod.android.communication;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -20,6 +23,7 @@ import android.os.Handler.Callback;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 /**
  * 
@@ -106,8 +110,24 @@ public abstract class TcpClientService extends Service implements Callback,
 	}
 
 	protected void onConnectSuccess() {
-		for (ByteFrame frame : waitSendFrames) {
-			sendMessageCertainly(frame);
+		List<Callable<Object>> tasks = new ArrayList<Callable<Object>>();
+		for (final ByteFrame frame : waitSendFrames) {
+			if (client != null) {
+				tasks.add(new Callable<Object>() {
+					public Object call() throws Exception {
+						boolean success = client.sendFrame(frame);
+						if (success) {
+							waitSendFrames.remove(frame);
+						}
+						return null;
+					}
+				});
+			}
+		}
+		try {
+			messageSenderExecutor.invokeAll(tasks);
+		} catch (InterruptedException e) {
+			Log.w("TcpClientService", "send message on connect success failed.");
 		}
 	}
 

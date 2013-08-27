@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
-http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
 	<aop:aspectj-autoproxy />
 	<context:annotation-config />
@@ -34,10 +36,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 		</property>
 	</bean>
 
-	<bean id="orderEventCenter" class="org.herod.order.event.EventCenter"
-		init-method="start">
-		<property name="initialDelay" value="10" />
-		<property name="period" value="10" />
+	<bean id="orderEventCenter" class="org.herod.order.event.EventCenter">
 	</bean>
 	<bean id="eventHeadTailHandler" class="org.herod.event.EventHeadTailHandler"></bean>
 	<bean id="eventServer" class="org.herod.communication.server.Server"
@@ -57,4 +56,13 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 			</bean>
 		</property>
 	</bean>
+
+	<bean id="orderCenter" class="org.herod.order.order.SimpleOrderCenter"
+		init-method="init" />
+	<bean id="eventHeartbeatScheduledService" class="org.herod.order.event.HeartbeatScheduledService"></bean>
+
+	<task:scheduled-tasks>
+		<task:scheduled ref="eventHeartbeatScheduledService"
+			method="run" cron="30 * * * * ?" />
+	</task:scheduled-tasks>
 </beans>

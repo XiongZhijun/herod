@@ -4,12 +4,16 @@
 package org.herod.buyer.phone.db;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.herod.framework.db.DatabaseAccessSupport;
 import org.herod.framework.db.DatabaseUtils;
 import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderItem;
+import org.springframework.util.CollectionUtils;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -32,7 +36,7 @@ public class OrderDao extends DatabaseAccessSupport {
 		super(openHelper);
 	}
 
-	public void addOrders(List<Order> orders) {
+	public void addOrders(Collection<Order> orders) {
 		executeWrite(new NewOrdersWriter(orders));
 	}
 
@@ -40,14 +44,25 @@ public class OrderDao extends DatabaseAccessSupport {
 		executeWrite(new RemoveAllOrdersWriter());
 	}
 
+	public void deleteOrders(Set<String> serialNumbers) {
+		if (CollectionUtils.isEmpty(serialNumbers)) {
+			return;
+		}
+		executeWrite(new RemoveOrdersWithSerialNumberWriter(serialNumbers));
+	}
+
 	public List<Order> getAllOrders() {
 		return executeRead(new QueryAllOrdersReader());
 	}
 
-	class NewOrdersWriter implements Writer {
-		private List<Order> orders;
+	public Set<String> findAllUncompleteOrders() {
+		return executeRead(new QueryAllUncompleteOrdersReader());
+	}
 
-		public NewOrdersWriter(List<Order> orders) {
+	class NewOrdersWriter implements Writer {
+		private Collection<Order> orders;
+
+		public NewOrdersWriter(Collection<Order> orders) {
 			super();
 			this.orders = orders;
 		}
@@ -62,7 +77,7 @@ public class OrderDao extends DatabaseAccessSupport {
 		}
 	}
 
-	protected void insertOrders(SQLiteDatabase db, List<Order> orders) {
+	protected void insertOrders(SQLiteDatabase db, Collection<Order> orders) {
 		List<String> columns = getAllColumnsByDatabase(db, ORDERS);
 		for (Order order : orders) {
 			ContentValues values = DatabaseUtils
@@ -88,10 +103,54 @@ public class OrderDao extends DatabaseAccessSupport {
 		}
 	}
 
+	protected class RemoveOrdersWithSerialNumberWriter implements Writer {
+		private Set<String> serialNumbers;
+
+		public RemoveOrdersWithSerialNumberWriter(Set<String> serialNumbers) {
+			super();
+			this.serialNumbers = serialNumbers;
+		}
+
+		public void write(SQLiteDatabase db) {
+			StringBuilder deleteOrderSelection = new StringBuilder();
+			StringBuilder deleteOrderItemSelection = new StringBuilder();
+			for (String sn : serialNumbers) {
+				if (deleteOrderItemSelection.length() > 0) {
+					deleteOrderItemSelection.append(" OR ");
+				}
+				deleteOrderItemSelection.append(" ORDER_SERIAL_NUMBER = '")
+						.append(sn).append("'");
+				if (deleteOrderSelection.length() > 0) {
+					deleteOrderSelection.append(" OR ");
+				}
+				deleteOrderSelection.append(" SERIAL_NUMBER = '").append(sn)
+						.append("'");
+			}
+			db.delete(ORDER_ITEMS, deleteOrderItemSelection.toString(), null);
+			db.delete(ORDERS, deleteOrderSelection.toString(), null);
+		}
+	}
+
+	class QueryAllUncompleteOrdersReader implements Reader<Set<String>> {
+		public Set<String> read(SQLiteDatabase db) {
+			Cursor cursor = db
+					.query(ORDERS,
+							new String[] { "SERIAL_NUMBER" },
+							"STATUS = 'Submitted' or STATUS = 'Acceptted' or STATUS = 'Rejected'",
+							null, null, null, null);
+			Set<String> results = new HashSet<String>();
+			while (cursor.moveToNext()) {
+				results.add(cursor.getString(0));
+			}
+			return results;
+		}
+
+	}
+
 	class QueryAllOrdersReader implements Reader<List<Order>> {
 		public List<Order> read(SQLiteDatabase db) {
 			Cursor orderCursor = db.query(ORDERS, null, null, null, null, null,
-					"SERIAL_NUMBER");
+					"SERIAL_NUMBER DESC");
 			Cursor itemsCursor = db.query(ORDER_ITEMS, null, null, null, null,
 					null, null);
 			List<Order> orders = DatabaseUtils.toList(orderCursor, -1, -1,

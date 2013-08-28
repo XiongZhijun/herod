@@ -112,7 +112,11 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 
 	@Override
 	public List<Order> findOrdersBySerialNumbers(List<String> serialNumbers) {
-		return queryOrders(" WHERE SERIAL_NUMBER IN ?", serialNumbers);
+		RowMapper<Order> rm = new HerodBeanPropertyRowMapper<Order>(Order.class);
+		List<Order> orders = herodJdbcTemplate.query(SELECT_FROM_ORDERS_SQL
+				+ " WHERE SERIAL_NUMBER IN (:serialNumbers)", rm,
+				Collections.singletonMap("serialNumbers", serialNumbers));
+		return queryOrderItemsAndFillOrders(orders);
 	}
 
 	@Override
@@ -146,6 +150,10 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 		RowMapper<Order> rm = new HerodBeanPropertyRowMapper<Order>(Order.class);
 		List<Order> orders = herodJdbcTemplate.query(SELECT_FROM_ORDERS_SQL
 				+ whereConditionSql, rm, args);
+		return queryOrderItemsAndFillOrders(orders);
+	}
+
+	private List<Order> queryOrderItemsAndFillOrders(List<Order> orders) {
 		List<String> serialNumbers = getOrderSerialNumbers(orders);
 		List<OrderItem> orderItems = orderItemQueryService
 				.findOrderItemsBySerialNumber(serialNumbers);

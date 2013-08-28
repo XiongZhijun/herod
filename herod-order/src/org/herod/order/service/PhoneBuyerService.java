@@ -96,7 +96,10 @@ public interface PhoneBuyerService {
 	 *            订单流水号
 	 * @return
 	 */
-	Map<String, Order> findOrdersBySerialNumber(List<String> serialNumbers);
+	@GET
+	@Produces(DEFAULT_MEDIA_TYPE)
+	Map<String, Order> findOrdersBySerialNumber(
+			@QueryParam("serialNumber") String[] serialNumbers);
 
 	/**
 	 * 读取买家常用地址

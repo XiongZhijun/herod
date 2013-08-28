@@ -4,6 +4,7 @@
 package org.herod.order.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -104,10 +105,10 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 	}
 
 	@Override
-	public Map<String, Order> findOrdersBySerialNumber(
-			List<String> serialNumbers) {
+	public Map<String, Order> findOrdersBySerialNumber(String[] serialNumbers) {
 		Map<String, Order> orderMap = new HashMap<String, Order>();
-		List<Order> orders = orderDas.findOrdersBySerialNumbers(serialNumbers);
+		List<Order> orders = orderDas.findOrdersBySerialNumbers(Arrays
+				.asList(serialNumbers));
 		for (Order order : orders) {
 			orderMap.put(order.getSerialNumber(), order);
 		}

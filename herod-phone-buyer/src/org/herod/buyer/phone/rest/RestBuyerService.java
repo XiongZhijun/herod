@@ -5,18 +5,22 @@ package org.herod.buyer.phone.rest;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.herod.buyer.phone.BuyerService;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.rest.GZipRestTemplateBuilder;
 import org.herod.framework.rest.RestServiceSupport;
 import org.herod.framework.rest.URLBuilder;
+import org.herod.framework.tools.GsonUtils;
 import org.herod.order.common.model.Order;
 import org.herod.order.common.model.Result;
 import org.herod.order.common.model.SimpleResult;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
 import android.content.Context;
@@ -122,6 +126,25 @@ public class RestBuyerService extends RestServiceSupport implements
 	public Result submitOrders(List<Order> orders) {
 		return postForObject("/herod/order", SimpleResult.class,
 				new Gson().toJson(orders));
+	}
+
+	public Map<String, Order> findOrders(Set<String> serialNumbers) {
+		if (CollectionUtils.isEmpty(serialNumbers)) {
+			return Collections.emptyMap();
+		}
+		StringBuilder url = new StringBuilder("/herod/order?");
+		int i = 0;
+		for (String sn : serialNumbers) {
+			if (i > 0) {
+				url.append("&");
+			}
+			url.append("serialNumber=").append(sn);
+			i++;
+		}
+		String json = getForObject(url.toString(), String.class);
+		Type type = new TypeToken<Map<String, Order>>() {
+		}.getType();
+		return GsonUtils.buildDeaultGson().fromJson(json, type);
 	}
 
 	@Override

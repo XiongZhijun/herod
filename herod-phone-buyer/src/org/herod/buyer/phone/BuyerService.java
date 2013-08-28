@@ -4,6 +4,8 @@
 package org.herod.buyer.phone;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.herod.framework.MapWrapper;
 import org.herod.order.common.model.Order;
@@ -33,4 +35,6 @@ public interface BuyerService {
 			int count);
 
 	Result submitOrders(List<Order> orders);
+
+	Map<String, Order> findOrders(Set<String> serialNumbers);
 }

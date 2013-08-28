@@ -1,13 +1,21 @@
 package org.herod.worker.phone;
 
+import static org.herod.event.EventCodes.ACCEPT_COMMAND;
+import static org.herod.event.EventCodes.CANCEL_COMMAND;
+import static org.herod.event.EventCodes.COMPLETE_COMMAND;
+import static org.herod.event.EventCodes.HEARTBEAT_COMMAND;
+import static org.herod.event.EventCodes.REJECT_COMMAND;
+import static org.herod.event.EventCodes.SUBMIT_COMMAND;
+import static org.herod.event.EventCodes.UPDATE_COMMAND;
+import static org.herod.event.EventFields.ACCEPTTED_COUNT;
+import static org.herod.event.EventFields.SUBMITTED_COUNT;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.herod.android.communication.TcpClientService.LocalBinder;
 import org.herod.event.Event;
-import static org.herod.event.EventCodes.*;
-import org.herod.event.EventFields;
 import org.herod.framework.lbs.LocationManager;
 import org.herod.framework.lbs.SimpleLocationPlan;
 import org.herod.framework.lbs.SimpleLocationPlan.OnLocationSuccessListener;
@@ -93,15 +101,7 @@ public class MainActivity extends BaseActivity implements Callback,
 		bindService(new Intent(this, EventClientService.class),
 				registServiceConnection, Context.BIND_AUTO_CREATE);
 
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(EventActionUtils.getEventAction(HEARTBEAT_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(SUBMIT_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(ACCEPT_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(COMPLETE_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(CANCEL_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(REJECT_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(UPDATE_COMMAND));
-		registerReceiver(eventReceiver, filter);
+		registerEventReceiver();
 	}
 
 	protected List<OrderListFragment> createOrderListFragments(
@@ -208,19 +208,30 @@ public class MainActivity extends BaseActivity implements Callback,
 		currentFragment.refreshOrderList();
 	}
 
+	private void registerEventReceiver() {
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(EventActionUtils.getEventAction(HEARTBEAT_COMMAND));
+		filter.addAction(EventActionUtils.getEventAction(SUBMIT_COMMAND));
+		filter.addAction(EventActionUtils.getEventAction(ACCEPT_COMMAND));
+		filter.addAction(EventActionUtils.getEventAction(COMPLETE_COMMAND));
+		filter.addAction(EventActionUtils.getEventAction(CANCEL_COMMAND));
+		filter.addAction(EventActionUtils.getEventAction(REJECT_COMMAND));
+		filter.addAction(EventActionUtils.getEventAction(UPDATE_COMMAND));
+		registerReceiver(eventReceiver, filter);
+	}
+
 	class EventReceiver extends BroadcastReceiver {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Event event = (Event) intent
 					.getSerializableExtra(EventClientService.EVENT);
-			String code = event.getCode();
-			int submittedCounts = event.getInt(EventFields.SUBMITTED_COUNT);
-			int accepttedCounts = event.getInt(EventFields.ACCEPTTED_COUNT);
+			int submittedCounts = event.getInt(SUBMITTED_COUNT);
+			int accepttedCounts = event.getInt(ACCEPTTED_COUNT);
 			indicator.setTabQauntity(0, submittedCounts);
 			indicator.setTabQauntity(1, accepttedCounts);
 
-			if (canRefreshCurrentFragment(code)) {
+			if (canRefreshCurrentFragment(event.getCode())) {
 				refreshCurrentFragment();
 			}
 		}

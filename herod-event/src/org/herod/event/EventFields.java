@@ -11,4 +11,6 @@ package org.herod.event;
  */
 public interface EventFields {
 	String ID = "id";
+	String ACCEPTTED_COUNT = "a";
+	String SUBMITTED_COUNT = "s";
 }

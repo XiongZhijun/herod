@@ -13,5 +13,10 @@ public interface EventCodes {
 
 	String REGIST_COMMAND = "R";
 	String HEARTBEAT_COMMAND = "H";
+	String SUBMIT_COMMAND = "S";
+	String ACCEPT_COMMAND = "A";
+	String COMPLETE_COMMAND = "C";
+	String CANCEL_COMMAND = "CA";
+	String REJECT_COMMAND = "RE";
 
 }

@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.herod.event.Event;
 import org.herod.event.EventCodes;
+import org.herod.event.EventFields;
 import org.herod.order.model.OrderStatus;
 import org.herod.order.order.OrderCenter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,8 +82,8 @@ public class HeartbeatScheduledService implements Runnable {
 					.get(Submitted) : 0;
 			Event event = new Event();
 			event.setCode(EventCodes.HEARTBEAT_COMMAND);
-			event.put("a", acceptted);
-			event.put("s", submitted);
+			event.put(EventFields.ACCEPTTED_COUNT, acceptted);
+			event.put(EventFields.SUBMITTED_COUNT, submitted);
 			eventCenter.sendEvent(workerId, event);
 			return null;
 		}

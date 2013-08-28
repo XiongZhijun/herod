@@ -51,10 +51,9 @@ public class EventClientService extends TcpClientService {
 		if (!(byteFrame instanceof Event)) {
 			return;
 		}
-		final Event event = (Event) byteFrame;
-		Intent intent = new Intent(this, EventReceiver.class);
+		Event event = (Event) byteFrame;
+		Intent intent = new Intent(EventActionUtils.getEventAction(event));
 		intent.putExtra(EVENT, event);
 		sendBroadcast(intent);
 	}
-
 }

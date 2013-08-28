@@ -18,5 +18,6 @@ public interface EventCodes {
 	String COMPLETE_COMMAND = "C";
 	String CANCEL_COMMAND = "CA";
 	String REJECT_COMMAND = "RE";
+	String UPDATE_COMMAND = "U";
 
 }

@@ -38,6 +38,14 @@ public class Event implements ByteFrame, Serializable {
 		return 0;
 	}
 
+	public int getInt(String propertyName) {
+		String value = getString(propertyName);
+		if (isNotBlank(value)) {
+			return Integer.parseInt(value);
+		}
+		return 0;
+	}
+
 	public Date getDate(String propertyName) {
 		long time = getLong(propertyName);
 		return new Date(time);

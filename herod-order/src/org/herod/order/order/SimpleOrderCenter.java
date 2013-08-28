@@ -14,7 +14,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.herod.common.das.HerodBeanPropertyRowMapper;
 import org.herod.common.das.HerodJdbcTemplate;
-import org.herod.order.model.Order;
+import org.herod.event.Event;
+import org.herod.event.EventCodes;
+import org.herod.event.EventFields;
+import org.herod.order.event.EventCenter;
 import org.herod.order.model.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -32,6 +35,8 @@ public class SimpleOrderCenter implements OrderCenter {
 	private Map<Long, Set<OrderInfo>> workerOrdersMap = new HashMap<Long, Set<OrderInfo>>();
 	@Autowired
 	private HerodJdbcTemplate herodJdbcTemplate;
+	@Autowired
+	private EventCenter eventCenter;
 
 	@Override
 	public void init() {
@@ -52,9 +57,8 @@ public class SimpleOrderCenter implements OrderCenter {
 	}
 
 	@Override
-	public void submitOrder(Order order) {
-		addToWorkerSet(order.getWorkerId(), order.getSerialNumber(),
-				OrderStatus.Submitted);
+	public void submitOrder(long workerId, String orderSN) {
+		addToWorkerSet(workerId, orderSN, OrderStatus.Submitted);
 	}
 
 	@Override
@@ -69,12 +73,12 @@ public class SimpleOrderCenter implements OrderCenter {
 
 	@Override
 	public void cancelOrder(long workerId, String orderSN) {
-		removeFromWorkerSet(workerId, orderSN);
+		removeFromWorkerSet(workerId, orderSN, OrderStatus.Cancelled);
 	}
 
 	@Override
 	public void completeOrder(long workerId, String orderSN) {
-		removeFromWorkerSet(workerId, orderSN);
+		removeFromWorkerSet(workerId, orderSN, OrderStatus.Completed);
 	}
 
 	@Override
@@ -98,10 +102,13 @@ public class SimpleOrderCenter implements OrderCenter {
 		return results;
 	}
 
-	private void removeFromWorkerSet(long workerId, String orderSN) {
+	private void removeFromWorkerSet(long workerId, String orderSN,
+			OrderStatus status) {
 		writeLock.lock();
 		try {
 			getOrderInfos(workerId).remove(new OrderInfo(orderSN));
+			Event event = buildEvent(workerId, status);
+			eventCenter.sendEvent(workerId, event);
 		} finally {
 			writeLock.unlock();
 		}
@@ -118,6 +125,36 @@ public class SimpleOrderCenter implements OrderCenter {
 		} finally {
 			writeLock.unlock();
 		}
+		Event event = buildEvent(workerId, status);
+		eventCenter.sendEvent(workerId, event);
+	}
+
+	private Event buildEvent(long workerId, OrderStatus status) {
+		Event event = new Event();
+		event.setCode(getEventCode(status));
+		Map<OrderStatus, Integer> ordersCountMap = getOrdersCount(workerId);
+		event.put(EventFields.ACCEPTTED_COUNT,
+				ordersCountMap.get(OrderStatus.Acceptted));
+		event.put(EventFields.SUBMITTED_COUNT,
+				ordersCountMap.get(OrderStatus.Submitted));
+		return event;
+	}
+
+	private String getEventCode(OrderStatus status) {
+		switch (status) {
+		case Submitted:
+			return EventCodes.SUBMIT_COMMAND;
+		case Acceptted:
+			return EventCodes.ACCEPT_COMMAND;
+		case Completed:
+			return EventCodes.COMPLETE_COMMAND;
+		case Cancelled:
+			return EventCodes.CANCEL_COMMAND;
+		case Rejected:
+			return EventCodes.REJECT_COMMAND;
+		default:
+			return EventCodes.SUBMIT_COMMAND;
+		}
 	}
 
 	protected Set<OrderInfo> getOrderInfos(long workerId) {
@@ -131,6 +168,10 @@ public class SimpleOrderCenter implements OrderCenter {
 
 	public void setHerodJdbcTemplate(HerodJdbcTemplate herodJdbcTemplate) {
 		this.herodJdbcTemplate = herodJdbcTemplate;
+	}
+
+	public void setEventCenter(EventCenter eventCenter) {
+		this.eventCenter = eventCenter;
 	}
 
 	public static class OrderInfo {

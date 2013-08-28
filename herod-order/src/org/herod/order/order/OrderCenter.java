@@ -5,7 +5,6 @@ package org.herod.order.order;
 
 import java.util.Map;
 
-import org.herod.order.model.Order;
 import org.herod.order.model.OrderStatus;
 
 /**
@@ -17,7 +16,7 @@ public interface OrderCenter {
 
 	void init();
 
-	void submitOrder(Order order);
+	void submitOrder(long workerId, String orderSN);
 
 	void acceptOrder(long workerId, String orderSN);
 

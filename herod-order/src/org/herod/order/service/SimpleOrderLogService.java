@@ -10,6 +10,7 @@ import org.herod.order.model.Order;
 import org.herod.order.model.OrderLog;
 import org.herod.order.model.OrderLog.Operation;
 import org.herod.order.model.OrderLog.OperatorType;
+import org.herod.order.order.OrderCenter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -22,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class SimpleOrderLogService implements OrderLogService {
 	@Autowired
 	private LogDas logDas;
+	@Autowired
+	private OrderCenter orderCenter;
 
 	@Override
 	public void agentWorkerlog(long workerId, String orderSerialNumber,
@@ -33,6 +36,33 @@ public class SimpleOrderLogService implements OrderLogService {
 		log.setOperatorType(OperatorType.AgentWorker);
 		log.setReason(reason);
 		logDas.addLog(log);
+		notifyOrderCenter(workerId, orderSerialNumber, operation);
+	}
+
+	private void notifyOrderCenter(long workerId, String orderSerialNumber,
+			Operation operation) {
+		switch (operation) {
+		case Accept:
+			orderCenter.acceptOrder(workerId, orderSerialNumber);
+			break;
+		case Cancel:
+			orderCenter.cancelOrder(workerId, orderSerialNumber);
+			break;
+		case Submit:
+			orderCenter.submitOrder(workerId, orderSerialNumber);
+			break;
+		case Reject:
+			orderCenter.rejectOrder(workerId, orderSerialNumber);
+			break;
+		case Complete:
+			orderCenter.completeOrder(workerId, orderSerialNumber);
+			break;
+		case Update:
+			// TODO
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override
@@ -51,6 +81,10 @@ public class SimpleOrderLogService implements OrderLogService {
 
 	public void setLogDas(LogDas logDas) {
 		this.logDas = logDas;
+	}
+
+	public void setOrderCenter(OrderCenter orderCenter) {
+		this.orderCenter = orderCenter;
 	}
 
 	public static interface LogDas {

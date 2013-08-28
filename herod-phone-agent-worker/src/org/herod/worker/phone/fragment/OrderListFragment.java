@@ -123,8 +123,6 @@ public class OrderListFragment extends Fragment implements
 
 	@Override
 	public void onLoadMore() {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setTabPageIndicator(OrderTabPageIndicator indicator) {

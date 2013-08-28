@@ -18,12 +18,11 @@ import android.support.v4.app.FragmentActivity;
  */
 public abstract class AbstractGoodsTypeGoodsListFragment extends
 		AbstractGoodsListFragment {
-	private MapWrapper<String, Object> goodsType;
 
 	@Override
 	public List<MapWrapper<String, Object>> findPageGoods(int begin, int count) {
-		long id = goodsType.getLong("id");
-		return findGoodsesByType(id, begin, count);
+		long goodsTypeId = getArguments().getLong("goodsTypeId");
+		return findGoodsesByType(goodsTypeId, begin, count);
 	}
 
 	protected abstract List<MapWrapper<String, Object>> findGoodsesByType(
@@ -38,10 +37,6 @@ public abstract class AbstractGoodsTypeGoodsListFragment extends
 						"name", "name", "unit" }, new int[] { R.id.image,
 						R.id.name, R.id.price, R.id.quantity, R.id.addButton,
 						R.id.reduceButton, R.id.unit });
-	}
-
-	public void setGoodsType(MapWrapper<String, Object> goodsType) {
-		this.goodsType = goodsType;
 	}
 
 	@Override

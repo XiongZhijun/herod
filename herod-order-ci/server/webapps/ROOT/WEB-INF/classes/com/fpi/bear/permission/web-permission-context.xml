@@ -37,6 +37,8 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 				/loginError.jsp = anon
 				/ = anon
 				/rest/herod/agentworker/** = agentworkerauthen
+				/rest/herod/sn/transaction = anon
+				/rest/herod/order/** = anon
 				/rest/** = restauthen
 				/login.jsp = authcextend
 				/logout = logout

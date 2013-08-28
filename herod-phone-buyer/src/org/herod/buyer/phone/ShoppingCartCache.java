@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.herod.framework.MapWrapper;
 import org.herod.order.common.AbstractGoodsListFragment.IShoppingCartCache;
+import org.herod.order.common.Constants;
 import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderItem;
 

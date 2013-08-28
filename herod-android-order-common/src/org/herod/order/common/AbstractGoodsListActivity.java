@@ -45,7 +45,6 @@ public abstract class AbstractGoodsListActivity extends BaseActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
-
 	}
 
 	public List<MapWrapper<String, Object>> runOnBackground(Object... params) {
@@ -78,9 +77,10 @@ public abstract class AbstractGoodsListActivity extends BaseActivity implements
 		@Override
 		public Fragment getItem(int position) {
 			AbstractGoodsTypeGoodsListFragment fragment = createGoodsListFragment();
-			fragment.setGoodsType(goodsTypes.get(position));
 			Bundle args = new Bundle();
 			args.putAll(getIntent().getExtras());
+			args.putLong("goodsTypeId",
+					goodsTypes.get(position).getLong(Constants.ID));
 			fragment.setArguments(args);
 			return fragment;
 		}

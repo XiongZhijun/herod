@@ -10,6 +10,7 @@ import org.herod.framework.HerodTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.widget.TitlePageIndicator;
+import org.herod.order.common.Constants;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -46,7 +47,6 @@ public class StoresActivity extends BaseActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
-
 	}
 
 	public List<MapWrapper<String, Object>> runOnBackground(Object... params) {
@@ -75,12 +75,17 @@ public class StoresActivity extends BaseActivity implements
 
 		@Override
 		public Fragment getItem(int position) {
-			return new ShopListFragment();
+			ShopListFragment shopListFragment = new ShopListFragment();
+			Bundle args = new Bundle();
+			args.putLong("shopTypeId",
+					shopTypes.get(position).getLong(Constants.ID));
+			shopListFragment.setArguments(args);
+			return shopListFragment;
 		}
 
 		@Override
 		public int getCount() {
-			return shopTypes.size();
+			return shopTypes != null ? shopTypes.size() : 0;
 		}
 
 		@Override

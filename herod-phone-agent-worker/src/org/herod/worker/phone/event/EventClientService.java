@@ -55,5 +55,9 @@ public class EventClientService extends TcpClientService {
 		Intent intent = new Intent(EventActionUtils.getEventAction(event));
 		intent.putExtra(EVENT, event);
 		sendBroadcast(intent);
+		if (EventCodes.SUBMIT_COMMAND.equals(event.getCode())
+				|| EventCodes.REJECT_COMMAND.equals(event.getCode())) {
+			MediaPlayerService.playMedia(this, "ding.wav");
+		}
 	}
 }

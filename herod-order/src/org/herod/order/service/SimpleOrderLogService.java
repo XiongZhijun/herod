@@ -75,6 +75,8 @@ public class SimpleOrderLogService implements OrderLogService {
 			log.setOperator(order.getBuyerPhone());
 			log.setOperatorType(OperatorType.Buyer);
 			logs.add(log);
+			notifyOrderCenter(order.getWorkerId(), order.getSerialNumber(),
+					Operation.Submit);
 		}
 		logDas.addLogs(logs);
 	}

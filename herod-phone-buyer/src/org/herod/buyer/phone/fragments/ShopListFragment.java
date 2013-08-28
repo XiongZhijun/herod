@@ -51,12 +51,14 @@ public class ShopListFragment extends Fragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		new HerodTask<Long, List<MapWrapper<String, Object>>>(this).execute();
+		long shopTypeId = getArguments().getLong("shopTypeId");
+		new HerodTask<Long, List<MapWrapper<String, Object>>>(this)
+				.execute(shopTypeId);
 	}
 
 	@Override
 	public List<MapWrapper<String, Object>> runOnBackground(Long... params) {
-		return BuyerContext.getBuyerService().findShopesByType(1);
+		return BuyerContext.getBuyerService().findShopesByType(params[0]);
 	}
 
 	@Override

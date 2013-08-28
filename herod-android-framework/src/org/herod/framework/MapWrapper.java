@@ -3,6 +3,7 @@
  */
 package org.herod.framework;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import org.herod.framework.utils.MapUtils;
@@ -14,7 +15,8 @@ import org.herod.framework.utils.MapUtils;
  * @email hust.xzj@gmail.com
  * 
  */
-public class MapWrapper<K, V> {
+public class MapWrapper<K, V> implements Serializable {
+	private static final long serialVersionUID = -5747357541078088745L;
 	private Map<K, V> map;
 
 	public MapWrapper(Map<K, V> map) {

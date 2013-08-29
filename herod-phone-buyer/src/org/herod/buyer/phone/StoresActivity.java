@@ -28,7 +28,7 @@ import android.view.View.OnClickListener;
  * @email hust.xzj@gmail.com
  * 
  */
-public class StoresActivity extends BaseActivity implements
+public class StoresActivity extends BuyerBaseActivity implements
 		AsyncTaskable<Object, List<MapWrapper<String, Object>>> {
 
 	private ViewPager mPager;

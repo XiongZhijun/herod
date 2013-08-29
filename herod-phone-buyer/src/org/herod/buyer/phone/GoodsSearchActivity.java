@@ -16,7 +16,7 @@ import android.widget.SearchView;
  * @email hust.xzj@gmail.com
  * 
  */
-public class GoodsSearchActivity extends BaseActivity {
+public class GoodsSearchActivity extends BuyerBaseActivity {
 
 	private SearchGoodsListFragment goodsListFragment;
 	private String queryString;

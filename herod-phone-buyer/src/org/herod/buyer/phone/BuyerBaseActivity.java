@@ -3,16 +3,13 @@
  */
 package org.herod.buyer.phone;
 
-import org.herod.framework.ViewFindable;
 import org.herod.order.common.AbstractGoodsListFragment.QuantityChangedListener;
+import org.herod.order.common.BaseActivity;
 
-import android.app.ActionBar;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,25 +24,10 @@ import android.widget.TextView;
  * @email hust.xzj@gmail.com
  * 
  */
-public class BaseActivity extends FragmentActivity implements
-		QuantityChangedListener, ViewFindable {
+public abstract class BuyerBaseActivity extends BaseActivity implements
+		QuantityChangedListener {
 	private Menu menu;
 	protected SearchView searchview;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		showBackAction(canBack());
-	}
-
-	private void showBackAction(boolean canBack) {
-		ActionBar actionBar = getActionBar();
-		if (actionBar != null) {
-			actionBar.setHomeButtonEnabled(canBack);
-			actionBar.setDisplayHomeAsUpEnabled(canBack);
-			actionBar.setDisplayShowTitleEnabled(true);
-		}
-	}
 
 	@Override
 	protected void onResume() {
@@ -54,10 +36,6 @@ public class BaseActivity extends FragmentActivity implements
 		if (searchview != null && !searchview.isIconified()) {
 			searchview.setIconified(true);
 		}
-	}
-
-	public void back(MenuItem item) {
-		onBackPressed();
 	}
 
 	public void queryGoods(MenuItem item) {
@@ -72,11 +50,7 @@ public class BaseActivity extends FragmentActivity implements
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-		int menuConfigResource = getMenuConfigResource();
-		if (menuConfigResource <= 0) {
-			return false;
-		}
-		getMenuInflater().inflate(menuConfigResource, menu);
+		super.onCreateOptionsMenu(menu);
 		this.menu = menu;
 		initSearch(menu);
 		return true;
@@ -121,14 +95,6 @@ public class BaseActivity extends FragmentActivity implements
 		return R.menu.home;
 	}
 
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == android.R.id.home) {
-			back(item);
-			return true;
-		}
-		return false;
-	}
-
 	public void updateTotalQuantity() {
 		int quantity = ShoppingCartCache.getInstance().getTotalQuantity();
 		if (menu == null) {
@@ -166,10 +132,6 @@ public class BaseActivity extends FragmentActivity implements
 			return;
 		}
 		super.onBackPressed();
-	}
-
-	protected boolean canBack() {
-		return true;
 	}
 
 }

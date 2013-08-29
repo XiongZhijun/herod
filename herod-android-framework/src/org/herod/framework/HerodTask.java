@@ -36,6 +36,17 @@ public class HerodTask<Params, Result> extends
 		postExecutor.onPostExecute(result);
 	}
 
+	public static <Params, Result> void execute(
+			AsyncTaskable<Params, Result> asyncTaskable, Params... params) {
+		new HerodTask<Params, Result>(asyncTaskable).execute(params);
+	}
+
+	public static <Params, Result> void execute(
+			BackgroudRunnable<Params, Result> runnable,
+			PostExecutor<Result> postExecutor, Params... params) {
+		new HerodTask<Params, Result>(runnable, postExecutor).execute(params);
+	}
+
 	public static interface BackgroudRunnable<Params, Result> {
 		Result runOnBackground(Params... params);
 	}

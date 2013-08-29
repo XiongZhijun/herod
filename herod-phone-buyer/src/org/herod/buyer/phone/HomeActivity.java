@@ -32,7 +32,7 @@ import android.widget.Toast;
 import com.baidu.location.BDLocation;
 import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
 
-public class HomeActivity extends BaseActivity implements
+public class HomeActivity extends BuyerBaseActivity implements
 		AsyncTaskable<Object, List<MapWrapper<String, Object>>>,
 		OnItemClickListener, OnLocationSuccessListener {
 	private GridView shopTypesGridView;

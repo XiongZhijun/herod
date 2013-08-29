@@ -11,7 +11,7 @@ package org.herod.buyer.phone;
  * @email hust.xzj@gmail.com
  * 
  */
-public abstract class AbstractOrdersActivity extends BaseActivity {
+public abstract class AbstractOrdersActivity extends BuyerBaseActivity {
 
 	public abstract void refreshOrders();
 

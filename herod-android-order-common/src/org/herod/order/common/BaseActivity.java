@@ -34,16 +34,8 @@ public abstract class BaseActivity extends FragmentActivity implements
 		}
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-
 	public void back(MenuItem item) {
 		onBackPressed();
-	}
-
-	public void queryGoods(MenuItem item) {
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {

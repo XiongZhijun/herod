@@ -5,6 +5,7 @@ package org.herod.order.common;
 
 import java.util.List;
 
+import org.herod.framework.BaseFragment;
 import org.herod.framework.HerodTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
@@ -16,7 +17,6 @@ import org.herod.framework.widget.XListView;
 import org.herod.framework.widget.XListView.IXListViewListener;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +32,7 @@ import android.widget.Toast;
  * @email hust.xzj@gmail.com
  * 
  */
-public abstract class AbstractGoodsListFragment extends Fragment implements
+public abstract class AbstractGoodsListFragment extends BaseFragment implements
 		ViewFindable, AsyncTaskable<Object, List<MapWrapper<String, Object>>>,
 		IXListViewListener, ViewBinder {
 	protected XListView goodsListView;
@@ -83,11 +83,6 @@ public abstract class AbstractGoodsListFragment extends Fragment implements
 	@Override
 	public List<MapWrapper<String, Object>> runOnBackground(Object... params) {
 		return findPageGoods(begin, count);
-	}
-
-	@Override
-	public View findViewById(int id) {
-		return getView().findViewById(id);
 	}
 
 	protected abstract List<MapWrapper<String, Object>> findPageGoods(

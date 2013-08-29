@@ -8,6 +8,7 @@ import java.util.List;
 import org.herod.buyer.phone.BuyerContext;
 import org.herod.buyer.phone.GoodsListActivity;
 import org.herod.buyer.phone.R;
+import org.herod.framework.BaseFragment;
 import org.herod.framework.HerodTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
@@ -17,7 +18,6 @@ import org.herod.order.common.RefreshButtonHelper;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,7 +36,7 @@ import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
  * @email hust.xzj@gmail.com
  * 
  */
-public class ShopListFragment extends Fragment implements ViewFindable,
+public class ShopListFragment extends BaseFragment implements ViewFindable,
 		AsyncTaskable<Long, List<MapWrapper<String, Object>>>,
 		OnItemClickListener {
 	private GridView shopsGridView;
@@ -104,11 +104,6 @@ public class ShopListFragment extends Fragment implements ViewFindable,
 		intent.putExtra("shopId", item.getLong("id"));
 		intent.putExtra("shopName", item.getString("name"));
 		startActivity(intent);
-	}
-
-	@Override
-	public View findViewById(int id) {
-		return getView().findViewById(id);
 	}
 
 }

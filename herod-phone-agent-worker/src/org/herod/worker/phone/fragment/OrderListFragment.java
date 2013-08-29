@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.herod.framework.BaseFragment;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.ViewFindable;
 import org.herod.framework.widget.XListView;
@@ -23,13 +24,12 @@ import org.springframework.util.CollectionUtils;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
-public class OrderListFragment extends Fragment implements ViewFindable,
+public class OrderListFragment extends BaseFragment implements ViewFindable,
 		AsyncTaskable<FragmentType, List<Order>>, IXListViewListener {
 	private DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 	private XListView ordersListView;
@@ -149,11 +149,6 @@ public class OrderListFragment extends Fragment implements ViewFindable,
 
 	public static enum FragmentType {
 		WaitAccept, WaitComplete
-	}
-
-	@Override
-	public View findViewById(int id) {
-		return getView().findViewById(id);
 	}
 
 }

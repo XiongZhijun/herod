@@ -6,6 +6,7 @@ package org.herod.order.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.herod.framework.RepeatedlyTask;
 import org.herod.framework.ViewFindable;
 
 import android.view.View;
@@ -20,7 +21,17 @@ public class RefreshButtonHelper {
 	private View refreshButton;
 	private List<View> otherViews = new ArrayList<View>();
 
-	public RefreshButtonHelper(ViewFindable viewFindable, int refreshButton,
+	public RefreshButtonHelper(ViewFindable viewFindable,
+			final RepeatedlyTask<?, ?> task, int refreshButton,
+			int... otherViews) {
+		this(viewFindable, refreshButton, new OnClickListener() {
+			public void onClick(View v) {
+				task.execute();
+			}
+		}, otherViews);
+	}
+
+	private RefreshButtonHelper(ViewFindable viewFindable, int refreshButton,
 			OnClickListener refreshListener, int... otherViews) {
 		this.refreshButton = viewFindable.findViewById(refreshButton);
 		this.refreshButton.setOnClickListener(refreshListener);

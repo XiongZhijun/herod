@@ -6,9 +6,9 @@ package org.herod.order.common;
 import java.util.List;
 
 import org.herod.framework.BaseFragment;
-import org.herod.framework.HerodTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
+import org.herod.framework.RepeatedlyTask;
 import org.herod.framework.ViewFindable;
 import org.herod.framework.adapter.SimpleAdapter;
 import org.herod.framework.adapter.SimpleAdapter.ViewBinder;
@@ -41,6 +41,7 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 	private int begin = 0;
 	private int count = 30;
 	private RefreshButtonHelper refreshButtonHelper;
+	private RepeatedlyTask<Object, List<MapWrapper<String, Object>>> loadGoodsTask;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,12 +61,10 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		refreshButtonHelper = new RefreshButtonHelper(this, R.id.refreshButton,
-				new OnClickListener() {
-					public void onClick(View arg0) {
-						loadGoods();
-					}
-				}, R.id.goodsListView);
+		loadGoodsTask = new RepeatedlyTask<Object, List<MapWrapper<String, Object>>>(
+				this);
+		refreshButtonHelper = new RefreshButtonHelper(this, loadGoodsTask,
+				R.id.refreshButton, R.id.goodsListView);
 	}
 
 	@Override
@@ -188,7 +187,7 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 	}
 
 	public void loadGoods() {
-		new HerodTask<Object, List<MapWrapper<String, Object>>>(this).execute();
+		loadGoodsTask.execute();
 	}
 
 	protected IShoppingCartCache getShoppingCartCache() {

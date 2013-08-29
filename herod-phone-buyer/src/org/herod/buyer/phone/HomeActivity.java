@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
-import org.herod.framework.HerodTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
+import org.herod.framework.RepeatedlyTask;
 import org.herod.framework.lbs.LocationManager;
 import org.herod.framework.lbs.SimpleLocationPlan;
 import org.herod.framework.lbs.SimpleLocationPlan.OnLocationSuccessListener;
@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
@@ -38,6 +37,7 @@ public class HomeActivity extends BuyerBaseActivity implements
 	private GridView shopTypesGridView;
 	private boolean isFirst = true;
 	private RefreshButtonHelper refreshButtonHelper;
+	private RepeatedlyTask<Object, List<MapWrapper<String, Object>>> loadShopTypesTask;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -60,13 +60,10 @@ public class HomeActivity extends BuyerBaseActivity implements
 		if (networkConnectInfo.connectType == ConnectType._2G) {
 			ToastUtils.showToast("当前为2G网络", Toast.LENGTH_SHORT);
 		}
-		refreshButtonHelper = new RefreshButtonHelper(this, R.id.refreshButton,
-				new OnClickListener() {
-					public void onClick(View arg0) {
-						new HerodTask<Object, List<MapWrapper<String, Object>>>(
-								HomeActivity.this).execute();
-					}
-				}, R.id.shopTypesGrid);
+		loadShopTypesTask = new RepeatedlyTask<Object, List<MapWrapper<String, Object>>>(
+				this);
+		refreshButtonHelper = new RefreshButtonHelper(this, loadShopTypesTask,
+				R.id.refreshButton, R.id.shopTypesGrid);
 	}
 
 	@Override
@@ -74,8 +71,7 @@ public class HomeActivity extends BuyerBaseActivity implements
 		Log.d("LocationSuccess",
 				location.getLatitude() + "," + location.getLongitude());
 		if (isFirst) {
-			new HerodTask<Object, List<MapWrapper<String, Object>>>(this)
-					.execute();
+			loadShopTypesTask.execute();
 			isFirst = false;
 		}
 	}

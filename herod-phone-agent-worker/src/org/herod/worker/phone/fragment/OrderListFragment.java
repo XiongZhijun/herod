@@ -13,10 +13,9 @@ import org.herod.framework.widget.XListView;
 import org.herod.framework.widget.XListView.IXListViewListener;
 import org.herod.order.common.RefreshButtonHelper;
 import org.herod.order.common.model.Order;
-import org.herod.worker.phone.AgentWorkerTask;
+import org.herod.worker.phone.AgentWorkerRepeatedlyTask;
 import org.herod.worker.phone.R;
 import org.herod.worker.phone.WorkerContext;
-import org.herod.worker.phone.fragment.OrderListFragment.FragmentType;
 import org.herod.worker.phone.handler.HerodHandler;
 import org.herod.worker.phone.view.OrderTabPageIndicator;
 import org.springframework.util.CollectionUtils;
@@ -26,11 +25,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 public class OrderListFragment extends BaseFragment implements ViewFindable,
-		AsyncTaskable<FragmentType, List<Order>>, IXListViewListener {
+		AsyncTaskable<Object, List<Order>>, IXListViewListener {
 	private DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 	private XListView ordersListView;
 	private String title;
@@ -40,6 +38,7 @@ public class OrderListFragment extends BaseFragment implements ViewFindable,
 	private Handler handler;
 	private OrderListAdapter orderListAdapter;
 	private RefreshButtonHelper refreshButtonHelper;
+	private AgentWorkerRepeatedlyTask<Object, List<Order>> loadOrdersTask;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,13 +60,11 @@ public class OrderListFragment extends BaseFragment implements ViewFindable,
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		refreshButtonHelper = new RefreshButtonHelper(this, R.id.refreshButton,
-				new OnClickListener() {
-					public void onClick(View v) {
-						refreshOrderList();
-					}
-				}, R.id.ordersListView);
-		refreshOrderList();
+		loadOrdersTask = new AgentWorkerRepeatedlyTask<Object, List<Order>>(
+				getActivity(), this);
+		refreshButtonHelper = new RefreshButtonHelper(this, loadOrdersTask,
+				R.id.refreshButton, R.id.ordersListView);
+		loadOrdersTask.execute();
 	}
 
 	@Override
@@ -76,13 +73,12 @@ public class OrderListFragment extends BaseFragment implements ViewFindable,
 	}
 
 	public void refreshOrderList() {
-		new AgentWorkerTask<FragmentType, List<Order>>(getActivity(), this)
-				.execute(type);
+		loadOrdersTask.execute();
 	}
 
 	@Override
-	public List<Order> runOnBackground(FragmentType... params) {
-		switch (params[0]) {
+	public List<Order> runOnBackground(Object... params) {
+		switch (type) {
 		case WaitAccept:
 			return WorkerContext.getWorkerService().findWaitAcceptOrders();
 		case WaitComplete:

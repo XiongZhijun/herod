@@ -5,9 +5,9 @@ package org.herod.order.common;
 
 import java.util.List;
 
-import org.herod.framework.HerodTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
+import org.herod.framework.RepeatedlyTask;
 import org.herod.framework.widget.TabPageIndicator;
 
 import android.os.Bundle;
@@ -15,8 +15,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.view.View.OnClickListener;
 
 /**
  * @author Xiong Zhijun
@@ -30,6 +28,7 @@ public abstract class AbstractGoodsListActivity extends BaseActivity implements
 	private long shopId;
 	private String shopName;
 	private RefreshButtonHelper refreshButtonHelper;
+	private RepeatedlyTask<Object, List<MapWrapper<String, Object>>> loadGoodsTypeTask;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,14 +40,11 @@ public abstract class AbstractGoodsListActivity extends BaseActivity implements
 
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mIndicator = (TabPageIndicator) findViewById(R.id.indicator);
-		refreshButtonHelper = new RefreshButtonHelper(this, R.id.refreshButton,
-				new OnClickListener() {
-					public void onClick(View arg0) {
-						new HerodTask<Object, List<MapWrapper<String, Object>>>(
-								AbstractGoodsListActivity.this).execute();
-					}
-				}, R.id.pager, R.id.indicator);
-		new HerodTask<Object, List<MapWrapper<String, Object>>>(this).execute();
+		loadGoodsTypeTask = new RepeatedlyTask<Object, List<MapWrapper<String, Object>>>(
+				this);
+		refreshButtonHelper = new RefreshButtonHelper(this, loadGoodsTypeTask,
+				R.id.refreshButton, R.id.pager, R.id.indicator);
+		loadGoodsTypeTask.execute();
 	}
 
 	@Override

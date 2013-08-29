@@ -14,9 +14,14 @@ import org.herod.framework.HerodTask.PostExecutor;
  */
 public class RepeatedlyTask<Params, Result> {
 
-	private BackgroudRunnable<Params, Result> runnable;
-	private PostExecutor<Result> postExecutor;
-	private Params[] params;
+	protected BackgroudRunnable<Params, Result> runnable;
+	protected PostExecutor<Result> postExecutor;
+	protected ParamsLoader<Params> paramsLoader;
+
+	public RepeatedlyTask(
+			RepeatedlyAsyncTaskable<Params, Result> repeatedlyAsyncTaskable) {
+		this(repeatedlyAsyncTaskable, repeatedlyAsyncTaskable);
+	}
 
 	public RepeatedlyTask(AsyncTaskable<Params, Result> asyncTaskable,
 			Params... params) {
@@ -24,14 +29,38 @@ public class RepeatedlyTask<Params, Result> {
 	}
 
 	public RepeatedlyTask(BackgroudRunnable<Params, Result> runnable,
-			PostExecutor<Result> postExecutor, Params... params) {
+			PostExecutor<Result> postExecutor, final Params... params) {
+		this(runnable, postExecutor, new ParamsLoader<Params>() {
+			public Params[] getParams() {
+				return params;
+			}
+		});
+	}
+
+	public RepeatedlyTask(AsyncTaskable<Params, Result> asyncTaskable,
+			ParamsLoader<Params> paramsLoaders) {
+		this(asyncTaskable, asyncTaskable, paramsLoaders);
+	}
+
+	public RepeatedlyTask(BackgroudRunnable<Params, Result> runnable,
+			PostExecutor<Result> postExecutor, ParamsLoader<Params> paramsLoader) {
 		super();
 		this.runnable = runnable;
 		this.postExecutor = postExecutor;
-		this.params = params;
+		this.paramsLoader = paramsLoader;
 	}
 
 	public void execute() {
-		new HerodTask<Params, Result>(runnable, postExecutor).execute(params);
+		new HerodTask<Params, Result>(runnable, postExecutor)
+				.execute(paramsLoader.getParams());
+	}
+
+	public static interface ParamsLoader<Params> {
+		Params[] getParams();
+	}
+
+	public static interface RepeatedlyAsyncTaskable<Params, Result> extends
+			AsyncTaskable<Params, Result>, ParamsLoader<Params> {
+
 	}
 }

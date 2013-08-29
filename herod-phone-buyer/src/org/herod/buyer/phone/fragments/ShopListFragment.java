@@ -9,9 +9,9 @@ import org.herod.buyer.phone.BuyerContext;
 import org.herod.buyer.phone.GoodsListActivity;
 import org.herod.buyer.phone.R;
 import org.herod.framework.BaseFragment;
-import org.herod.framework.HerodTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
+import org.herod.framework.RepeatedlyTask;
 import org.herod.framework.ViewFindable;
 import org.herod.order.common.ImageLoaderAdapter;
 import org.herod.order.common.RefreshButtonHelper;
@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -37,10 +36,11 @@ import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
  * 
  */
 public class ShopListFragment extends BaseFragment implements ViewFindable,
-		AsyncTaskable<Long, List<MapWrapper<String, Object>>>,
+		AsyncTaskable<Object, List<MapWrapper<String, Object>>>,
 		OnItemClickListener {
 	private GridView shopsGridView;
 	private RefreshButtonHelper refreshButtonHelper;
+	private RepeatedlyTask<Object, List<MapWrapper<String, Object>>> loadShopsTask;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,29 +55,22 @@ public class ShopListFragment extends BaseFragment implements ViewFindable,
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		refreshButtonHelper = new RefreshButtonHelper(this, R.id.refreshButton,
-				new OnClickListener() {
-					public void onClick(View arg0) {
-						refresh();
-					}
-				}, R.id.shopsGridView);
+		loadShopsTask = new RepeatedlyTask<Object, List<MapWrapper<String, Object>>>(
+				this);
+		refreshButtonHelper = new RefreshButtonHelper(this, loadShopsTask,
+				R.id.refreshButton, R.id.shopsGridView);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		refresh();
-	}
-
-	private void refresh() {
-		long shopTypeId = getArguments().getLong("shopTypeId");
-		new HerodTask<Long, List<MapWrapper<String, Object>>>(this)
-				.execute(shopTypeId);
+		loadShopsTask.execute();
 	}
 
 	@Override
-	public List<MapWrapper<String, Object>> runOnBackground(Long... params) {
-		return BuyerContext.getBuyerService().findShopesByType(params[0]);
+	public List<MapWrapper<String, Object>> runOnBackground(Object... params) {
+		long shopTypeId = getArguments().getLong("shopTypeId");
+		return BuyerContext.getBuyerService().findShopesByType(shopTypeId);
 	}
 
 	@Override

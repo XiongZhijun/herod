@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:herod="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,7 +18,22 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/indicator" />
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/refreshButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F0F0F0"
+        android:gravity="center" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/base_empty_view_bg"
+            android:contentDescription="@null"
+            android:src="@drawable/base_empty_view" />
+    </LinearLayout>
+
+</RelativeLayout>

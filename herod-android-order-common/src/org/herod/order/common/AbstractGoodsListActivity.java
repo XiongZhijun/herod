@@ -15,6 +15,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 /**
  * @author Xiong Zhijun
@@ -27,6 +29,7 @@ public abstract class AbstractGoodsListActivity extends BaseActivity implements
 	private TabPageIndicator mIndicator;
 	private long shopId;
 	private String shopName;
+	private RefreshButtonHelper refreshButtonHelper;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,13 @@ public abstract class AbstractGoodsListActivity extends BaseActivity implements
 
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mIndicator = (TabPageIndicator) findViewById(R.id.indicator);
-
+		refreshButtonHelper = new RefreshButtonHelper(this, R.id.refreshButton,
+				new OnClickListener() {
+					public void onClick(View arg0) {
+						new HerodTask<Object, List<MapWrapper<String, Object>>>(
+								AbstractGoodsListActivity.this).execute();
+					}
+				}, R.id.pager, R.id.indicator);
 		new HerodTask<Object, List<MapWrapper<String, Object>>>(this).execute();
 	}
 
@@ -55,6 +64,9 @@ public abstract class AbstractGoodsListActivity extends BaseActivity implements
 			long shopId);
 
 	public void onPostExecute(List<MapWrapper<String, Object>> result) {
+		if (refreshButtonHelper.checkNullResult(result)) {
+			return;
+		}
 		GoodsFragmentAdapter mAdapter = new GoodsFragmentAdapter(result);
 		mPager.setAdapter(mAdapter);
 		mIndicator.setViewPager(mPager);

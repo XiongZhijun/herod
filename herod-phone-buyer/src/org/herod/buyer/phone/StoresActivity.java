@@ -11,12 +11,15 @@ import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.widget.TitlePageIndicator;
 import org.herod.order.common.Constants;
+import org.herod.order.common.RefreshButtonHelper;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 /**
  * 
@@ -30,6 +33,7 @@ public class StoresActivity extends BaseActivity implements
 
 	private ViewPager mPager;
 	private TitlePageIndicator mIndicator;
+	private RefreshButtonHelper refreshButtonHelper;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,13 @@ public class StoresActivity extends BaseActivity implements
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mIndicator = (TitlePageIndicator) findViewById(R.id.indicator);
 
+		refreshButtonHelper = new RefreshButtonHelper(this, R.id.refreshButton,
+				new OnClickListener() {
+					public void onClick(View arg0) {
+						new HerodTask<Object, List<MapWrapper<String, Object>>>(
+								StoresActivity.this).execute();
+					}
+				}, R.id.pager, R.id.indicator);
 		new HerodTask<Object, List<MapWrapper<String, Object>>>(this).execute();
 	}
 
@@ -54,6 +65,9 @@ public class StoresActivity extends BaseActivity implements
 	}
 
 	public void onPostExecute(List<MapWrapper<String, Object>> result) {
+		if (refreshButtonHelper.checkNullResult(result)) {
+			return;
+		}
 		ShopsFragmentAdapter mAdapter = new ShopsFragmentAdapter(result);
 		mPager.setAdapter(mAdapter);
 		mIndicator.setViewPager(mPager);

@@ -8,6 +8,7 @@ import java.util.List;
 import org.herod.framework.HerodTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
+import org.herod.framework.ViewFindable;
 import org.herod.framework.adapter.SimpleAdapter;
 import org.herod.framework.adapter.SimpleAdapter.ViewBinder;
 import org.herod.framework.utils.ToastUtils;
@@ -32,13 +33,14 @@ import android.widget.Toast;
  * 
  */
 public abstract class AbstractGoodsListFragment extends Fragment implements
-		AsyncTaskable<Object, List<MapWrapper<String, Object>>>,
+		ViewFindable, AsyncTaskable<Object, List<MapWrapper<String, Object>>>,
 		IXListViewListener, ViewBinder {
 	protected XListView goodsListView;
 	protected SimpleAdapter adapter;
 	private boolean isFirstLoad = true;
 	private int begin = 0;
 	private int count = 30;
+	private RefreshButtonHelper refreshButtonHelper;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,6 +55,17 @@ public abstract class AbstractGoodsListFragment extends Fragment implements
 		adapter.setViewBinder(this);
 		goodsListView.setAdapter(adapter);
 		return view;
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		refreshButtonHelper = new RefreshButtonHelper(this, R.id.refreshButton,
+				new OnClickListener() {
+					public void onClick(View arg0) {
+						loadGoods();
+					}
+				}, R.id.goodsListView);
 	}
 
 	@Override
@@ -72,6 +85,11 @@ public abstract class AbstractGoodsListFragment extends Fragment implements
 		return findPageGoods(begin, count);
 	}
 
+	@Override
+	public View findViewById(int id) {
+		return getView().findViewById(id);
+	}
+
 	protected abstract List<MapWrapper<String, Object>> findPageGoods(
 			int begin, int count);
 
@@ -79,7 +97,11 @@ public abstract class AbstractGoodsListFragment extends Fragment implements
 
 	@Override
 	public void onPostExecute(List<MapWrapper<String, Object>> data) {
-		if (data == null || data.size() == 0) {
+		if (refreshButtonHelper.checkNullResult(data)) {
+			begin = 0;
+			return;
+		}
+		if (data.size() == 0) {
 			if (!isFirstLoad) {
 				ToastUtils.showToast("没有更多商品了！", Toast.LENGTH_SHORT);
 			}

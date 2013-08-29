@@ -3,6 +3,7 @@
  */
 package org.herod.buyer.phone;
 
+import org.herod.framework.ViewFindable;
 import org.herod.order.common.AbstractGoodsListFragment.QuantityChangedListener;
 
 import android.app.ActionBar;
@@ -27,7 +28,7 @@ import android.widget.TextView;
  * 
  */
 public class BaseActivity extends FragmentActivity implements
-		QuantityChangedListener {
+		QuantityChangedListener, ViewFindable {
 	private Menu menu;
 	protected SearchView searchview;
 

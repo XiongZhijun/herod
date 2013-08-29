@@ -15,12 +15,14 @@ import org.herod.framework.tools.NetworkStatusTools.ConnectType;
 import org.herod.framework.tools.NetworkStatusTools.NetworkConnectInfo;
 import org.herod.framework.utils.ToastUtils;
 import org.herod.order.common.ImageLoaderAdapter;
+import org.herod.order.common.RefreshButtonHelper;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
@@ -35,6 +37,7 @@ public class HomeActivity extends BaseActivity implements
 		OnItemClickListener, OnLocationSuccessListener {
 	private GridView shopTypesGridView;
 	private boolean isFirst = true;
+	private RefreshButtonHelper refreshButtonHelper;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,13 @@ public class HomeActivity extends BaseActivity implements
 		if (networkConnectInfo.connectType == ConnectType._2G) {
 			ToastUtils.showToast("当前为2G网络", Toast.LENGTH_SHORT);
 		}
+		refreshButtonHelper = new RefreshButtonHelper(this, R.id.refreshButton,
+				new OnClickListener() {
+					public void onClick(View arg0) {
+						new HerodTask<Object, List<MapWrapper<String, Object>>>(
+								HomeActivity.this).execute();
+					}
+				}, R.id.shopTypesGrid);
 	}
 
 	@Override
@@ -98,6 +108,9 @@ public class HomeActivity extends BaseActivity implements
 
 	@Override
 	public void onPostExecute(List<MapWrapper<String, Object>> data) {
+		if (refreshButtonHelper.checkNullResult(data)) {
+			return;
+		}
 		ListAdapter adapter = new ImageLoaderAdapter(this, data,
 				R.layout.activity_home_shop_type_item, new String[] { "name",
 						"imageUrl" }, new int[] { R.id.name, R.id.image });

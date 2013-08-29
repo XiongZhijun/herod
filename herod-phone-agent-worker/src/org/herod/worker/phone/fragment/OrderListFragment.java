@@ -7,8 +7,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.herod.framework.HerodTask.AsyncTaskable;
+import org.herod.framework.ViewFindable;
 import org.herod.framework.widget.XListView;
 import org.herod.framework.widget.XListView.IXListViewListener;
+import org.herod.order.common.RefreshButtonHelper;
 import org.herod.order.common.model.Order;
 import org.herod.worker.phone.AgentWorkerTask;
 import org.herod.worker.phone.R;
@@ -27,18 +29,17 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
-public class OrderListFragment extends Fragment implements
-		AsyncTaskable<FragmentType, List<Order>>, IXListViewListener,
-		OnClickListener {
+public class OrderListFragment extends Fragment implements ViewFindable,
+		AsyncTaskable<FragmentType, List<Order>>, IXListViewListener {
 	private DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 	private XListView ordersListView;
-	private View refreshButton;
 	private String title;
 	private FragmentType type;
 	private int index = 0;
 	private OrderTabPageIndicator indicator;
 	private Handler handler;
 	private OrderListAdapter orderListAdapter;
+	private RefreshButtonHelper refreshButtonHelper;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,8 +51,6 @@ public class OrderListFragment extends Fragment implements
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_orders_list, container,
 				false);
-		refreshButton = view.findViewById(R.id.refreshButton);
-		refreshButton.setOnClickListener(this);
 		ordersListView = (XListView) view.findViewById(R.id.ordersListView);
 		ordersListView.setPullRefreshEnable(true);
 		ordersListView.setPullLoadEnable(false);
@@ -62,6 +61,12 @@ public class OrderListFragment extends Fragment implements
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		refreshButtonHelper = new RefreshButtonHelper(this, R.id.refreshButton,
+				new OnClickListener() {
+					public void onClick(View v) {
+						refreshOrderList();
+					}
+				}, R.id.ordersListView);
 		refreshOrderList();
 	}
 
@@ -73,12 +78,6 @@ public class OrderListFragment extends Fragment implements
 	public void refreshOrderList() {
 		new AgentWorkerTask<FragmentType, List<Order>>(getActivity(), this)
 				.execute(type);
-	}
-
-	@Override
-	public void onClick(View v) {
-		if (v.getId() == R.id.refreshButton)
-			refreshOrderList();
 	}
 
 	@Override
@@ -96,11 +95,10 @@ public class OrderListFragment extends Fragment implements
 	@Override
 	public void onPostExecute(List<Order> orders) {
 		if (CollectionUtils.isEmpty(orders)) {
-			refreshButton.setVisibility(View.VISIBLE);
-			ordersListView.setVisibility(View.GONE);
+			refreshButtonHelper.enableRefresh();
 			return;
 		}
-		refreshButton.setVisibility(View.GONE);
+		refreshButtonHelper.disableRefresh();
 		ordersListView.setVisibility(View.VISIBLE);
 		orderListAdapter = new OrderListAdapter(this, orders, handler);
 		ordersListView.setAdapter(orderListAdapter);
@@ -151,6 +149,11 @@ public class OrderListFragment extends Fragment implements
 
 	public static enum FragmentType {
 		WaitAccept, WaitComplete
+	}
+
+	@Override
+	public View findViewById(int id) {
+		return getView().findViewById(id);
 	}
 
 }

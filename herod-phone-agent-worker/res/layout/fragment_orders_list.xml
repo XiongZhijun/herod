@@ -24,8 +24,9 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/base_empty_view_bg"
             android:contentDescription="@null"
-            android:src="@drawable/refresh_alert" />
+            android:src="@drawable/base_empty_view" />
     </LinearLayout>
 
 </RelativeLayout>

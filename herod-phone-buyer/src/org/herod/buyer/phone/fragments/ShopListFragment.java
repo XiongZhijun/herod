@@ -11,13 +11,16 @@ import org.herod.buyer.phone.R;
 import org.herod.framework.HerodTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
+import org.herod.framework.ViewFindable;
 import org.herod.order.common.ImageLoaderAdapter;
+import org.herod.order.common.RefreshButtonHelper;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -33,10 +36,11 @@ import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
  * @email hust.xzj@gmail.com
  * 
  */
-public class ShopListFragment extends Fragment implements
+public class ShopListFragment extends Fragment implements ViewFindable,
 		AsyncTaskable<Long, List<MapWrapper<String, Object>>>,
 		OnItemClickListener {
 	private GridView shopsGridView;
+	private RefreshButtonHelper refreshButtonHelper;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,8 +53,23 @@ public class ShopListFragment extends Fragment implements
 	}
 
 	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		refreshButtonHelper = new RefreshButtonHelper(this, R.id.refreshButton,
+				new OnClickListener() {
+					public void onClick(View arg0) {
+						refresh();
+					}
+				}, R.id.shopsGridView);
+	}
+
+	@Override
 	public void onResume() {
 		super.onResume();
+		refresh();
+	}
+
+	private void refresh() {
 		long shopTypeId = getArguments().getLong("shopTypeId");
 		new HerodTask<Long, List<MapWrapper<String, Object>>>(this)
 				.execute(shopTypeId);
@@ -63,7 +82,9 @@ public class ShopListFragment extends Fragment implements
 
 	@Override
 	public void onPostExecute(List<MapWrapper<String, Object>> data) {
-		// TODO 出错时处理
+		if (refreshButtonHelper.checkNullResult(data)) {
+			return;
+		}
 		ImageLoaderAdapter adapter = new ImageLoaderAdapter(getActivity(),
 				data, R.layout.fragment_shop_list_shop_item, new String[] {
 						"name", "imageUrl" },
@@ -83,6 +104,11 @@ public class ShopListFragment extends Fragment implements
 		intent.putExtra("shopId", item.getLong("id"));
 		intent.putExtra("shopName", item.getString("name"));
 		startActivity(intent);
+	}
+
+	@Override
+	public View findViewById(int id) {
+		return getView().findViewById(id);
 	}
 
 }

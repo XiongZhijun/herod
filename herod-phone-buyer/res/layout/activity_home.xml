@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/ActivityTheme"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -15,4 +15,18 @@
         android:verticalSpacing="13dip" >
     </GridView>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/refreshButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F0F0F0"
+        android:gravity="center" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/base_empty_view_bg"
+            android:contentDescription="@null"
+            android:src="@drawable/base_empty_view" />
+    </LinearLayout>
+</RelativeLayout>

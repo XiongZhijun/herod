@@ -3,8 +3,11 @@
  */
 package org.herod.framework.rest;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.net.URI;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.herod.framework.utils.FileUtils;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -21,6 +24,7 @@ import android.app.Application;
 public class GZipCacheRestTemplate extends GZipRestTemplate {
 	private static final String REST_CACHE = "RestCache";
 	private static Application application;
+	private NeedCacheMatcher needCacheMatcher = ALL_MATCHER;
 
 	public GZipCacheRestTemplate() {
 		super();
@@ -91,7 +95,7 @@ public class GZipCacheRestTemplate extends GZipRestTemplate {
 
 	@SuppressWarnings("unchecked")
 	protected <T> T getFromCache(URI url, Class<T> responseType) {
-		if (!String.class.equals(responseType)) {
+		if (!String.class.equals(responseType) && !needCacheMatcher.matche(url)) {
 			return null;
 		}
 		String fileName = url.toString().replace("/", "_").replace("&", "_")
@@ -101,16 +105,50 @@ public class GZipCacheRestTemplate extends GZipRestTemplate {
 	}
 
 	protected <T> void saveToCache(URI url, Class<T> responseType, T result) {
+		if (!needCacheMatcher.matche(url)) {
+			return;
+		}
 		String fileName = url.toString().replace("/", "_").replace("&", "_")
 				.replace(":", "_").replace(".", "_").replace("?", "_");
+		removeHistoryFile(fileName);
 		if (String.class.equals(responseType)) {
 			FileUtils.saveToFile(application, REST_CACHE, fileName,
 					result.toString());
 		}
 	}
 
+	protected void removeHistoryFile(String fileName) {
+		final Pattern pattern = Pattern.compile(fileName.replaceAll(
+				"timestamp=\\d*", "timestamp=\\\\d*"));
+		File fileDir = application.getExternalFilesDir(REST_CACHE);
+		File[] files = fileDir.listFiles(new FileFilter() {
+			public boolean accept(File file) {
+				String fileName = file.getName();
+				return pattern.matcher(fileName).matches();
+			}
+		});
+		for (File file : files) {
+			file.delete();
+		}
+	}
+
+	public void setNeedCacheMatcher(NeedCacheMatcher needCacheMatcher) {
+		if (needCacheMatcher != null)
+			this.needCacheMatcher = needCacheMatcher;
+	}
+
 	public static void setApplication(Application application) {
 		GZipCacheRestTemplate.application = application;
 	}
 
+	public static interface NeedCacheMatcher {
+		boolean matche(URI url);
+	}
+
+	private static final NeedCacheMatcher ALL_MATCHER = new NeedCacheMatcher() {
+		public boolean matche(URI url) {
+			return true;
+		}
+
+	};
 }

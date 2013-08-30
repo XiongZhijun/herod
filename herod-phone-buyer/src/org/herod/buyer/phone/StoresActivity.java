@@ -10,7 +10,9 @@ import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.RepeatedlyTask;
 import org.herod.framework.widget.TitlePageIndicator;
-import org.herod.order.common.Constants;
+
+import static org.herod.order.common.Constants.*;
+
 import org.herod.order.common.RefreshButtonHelper;
 
 import android.os.Bundle;
@@ -88,8 +90,9 @@ public class StoresActivity extends BuyerBaseActivity implements
 		public Fragment getItem(int position) {
 			ShopListFragment shopListFragment = new ShopListFragment();
 			Bundle args = new Bundle();
-			args.putLong("shopTypeId",
-					shopTypes.get(position).getLong(Constants.ID));
+			MapWrapper<String, Object> shopType = shopTypes.get(position);
+			args.putLong("shopTypeId", shopType.getLong(ID));
+			args.putLong(TIMESTAMP, shopType.getLong(TIMESTAMP));
 			shopListFragment.setArguments(args);
 			return shopListFragment;
 		}

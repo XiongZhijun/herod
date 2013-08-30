@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.herod.framework.MapWrapper;
 import org.herod.order.common.AbstractGoodsListActivity;
+import org.herod.order.common.Constants;
 import org.herod.order.common.AbstractGoodsListFragment.QuantityChangedListener;
 import org.herod.order.common.AbstractGoodsTypeGoodsListFragment;
 
@@ -35,7 +36,9 @@ public class GoodsListActivity extends AbstractGoodsListActivity implements
 
 	@Override
 	protected List<MapWrapper<String, Object>> findGoodsTypesByShop(long shopId) {
-		return BuyerContext.getBuyerService().findGoodsTypesByShop(shopId);
+		long timestamp = getIntent().getLongExtra(Constants.TIMESTAMP, 0);
+		return BuyerContext.getBuyerService().findGoodsTypesByShop(shopId,
+				timestamp);
 	}
 
 	@Override
@@ -158,8 +161,9 @@ public class GoodsListActivity extends AbstractGoodsListActivity implements
 		@Override
 		protected List<MapWrapper<String, Object>> findGoodsesByType(
 				long goodsTypeId, int begin, int count) {
+			long timestamp = getArguments().getLong(Constants.TIMESTAMP);
 			return BuyerContext.getBuyerService().findGoodsesByType(
-					goodsTypeId, begin, count);
+					goodsTypeId, begin, count, timestamp);
 		}
 
 		protected IShoppingCartCache getShoppingCartCache() {

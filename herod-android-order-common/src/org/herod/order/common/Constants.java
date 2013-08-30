@@ -24,4 +24,6 @@ public interface Constants {
 	String ID = "id";
 
 	String AGENT_ID = "agentId";
+
+	String TIMESTAMP = "timestamp";
 }

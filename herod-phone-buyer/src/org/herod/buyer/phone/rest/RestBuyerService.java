@@ -4,7 +4,9 @@
 package org.herod.buyer.phone.rest;
 
 import java.lang.reflect.Type;
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,6 +16,8 @@ import java.util.Set;
 
 import org.herod.buyer.phone.BuyerService;
 import org.herod.framework.MapWrapper;
+import org.herod.framework.rest.GZipCacheRestTemplate;
+import org.herod.framework.rest.GZipCacheRestTemplate.NeedCacheMatcher;
 import org.herod.framework.rest.GZipCacheRestTemplateBuilder;
 import org.herod.framework.rest.RestServiceSupport;
 import org.herod.framework.rest.URLBuilder;
@@ -37,13 +41,13 @@ import com.google.gson.reflect.TypeToken;
  * 
  */
 public class RestBuyerService extends RestServiceSupport implements
-		BuyerService {
-	private RestTemplate restTemplate;
+		BuyerService, NeedCacheMatcher {
+	private GZipCacheRestTemplate restTemplate;
 	private URLBuilder urlBuilder;
 
 	public RestBuyerService(Context context) {
 		super();
-		this.restTemplate = new GZipCacheRestTemplateBuilder()
+		this.restTemplate = (GZipCacheRestTemplate) new GZipCacheRestTemplateBuilder()
 				.buildRestTemplate();
 		this.urlBuilder = new RestUrlBuilder(context);
 	}
@@ -55,38 +59,54 @@ public class RestBuyerService extends RestServiceSupport implements
 
 	@Override
 	public List<MapWrapper<String, Object>> findShopTypes() {
-		String json = getForObject("/herod/order/shopTypes", String.class,
-				new Date().getTime());
+		String json = getForObject(
+				"/herod/order/shopTypes?timestamp={timestamp}", String.class,
+				buildTimestamp());
+		return toMapWrapperList(json);
+	}
+
+	private long buildTimestamp() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.set(Calendar.MILLISECOND, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		return calendar.getTime().getTime();
+	}
+
+	@Override
+	public List<MapWrapper<String, Object>> findShopesByType(long typeId,
+			long timestamp) {
+		String json = getForObject(
+				"/herod/order/shopTypes/{typeId}/shops?timestamp={timestamp}",
+				String.class, typeId, timestamp);
 		return toMapWrapperList(json);
 	}
 
 	@Override
-	public List<MapWrapper<String, Object>> findShopesByType(long typeId) {
-		String json = getForObject("/herod/order/shopTypes/{typeId}/shops",
-				String.class, typeId);
-		return toMapWrapperList(json);
-	}
-
-	@Override
-	public MapWrapper<String, Object> findShopById(long shopId) {
-		String json = getForObject("/herod/order/shops/{shopId}", String.class,
-				shopId);
+	public MapWrapper<String, Object> findShopById(long shopId, long timestamp) {
+		String json = getForObject(
+				"/herod/order/shops/{shopId}?timestamp={timestamp}",
+				String.class, shopId, timestamp);
 		return toMapWrapper(json);
 	}
 
 	@Override
-	public List<MapWrapper<String, Object>> findGoodsTypesByShop(long shopId) {
-		String json = getForObject("/herod/order/shops/{shopId}/goodsTypes",
-				String.class, shopId);
+	public List<MapWrapper<String, Object>> findGoodsTypesByShop(long shopId,
+			long timestamp) {
+		String json = getForObject(
+				"/herod/order/shops/{shopId}/goodsTypes?timestamp={timestamp}",
+				String.class, shopId, timestamp);
 		return toMapWrapperList(json);
 	}
 
 	@Override
 	public List<MapWrapper<String, Object>> findGoodsesByType(long goodsTypeId,
-			int begin, int count) {
+			int begin, int count, long timestamp) {
 		String json = getForObject(
-				"/herod/order/goodsTypes/{goodsTypeId}/goodses?begin={begin}&count={count}",
-				String.class, goodsTypeId, begin, count);
+				"/herod/order/goodsTypes/{goodsTypeId}/goodses?begin={begin}&count={count}&timestamp={timestamp}",
+				String.class, goodsTypeId, begin, count, timestamp);
 		return toMapWrapperList(json);
 	}
 
@@ -160,4 +180,17 @@ public class RestBuyerService extends RestServiceSupport implements
 		return restTemplate;
 	}
 
+	@Override
+	public boolean matche(URI url) {
+		String urlStr = url.toString();
+		for (String notCacheURL : NOT_CACHE_URLS) {
+			if (urlStr.indexOf(notCacheURL) < 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static final String[] NOT_CACHE_URLS = new String[] {
+			"/herod/sn/transaction", "/herod/order?" };
 }

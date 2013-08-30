@@ -22,14 +22,16 @@ public interface BuyerService {
 
 	List<MapWrapper<String, Object>> findShopTypes();
 
-	List<MapWrapper<String, Object>> findShopesByType(long typeId);
+	List<MapWrapper<String, Object>> findShopesByType(long typeId,
+			long timestamp);
 
-	MapWrapper<String, Object> findShopById(long shopId);
+	MapWrapper<String, Object> findShopById(long shopId, long timestamp);
 
-	List<MapWrapper<String, Object>> findGoodsTypesByShop(long shopId);
+	List<MapWrapper<String, Object>> findGoodsTypesByShop(long shopId,
+			long timestamp);
 
 	List<MapWrapper<String, Object>> findGoodsesByType(long goodsTypeId,
-			int begin, int count);
+			int begin, int count, long timestamp);
 
 	List<MapWrapper<String, Object>> searchGoodses(String goodsName, int begin,
 			int count);

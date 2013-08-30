@@ -35,9 +35,10 @@ public class BuyerServiceProxy implements BuyerService, ShopService {
 	}
 
 	@Override
-	public List<MapWrapper<String, Object>> findShopesByType(long typeId) {
+	public List<MapWrapper<String, Object>> findShopesByType(long typeId,
+			long timestamp) {
 		List<MapWrapper<String, Object>> shopes = buyerService
-				.findShopesByType(typeId);
+				.findShopesByType(typeId, timestamp);
 		if (shopCache.size() > 100) {
 			shopCache.clear();
 		}
@@ -48,22 +49,24 @@ public class BuyerServiceProxy implements BuyerService, ShopService {
 	}
 
 	@Override
-	public MapWrapper<String, Object> findShopById(long shopId) {
+	public MapWrapper<String, Object> findShopById(long shopId, long timestamp) {
 		if (shopCache.containsKey(shopId)) {
 			return shopCache.get(shopId);
 		}
-		return buyerService.findShopById(shopId);
+		return buyerService.findShopById(shopId, timestamp);
 	}
 
 	@Override
-	public List<MapWrapper<String, Object>> findGoodsTypesByShop(long shopId) {
-		return buyerService.findGoodsTypesByShop(shopId);
+	public List<MapWrapper<String, Object>> findGoodsTypesByShop(long shopId,
+			long timestamp) {
+		return buyerService.findGoodsTypesByShop(shopId, timestamp);
 	}
 
 	@Override
 	public List<MapWrapper<String, Object>> findGoodsesByType(long goodsTypeId,
-			int begin, int count) {
-		return buyerService.findGoodsesByType(goodsTypeId, begin, count);
+			int begin, int count, long timestamp) {
+		return buyerService.findGoodsesByType(goodsTypeId, begin, count,
+				timestamp);
 	}
 
 	@Override
@@ -85,6 +88,14 @@ public class BuyerServiceProxy implements BuyerService, ShopService {
 	@Override
 	public Map<String, Order> findOrders(Set<String> serialNumbers) {
 		return buyerService.findOrders(serialNumbers);
+	}
+
+	@Override
+	public MapWrapper<String, Object> findShopById(long shopId) {
+		if (shopCache.containsKey(shopId)) {
+			return shopCache.get(shopId);
+		}
+		return null;
 	}
 
 }

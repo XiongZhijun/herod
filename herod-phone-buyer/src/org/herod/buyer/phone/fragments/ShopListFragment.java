@@ -13,6 +13,7 @@ import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.RepeatedlyTask;
 import org.herod.framework.ViewFindable;
+import org.herod.order.common.Constants;
 import org.herod.order.common.ImageLoaderAdapter;
 import org.herod.order.common.RefreshButtonHelper;
 
@@ -70,7 +71,9 @@ public class ShopListFragment extends BaseFragment implements ViewFindable,
 	@Override
 	public List<MapWrapper<String, Object>> runOnBackground(Object... params) {
 		long shopTypeId = getArguments().getLong("shopTypeId");
-		return BuyerContext.getBuyerService().findShopesByType(shopTypeId);
+		long timestamp = getArguments().getLong(Constants.TIMESTAMP);
+		return BuyerContext.getBuyerService().findShopesByType(shopTypeId,
+				timestamp);
 	}
 
 	@Override
@@ -96,6 +99,7 @@ public class ShopListFragment extends BaseFragment implements ViewFindable,
 				.getItemAtPosition(position);
 		intent.putExtra("shopId", item.getLong("id"));
 		intent.putExtra("shopName", item.getString("name"));
+		intent.putExtra(Constants.TIMESTAMP, item.getLong(Constants.TIMESTAMP));
 		startActivity(intent);
 	}
 

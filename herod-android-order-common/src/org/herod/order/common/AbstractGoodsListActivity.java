@@ -87,8 +87,10 @@ public abstract class AbstractGoodsListActivity extends BaseActivity implements
 			AbstractGoodsTypeGoodsListFragment fragment = createGoodsListFragment();
 			Bundle args = new Bundle();
 			args.putAll(getIntent().getExtras());
-			args.putLong("goodsTypeId",
-					goodsTypes.get(position).getLong(Constants.ID));
+			MapWrapper<String, Object> goodsType = goodsTypes.get(position);
+			args.putLong("goodsTypeId", goodsType.getLong(Constants.ID));
+			args.putLong(Constants.TIMESTAMP,
+					goodsType.getLong(Constants.TIMESTAMP));
 			fragment.setArguments(args);
 			return fragment;
 		}

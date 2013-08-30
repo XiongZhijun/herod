@@ -18,14 +18,12 @@ public class BuyerContext {
 	private static int restServerPort;
 	private static String imageServerHost;
 	private static int imageServerPort;
-	private static BuyerService buyerService;
-	private static ShopService shopService;
+	private static BuyerServiceProxy buyerService;
 
 	public static void init(Context context) {
-		BuyerServiceProxy buyerServiceProxy = new BuyerServiceProxy(
-				new RestBuyerService(context));
-		buyerService = buyerServiceProxy;
-		shopService = buyerServiceProxy;
+		if (buyerService == null) {
+			buyerService = new BuyerServiceProxy(new RestBuyerService(context));
+		}
 		restServerHost = context.getString(R.string.RestServerHost);
 		restServerPort = Integer.parseInt(context
 				.getString(R.string.RestServerPort));
@@ -41,16 +39,8 @@ public class BuyerContext {
 		return buyerService;
 	}
 
-	public static void setBuyerService(BuyerService buyerService) {
-		BuyerContext.buyerService = buyerService;
-	}
-
 	public static ShopService getShopService() {
-		return shopService;
-	}
-
-	public static void setShopService(ShopService shopService) {
-		BuyerContext.shopService = shopService;
+		return buyerService;
 	}
 
 	public static String getRestServerHost() {

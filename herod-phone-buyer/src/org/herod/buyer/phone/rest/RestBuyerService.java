@@ -6,6 +6,7 @@ package org.herod.buyer.phone.rest;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Set;
 
 import org.herod.buyer.phone.BuyerService;
 import org.herod.framework.MapWrapper;
-import org.herod.framework.rest.GZipRestTemplateBuilder;
+import org.herod.framework.rest.GZipCacheRestTemplateBuilder;
 import org.herod.framework.rest.RestServiceSupport;
 import org.herod.framework.rest.URLBuilder;
 import org.herod.framework.tools.GsonUtils;
@@ -42,7 +43,8 @@ public class RestBuyerService extends RestServiceSupport implements
 
 	public RestBuyerService(Context context) {
 		super();
-		this.restTemplate = new GZipRestTemplateBuilder().buildRestTemplate();
+		this.restTemplate = new GZipCacheRestTemplateBuilder()
+				.buildRestTemplate();
 		this.urlBuilder = new RestUrlBuilder(context);
 	}
 
@@ -53,7 +55,8 @@ public class RestBuyerService extends RestServiceSupport implements
 
 	@Override
 	public List<MapWrapper<String, Object>> findShopTypes() {
-		String json = getForObject("/herod/order/shopTypes", String.class);
+		String json = getForObject("/herod/order/shopTypes", String.class,
+				new Date().getTime());
 		return toMapWrapperList(json);
 	}
 

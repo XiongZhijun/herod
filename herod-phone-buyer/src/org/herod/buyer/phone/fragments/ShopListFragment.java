@@ -64,7 +64,7 @@ public class ShopListFragment extends BaseFragment implements ViewFindable,
 	@Override
 	public void onResume() {
 		super.onResume();
-		loadShopsTask.execute();
+		loadShopsTask.execute(getActivity());
 	}
 
 	@Override

@@ -38,7 +38,7 @@ public class BuyerServiceProxy implements BuyerService, ShopService {
 	public List<MapWrapper<String, Object>> findShopesByType(long typeId) {
 		List<MapWrapper<String, Object>> shopes = buyerService
 				.findShopesByType(typeId);
-		if (shopCache.size() > 20) {
+		if (shopCache.size() > 100) {
 			shopCache.clear();
 		}
 		for (MapWrapper<String, Object> shop : shopes) {

@@ -11,8 +11,8 @@ import org.herod.buyer.phone.adapter.OrderListAdapter;
 import org.herod.buyer.phone.db.OrderDao;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
-import org.herod.framework.HerodTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
+import org.herod.framework.RepeatedlyTask;
 import org.herod.framework.db.DatabaseOpenHelper;
 import org.herod.order.common.model.Order;
 
@@ -73,7 +73,7 @@ public class HisttoryOrdersActivity extends AbstractOrdersActivity implements
 	}
 
 	public void refreshOrders() {
-		new HerodTask<Object, List<Order>>(this).execute();
+		new RepeatedlyTask<Object, List<Order>>(this).execute(this);
 	}
 
 	private class OnClearShoppingCartOkListener implements

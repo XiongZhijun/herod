@@ -23,6 +23,7 @@ import org.herod.order.common.model.OrderStatus;
 import org.herod.order.common.model.Result;
 import org.herod.order.common.model.ResultCode;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
@@ -128,6 +129,7 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 		private String buyerPhone;
 		private String buyerName;
 		private String comment;
+		private ProgressDialog progressDialog;
 
 		public SubmitOrdersTask(String buyerAddress, String buyerPhone,
 				String buyerName, String comment) {
@@ -136,6 +138,15 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 			this.buyerPhone = buyerPhone;
 			this.buyerName = buyerName;
 			this.comment = comment;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			if (progressDialog != null && progressDialog.isShowing()) {
+				progressDialog.dismiss();
+			}
+			progressDialog = ProgressDialog.show(getActivity(), "订单", "提交订单……");
 		}
 
 		protected Result doInBackground(Object... params) {
@@ -161,6 +172,9 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 
 		@Override
 		protected void onPostExecute(Result result) {
+			if (progressDialog != null && progressDialog.isShowing()) {
+				progressDialog.dismiss();
+			}
 			FragmentActivity activity = getActivity();
 			if (result != null
 					&& (result.isSuccess() || result.getCode() == ResultCode.SomeOrderIsExists)) {

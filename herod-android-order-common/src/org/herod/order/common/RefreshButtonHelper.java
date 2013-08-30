@@ -26,7 +26,7 @@ public class RefreshButtonHelper {
 			int... otherViews) {
 		this(viewFindable, refreshButton, new OnClickListener() {
 			public void onClick(View v) {
-				task.execute();
+				task.execute(v.getContext());
 			}
 		}, otherViews);
 	}

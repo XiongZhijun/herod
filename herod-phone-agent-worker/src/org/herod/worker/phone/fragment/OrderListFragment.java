@@ -61,10 +61,10 @@ public class OrderListFragment extends BaseFragment implements ViewFindable,
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		loadOrdersTask = new AgentWorkerRepeatedlyTask<Object, List<Order>>(
-				getActivity(), this);
+				this);
 		refreshButtonHelper = new RefreshButtonHelper(this, loadOrdersTask,
 				R.id.refreshButton, R.id.ordersListView);
-		loadOrdersTask.execute();
+		refreshOrderList();
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class OrderListFragment extends BaseFragment implements ViewFindable,
 	}
 
 	public void refreshOrderList() {
-		loadOrdersTask.execute();
+		loadOrdersTask.execute(getActivity());
 	}
 
 	@Override

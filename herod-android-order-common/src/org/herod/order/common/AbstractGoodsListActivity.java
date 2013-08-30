@@ -44,7 +44,7 @@ public abstract class AbstractGoodsListActivity extends BaseActivity implements
 				this);
 		refreshButtonHelper = new RefreshButtonHelper(this, loadGoodsTypeTask,
 				R.id.refreshButton, R.id.pager, R.id.indicator);
-		loadGoodsTypeTask.execute();
+		loadGoodsTypeTask.execute(this);
 	}
 
 	@Override

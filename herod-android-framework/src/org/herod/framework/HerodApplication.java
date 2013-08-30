@@ -3,6 +3,7 @@
  */
 package org.herod.framework;
 
+import org.herod.framework.rest.GZipCacheRestTemplate;
 import org.herod.framework.utils.ResourcesUtils;
 import org.herod.framework.utils.ToastUtils;
 
@@ -20,6 +21,7 @@ public class HerodApplication extends Application {
 		super.onCreate();
 		ResourcesUtils.setApplication(this);
 		ToastUtils.setApplicationContext(this);
+		GZipCacheRestTemplate.setApplication(this);
 	}
 
 }

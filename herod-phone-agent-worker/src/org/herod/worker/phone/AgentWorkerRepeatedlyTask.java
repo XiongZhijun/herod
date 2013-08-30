@@ -15,17 +15,13 @@ import android.content.Context;
  */
 public class AgentWorkerRepeatedlyTask<Params, Result> extends
 		RepeatedlyTask<Params, Result> {
-
-	private Context context;
-
-	public AgentWorkerRepeatedlyTask(Context context,
+	public AgentWorkerRepeatedlyTask(
 			AsyncTaskable<Params, Result> asyncTaskable, Params... params) {
 		super(asyncTaskable, params);
-		this.context = context;
 	}
 
 	@Override
-	public void execute() {
+	public void execute(Context context) {
 		new AgentWorkerTask<Params, Result>(context, runnable, postExecutor)
 				.execute(paramsLoader.getParams());
 	}

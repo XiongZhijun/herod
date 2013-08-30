@@ -7,6 +7,9 @@ import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.HerodTask.BackgroudRunnable;
 import org.herod.framework.HerodTask.PostExecutor;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+
 /**
  * 
  * @author Xiong Zhijun
@@ -17,18 +20,22 @@ public class RepeatedlyTask<Params, Result> {
 	protected BackgroudRunnable<Params, Result> runnable;
 	protected PostExecutor<Result> postExecutor;
 	protected ParamsLoader<Params> paramsLoader;
-
-	public RepeatedlyTask(
-			RepeatedlyAsyncTaskable<Params, Result> repeatedlyAsyncTaskable) {
-		this(repeatedlyAsyncTaskable, repeatedlyAsyncTaskable);
-	}
+	private ProgressDialog dialog;
+	private boolean showProgressDialog = true;
 
 	public RepeatedlyTask(AsyncTaskable<Params, Result> asyncTaskable,
 			Params... params) {
 		this(asyncTaskable, asyncTaskable, params);
 	}
 
-	public RepeatedlyTask(BackgroudRunnable<Params, Result> runnable,
+	@SuppressWarnings("unchecked")
+	public RepeatedlyTask(AsyncTaskable<Params, Result> asyncTaskable,
+			boolean showProgressDialog) {
+		this(asyncTaskable, asyncTaskable);
+		this.showProgressDialog = showProgressDialog;
+	}
+
+	RepeatedlyTask(BackgroudRunnable<Params, Result> runnable,
 			PostExecutor<Result> postExecutor, final Params... params) {
 		this(runnable, postExecutor, new ParamsLoader<Params>() {
 			public Params[] getParams() {
@@ -37,22 +44,41 @@ public class RepeatedlyTask<Params, Result> {
 		});
 	}
 
-	public RepeatedlyTask(AsyncTaskable<Params, Result> asyncTaskable,
-			ParamsLoader<Params> paramsLoaders) {
-		this(asyncTaskable, asyncTaskable, paramsLoaders);
-	}
-
-	public RepeatedlyTask(BackgroudRunnable<Params, Result> runnable,
-			PostExecutor<Result> postExecutor, ParamsLoader<Params> paramsLoader) {
+	RepeatedlyTask(BackgroudRunnable<Params, Result> runnable,
+			final PostExecutor<Result> postExecutor,
+			ParamsLoader<Params> paramsLoader) {
 		super();
 		this.runnable = runnable;
-		this.postExecutor = postExecutor;
+		this.postExecutor = new PostExecutor<Result>() {
+			public void onPostExecute(Result result) {
+				dismissDialog();
+				postExecutor.onPostExecute(result);
+			}
+
+		};
 		this.paramsLoader = paramsLoader;
 	}
 
-	public void execute() {
+	public void execute(Context context) {
+		showDialog(context);
 		new HerodTask<Params, Result>(runnable, postExecutor)
 				.execute(paramsLoader.getParams());
+	}
+
+	private void dismissDialog() {
+		if (dialog != null && dialog.isShowing()) {
+			dialog.dismiss();
+		}
+	}
+
+	private void showDialog(Context context) {
+		if (!showProgressDialog) {
+			return;
+		}
+		if (dialog != null && dialog.isShowing()) {
+			dialog.dismiss();
+		}
+		dialog = ProgressDialog.show(context, "提示", "数据读取中……");
 	}
 
 	public static interface ParamsLoader<Params> {

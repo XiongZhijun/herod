@@ -62,7 +62,7 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		loadGoodsTask = new RepeatedlyTask<Object, List<MapWrapper<String, Object>>>(
-				this);
+				this, false);
 		refreshButtonHelper = new RefreshButtonHelper(this, loadGoodsTask,
 				R.id.refreshButton, R.id.goodsListView);
 	}
@@ -187,7 +187,7 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 	}
 
 	public void loadGoods() {
-		loadGoodsTask.execute();
+		loadGoodsTask.execute(getActivity());
 	}
 
 	protected IShoppingCartCache getShoppingCartCache() {

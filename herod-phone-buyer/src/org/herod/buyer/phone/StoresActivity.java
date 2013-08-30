@@ -49,7 +49,7 @@ public class StoresActivity extends BuyerBaseActivity implements
 		refreshButtonHelper = new RefreshButtonHelper(this, loadShopTypesTask,
 				R.id.refreshButton, R.id.pager, R.id.indicator);
 
-		loadShopTypesTask.execute();
+		loadShopTypesTask.execute(this);
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import org.herod.framework.utils.ToastUtils;
 import org.herod.order.common.ImageLoaderAdapter;
 import org.herod.order.common.RefreshButtonHelper;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -38,6 +39,7 @@ public class HomeActivity extends BuyerBaseActivity implements
 	private boolean isFirst = true;
 	private RefreshButtonHelper refreshButtonHelper;
 	private RepeatedlyTask<Object, List<MapWrapper<String, Object>>> loadShopTypesTask;
+	private ProgressDialog locationProgressDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,14 +66,21 @@ public class HomeActivity extends BuyerBaseActivity implements
 				this);
 		refreshButtonHelper = new RefreshButtonHelper(this, loadShopTypesTask,
 				R.id.refreshButton, R.id.shopTypesGrid);
+
+		locationProgressDialog = ProgressDialog.show(this, "提示", "定位中……");
 	}
 
 	@Override
 	public void onLocationSuccess(BDLocation location) {
 		Log.d("LocationSuccess",
 				location.getLatitude() + "," + location.getLongitude());
+		if (locationProgressDialog != null
+				&& locationProgressDialog.isShowing()) {
+			locationProgressDialog.dismiss();
+			locationProgressDialog = null;
+		}
 		if (isFirst) {
-			loadShopTypesTask.execute();
+			loadShopTypesTask.execute(this);
 			isFirst = false;
 		}
 	}

@@ -94,6 +94,7 @@ public abstract class TcpClientService extends Service implements Callback,
 
 	@Override
 	public boolean handleMessage(Message msg) {
+		handler.removeMessages(msg.what);
 		switch (msg.what) {
 		case CONNECT_FAILED:
 			onConnectFailed();

@@ -84,7 +84,13 @@ public class TcpClient implements Runnable {
 				while (it.hasNext()) {
 					SelectionKey skey = (SelectionKey) it.next();
 					it.remove();
-					if (skey.isReadable()) {
+					SocketChannel sc = (SocketChannel) skey.channel();
+					if (!sc.isConnected()) {
+						stop();
+						handler.sendEmptyMessageDelayed(
+								TcpClientService.READ_DATA_FROM_SERVER_FAILED,
+								delayMillis);
+					} else if (skey.isReadable()) {
 						read(skey);
 					}
 				}
@@ -95,23 +101,38 @@ public class TcpClient implements Runnable {
 	private void read(SelectionKey skey) throws IOException {
 		int read;
 		SocketChannel sc = (SocketChannel) skey.channel();
-		while ((read = sc.read(buffer)) != -1) {
-			if (read == 0)
+		while (true) {
+			read = sc.read(buffer);
+			if (read == -1) {
+				stop();
+				handler.sendEmptyMessageDelayed(
+						TcpClientService.READ_DATA_FROM_SERVER_FAILED,
+						delayMillis);
+			} else if (read == 0) {
 				break;
-			buffer.flip();
-			byte[] array = new byte[read];
-			buffer.get(array);
-			buffer.clear();
-			cache.push(array, 0, read, frameCallback);
+			} else {
+				buffer.flip();
+				byte[] array = new byte[read];
+				buffer.get(array);
+				buffer.clear();
+				cache.push(array, 0, read, frameCallback);
+			}
 		}
 	}
 
 	public void stop() {
 		connectted = false;
 		try {
-			client.close();
+			if (selector != null)
+				selector.close();
 		} catch (IOException e) {
-			Log.w("TcpClient", "disconnect failed.");
+			Log.w("TcpClient", "close selector failed.");
+		}
+		try {
+			if (client != null)
+				client.close();
+		} catch (IOException e) {
+			Log.w("TcpClient", "close client failed.");
 			handler.sendEmptyMessageDelayed(TcpClientService.DISCONNECT_FAILED,
 					delayMillis);
 		}

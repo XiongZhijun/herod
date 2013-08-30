@@ -3,6 +3,6 @@
 
     <string name="TcpServerHost">172.19.33.88</string>
     <string name="TcpServerPort">9991</string>
-    <string name="TcpServerReconnectDelay">1000</string>
+    <string name="TcpServerReconnectDelay">3000</string>
 
 </resources>

@@ -4,19 +4,17 @@
         android:id="@+id/search"
         android:actionViewClass="android.widget.SearchView"
         android:icon="@android:drawable/ic_menu_search"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="商品搜索"/>
     <item
         android:id="@+id/historyOrders"
         android:icon="@drawable/history_orders"
-        android:onClick="showHistoryOrders"
         android:showAsAction="ifRoom"
         android:title="历史订单"/>
     <item
         android:id="@+id/shoppingCart"
         android:actionProviderClass="org.herod.buyer.phone.view.ShoppingCartActionBarActionProvider"
-        android:onClick="showShoppingCart"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="购物车"/>
 
 </menu>

@@ -3,7 +3,6 @@
     <item
         android:id="@+id/historyOrders"
         android:icon="@drawable/history_orders"
-        android:onClick="showHistoryOrders"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
         android:title="历史订单"/>

@@ -35,26 +35,35 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="org.herod.buyer.phone.HomeActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="org.herod.buyer.phone.ShoppingCartActivity" >
+        <activity
+            android:name="org.herod.buyer.phone.ShoppingCartActivity"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="org.herod.buyer.phone.HisttoryOrdersActivity" >
+        <activity
+            android:name="org.herod.buyer.phone.HisttoryOrdersActivity"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="org.herod.buyer.phone.StoresActivity" >
+        <activity
+            android:name="org.herod.buyer.phone.StoresActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="org.herod.buyer.phone.GoodsListActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.PageIndicatorDefaults" >
         </activity>
         <activity
             android:name="org.herod.buyer.phone.GoodsSearchActivity"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>

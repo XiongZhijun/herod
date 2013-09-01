@@ -38,15 +38,29 @@ public abstract class BuyerBaseActivity extends BaseActivity implements
 		}
 	}
 
-	public void queryGoods(MenuItem item) {
-	}
-
 	public void showHistoryOrders(MenuItem item) {
 		startActivity(new Intent(this, HisttoryOrdersActivity.class));
 	}
 
 	public void showShoppingCart(MenuItem item) {
 		startActivity(new Intent(this, ShoppingCartActivity.class));
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		boolean done = super.onOptionsItemSelected(item);
+		if (done) {
+			return done;
+		}
+		switch (item.getItemId()) {
+		case R.id.historyOrders:
+			showHistoryOrders(item);
+			return true;
+		case R.id.shoppingCart:
+			showShoppingCart(item);
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {

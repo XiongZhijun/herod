@@ -3,13 +3,15 @@
  */
 package org.herod.buyer.phone;
 
+import static org.herod.order.common.Constants.ID;
+import static org.herod.order.common.Constants.TIMESTAMP;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.herod.framework.MapWrapper;
-import org.herod.order.common.Constants;
 import org.herod.order.common.model.Order;
 import org.herod.order.common.model.Result;
 
@@ -23,6 +25,7 @@ import org.herod.order.common.model.Result;
 public class BuyerServiceProxy implements BuyerService, ShopService {
 	private Map<Long, MapWrapper<String, Object>> shopCache = new HashMap<Long, MapWrapper<String, Object>>();
 	private BuyerService buyerService;
+	private Map<Long, Long> latestShopTimestampMap = new HashMap<Long, Long>();
 
 	public BuyerServiceProxy(BuyerService buyerService) {
 		super();
@@ -41,9 +44,12 @@ public class BuyerServiceProxy implements BuyerService, ShopService {
 				.findShopesByType(typeId, timestamp);
 		if (shopCache.size() > 100) {
 			shopCache.clear();
+			latestShopTimestampMap.clear();
 		}
 		for (MapWrapper<String, Object> shop : shopes) {
-			shopCache.put(shop.getLong(Constants.ID), shop);
+			long shopId = shop.getLong(ID);
+			shopCache.put(shopId, shop);
+			latestShopTimestampMap.put(shopId, shop.getLong(TIMESTAMP));
 		}
 		return shopes;
 	}
@@ -53,6 +59,7 @@ public class BuyerServiceProxy implements BuyerService, ShopService {
 		if (shopCache.containsKey(shopId)) {
 			return shopCache.get(shopId);
 		}
+		latestShopTimestampMap.put(shopId, shopId);
 		return buyerService.findShopById(shopId, timestamp);
 	}
 
@@ -95,7 +102,9 @@ public class BuyerServiceProxy implements BuyerService, ShopService {
 		if (shopCache.containsKey(shopId)) {
 			return shopCache.get(shopId);
 		}
-		return null;
+		long timestamp = latestShopTimestampMap.containsKey(shopId) ? latestShopTimestampMap
+				.get(shopId) : 0;
+		return findShopById(shopId, timestamp);
 	}
 
 }

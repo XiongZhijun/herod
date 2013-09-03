@@ -9,6 +9,7 @@ import static org.herod.order.common.Constants.SHOP_ID;
 import java.util.List;
 
 import org.herod.framework.BaseFragment;
+import org.herod.framework.HerodTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.RepeatedlyTask;
@@ -145,9 +146,17 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 		return goods.getLong(SHOP_ID);
 	}
 
-	private void increase(View dataSetView, MapWrapper<String, Object> goods) {
-		int quantity = getShoppingCartCache().increase(getShopId(goods), goods);
-		setQuantity(dataSetView, quantity);
+	private void increase(final View dataSetView,
+			final MapWrapper<String, Object> goods) {
+		new HerodTask<Object, Integer>(new AsyncTaskable<Object, Integer>() {
+			public Integer runOnBackground(Object... params) {
+				return getShoppingCartCache().increase(getShopId(goods), goods);
+			}
+
+			public void onPostExecute(Integer quantity) {
+				setQuantity(dataSetView, quantity);
+			}
+		}).execute();
 	}
 
 	private void decrease(View dataSetView, MapWrapper<String, Object> goods,

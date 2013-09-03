@@ -16,14 +16,20 @@ import android.util.Log;
 public class SimpleRestResponseErrorHandler extends DefaultResponseErrorHandler {
 
 	private static final String TAG = SimpleRestResponseErrorHandler.class
-			.getName();
+			.getSimpleName();
 
 	@Override
 	public void handleError(ClientHttpResponse response) throws IOException {
 		if (response == null) {
 			throw new NoResponseException("response is null.");
 		}
-		HttpStatus statusCode = response.getStatusCode();
+		HttpStatus statusCode;
+		try {
+			statusCode = response.getStatusCode();
+		} catch (Exception e) {
+			Log.w(TAG, "get response status code failed.", e);
+			throw new NoResponseException("get response status code failed.");
+		}
 		if (statusCode == null) {
 			throw new NoResponseException("response status code is null.");
 		}

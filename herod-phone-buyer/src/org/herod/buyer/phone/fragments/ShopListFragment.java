@@ -3,6 +3,13 @@
  */
 package org.herod.buyer.phone.fragments;
 
+import static org.herod.buyer.phone.Constants.IMAGE_URL;
+import static org.herod.buyer.phone.Constants.SHOP_TYPE_ID;
+import static org.herod.order.common.Constants.ID;
+import static org.herod.order.common.Constants.NAME;
+import static org.herod.order.common.Constants.SHOP_ID;
+import static org.herod.order.common.Constants.SHOP_NAME;
+
 import java.util.List;
 
 import org.herod.buyer.phone.BuyerContext;
@@ -70,7 +77,7 @@ public class ShopListFragment extends BaseFragment implements ViewFindable,
 
 	@Override
 	public List<MapWrapper<String, Object>> runOnBackground(Object... params) {
-		long shopTypeId = getArguments().getLong("shopTypeId");
+		long shopTypeId = getArguments().getLong(SHOP_TYPE_ID);
 		long timestamp = getArguments().getLong(Constants.TIMESTAMP);
 		return BuyerContext.getBuyerService().findShopesByType(shopTypeId,
 				timestamp);
@@ -83,8 +90,7 @@ public class ShopListFragment extends BaseFragment implements ViewFindable,
 		}
 		ImageLoaderAdapter adapter = new ImageLoaderAdapter(getActivity(),
 				data, R.layout.fragment_shop_list_shop_item, new String[] {
-						"name", "imageUrl" },
-				new int[] { R.id.name, R.id.image });
+						NAME, IMAGE_URL }, new int[] { R.id.name, R.id.image });
 		shopsGridView.setAdapter(adapter);
 		shopsGridView.setOnScrollListener(new PauseOnScrollListener(
 				ImageLoaderUtils.getImageLoader(), false, true));
@@ -97,8 +103,8 @@ public class ShopListFragment extends BaseFragment implements ViewFindable,
 		Intent intent = new Intent(getActivity(), GoodsListActivity.class);
 		MapWrapper<String, Object> item = (MapWrapper<String, Object>) adapterView
 				.getItemAtPosition(position);
-		intent.putExtra("shopId", item.getLong("id"));
-		intent.putExtra("shopName", item.getString("name"));
+		intent.putExtra(SHOP_ID, item.getLong(ID));
+		intent.putExtra(SHOP_NAME, item.getString(NAME));
 		intent.putExtra(Constants.TIMESTAMP, item.getLong(Constants.TIMESTAMP));
 		startActivity(intent);
 	}

@@ -3,6 +3,9 @@
  */
 package org.herod.order.common;
 
+import static org.herod.order.common.Constants.ID;
+import static org.herod.order.common.Constants.SHOP_ID;
+
 import java.util.List;
 
 import org.herod.framework.BaseFragment;
@@ -114,7 +117,7 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 			final MapWrapper<String, Object> goods, final View view,
 			String from, int to, int position, Object data,
 			String textRepresentation) {
-		final long goodsId = goods.getLong("id");
+		final long goodsId = goods.getLong(ID);
 		if (to == R.id.quantity) {
 			int quantity = getShoppingCartCache().getQuantity(getShopId(goods),
 					goodsId);
@@ -139,7 +142,7 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 	}
 
 	protected long getShopId(MapWrapper<String, Object> goods) {
-		return goods.getLong("shopId");
+		return goods.getLong(SHOP_ID);
 	}
 
 	private void increase(View dataSetView, MapWrapper<String, Object> goods) {

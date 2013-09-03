@@ -15,6 +15,7 @@ import org.herod.order.common.AbstractGoodsListFragment;
 import org.herod.order.common.ImageLoaderAdapter;
 
 import android.support.v4.app.FragmentActivity;
+import static org.herod.buyer.phone.Constants.*;
 
 /**
  * 
@@ -40,9 +41,9 @@ public class SearchGoodsListFragment extends AbstractGoodsListFragment {
 		return new ImageLoaderAdapter(activity,
 				Collections.<MapWrapper<String, Object>> emptyList(),
 				R.layout.activity_goods_search_goods_item, new String[] {
-						"thumbnail", "name", "sellingPrice", "name", "name",
-						"name", "shopName", "unit" }, new int[] { R.id.image,
-						R.id.name, R.id.price, R.id.quantity, R.id.addButton,
+						THUMBNAIL, NAME, SELLING_PRICE, NAME, NAME, NAME,
+						SHOP_NAME, UNIT }, new int[] { R.id.image, R.id.name,
+						R.id.price, R.id.quantity, R.id.addButton,
 						R.id.reduceButton, R.id.shopName, R.id.unit });
 	}
 

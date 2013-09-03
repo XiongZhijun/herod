@@ -3,6 +3,10 @@
  */
 package org.herod.worker.phone.rest;
 
+import static org.herod.framework.Constants.REST;
+import static org.herod.worker.phone.Constants.IMEI;
+import static org.herod.worker.phone.Constants.TOKEN;
+
 import org.herod.framework.rest.URLBuilder;
 import org.herod.framework.tools.HttpUrlBuilderSupport;
 import org.herod.framework.utils.DeviceUtils;
@@ -18,7 +22,6 @@ import android.content.Context;
  * 
  */
 public class RestUrlBuilder extends HttpUrlBuilderSupport implements URLBuilder {
-	private static final String REST = "rest";
 	private String imei;
 
 	public RestUrlBuilder(Context context) {
@@ -31,8 +34,8 @@ public class RestUrlBuilder extends HttpUrlBuilderSupport implements URLBuilder 
 		clean();
 		appendHttpServerUrl().appendRelativeUrl(REST)
 				.appendRelativeUrl(relativeUrl)
-				.appendParams("token", WorkerContext.getLoginTokenString())
-				.appendParams("imei", imei);
+				.appendParams(TOKEN, WorkerContext.getLoginTokenString())
+				.appendParams(IMEI, imei);
 		return getString();
 	}
 

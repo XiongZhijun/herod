@@ -3,6 +3,8 @@
  */
 package org.herod.buyer.phone.view;
 
+import static org.herod.order.common.Constants.TEL;
+
 import org.herod.buyer.phone.AbstractOrdersActivity;
 import org.herod.buyer.phone.R;
 import org.herod.buyer.phone.ShoppingCartCache;
@@ -37,6 +39,8 @@ import android.widget.TextView;
  */
 public class OrderView extends LinearLayout implements
 		GoodsQuantityChangedListener, ViewFindable {
+	/**  */
+	private static final String MM_DD_HH_MM = "MM-dd HH:mm";
 	@InjectView(R.id.shopName)
 	private TextView shopNameView;
 	@InjectView(R.id.shopPhone)
@@ -105,7 +109,7 @@ public class OrderView extends LinearLayout implements
 					ResourcesUtils.getEnumShowName(order.getStatus()));
 			setText(serialNumberView, order.getSerialNumber());
 			setText(submitTimeView,
-					DateUtils.format("MM-dd HH:mm", order.getSubmitTime()));
+					DateUtils.format(MM_DD_HH_MM, order.getSubmitTime()));
 		}
 		orderItemsContainer.removeAllViews();
 		setText(shopNameView, order.getShopName());
@@ -201,7 +205,7 @@ public class OrderView extends LinearLayout implements
 	private class CallPhoneListener implements OnClickListener {
 		public void onClick(View v) {
 			String phone = order.getShopPhone();
-			Uri uri = Uri.parse("tel:" + phone);
+			Uri uri = Uri.parse(TEL + phone);
 			Intent it = new Intent(Intent.ACTION_DIAL, uri);
 			activity.startActivity(it);
 		}

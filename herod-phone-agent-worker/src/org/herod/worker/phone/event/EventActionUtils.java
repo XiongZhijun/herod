@@ -4,6 +4,7 @@
 package org.herod.worker.phone.event;
 
 import org.herod.event.Event;
+import static org.herod.order.common.Constants.*;
 
 /**
  * 
@@ -18,7 +19,8 @@ public class EventActionUtils {
 
 	public static String getEventAction(String eventCode) {
 		StringBuilder action = new StringBuilder();
-		action.append(Event.class.getName()).append("_").append(eventCode);
+		action.append(Event.class.getName()).append(UNDERLINE)
+				.append(eventCode);
 		return action.toString();
 	}
 }

@@ -224,8 +224,7 @@ public class MainActivity extends BaseActivity implements Callback,
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Event event = (Event) intent
-					.getSerializableExtra(EventClientService.EVENT);
+			Event event = (Event) intent.getSerializableExtra(Constants.EVENT);
 			int submittedCounts = event.getInt(SUBMITTED_COUNT);
 			int accepttedCounts = event.getInt(ACCEPTTED_COUNT);
 			indicator.setTabQauntity(0, submittedCounts);

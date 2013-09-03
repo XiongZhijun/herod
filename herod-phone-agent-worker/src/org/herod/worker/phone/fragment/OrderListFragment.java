@@ -29,7 +29,8 @@ import android.view.ViewGroup;
 
 public class OrderListFragment extends BaseFragment implements ViewFindable,
 		AsyncTaskable<Object, List<Order>>, IXListViewListener {
-	private DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	private static final String HH_MM_SS = "HH:mm:ss";
+	private DateFormat dateFormat = new SimpleDateFormat(HH_MM_SS);
 	private XListView ordersListView;
 	private String title;
 	private FragmentType type;

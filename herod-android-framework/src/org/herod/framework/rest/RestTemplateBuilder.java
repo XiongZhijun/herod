@@ -22,6 +22,9 @@ import org.springframework.web.client.RestTemplate;
  */
 public class RestTemplateBuilder {
 
+	private static final String ALPHA = "alpha";
+	private static final String SIMPLE_MODULE_NAME = "Module1";
+
 	public RestTemplate buildRestTemplate() {
 		RestTemplate restTemplate = createRestTemplate();
 		restTemplate.setErrorHandler(buildResponseErrorHandler());
@@ -47,8 +50,8 @@ public class RestTemplateBuilder {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.getDeserializationConfig().set(
 				Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		SimpleModule module = new SimpleModule("Module1", new Version(0, 1, 0,
-				"alpha"));
+		SimpleModule module = new SimpleModule(SIMPLE_MODULE_NAME, new Version(
+				0, 1, 0, ALPHA));
 		objectMapper.registerModule(module);
 		converter.setObjectMapper(objectMapper);
 		return converter;

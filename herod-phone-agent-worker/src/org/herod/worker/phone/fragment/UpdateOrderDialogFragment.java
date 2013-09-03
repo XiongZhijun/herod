@@ -3,6 +3,9 @@
  */
 package org.herod.worker.phone.fragment;
 
+import static org.herod.worker.phone.Constants.COMMENT;
+import static org.herod.worker.phone.Constants.REASON;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,15 +56,15 @@ public class UpdateOrderDialogFragment extends FormFragment implements
 
 	@Override
 	protected Map<Integer, String> getFormShowFromToMap() {
-		return Collections.singletonMap(R.id.comment, "comment");
+		return Collections.singletonMap(R.id.comment, COMMENT);
 	}
 
 	@SuppressLint("UseSparseArrays")
 	@Override
 	protected Map<Integer, String> getFormInputShowFromToMap() {
 		Map<Integer, String> fromToMap = new HashMap<Integer, String>();
-		fromToMap.put(R.id.comment, "comment");
-		fromToMap.put(R.id.reason, "reason");
+		fromToMap.put(R.id.comment, COMMENT);
+		fromToMap.put(R.id.reason, REASON);
 		return fromToMap;
 	}
 
@@ -85,7 +88,7 @@ public class UpdateOrderDialogFragment extends FormFragment implements
 			return null;
 		}
 		OrderUpdateInfo updateInfo = orderEditor.toUpdateInfo(
-				formDatas.get("comment"), formDatas.get("reason"));
+				formDatas.get(COMMENT), formDatas.get(REASON));
 		return WorkerContext.getWorkerService().updateOrder(updateInfo);
 	}
 
@@ -109,7 +112,7 @@ public class UpdateOrderDialogFragment extends FormFragment implements
 			String comment) {
 		UpdateOrderDialogFragment fragment = new UpdateOrderDialogFragment();
 		Bundle args = new Bundle();
-		args.putString("comment", comment);
+		args.putString(COMMENT, comment);
 		fragment.setArguments(args);
 		fragment.handler = handler;
 		fragment.show(activity.getSupportFragmentManager(), null);

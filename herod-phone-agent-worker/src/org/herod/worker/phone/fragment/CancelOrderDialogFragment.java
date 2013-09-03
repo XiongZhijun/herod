@@ -3,6 +3,8 @@
  */
 package org.herod.worker.phone.fragment;
 
+import static org.herod.worker.phone.Constants.REASON;
+
 import java.util.Collections;
 import java.util.Map;
 
@@ -51,13 +53,13 @@ public class CancelOrderDialogFragment extends FormFragment implements
 
 	@Override
 	protected Map<Integer, String> getFormInputShowFromToMap() {
-		return Collections.singletonMap(R.id.reason, "reason");
+		return Collections.singletonMap(R.id.reason, REASON);
 	}
 
 	@Override
 	public void onOk(Map<String, String> formDatas) {
 		new AgentWorkerTask<String, Result>(getActivity(), this)
-				.execute(formDatas.get("reason"));
+				.execute(formDatas.get(REASON));
 
 	}
 

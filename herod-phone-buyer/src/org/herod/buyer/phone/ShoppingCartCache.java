@@ -13,6 +13,7 @@ import org.herod.order.common.AbstractGoodsListFragment.IShoppingCartCache;
 import org.herod.order.common.Constants;
 import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderItem;
+import static org.herod.buyer.phone.Constants.*;
 
 /**
  * @author Xiong Zhijun
@@ -20,6 +21,7 @@ import org.herod.order.common.model.OrderItem;
  * 
  */
 public class ShoppingCartCache implements IShoppingCartCache {
+
 	private static ShoppingCartCache instance = new ShoppingCartCache();
 	private Map<Long, Order> orderCaches = new HashMap<Long, Order>();
 	private List<GoodsQuantityChangedListener> listeners = new ArrayList<ShoppingCartCache.GoodsQuantityChangedListener>();
@@ -67,7 +69,7 @@ public class ShoppingCartCache implements IShoppingCartCache {
 						.getDouble(Constants.MIN_CHARGE_FOR_FREE_DELIVERY);
 			}
 			order.setShopName(shop.getString(Constants.NAME));
-			order.setShopPhone(shop.getString("contactNumber"));
+			order.setShopPhone(shop.getString(CONTACT_NUMBER));
 			order.setShopCostOfRunErrands(shopCostOfRunErrands);
 			order.setShopMinChargeForFreeDelivery(shopMinChargeForFreeDelivery);
 			order.setShopId(shopId);
@@ -80,7 +82,7 @@ public class ShoppingCartCache implements IShoppingCartCache {
 	private OrderItem findAndCreateOrderItem(long shopId,
 			MapWrapper<String, ?> goods) {
 		Order order = findOrCreateOrder(shopId);
-		long goodsId = goods.getLong("id");
+		long goodsId = goods.getLong(ID);
 		OrderItem orderItem = order.findOrderItemByGoodsId(goodsId);
 		if (orderItem == null) {
 			orderItem = createOrderItem(goods);
@@ -92,10 +94,10 @@ public class ShoppingCartCache implements IShoppingCartCache {
 	private OrderItem createOrderItem(MapWrapper<String, ?> goods) {
 		OrderItem orderItem;
 		orderItem = new OrderItem();
-		long goodsId = goods.getLong("id");
-		String goodsCode = goods.getString("code");
-		String goodsName = goods.getString("name");
-		double sellingPrice = goods.getDouble("sellingPrice");
+		long goodsId = goods.getLong(ID);
+		String goodsCode = goods.getString(CODE);
+		String goodsName = goods.getString(NAME);
+		double sellingPrice = goods.getDouble(SELLING_PRICE);
 		orderItem.setSellingPrice(sellingPrice);
 		orderItem.setGoodsCode(goodsCode);
 		orderItem.setGoodsName(goodsName);

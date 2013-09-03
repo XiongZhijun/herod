@@ -3,6 +3,8 @@
  */
 package org.herod.buyer.phone.fragments;
 
+import static org.herod.buyer.phone.Constants.MESSAGE;
+
 import org.herod.buyer.phone.R;
 import org.herod.framework.ci.InjectViewHelper;
 
@@ -14,7 +16,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 /**
  * 
  * 
@@ -24,6 +25,7 @@ import android.widget.TextView;
  */
 public class ConfirmDialogFragment extends DialogFragment implements
 		OnClickListener {
+
 	private String message;
 	private OnOkButtonClickListener onOkButtonClickListener;
 	private OnCancelButtonClickListener onCancelButtonClickListener;
@@ -45,7 +47,7 @@ public class ConfirmDialogFragment extends DialogFragment implements
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		new InjectViewHelper().injectViews(view);
-		message = getArguments().getString("message");
+		message = getArguments().getString(MESSAGE);
 		((TextView) view.findViewById(R.id.message)).setText(message);
 		view.findViewById(R.id.okButton).setOnClickListener(this);
 		view.findViewById(R.id.cancelButton).setOnClickListener(this);
@@ -77,7 +79,7 @@ public class ConfirmDialogFragment extends DialogFragment implements
 			OnOkButtonClickListener onOkButtonClickListener) {
 		ConfirmDialogFragment fragment = new ConfirmDialogFragment();
 		Bundle args = new Bundle();
-		args.putString("message", message);
+		args.putString(MESSAGE, message);
 		fragment.setArguments(args);
 		fragment.onOkButtonClickListener = onOkButtonClickListener;
 		fragment.show(activity.getSupportFragmentManager(), null);

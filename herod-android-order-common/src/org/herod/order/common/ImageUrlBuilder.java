@@ -5,6 +5,7 @@ package org.herod.order.common;
 
 import org.herod.framework.rest.URLBuilder;
 import org.herod.framework.tools.HttpUrlBuilderSupport;
+import static org.herod.order.common.Constants.*;
 
 /**
  * 
@@ -19,9 +20,10 @@ public class ImageUrlBuilder extends HttpUrlBuilderSupport implements
 	@Override
 	public String build(String relativeUrl) {
 		clean();
+		// TODO 这个是不是要删掉
 		appendHttpServerUrl().appendRelativeUrl(relativeUrl)
-				.appendParams("username", "root")
-				.appendParams("password", "123456");
+				.appendParams(USER_NAME, "root")
+				.appendParams(PASSWORD, "123456");
 		return getString();
 	}
 

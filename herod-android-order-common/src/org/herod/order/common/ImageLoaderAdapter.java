@@ -13,6 +13,7 @@ import android.content.Context;
 import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
+import static org.herod.order.common.Constants.*;
 
 /**
  * @author Xiong Zhijun
@@ -36,9 +37,8 @@ public class ImageLoaderAdapter extends SimpleAdapter {
 	public void addData(List<MapWrapper<String, Object>> data) {
 		for (MapWrapper<String, Object> existRecord : this.mData) {
 			for (MapWrapper<String, Object> record : data) {
-				if (existRecord.containsKey("id")
-						&& existRecord.get("id") != null
-						&& existRecord.get("id").equals(record.get("id"))) {
+				if (existRecord.containsKey(ID) && existRecord.get(ID) != null
+						&& existRecord.get(ID).equals(record.get(ID))) {
 					data.remove(record);
 					break;
 				}

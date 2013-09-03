@@ -13,6 +13,7 @@ import org.herod.worker.phone.view.OrderEditorManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import static org.herod.worker.phone.Constants.*;
 
 /**
  * 
@@ -26,7 +27,7 @@ public class GoodsListActivity extends AbstractGoodsListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		serialNumber = getIntent().getStringExtra("serialNumber");
+		serialNumber = getIntent().getStringExtra(SERIAL_NUMBER);
 	}
 
 	@Override
@@ -85,9 +86,9 @@ public class GoodsListActivity extends AbstractGoodsListActivity {
 			String serialNumber) {
 		Intent intent = new Intent(fragment.getActivity(),
 				GoodsListActivity.class);
-		intent.putExtra("shopId", shopId);
-		intent.putExtra("shopName", shopName);
-		intent.putExtra("serialNumber", serialNumber);
+		intent.putExtra(SHOP_ID, shopId);
+		intent.putExtra(SHOP_NAME, shopName);
+		intent.putExtra(SERIAL_NUMBER, serialNumber);
 		fragment.startActivityForResult(intent, NEW_ORDER_ITEMS);
 	}
 

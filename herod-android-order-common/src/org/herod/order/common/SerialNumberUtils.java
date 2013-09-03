@@ -3,6 +3,8 @@
  */
 package org.herod.order.common;
 
+import static org.herod.framework.Constants.MINUS;
+
 /**
  * 
  * @author Xiong Zhijun
@@ -23,7 +25,7 @@ public class SerialNumberUtils {
 		StringBuilder sb = new StringBuilder();
 		for (Object arg : args) {
 			if (sb.length() > 0) {
-				sb.append("-");
+				sb.append(MINUS);
 			}
 			sb.append(arg);
 		}

@@ -16,6 +16,7 @@ import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderItem;
 import org.herod.order.common.model.OrderItemFlag;
 import org.herod.worker.phone.model.OrderUpdateInfo;
+import static org.herod.worker.phone.Constants.*;
 
 /**
  * 
@@ -84,7 +85,7 @@ public class OrderEditor implements IShoppingCartCache {
 
 	@Override
 	public int increase(long shopId, MapWrapper<String, ?> goods) {
-		long goodsId = goods.getLong("id");
+		long goodsId = goods.getLong(ID);
 		String orderItemSN = SerialNumberUtils.buildOrderItemSerialNumber(
 				order.getSerialNumber(), goodsId);
 		if (newOrderItemQuantityMap.containsKey(orderItemSN)) {
@@ -110,9 +111,9 @@ public class OrderEditor implements IShoppingCartCache {
 		orderItem.setOrderSerialNumber(order.getSerialNumber());
 		orderItem.setSerialNumber(orderItemSN);
 		orderItem.setGoodsId(goodsId);
-		orderItem.setSellingPrice(goods.getDouble("sellingPrice"));
-		orderItem.setGoodsCode(goods.getString("code"));
-		orderItem.setGoodsName(goods.getString("name"));
+		orderItem.setSellingPrice(goods.getDouble(SELLING_PRICE));
+		orderItem.setGoodsCode(goods.getString(CODE));
+		orderItem.setGoodsName(goods.getString(NAME));
 		orderItem.setQuantity(0);
 		orderItem.setAgentId(order.getAgentId());
 		orderItem.setShopId(order.getShopId());

@@ -3,6 +3,7 @@
  */
 package org.herod.framework.db;
 
+import org.herod.framework.Constants;
 import org.herod.framework.R;
 import org.herod.framework.utils.ResourcesUtils;
 
@@ -102,7 +103,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	private static String buildVersionResourceName(String databaseName,
 			int version) {
 		StringBuilder versionResouce = new StringBuilder();
-		versionResouce.append(databaseName).append("_").append(version);
+		versionResouce.append(databaseName).append(Constants.UNDERLINE)
+				.append(version);
 		return versionResouce.toString();
 	}
 }

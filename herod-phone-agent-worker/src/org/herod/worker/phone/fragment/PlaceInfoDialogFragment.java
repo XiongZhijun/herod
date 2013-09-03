@@ -3,6 +3,12 @@
  */
 package org.herod.worker.phone.fragment;
 
+import static org.herod.worker.phone.Constants.ADDRESS;
+import static org.herod.worker.phone.Constants.DEST_ADDRESS;
+import static org.herod.worker.phone.Constants.LOCATION_NAME;
+import static org.herod.worker.phone.Constants.PHONE;
+import static org.herod.worker.phone.Constants.TEL;
+
 import org.herod.order.common.model.Address;
 import org.herod.worker.phone.MapActivity;
 import org.herod.worker.phone.R;
@@ -48,9 +54,9 @@ public class PlaceInfoDialogFragment extends DialogFragment implements
 		super.onViewCreated(view, savedInstanceState);
 		view.findViewById(R.id.phone).setOnClickListener(this);
 		view.findViewById(R.id.location).setOnClickListener(this);
-		phone = getArguments().getString("phone");
-		locationName = getArguments().getString("locationName");
-		address = (Address) getArguments().getSerializable("address");
+		phone = getArguments().getString(PHONE);
+		locationName = getArguments().getString(LOCATION_NAME);
+		address = (Address) getArguments().getSerializable(ADDRESS);
 		((TextView) view.findViewById(R.id.phone)).setText(phone);
 		((TextView) view.findViewById(R.id.location)).setText(locationName);
 	}
@@ -66,13 +72,13 @@ public class PlaceInfoDialogFragment extends DialogFragment implements
 
 	private void onLocationClickListener() {
 		Intent intent = new Intent(getActivity(), MapActivity.class);
-		intent.putExtra("destAddress", address);
+		intent.putExtra(DEST_ADDRESS, address);
 		startActivity(intent);
 
 	}
 
 	private void onPhoneClickListener() {
-		Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"
+		Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.parse(TEL
 				+ phone));
 		startActivity(phoneIntent);
 	}
@@ -81,9 +87,9 @@ public class PlaceInfoDialogFragment extends DialogFragment implements
 			String phone) {
 		PlaceInfoDialogFragment fragment = new PlaceInfoDialogFragment();
 		Bundle args = new Bundle();
-		args.putString("phone", phone);
-		args.putString("locationName", address.getAddress());
-		args.putSerializable("address", address);
+		args.putString(PHONE, phone);
+		args.putString(LOCATION_NAME, address.getAddress());
+		args.putSerializable(ADDRESS, address);
 		fragment.setArguments(args);
 		fragment.show(activity.getSupportFragmentManager(), null);
 	}

@@ -3,13 +3,14 @@
  */
 package org.herod.framework.utils;
 
+import static org.herod.framework.Constants.PERIOD;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import org.herod.framework.AndroidException;
 
 import android.util.Log;
-
 /**
  * Pojo反射的工具类。
  * 
@@ -53,7 +54,7 @@ public abstract class BeanUtils {
 		if (target == null) {
 			return null;
 		}
-		if (fieldName.contains(".")) {
+		if (fieldName.contains(PERIOD)) {
 			String[] splits = fieldName.split("\\.");
 			Object value = target;
 			for (int i = 0; i < splits.length; i++) {

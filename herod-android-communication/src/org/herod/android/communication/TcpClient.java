@@ -21,6 +21,7 @@ import android.util.Log;
 
 public class TcpClient implements Runnable {
 
+	private static final String TAG = TcpClient.class.getSimpleName();
 	private String serverHost;
 	private int serverPort;
 	private SocketChannel client;
@@ -53,7 +54,7 @@ public class TcpClient implements Runnable {
 		try {
 			readDatas();
 		} catch (Exception e) {
-			Log.w("TcpClient", "read from server failed.", e);
+			Log.w(TAG, "read from server failed.", e);
 			handler.sendEmptyMessage(TcpClientService.READ_DATA_FROM_SERVER_FAILED);
 		}
 	}
@@ -70,7 +71,7 @@ public class TcpClient implements Runnable {
 			connectted = true;
 			handler.sendEmptyMessage(TcpClientService.CONNECT_SUCCESS);
 		} catch (Exception e) {
-			Log.w("TcpClient", "connect server failed.");
+			Log.w(TAG, "connect server failed.");
 			handler.sendEmptyMessageDelayed(TcpClientService.CONNECT_FAILED,
 					delayMillis);
 		}
@@ -126,13 +127,13 @@ public class TcpClient implements Runnable {
 			if (selector != null)
 				selector.close();
 		} catch (IOException e) {
-			Log.w("TcpClient", "close selector failed.");
+			Log.w(TAG, "close selector failed.");
 		}
 		try {
 			if (client != null)
 				client.close();
 		} catch (IOException e) {
-			Log.w("TcpClient", "close client failed.");
+			Log.w(TAG, "close client failed.");
 			handler.sendEmptyMessageDelayed(TcpClientService.DISCONNECT_FAILED,
 					delayMillis);
 		}
@@ -150,7 +151,7 @@ public class TcpClient implements Runnable {
 			bytebuf.flip();
 			return true;
 		} catch (Exception e) {
-			Log.w("TcpClient", "send data to server failed.");
+			Log.w(TAG, "send data to server failed.");
 			return false;
 		}
 	}

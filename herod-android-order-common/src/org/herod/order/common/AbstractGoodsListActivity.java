@@ -3,6 +3,11 @@
  */
 package org.herod.order.common;
 
+import static org.herod.order.common.Constants.GOODS_TYPE_ID;
+import static org.herod.order.common.Constants.NAME;
+import static org.herod.order.common.Constants.SHOP_ID;
+import static org.herod.order.common.Constants.SHOP_NAME;
+
 import java.util.List;
 
 import org.herod.framework.HerodTask.AsyncTaskable;
@@ -34,8 +39,8 @@ public abstract class AbstractGoodsListActivity extends BaseActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_goods_list);
-		shopId = getIntent().getLongExtra("shopId", 0);
-		shopName = getIntent().getStringExtra("shopName");
+		shopId = getIntent().getLongExtra(SHOP_ID, 0);
+		shopName = getIntent().getStringExtra(SHOP_NAME);
 		setTitle(shopName);
 
 		mPager = (ViewPager) findViewById(R.id.pager);
@@ -88,7 +93,7 @@ public abstract class AbstractGoodsListActivity extends BaseActivity implements
 			Bundle args = new Bundle();
 			args.putAll(getIntent().getExtras());
 			MapWrapper<String, Object> goodsType = goodsTypes.get(position);
-			args.putLong("goodsTypeId", goodsType.getLong(Constants.ID));
+			args.putLong(GOODS_TYPE_ID, goodsType.getLong(Constants.ID));
 			args.putLong(Constants.TIMESTAMP,
 					goodsType.getLong(Constants.TIMESTAMP));
 			fragment.setArguments(args);
@@ -102,7 +107,7 @@ public abstract class AbstractGoodsListActivity extends BaseActivity implements
 
 		@Override
 		public CharSequence getPageTitle(int position) {
-			return goodsTypes.get(position).getString("name");
+			return goodsTypes.get(position).getString(NAME);
 		}
 	}
 

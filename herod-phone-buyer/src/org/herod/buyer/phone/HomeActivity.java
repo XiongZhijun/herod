@@ -1,5 +1,11 @@
 package org.herod.buyer.phone;
 
+import static org.herod.buyer.phone.Constants.IMAGE_URL;
+import static org.herod.buyer.phone.Constants.POSITION;
+import static org.herod.buyer.phone.Constants.TYPE_ID;
+import static org.herod.order.common.Constants.ID;
+import static org.herod.order.common.Constants.NAME;
+
 import java.util.List;
 
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
@@ -35,6 +41,7 @@ import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
 public class HomeActivity extends BuyerBaseActivity implements
 		AsyncTaskable<Object, List<MapWrapper<String, Object>>>,
 		OnItemClickListener, OnLocationSuccessListener {
+
 	private GridView shopTypesGridView;
 	private boolean isFirst = true;
 	private RefreshButtonHelper refreshButtonHelper;
@@ -99,10 +106,10 @@ public class HomeActivity extends BuyerBaseActivity implements
 	public void onItemClick(AdapterView<?> adapterView, View view,
 			int position, long id) {
 		Intent intent = new Intent(HomeActivity.this, StoresActivity.class);
-		intent.putExtra("position", position);
+		intent.putExtra(POSITION, position);
 		MapWrapper<String, Object> item = (MapWrapper<String, Object>) adapterView
 				.getItemAtPosition(position);
-		intent.putExtra("typeId", item.getLong("id"));
+		intent.putExtra(TYPE_ID, item.getLong(ID));
 		startActivity(intent);
 	}
 
@@ -117,8 +124,8 @@ public class HomeActivity extends BuyerBaseActivity implements
 			return;
 		}
 		ListAdapter adapter = new ImageLoaderAdapter(this, data,
-				R.layout.activity_home_shop_type_item, new String[] { "name",
-						"imageUrl" }, new int[] { R.id.name, R.id.image });
+				R.layout.activity_home_shop_type_item, new String[] { NAME,
+						IMAGE_URL }, new int[] { R.id.name, R.id.image });
 		shopTypesGridView.setAdapter(adapter);
 	}
 

@@ -5,10 +5,23 @@ package org.herod.worker.phone.view;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static org.herod.worker.phone.Constants.BUYER_NAME;
+import static org.herod.worker.phone.Constants.COMMENT;
+import static org.herod.worker.phone.Constants.COST_OF_RUN_ERRANDS;
+import static org.herod.worker.phone.Constants.DEST_ADDRESS;
+import static org.herod.worker.phone.Constants.MM_DD_HH_MM;
+import static org.herod.worker.phone.Constants.SERIAL_NUMBER;
+import static org.herod.worker.phone.Constants.SHOP_NAME;
+import static org.herod.worker.phone.Constants.SHOP_TIPS;
+import static org.herod.worker.phone.Constants.STATUS;
+import static org.herod.worker.phone.Constants.SUBMIT_TIME;
+import static org.herod.worker.phone.Constants.TOTAL_AMOUNT_WITH_COST_OF_RUN_ERRANDS;
+import static org.herod.worker.phone.Constants.TOTAL_QUANTITY;
+import static org.herod.worker.phone.Constants.WP_ADDRESSES;
 import static org.herod.worker.phone.R.id.acceptOrderButton;
 import static org.herod.worker.phone.R.id.addNewItemButton;
 import static org.herod.worker.phone.R.id.buyerName;
-import static org.herod.worker.phone.R.id.*;
+import static org.herod.worker.phone.R.id.cancelEditButton;
 import static org.herod.worker.phone.R.id.cancelOrderButton;
 import static org.herod.worker.phone.R.id.comment;
 import static org.herod.worker.phone.R.id.completeOrderButton;
@@ -21,6 +34,7 @@ import static org.herod.worker.phone.R.id.shopName;
 import static org.herod.worker.phone.R.id.shopTips;
 import static org.herod.worker.phone.R.id.status;
 import static org.herod.worker.phone.R.id.submitTime;
+import static org.herod.worker.phone.R.id.totalQuantity;
 import static org.herod.worker.phone.R.id.totalWithCostOfRunErrands;
 
 import java.util.ArrayList;
@@ -61,7 +75,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 /**
  * 
  * 
@@ -71,20 +84,21 @@ import android.widget.Toast;
  */
 public class OrderView extends LinearLayout implements
 		GoodsQuantityChangedListener, OnClickListener, ViewFindable {
+	
 	private static final int[] FORM_TO = new int[] { serialNumber, submitTime,
 			shopName, buyerName, comment, status, shopTips, costOfRunErrands,
 			totalWithCostOfRunErrands, totalQuantity };
-	private static final String[] FORM_FROM = new String[] { "serialNumber",
-			"submitTime", "shopName", "buyerName", "comment", "status",
-			"shopTips", "costOfRunErrands", "totalAmountWithCostOfRunErrands",
-			"totalQuantity" };
+	private static final String[] FORM_FROM = new String[] { SERIAL_NUMBER,
+			SUBMIT_TIME, SHOP_NAME, BUYER_NAME, COMMENT, STATUS, SHOP_TIPS,
+			COST_OF_RUN_ERRANDS, TOTAL_AMOUNT_WITH_COST_OF_RUN_ERRANDS,
+			TOTAL_QUANTITY };
 	private static final int[] NEED_SET_ON_CLICK_LISTENER_VIEW_IDS = new int[] {
 			editOrderButton, acceptOrderButton, completeOrderButton,
 			cancelOrderButton, cancelEditButton, confirmEditButton,
 			addNewItemButton, shopName, buyerName, route };
 
 	private static FormHelper formHelper = new FormHelperBuilder(FORM_FROM,
-			FORM_TO, Order.class).addDateSerializer("MM-dd HH:mm").build();
+			FORM_TO, Order.class).addDateSerializer(MM_DD_HH_MM).build();
 
 	@InjectView(R.id.orderItemsListView)
 	private LinearLayout orderItemsContainer;
@@ -186,10 +200,10 @@ public class OrderView extends LinearLayout implements
 			onCompleteOrderButtonClick();
 		} else if (v.getId() == R.id.route) {
 			Intent intent = new Intent(getContext(), MapActivity.class);
-			intent.putExtra("destAddress", order.getDeliveryAddress());
+			intent.putExtra(DEST_ADDRESS, order.getDeliveryAddress());
 			ArrayList<Address> wpAddresses = new ArrayList<Address>();
 			wpAddresses.add(order.getShopAddress());
-			intent.putExtra("wpAddresses", wpAddresses);
+			intent.putExtra(WP_ADDRESSES, wpAddresses);
 			getContext().startActivity(intent);
 		}
 	}

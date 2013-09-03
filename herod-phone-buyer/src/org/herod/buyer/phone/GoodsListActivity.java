@@ -66,6 +66,23 @@ public class GoodsListActivity extends AbstractGoodsListActivity implements
 		return true;
 	}
 
+	public boolean onOptionsItemSelected(MenuItem item) {
+		boolean done = super.onOptionsItemSelected(item);
+		if (done) {
+			return done;
+		}
+		switch (item.getItemId()) {
+		case R.id.historyOrders:
+			showHistoryOrders(item);
+			return true;
+		case R.id.shoppingCart:
+			showShoppingCart(item);
+			return true;
+		default:
+			return false;
+		}
+	}
+
 	public void showHistoryOrders(MenuItem item) {
 		startActivity(new Intent(this, HisttoryOrdersActivity.class));
 	}

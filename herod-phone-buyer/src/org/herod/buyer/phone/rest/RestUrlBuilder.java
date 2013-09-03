@@ -12,6 +12,8 @@ import android.content.Context;
 
 import com.baidu.location.BDLocation;
 
+import static org.herod.buyer.phone.Constants.*;
+
 /**
  * 
  * 
@@ -20,7 +22,7 @@ import com.baidu.location.BDLocation;
  * 
  */
 public class RestUrlBuilder extends HttpUrlBuilderSupport implements URLBuilder {
-	private static final String REST = "rest";
+
 	private Context context;
 
 	public RestUrlBuilder(Context context) {
@@ -36,8 +38,8 @@ public class RestUrlBuilder extends HttpUrlBuilderSupport implements URLBuilder 
 		BDLocation latestLocation = LocationManager.getInstance(context)
 				.getLatestBDLocation();
 		if (latestLocation != null) {
-			appendParams("latitude", latestLocation.getLatitude());
-			appendParams("longitude", latestLocation.getLongitude());
+			appendParams(LATITUDE, latestLocation.getLatitude());
+			appendParams(LONGITUDE, latestLocation.getLongitude());
 		}
 		return getString();
 	}

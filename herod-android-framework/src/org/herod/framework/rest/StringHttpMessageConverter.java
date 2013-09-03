@@ -13,6 +13,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.herod.framework.Constants;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -27,14 +28,18 @@ import org.springframework.util.FileCopyUtils;
  */
 public class StringHttpMessageConverter extends
 		AbstractHttpMessageConverter<String> {
-	public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+	private static final String PLAIN = "plain";
+	private static final String TEXT = "text";
+
+	public static final Charset DEFAULT_CHARSET = Charset
+			.forName(Constants.UTF8);
 
 	private final List<Charset> availableCharsets;
 
 	private boolean writeAcceptCharset = true;
 
 	public StringHttpMessageConverter() {
-		super(new MediaType("text", "plain", DEFAULT_CHARSET), MediaType.ALL);
+		super(new MediaType(TEXT, PLAIN, DEFAULT_CHARSET), MediaType.ALL);
 		this.availableCharsets = new ArrayList<Charset>(Charset
 				.availableCharsets().values());
 	}

@@ -3,6 +3,12 @@
  */
 package org.herod.buyer.phone;
 
+import static org.herod.buyer.phone.Constants.POSITION;
+import static org.herod.buyer.phone.Constants.SHOP_TYPE_ID;
+import static org.herod.order.common.Constants.ID;
+import static org.herod.order.common.Constants.NAME;
+import static org.herod.order.common.Constants.TIMESTAMP;
+
 import java.util.List;
 
 import org.herod.buyer.phone.fragments.ShopListFragment;
@@ -10,9 +16,6 @@ import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.RepeatedlyTask;
 import org.herod.framework.widget.TitlePageIndicator;
-
-import static org.herod.order.common.Constants.*;
-
 import org.herod.order.common.RefreshButtonHelper;
 
 import android.os.Bundle;
@@ -30,7 +33,6 @@ import android.support.v4.view.ViewPager;
  */
 public class StoresActivity extends BuyerBaseActivity implements
 		AsyncTaskable<Object, List<MapWrapper<String, Object>>> {
-
 	private ViewPager mPager;
 	private TitlePageIndicator mIndicator;
 	private RefreshButtonHelper refreshButtonHelper;
@@ -70,11 +72,12 @@ public class StoresActivity extends BuyerBaseActivity implements
 		ShopsFragmentAdapter mAdapter = new ShopsFragmentAdapter(result);
 		mPager.setAdapter(mAdapter);
 		mIndicator.setViewPager(mPager);
-		int position = getIntent().getIntExtra("position", 0);
+		int position = getIntent().getIntExtra(POSITION, 0);
 		mPager.setCurrentItem(position);
 	}
 
 	class ShopsFragmentAdapter extends FragmentPagerAdapter {
+
 		private List<MapWrapper<String, Object>> shopTypes;
 
 		public ShopsFragmentAdapter(List<MapWrapper<String, Object>> shopTypes) {
@@ -91,7 +94,7 @@ public class StoresActivity extends BuyerBaseActivity implements
 			ShopListFragment shopListFragment = new ShopListFragment();
 			Bundle args = new Bundle();
 			MapWrapper<String, Object> shopType = shopTypes.get(position);
-			args.putLong("shopTypeId", shopType.getLong(ID));
+			args.putLong(SHOP_TYPE_ID, shopType.getLong(ID));
 			args.putLong(TIMESTAMP, shopType.getLong(TIMESTAMP));
 			shopListFragment.setArguments(args);
 			return shopListFragment;
@@ -104,7 +107,7 @@ public class StoresActivity extends BuyerBaseActivity implements
 
 		@Override
 		public CharSequence getPageTitle(int position) {
-			return shopTypes.get(position).getString("name");
+			return shopTypes.get(position).getString(NAME);
 		}
 
 	}

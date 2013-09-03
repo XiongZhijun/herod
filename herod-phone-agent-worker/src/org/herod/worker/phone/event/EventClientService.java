@@ -3,6 +3,8 @@
  */
 package org.herod.worker.phone.event;
 
+import static org.herod.worker.phone.Constants.EVENT;
+
 import org.herod.android.communication.TcpClientService;
 import org.herod.communication.common.ByteCacheVisitor;
 import org.herod.communication.common.ByteFrame;
@@ -23,7 +25,8 @@ import android.content.Intent;
  * 
  */
 public class EventClientService extends TcpClientService {
-	public static final String EVENT = "event";
+	private static final String DEFAULT_RING = "ding.wav";
+
 	private EventHeadTailHandler eventHeadTailHandler = new EventHeadTailHandler();
 
 	@Override
@@ -57,7 +60,8 @@ public class EventClientService extends TcpClientService {
 		sendBroadcast(intent);
 		if (EventCodes.SUBMIT_COMMAND.equals(event.getCode())
 				|| EventCodes.REJECT_COMMAND.equals(event.getCode())) {
-			MediaPlayerService.playMedia(this, "ding.wav");
+			MediaPlayerService.playMedia(this, DEFAULT_RING);
+			;
 		}
 	}
 }

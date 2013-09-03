@@ -29,7 +29,7 @@ import com.baidu.mapapi.map.RouteOverlay;
 import com.baidu.mapapi.search.MKDrivingRouteResult;
 import com.baidu.mapapi.search.MKRoutePlan;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
-
+import static org.herod.worker.phone.Constants.*;
 /**
  * 
  * @author Xiong Zhijun
@@ -68,8 +68,8 @@ public class MapActivity extends BaseActivity implements OnClickListener,
 		setCenter(currentLocation);
 
 		Bundle extras = getIntent().getExtras();
-		destAddress = (Address) extras.getSerializable("destAddress");
-		wpAddresses = (List<Address>) extras.getSerializable("wpAddresses");
+		destAddress = (Address) extras.getSerializable(DEST_ADDRESS);
+		wpAddresses = (List<Address>) extras.getSerializable(WP_ADDRESSES);
 
 		List<LocationItem> locationItems = new ArrayList<LocationItem>();
 		locationItems.add(new LocationItem(this, new Address("我的位置",

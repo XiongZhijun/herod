@@ -3,6 +3,8 @@
  */
 package org.herod.framework.utils;
 
+import static org.herod.framework.Constants.UNDERLINE;
+
 import java.lang.reflect.Field;
 
 import org.herod.framework.AndroidException;
@@ -55,8 +57,8 @@ public abstract class ResourcesUtils {
 	 * @return
 	 */
 	public static String getEnumShowName(Enum<?> _enum) {
-		return ResourcesUtils.getString(_enum.getClass().getSimpleName() + "_"
-				+ _enum.name());
+		return ResourcesUtils.getString(_enum.getClass().getSimpleName()
+				+ UNDERLINE + _enum.name());
 	}
 
 	/**

@@ -33,6 +33,7 @@ import android.util.Log;
 public abstract class TcpClientService extends Service implements Callback,
 		org.herod.communication.common.Callback {
 
+	private static final String TAG = TcpClientService.class.getSimpleName();
 	public static final int CONNECT_FAILED = 1;
 	public static final int READ_DATA_FROM_SERVER_FAILED = 2;
 	public static final int DISCONNECT_FAILED = 3;
@@ -128,7 +129,7 @@ public abstract class TcpClientService extends Service implements Callback,
 		try {
 			messageSenderExecutor.invokeAll(tasks);
 		} catch (InterruptedException e) {
-			Log.w("TcpClientService", "send message on connect success failed.");
+			Log.w(TAG, "send message on connect success failed.");
 		}
 	}
 

@@ -3,6 +3,13 @@
  */
 package org.herod.framework.rest;
 
+import static org.herod.framework.Constants.AMPERSAND;
+import static org.herod.framework.Constants.COLON;
+import static org.herod.framework.Constants.FORWARD_SLASH;
+import static org.herod.framework.Constants.PERIOD;
+import static org.herod.framework.Constants.QUESTION_MARK;
+import static org.herod.framework.Constants.UNDERLINE;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.net.URI;
@@ -22,6 +29,8 @@ import android.app.Application;
  * @email hust.xzj@gmail.com
  */
 public class GZipCacheRestTemplate extends GZipRestTemplate {
+	private static final String TIMESTAMP_REPLACED_STRING = "timestamp=\\\\d*";
+	private static final String TIMESTAMP_PATTERN = "timestamp=\\d*";
 	private static final String REST_CACHE = "RestCache";
 	private static Application application;
 	private NeedCacheMatcher needCacheMatcher = ALL_MATCHER;
@@ -98,8 +107,7 @@ public class GZipCacheRestTemplate extends GZipRestTemplate {
 		if (!String.class.equals(responseType) && !needCacheMatcher.matche(url)) {
 			return null;
 		}
-		String fileName = url.toString().replace("/", "_").replace("&", "_")
-				.replace(":", "_").replace(".", "_").replace("?", "_");
+		String fileName = getFileName(url);
 		String text = FileUtils.readFromFile(application, REST_CACHE, fileName);
 		return (T) text;
 	}
@@ -108,8 +116,7 @@ public class GZipCacheRestTemplate extends GZipRestTemplate {
 		if (!needCacheMatcher.matche(url)) {
 			return;
 		}
-		String fileName = url.toString().replace("/", "_").replace("&", "_")
-				.replace(":", "_").replace(".", "_").replace("?", "_");
+		String fileName = getFileName(url);
 		removeHistoryFile(fileName);
 		if (String.class.equals(responseType)) {
 			FileUtils.saveToFile(application, REST_CACHE, fileName,
@@ -117,9 +124,16 @@ public class GZipCacheRestTemplate extends GZipRestTemplate {
 		}
 	}
 
+	private String getFileName(URI url) {
+		String fileName = url.toString().replace(FORWARD_SLASH, UNDERLINE)
+				.replace(AMPERSAND, UNDERLINE).replace(COLON, UNDERLINE)
+				.replace(PERIOD, UNDERLINE).replace(QUESTION_MARK, UNDERLINE);
+		return fileName;
+	}
+
 	protected void removeHistoryFile(String fileName) {
 		final Pattern pattern = Pattern.compile(fileName.replaceAll(
-				"timestamp=\\d*", "timestamp=\\\\d*"));
+				TIMESTAMP_PATTERN, TIMESTAMP_REPLACED_STRING));
 		File fileDir = application.getExternalFilesDir(REST_CACHE);
 		File[] files = fileDir.listFiles(new FileFilter() {
 			public boolean accept(File file) {

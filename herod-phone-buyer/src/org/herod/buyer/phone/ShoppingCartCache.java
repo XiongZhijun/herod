@@ -3,6 +3,8 @@
  */
 package org.herod.buyer.phone;
 
+import static org.herod.order.common.Constants.ID;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,10 +12,8 @@ import java.util.Map;
 
 import org.herod.framework.MapWrapper;
 import org.herod.order.common.AbstractGoodsListFragment.IShoppingCartCache;
-import org.herod.order.common.Constants;
 import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderItem;
-import static org.herod.buyer.phone.Constants.*;
 
 /**
  * @author Xiong Zhijun
@@ -54,57 +54,6 @@ public class ShoppingCartCache implements IShoppingCartCache {
 		return total;
 	}
 
-	private Order findOrCreateOrder(long shopId) {
-		Order order = orderCaches.get(shopId);
-		if (order == null) {
-			order = new Order();
-			MapWrapper<String, Object> shop = shopService.findShopById(shopId);
-			double shopCostOfRunErrands = 0;
-			double shopMinChargeForFreeDelivery = 0;
-			if (shop != null) {
-				shopCostOfRunErrands = shop
-						.getDouble(Constants.COST_OF_RUN_ERRANDS);
-				order.setCostOfRunErrands(shopCostOfRunErrands);
-				shopMinChargeForFreeDelivery = shop
-						.getDouble(Constants.MIN_CHARGE_FOR_FREE_DELIVERY);
-			}
-			order.setShopName(shop.getString(Constants.NAME));
-			order.setShopPhone(shop.getString(CONTACT_NUMBER));
-			order.setShopCostOfRunErrands(shopCostOfRunErrands);
-			order.setShopMinChargeForFreeDelivery(shopMinChargeForFreeDelivery);
-			order.setShopId(shopId);
-			order.setAgentId(shop.getLong(Constants.AGENT_ID));
-			orderCaches.put(shopId, order);
-		}
-		return order;
-	}
-
-	private OrderItem findAndCreateOrderItem(long shopId,
-			MapWrapper<String, ?> goods) {
-		Order order = findOrCreateOrder(shopId);
-		long goodsId = goods.getLong(ID);
-		OrderItem orderItem = order.findOrderItemByGoodsId(goodsId);
-		if (orderItem == null) {
-			orderItem = createOrderItem(goods);
-			order.addOrderItem(orderItem);
-		}
-		return orderItem;
-	}
-
-	private OrderItem createOrderItem(MapWrapper<String, ?> goods) {
-		OrderItem orderItem;
-		orderItem = new OrderItem();
-		long goodsId = goods.getLong(ID);
-		String goodsCode = goods.getString(CODE);
-		String goodsName = goods.getString(NAME);
-		double sellingPrice = goods.getDouble(SELLING_PRICE);
-		orderItem.setSellingPrice(sellingPrice);
-		orderItem.setGoodsCode(goodsCode);
-		orderItem.setGoodsName(goodsName);
-		orderItem.setGoodsId(goodsId);
-		return orderItem;
-	}
-
 	public int increaseWithExistGoods(long shopId, long goodsId) {
 		OrderItem orderItem = findOrderItem(shopId, goodsId);
 		if (orderItem == null) {
@@ -127,6 +76,28 @@ public class ShoppingCartCache implements IShoppingCartCache {
 		orderItem.setQuantity(current);
 		notifyQuantityChanged(shopId, orderItem.getGoodsId(), current);
 		return current;
+	}
+
+	private OrderItem findAndCreateOrderItem(long shopId,
+			MapWrapper<String, ?> goods) {
+		Order order = findOrCreateOrder(shopId);
+		long goodsId = goods.getLong(ID);
+		OrderItem orderItem = order.findOrderItemByGoodsId(goodsId);
+		if (orderItem == null) {
+			orderItem = OrderUtils.createOrderItem(goods);
+			order.addOrderItem(orderItem);
+		}
+		return orderItem;
+	}
+
+	private Order findOrCreateOrder(long shopId) {
+		Order order = orderCaches.get(shopId);
+		if (order == null) {
+			MapWrapper<String, Object> shop = shopService.findShopById(shopId);
+			order = OrderUtils.createOrder(shop);
+			orderCaches.put(shopId, order);
+		}
+		return order;
 	}
 
 	public int decrease(long shopId, long goodsId) {

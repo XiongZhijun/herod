@@ -40,7 +40,8 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 			+ "O.DELIVERY_WORKER_ID,O.STATUS,O.SUBMIT_TIME,O.PREPARE_TIME,O.COMPLETE_TIME,O.COMMENT, "
 			+ "O.DELIVERY_ADDRESS, O.DELIVERY_LONGITUDE, O.DELIVERY_LATITUDE, "
 			+ "S.NAME SHOP_NAME, S.CONTACT_NUMBER SHOP_PHONE, S.ADDRESS SHOP_ADDRESS, "
-			+ "S.LONGITUDE SHOP_LONGITUDE, S.LATITUDE SHOP_LATITUDE "
+			+ "S.LONGITUDE SHOP_LONGITUDE, S.LATITUDE SHOP_LATITUDE, "
+			+ "O.COST_OF_RUN_ERRANDS,O.SHOP_COST_OF_RUN_ERRANDS,O.SHOP_MIN_CHARGE_FOR_FREE_DELIVERY"
 			+ "FROM ZRH_ORDER O LEFT JOIN ZRH_SHOP S ON O.SHOP_ID = S.ID ";
 	private static final String UPDATE_ORDER_STATUS_AND_COMPLETE_TIME_SQL = "UPDATE ZRH_ORDER SET STATUS = ?, "
 			+ "COMPLETE_TIME = ? WHERE SERIAL_NUMBER = ?";
@@ -51,11 +52,12 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 	private static final String INSERT_ORDER_SQL = "INSERT INTO ZRH_ORDER "
 			+ "(SERIAL_NUMBER,BUYER_PHONE,BUYER_NAME,AGENT_ID,"
 			+ "SHOP_ID,DELIVERY_WORKER_ID,STATUS,SUBMIT_TIME,PREPARE_TIME,COMPLETE_TIME,"
-			+ "COMMENT,DELIVERY_ADDRESS,DELIVERY_LONGITUDE,DELIVERY_LATITUDE) "
+			+ "COMMENT,DELIVERY_ADDRESS,DELIVERY_LONGITUDE,DELIVERY_LATITUDE, "
+			+ "COST_OF_RUN_ERRANDS,SHOP_COST_OF_RUN_ERRANDS,SHOP_MIN_CHARGE_FOR_FREE_DELIVERY) "
 			+ "VALUES (:serialNumber,:buyerPhone,:buyerName,:agentId,:shopId,"
 			+ ":workerId,:status,:submitTime,:prepareTime,:completeTime,:comment,"
 			+ ":deliveryAddress.address,:deliveryAddress.location.longitude,"
-			+ ":deliveryAddress.location.latitude)";
+			+ ":deliveryAddress.location.latitude,:costOfRunErrands,:shopCostOfRunErrands,:shopMinChargeForFreeDelivery)";
 	@Autowired
 	private HerodJdbcTemplate herodJdbcTemplate;
 	@Autowired
@@ -81,7 +83,6 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 			batchArgs[i] = new HerodBeanPropertySqlParameterSource(
 					orders.get(i));
 		}
-		// TODO 需要把跑腿费等信息保存到数据库中
 		herodJdbcTemplate.batchUpdate(INSERT_ORDER_SQL, batchArgs);
 	}
 

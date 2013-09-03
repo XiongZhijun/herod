@@ -27,10 +27,17 @@ public class Order {
 	private long agentId;
 	/** 商店 */
 	private long shopId;
+	/** 商店名称 */
+	private String shopName;
+	/** 商店联系电话 */
+	private String shopPhone;
+	/** 商店地址 */
 	private Address shopAddress = new Address();
-	/** 处理的人 */
+	/** 配送人员 */
 	private long workerId;
+	/** 配送人姓名 */
 	private String workerName;
+	/** 配送人联系方式 */
 	private String workerPhone;
 	/** 订单状态 */
 	private OrderStatus status = OrderStatus.Unsubmit;
@@ -46,12 +53,12 @@ public class Order {
 	private String comment;
 	/** 订单项 */
 	private List<OrderItem> orderItems = new ArrayList<OrderItem>();
-	/** 跑腿费 */
+	/** 配送费 */
 	private double costOfRunErrands = 0;
-	private String shopName;
-	private String shopPhone;
-	private transient double shopCostOfRunErrands = 0;
-	private transient double shopMinChargeForFreeDelivery = 0;
+	/** 商店配送费 */
+	private double shopCostOfRunErrands = 0;
+	/** 商店免费起送额 */
+	private double shopMinChargeForFreeDelivery = 0;
 
 	public String getSerialNumber() {
 		return serialNumber;

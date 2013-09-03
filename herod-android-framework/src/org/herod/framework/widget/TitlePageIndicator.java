@@ -569,12 +569,10 @@ public class TitlePageIndicator extends View implements PageIndicator {
 			mPath.close();
 			canvas.drawPath(mPath, mPaintFooterIndicator);
 			break;
-
 		case Underline:
 			if (!currentSelected || page >= boundsSize) {
 				break;
 			}
-
 			Rect underlineBounds = bounds.get(page);
 			final float rightPlusPadding = underlineBounds.right
 					+ mFooterIndicatorUnderlinePadding;
@@ -593,6 +591,8 @@ public class TitlePageIndicator extends View implements PageIndicator {
 			mPaintFooterIndicator.setAlpha((int) (0xFF * selectedPercent));
 			canvas.drawPath(mPath, mPaintFooterIndicator);
 			mPaintFooterIndicator.setAlpha(0xFF);
+			break;
+		default:
 			break;
 		}
 	}
@@ -916,7 +916,6 @@ public class TitlePageIndicator extends View implements PageIndicator {
 			dest.writeInt(currentPage);
 		}
 
-		@SuppressWarnings("UnusedDeclaration")
 		public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
 			@Override
 			public SavedState createFromParcel(Parcel in) {

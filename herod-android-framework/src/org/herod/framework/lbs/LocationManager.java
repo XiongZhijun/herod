@@ -95,6 +95,9 @@ public class LocationManager implements BDLocationListener {
 	public void executeWithPlan(LocationPlan plan) {
 		stop();
 		plan.execute(this);
+		if (latestLocation != null) {
+			onReceiveLocation(latestLocation);
+		}
 	}
 
 	public void registerLocationListener(BDLocationListener locationListener) {

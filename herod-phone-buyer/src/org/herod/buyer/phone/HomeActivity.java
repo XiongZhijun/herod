@@ -54,11 +54,20 @@ public class HomeActivity extends BuyerBaseActivity implements
 		BuyerContext.init(this);
 		ImageLoaderUtils.initImageLoader(this);
 		setContentView(R.layout.activity_home);
-		SimpleLocationPlan locationPlan = new SimpleLocationPlan(this);
-		LocationManager.getInstance(this).executeWithPlan(locationPlan);
 		shopTypesGridView = (GridView) findViewById(R.id.shopTypesGrid);
 		shopTypesGridView.setOnItemClickListener(this);
 
+		loadShopTypesTask = new RepeatedlyTask<Object, List<MapWrapper<String, Object>>>(
+				this);
+
+		refreshButtonHelper = new RefreshButtonHelper(this, loadShopTypesTask,
+				R.id.refreshButton, R.id.shopTypesGrid);
+		checkNetwork();
+		locate();
+
+	}
+
+	private void checkNetwork() {
 		NetworkConnectInfo networkConnectInfo = NetworkStatusTools
 				.getNetworkConnectInfo(this);
 		if (!networkConnectInfo.available) {
@@ -69,12 +78,12 @@ public class HomeActivity extends BuyerBaseActivity implements
 		if (networkConnectInfo.connectType == ConnectType._2G) {
 			ToastUtils.showToast("当前为2G网络", Toast.LENGTH_SHORT);
 		}
-		loadShopTypesTask = new RepeatedlyTask<Object, List<MapWrapper<String, Object>>>(
-				this);
-		refreshButtonHelper = new RefreshButtonHelper(this, loadShopTypesTask,
-				R.id.refreshButton, R.id.shopTypesGrid);
+	}
 
+	private void locate() {
 		locationProgressDialog = ProgressDialog.show(this, "提示", "定位中……");
+		LocationManager lm = LocationManager.getInstance(this);
+		lm.executeWithPlan(new SimpleLocationPlan(this));
 	}
 
 	@Override
@@ -86,7 +95,7 @@ public class HomeActivity extends BuyerBaseActivity implements
 			locationProgressDialog.dismiss();
 			locationProgressDialog = null;
 		}
-		if (isFirst) {
+		if (isFirst && loadShopTypesTask != null) {
 			loadShopTypesTask.execute(this);
 			isFirst = false;
 		}

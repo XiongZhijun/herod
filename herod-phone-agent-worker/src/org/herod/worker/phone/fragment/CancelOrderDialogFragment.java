@@ -85,6 +85,7 @@ public class CancelOrderDialogFragment extends FormFragment implements
 	public static void showDialog(FragmentActivity activity, Handler handler,
 			String serialNumber) {
 		CancelOrderDialogFragment fragment = new CancelOrderDialogFragment();
+		// TODO 存在这样类似handler的参数传递问题。
 		fragment.handler = handler;
 		fragment.serialNumber = serialNumber;
 		fragment.show(activity.getSupportFragmentManager(), null);

@@ -4,6 +4,7 @@
 package org.herod.order.web;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ public class OrderFormDataAccessService extends FormDataAccessServiceImpl {
 	@Override
 	public Object add(FormData formData) {
 		orderFormDataPreprocessor.preproccess(formData);
+		formData.addFieldData("TIMESTAMP", "date", new Date().getTime());
 		Object id = super.add(formData);
 		orderFormDataPostprocessor.postproccess(formData);
 		return id;
@@ -43,6 +45,7 @@ public class OrderFormDataAccessService extends FormDataAccessServiceImpl {
 	@Override
 	public void update(FormData formData) {
 		orderFormDataPreprocessor.preproccess(formData);
+		formData.addFieldData("TIMESTAMP", "date", new Date().getTime());
 		super.update(formData);
 		orderFormDataPostprocessor.postproccess(formData);
 	}

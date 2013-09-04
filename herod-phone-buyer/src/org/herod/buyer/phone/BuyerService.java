@@ -22,8 +22,7 @@ public interface BuyerService {
 
 	List<MapWrapper<String, Object>> findShopTypes();
 
-	List<MapWrapper<String, Object>> findShopesByType(long typeId,
-			long timestamp);
+	List<MapWrapper<String, Object>> findShopesByType(long typeId);
 
 	MapWrapper<String, Object> findShopById(long shopId, long timestamp);
 

@@ -11,18 +11,18 @@
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/aopalliance/aopalliance/trunk/jars/aopalliance-1.0.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/aopalliance/aopalliance/trunk/sources/aopalliance-1.0-sources.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.aspectj/aspectjrt/trunk/jars/aspectjrt-1.6.11.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/org.aspectj/aspectjrt/trunk/sources/aspectjrt-1.6.11-sources.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.aspectj/aspectjweaver/trunk/jars/aspectjweaver-1.6.11.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/org.aspectj/aspectjweaver/trunk/sources/aspectjweaver-1.6.11-sources.jar"/>
-<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-common-database/trunk/jars/bear-common-database-1.6.1.6.jar"/>
-<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-common-database-control/trunk/jars/bear-common-database-control-1.6.1.6.jar"/>
-<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-common-lang/trunk/jars/bear-common-lang-1.6.1.6.jar"/>
+<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-common-database/trunk/jars/bear-common-database-1.6.1.6.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-common-database/trunk/sources/bear-common-database-1.6.1.6-sources.jar"/>
+<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-common-database-control/trunk/jars/bear-common-database-control-1.6.1.6.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-common-database-control/trunk/sources/bear-common-database-control-1.6.1.6-sources.jar"/>
+<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-common-lang/trunk/jars/bear-common-lang-1.6.1.6.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-common-lang/trunk/sources/bear-common-lang-1.6.1.6-sources.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-common-rest/trunk/jars/bear-common-rest-1.6.1.6.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-fileserver/trunk/jars/bear-fileserver-1.6.1.6.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-info-core/trunk/jars/bear-info-core-1.6.1.6.jar"/>
-<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-permission/trunk/jars/bear-permission-1.6.1.6.jar"/>
-<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-test/trunk/jars/bear-test-1.6.1.6.jar"/>
+<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-permission/trunk/jars/bear-permission-1.6.1.6.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-permission/trunk/sources/bear-permission-1.6.1.6-sources.jar"/>
+<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-test/trunk/jars/bear-test-1.6.1.6.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-test/trunk/sources/bear-test-1.6.1.6-sources.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/com.fpi.bear/bear-web-builder/trunk/jars/bear-web-builder-1.6.1.6.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.beanshell/bsh/trunk/jars/bsh-2.0b4.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/c3p0/c3p0/trunk/jars/c3p0-0.9.1.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/c3p0/c3p0/trunk/sources/c3p0-0.9.1-sources.jar"/>
-<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.jasig.cas.client/cas-client-core/trunk/jars/cas-client-core-3.2.1.jar"/>
+<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.jasig.cas.client/cas-client-core/trunk/jars/cas-client-core-3.2.1.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/org.jasig.cas.client/cas-client-core/trunk/sources/cas-client-core-3.2.1-sources.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/cglib/cglib-nodep/trunk/jars/cglib-nodep-2.2.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/commons-beanutils/commons-beanutils/trunk/jars/commons-beanutils-1.8.3.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/commons-beanutils/commons-beanutils/trunk/sources/commons-beanutils-1.8.3-sources.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/commons-collections/commons-collections/trunk/jars/commons-collections-3.2.1.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/commons-collections/commons-collections/trunk/sources/commons-collections-3.2.1-sources.jar"/>
@@ -36,7 +36,7 @@
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/dom4j/dom4j/trunk/jars/dom4j-1.6.1.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/dom4j/dom4j/trunk/sources/dom4j-1.6.1-sources.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.directwebremoting/dwr/trunk/jars/dwr-3.0.M1.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/org.directwebremoting/dwr/trunk/sources/dwr-3.0.M1-sources.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.easymock/easymock/trunk/jars/easymock-3.0.jar"/>
-<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/net.sf.ehcache/ehcache-core/trunk/jars/ehcache-core-2.2.0.jar"/>
+<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/net.sf.ehcache/ehcache-core/trunk/jars/ehcache-core-2.2.0.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/net.sf.ehcache/ehcache-core/trunk/sources/ehcache-core-2.2.0-sources.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/net.sf.ezmorph/ezmorph/trunk/jars/ezmorph-1.0.4.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/freemarker/freemarker/trunk/jars/freemarker-2.3.8.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/com.google.code.gson/gson/trunk/jars/gson-1.7.1.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/com.google.code.gson/gson/trunk/sources/gson-1.7.1-sources.jar"/>
@@ -57,7 +57,7 @@
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/junit/junit/trunk/jars/junit-4.8.2.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/log4j/log4j/trunk/bundles/log4j-1.2.16.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/log4j/log4j/trunk/sources/log4j-1.2.16-sources.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.apache.mina/mina-core/trunk/bundles/mina-core-2.0.0-M1.jar"/>
-<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.mybatis/mybatis/trunk/jars/mybatis-3.0.5.jar"/>
+<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.mybatis/mybatis/trunk/jars/mybatis-3.0.5.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/org.mybatis/mybatis/trunk/sources/mybatis-3.0.5-sources.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/mysql/mysql-connector-java/trunk/jars/mysql-connector-java-5.1.16.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.objenesis/objenesis/trunk/jars/objenesis-1.2.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/ojdbc14/ojdbc14/trunk/jars/ojdbc14-10.2.0.1.0.jar"/>
@@ -65,9 +65,9 @@
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.opensymphony.quartz/quartz/trunk/jars/quartz-1.6.1.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/javax.servlet/servlet-api/trunk/jars/servlet-api-2.5.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/javax.servlet/servlet-api/trunk/sources/servlet-api-2.5-sources.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.apache.shiro/shiro-core/trunk/bundles/shiro-core-1.1.0.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/org.apache.shiro/shiro-core/trunk/sources/shiro-core-1.1.0-sources.jar"/>
-<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.apache.shiro/shiro-ehcache/trunk/bundles/shiro-ehcache-1.1.0.jar"/>
-<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.apache.shiro/shiro-spring/trunk/bundles/shiro-spring-1.1.0.jar"/>
-<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.apache.shiro/shiro-web/trunk/bundles/shiro-web-1.1.0.jar"/>
+<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.apache.shiro/shiro-ehcache/trunk/bundles/shiro-ehcache-1.1.0.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/org.apache.shiro/shiro-ehcache/trunk/sources/shiro-ehcache-1.1.0-sources.jar"/>
+<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.apache.shiro/shiro-spring/trunk/bundles/shiro-spring-1.1.0.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/org.apache.shiro/shiro-spring/trunk/sources/shiro-spring-1.1.0-sources.jar"/>
+<classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.apache.shiro/shiro-web/trunk/bundles/shiro-web-1.1.0.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/org.apache.shiro/shiro-web/trunk/sources/shiro-web-1.1.0-sources.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.slf4j/slf4j-api/trunk/jars/slf4j-api-1.5.2.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/org.slf4j/slf4j-api/trunk/sources/slf4j-api-1.5.2-sources.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.slf4j/slf4j-log4j12/trunk/jars/slf4j-log4j12-1.5.2.jar" sourcepath="E:/Users/Xiong/.ivy2/cache/org.slf4j/slf4j-log4j12/trunk/sources/slf4j-log4j12-1.5.2-sources.jar"/>
 <classpathentry kind="lib" path="E:/Users/Xiong/.ivy2/cache/org.yaml/snakeyaml/trunk/jars/snakeyaml-1.6.jar"/>

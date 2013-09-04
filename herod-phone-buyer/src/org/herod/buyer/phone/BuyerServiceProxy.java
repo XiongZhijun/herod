@@ -38,10 +38,9 @@ public class BuyerServiceProxy implements BuyerService, ShopService {
 	}
 
 	@Override
-	public List<MapWrapper<String, Object>> findShopesByType(long typeId,
-			long timestamp) {
+	public List<MapWrapper<String, Object>> findShopesByType(long typeId) {
 		List<MapWrapper<String, Object>> shopes = buyerService
-				.findShopesByType(typeId, timestamp);
+				.findShopesByType(typeId);
 		if (shopCache.size() > 100) {
 			shopCache.clear();
 			latestShopTimestampMap.clear();

@@ -27,12 +27,9 @@
 			conf="compile->master;sources->sources;runtime->runtime" branch="trunk" />
 		<dependency org="com.fpi.bear" name="bear-common-database-control"
 			rev="1.6.1.6"
-			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
-		<dependency org="com.fpi.bear" name="bear-common-database"
-			rev="1.6.1.6"
-			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
+			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component;sources->sources" />
 		<dependency org="com.fpi.bear" name="bear-permission" rev="1.6.1.6"
-			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
+			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component;sources->sources" />
 		<dependency org="com.fpi.bear" name="bear-common-third-web"
 			rev="1.6.1.6" conf="compile->compile;sources->sources" />
 		<dependency org="com.fpi.bear" name="bear-common-rest" rev="1.6.1.6"
@@ -40,7 +37,7 @@
 		<dependency org="com.google.code.gson" name="gson" rev="1.7.1" />
 		<dependency org="com.fpi.bear" name="bear-common-database"
 			rev="1.6.1.6"
-			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component" />
+			conf="compile->master;runtime->master,runtime;dwr->dwr;hibernate->hibernate;spring->spring;web->web;conf->conf;component->component;sources->sources" />
 		<dependency org="org.apache.shiro" name="shiro-core" rev="1.1.0"
 			conf="compile->master;sources->sources" />
 		<dependency org="commons-configuration" name="commons-configuration"

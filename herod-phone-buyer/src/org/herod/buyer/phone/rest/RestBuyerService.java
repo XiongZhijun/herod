@@ -45,7 +45,8 @@ public class RestBuyerService extends RestServiceSupport implements
 		BuyerService, NeedCacheMatcher {
 	private static final String[] LOCATION_CORRELATION_FILES = new String[] { "/herod/order/shopTypes" };
 	private static final String[] NOT_CACHE_URLS = new String[] {
-			"/herod/sn/transaction", "/herod/order?" };
+			"/herod/sn/transaction", "/herod/order?", "/herod/order/goodses?",
+			"/herod/order/shopTypes/" };
 	private GZipCacheRestTemplate restTemplate;
 	private URLBuilder urlBuilder;
 
@@ -82,11 +83,9 @@ public class RestBuyerService extends RestServiceSupport implements
 	}
 
 	@Override
-	public List<MapWrapper<String, Object>> findShopesByType(long typeId,
-			long timestamp) {
-		String json = getForObject(
-				"/herod/order/shopTypes/{typeId}/shops?timestamp={timestamp}",
-				String.class, typeId, timestamp);
+	public List<MapWrapper<String, Object>> findShopesByType(long typeId) {
+		String json = getForObject("/herod/order/shopTypes/{typeId}/shops",
+				String.class, typeId);
 		return toMapWrapperList(json);
 	}
 
@@ -190,11 +189,11 @@ public class RestBuyerService extends RestServiceSupport implements
 	public boolean matche(URI url) {
 		String urlStr = url.toString();
 		for (String notCacheURL : NOT_CACHE_URLS) {
-			if (urlStr.indexOf(notCacheURL) < 0) {
-				return true;
+			if (urlStr.indexOf(notCacheURL) >= 0) {
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	private class BuyerFileNameBuilder extends DefaultFileNameBuilder {

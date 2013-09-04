@@ -78,9 +78,7 @@ public class ShopListFragment extends BaseFragment implements ViewFindable,
 	@Override
 	public List<MapWrapper<String, Object>> runOnBackground(Object... params) {
 		long shopTypeId = getArguments().getLong(SHOP_TYPE_ID);
-		long timestamp = getArguments().getLong(Constants.TIMESTAMP);
-		return BuyerContext.getBuyerService().findShopesByType(shopTypeId,
-				timestamp);
+		return BuyerContext.getBuyerService().findShopesByType(shopTypeId);
 	}
 
 	@Override

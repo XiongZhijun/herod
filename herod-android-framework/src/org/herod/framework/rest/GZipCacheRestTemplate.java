@@ -105,7 +105,7 @@ public class GZipCacheRestTemplate extends GZipRestTemplate {
 
 	@SuppressWarnings("unchecked")
 	protected <T> T getFromCache(URI url, Class<T> responseType) {
-		if (!String.class.equals(responseType) && !needCacheMatcher.matche(url)) {
+		if (!String.class.equals(responseType) || !needCacheMatcher.matche(url)) {
 			return null;
 		}
 		String fileName = getFileName(url);

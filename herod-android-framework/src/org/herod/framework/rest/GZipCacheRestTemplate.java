@@ -34,6 +34,7 @@ public class GZipCacheRestTemplate extends GZipRestTemplate {
 	private static final String REST_CACHE = "RestCache";
 	private static Application application;
 	private NeedCacheMatcher needCacheMatcher = ALL_MATCHER;
+	private FileNameBuilder fileNameBuilder = new DefaultFileNameBuilder();
 
 	public GZipCacheRestTemplate() {
 		super();
@@ -125,10 +126,7 @@ public class GZipCacheRestTemplate extends GZipRestTemplate {
 	}
 
 	private String getFileName(URI url) {
-		String fileName = url.toString().replace(FORWARD_SLASH, UNDERLINE)
-				.replace(AMPERSAND, UNDERLINE).replace(COLON, UNDERLINE)
-				.replace(PERIOD, UNDERLINE).replace(QUESTION_MARK, UNDERLINE);
-		return fileName;
+		return fileNameBuilder.build(url);
 	}
 
 	protected void removeHistoryFile(String fileName) {
@@ -151,12 +149,31 @@ public class GZipCacheRestTemplate extends GZipRestTemplate {
 			this.needCacheMatcher = needCacheMatcher;
 	}
 
+	public void setFileNameBuilder(FileNameBuilder fileNameBuilder) {
+		if (fileNameBuilder != null)
+			this.fileNameBuilder = fileNameBuilder;
+	}
+
 	public static void setApplication(Application application) {
 		GZipCacheRestTemplate.application = application;
 	}
 
+	public static interface FileNameBuilder {
+		String build(URI url);
+	}
+
 	public static interface NeedCacheMatcher {
 		boolean matche(URI url);
+	}
+
+	public static class DefaultFileNameBuilder implements FileNameBuilder {
+		public String build(URI url) {
+			String fileName = url.toString().replace(FORWARD_SLASH, UNDERLINE)
+					.replace(AMPERSAND, UNDERLINE).replace(COLON, UNDERLINE)
+					.replace(PERIOD, UNDERLINE)
+					.replace(QUESTION_MARK, UNDERLINE);
+			return fileName;
+		}
 	}
 
 	private static final NeedCacheMatcher ALL_MATCHER = new NeedCacheMatcher() {

@@ -17,6 +17,7 @@ import java.util.Set;
 import org.herod.buyer.phone.BuyerService;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.rest.GZipCacheRestTemplate;
+import org.herod.framework.rest.GZipCacheRestTemplate.DefaultFileNameBuilder;
 import org.herod.framework.rest.GZipCacheRestTemplate.NeedCacheMatcher;
 import org.herod.framework.rest.GZipCacheRestTemplateBuilder;
 import org.herod.framework.rest.RestServiceSupport;
@@ -42,6 +43,9 @@ import com.google.gson.reflect.TypeToken;
  */
 public class RestBuyerService extends RestServiceSupport implements
 		BuyerService, NeedCacheMatcher {
+	private static final String[] LOCATION_CORRELATION_FILES = new String[] { "/herod/order/shopTypes" };
+	private static final String[] NOT_CACHE_URLS = new String[] {
+			"/herod/sn/transaction", "/herod/order?" };
 	private GZipCacheRestTemplate restTemplate;
 	private URLBuilder urlBuilder;
 
@@ -49,6 +53,8 @@ public class RestBuyerService extends RestServiceSupport implements
 		super();
 		this.restTemplate = (GZipCacheRestTemplate) new GZipCacheRestTemplateBuilder()
 				.buildRestTemplate();
+		this.restTemplate.setNeedCacheMatcher(this);
+		this.restTemplate.setFileNameBuilder(new BuyerFileNameBuilder());
 		this.urlBuilder = new RestUrlBuilder(context);
 	}
 
@@ -191,6 +197,21 @@ public class RestBuyerService extends RestServiceSupport implements
 		return false;
 	}
 
-	private static final String[] NOT_CACHE_URLS = new String[] {
-			"/herod/sn/transaction", "/herod/order?" };
+	private class BuyerFileNameBuilder extends DefaultFileNameBuilder {
+
+		@Override
+		public String build(URI url) {
+			String fileName = super.build(url);
+			String urlStr = url.toString();
+			for (String locationCorrelationFile : LOCATION_CORRELATION_FILES) {
+				if (urlStr.indexOf(locationCorrelationFile) >= 0) {
+					return fileName;
+				}
+			}
+			return fileName.replaceAll("latitude=\\d*_?\\d*", "").replaceAll(
+					"longitude=\\d*_?\\d*", "");
+		}
+
+	}
+
 }

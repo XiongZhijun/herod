@@ -3,8 +3,6 @@
  */
 package org.herod.buyer.phone;
 
-import static org.herod.buyer.phone.Constants.GOODS_NAME;
-
 import org.herod.buyer.phone.fragments.SearchGoodsListFragment;
 
 import android.app.SearchManager;
@@ -51,8 +49,6 @@ public class GoodsSearchActivity extends BuyerBaseActivity {
 			return;
 		}
 		queryString = intent.getStringExtra(SearchManager.QUERY);
-		Bundle args = new Bundle();
-		args.putString(GOODS_NAME, queryString);
 		if (searchview != null) {
 			searchview.setQuery(queryString, false);
 		}

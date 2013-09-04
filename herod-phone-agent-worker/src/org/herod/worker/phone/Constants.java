@@ -35,4 +35,7 @@ public interface Constants extends org.herod.order.common.Constants {
 
 	String STATUS = "status";
 	String SERIAL_NUMBER = "serialNumber";
+	String TYPE = "type";
+	String TITLE = "title";
+	String INDEX = "index";
 }

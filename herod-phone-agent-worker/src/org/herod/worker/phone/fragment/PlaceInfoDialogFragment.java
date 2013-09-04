@@ -9,6 +9,7 @@ import static org.herod.worker.phone.Constants.LOCATION_NAME;
 import static org.herod.worker.phone.Constants.PHONE;
 import static org.herod.worker.phone.Constants.TEL;
 
+import org.herod.framework.BundleBuilder;
 import org.herod.order.common.model.Address;
 import org.herod.worker.phone.MapActivity;
 import org.herod.worker.phone.R;
@@ -86,10 +87,9 @@ public class PlaceInfoDialogFragment extends DialogFragment implements
 	public static void showFragment(FragmentActivity activity, Address address,
 			String phone) {
 		PlaceInfoDialogFragment fragment = new PlaceInfoDialogFragment();
-		Bundle args = new Bundle();
-		args.putString(PHONE, phone);
-		args.putString(LOCATION_NAME, address.getAddress());
-		args.putSerializable(ADDRESS, address);
+		Bundle args = new BundleBuilder().putString(PHONE, phone)
+				.putString(LOCATION_NAME, address.getAddress())
+				.putSerializable(ADDRESS, address).build();
 		fragment.setArguments(args);
 		fragment.show(activity.getSupportFragmentManager(), null);
 	}

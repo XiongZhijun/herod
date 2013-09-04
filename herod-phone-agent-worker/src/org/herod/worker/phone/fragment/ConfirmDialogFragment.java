@@ -3,12 +3,13 @@
  */
 package org.herod.worker.phone.fragment;
 
+import static org.herod.order.common.Constants.MESSAGE;
+
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.worker.phone.R;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,7 +25,6 @@ import android.widget.TextView;
  */
 public class ConfirmDialogFragment extends DialogFragment implements
 		OnClickListener {
-	private String message;
 	private OnOkButtonClickListener onOkButtonClickListener;
 	private OnCancelButtonClickListener onCancelButtonClickListener;
 
@@ -45,7 +45,7 @@ public class ConfirmDialogFragment extends DialogFragment implements
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		new InjectViewHelper().injectViews(view);
-		((TextView) view.findViewById(R.id.message)).setText(message);
+		((TextView) view.findViewById(R.id.message)).setText(getMessage());
 		view.findViewById(R.id.okButton).setOnClickListener(this);
 		view.findViewById(R.id.cancelButton).setOnClickListener(this);
 	}
@@ -64,8 +64,8 @@ public class ConfirmDialogFragment extends DialogFragment implements
 		dismiss();
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public String getMessage() {
+		return getArguments().getString(MESSAGE);
 	}
 
 	public void setOnOkButtonClickListener(
@@ -84,13 +84,5 @@ public class ConfirmDialogFragment extends DialogFragment implements
 
 	public static interface OnCancelButtonClickListener {
 		void onCancel();
-	}
-
-	public static void showDialog(FragmentActivity activity, String message,
-			OnOkButtonClickListener onOkButtonClickListener) {
-		ConfirmDialogFragment fragment = new ConfirmDialogFragment();
-		fragment.setMessage(message);
-		fragment.onOkButtonClickListener = onOkButtonClickListener;
-		fragment.show(activity.getSupportFragmentManager(), null);
 	}
 }

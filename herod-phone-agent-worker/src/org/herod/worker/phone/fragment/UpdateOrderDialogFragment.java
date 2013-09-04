@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.herod.framework.BundleBuilder;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.utils.ToastUtils;
 import org.herod.order.common.model.Result;
@@ -111,8 +112,7 @@ public class UpdateOrderDialogFragment extends FormFragment implements
 	public static void showDialog(FragmentActivity activity, Handler handler,
 			String comment) {
 		UpdateOrderDialogFragment fragment = new UpdateOrderDialogFragment();
-		Bundle args = new Bundle();
-		args.putString(COMMENT, comment);
+		Bundle args = BundleBuilder.create(COMMENT, comment);
 		fragment.setArguments(args);
 		fragment.handler = handler;
 		fragment.show(activity.getSupportFragmentManager(), null);

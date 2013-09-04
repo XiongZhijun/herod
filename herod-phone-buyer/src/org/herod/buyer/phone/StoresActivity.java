@@ -12,6 +12,7 @@ import static org.herod.order.common.Constants.TIMESTAMP;
 import java.util.List;
 
 import org.herod.buyer.phone.fragments.ShopListFragment;
+import org.herod.framework.BundleBuilder;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.RepeatedlyTask;
@@ -92,10 +93,10 @@ public class StoresActivity extends BuyerBaseActivity implements
 		@Override
 		public Fragment getItem(int position) {
 			ShopListFragment shopListFragment = new ShopListFragment();
-			Bundle args = new Bundle();
 			MapWrapper<String, Object> shopType = shopTypes.get(position);
-			args.putLong(SHOP_TYPE_ID, shopType.getLong(ID));
-			args.putLong(TIMESTAMP, shopType.getLong(TIMESTAMP));
+			Bundle args = new BundleBuilder()
+					.putLong(SHOP_TYPE_ID, shopType.getLong(ID))
+					.putLong(TIMESTAMP, shopType.getLong(TIMESTAMP)).build();
 			shopListFragment.setArguments(args);
 			return shopListFragment;
 		}

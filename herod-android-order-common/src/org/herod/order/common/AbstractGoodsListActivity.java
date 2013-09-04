@@ -3,7 +3,7 @@
  */
 package org.herod.order.common;
 
-import static org.herod.order.common.Constants.GOODS_TYPE_ID;
+import static org.herod.order.common.Constants.*;
 import static org.herod.order.common.Constants.NAME;
 import static org.herod.order.common.Constants.SHOP_ID;
 import static org.herod.order.common.Constants.SHOP_NAME;
@@ -11,6 +11,7 @@ import static org.herod.order.common.Constants.SHOP_NAME;
 import java.util.List;
 
 import org.herod.framework.HerodTask.AsyncTaskable;
+import org.herod.framework.BundleBuilder;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.RepeatedlyTask;
 import org.herod.framework.widget.TabPageIndicator;
@@ -90,12 +91,10 @@ public abstract class AbstractGoodsListActivity extends BaseActivity implements
 		@Override
 		public Fragment getItem(int position) {
 			AbstractGoodsTypeGoodsListFragment fragment = createGoodsListFragment();
-			Bundle args = new Bundle();
-			args.putAll(getIntent().getExtras());
 			MapWrapper<String, Object> goodsType = goodsTypes.get(position);
-			args.putLong(GOODS_TYPE_ID, goodsType.getLong(Constants.ID));
-			args.putLong(Constants.TIMESTAMP,
-					goodsType.getLong(Constants.TIMESTAMP));
+			Bundle args = new BundleBuilder().putAll(getIntent().getExtras())
+					.putLong(GOODS_TYPE_ID, goodsType.getLong(ID))
+					.putLong(TIMESTAMP, goodsType.getLong(TIMESTAMP)).build();
 			fragment.setArguments(args);
 			return fragment;
 		}

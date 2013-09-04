@@ -9,6 +9,9 @@ import static org.herod.event.EventCodes.SUBMIT_COMMAND;
 import static org.herod.event.EventCodes.UPDATE_COMMAND;
 import static org.herod.event.EventFields.ACCEPTTED_COUNT;
 import static org.herod.event.EventFields.SUBMITTED_COUNT;
+import static org.herod.worker.phone.Constants.INDEX;
+import static org.herod.worker.phone.Constants.TITLE;
+import static org.herod.worker.phone.Constants.TYPE;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +19,7 @@ import java.util.List;
 
 import org.herod.android.communication.TcpClientService.LocalBinder;
 import org.herod.event.Event;
+import org.herod.framework.BundleBuilder;
 import org.herod.framework.lbs.LocationManager;
 import org.herod.framework.lbs.SimpleLocationPlan;
 import org.herod.framework.lbs.SimpleLocationPlan.OnLocationSuccessListener;
@@ -91,7 +95,7 @@ public class MainActivity extends BaseActivity implements Callback,
 		handler = new HerodHandler(this);
 		indicator = (OrderTabPageIndicator) findViewById(R.id.indicator);
 		orderListFragmentPager = (ViewPager) findViewById(R.id.pager);
-		orderListFragments = createOrderListFragments(indicator);
+		orderListFragments = createOrderListFragments();
 		orderListFragmentAdapter = new OrderGroupAdapter(
 				getSupportFragmentManager());
 		orderListFragmentPager.setAdapter(orderListFragmentAdapter);
@@ -104,31 +108,40 @@ public class MainActivity extends BaseActivity implements Callback,
 		registerEventReceiver();
 	}
 
-	protected List<OrderListFragment> createOrderListFragments(
-			OrderTabPageIndicator indicator) {
+	private void registerEventReceiver() {
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(EventActionUtils.getEventAction(HEARTBEAT_COMMAND));
+		filter.addAction(EventActionUtils.getEventAction(SUBMIT_COMMAND));
+		filter.addAction(EventActionUtils.getEventAction(ACCEPT_COMMAND));
+		filter.addAction(EventActionUtils.getEventAction(COMPLETE_COMMAND));
+		filter.addAction(EventActionUtils.getEventAction(CANCEL_COMMAND));
+		filter.addAction(EventActionUtils.getEventAction(REJECT_COMMAND));
+		filter.addAction(EventActionUtils.getEventAction(UPDATE_COMMAND));
+		registerReceiver(eventReceiver, filter);
+	}
+
+	protected List<OrderListFragment> createOrderListFragments() {
 		List<OrderListFragment> fragments = new ArrayList<OrderListFragment>();
-		fragments.add(createFragment("待受理订单", FragmentType.WaitAccept,
-				indicator, 0));
-		fragments.add(createFragment("待完成订单", FragmentType.WaitComplete,
-				indicator, 1));
+		fragments.add(createFragment("待受理订单", FragmentType.WaitAccept, 0));
+		fragments.add(createFragment("待完成订单", FragmentType.WaitComplete, 1));
 		return fragments;
 	}
 
 	private OrderListFragment createFragment(String title, FragmentType type,
-			OrderTabPageIndicator indicator, int index) {
+			int index) {
 		OrderListFragment fragment = new OrderListFragment();
-		fragment.setTitle(title);
-		fragment.setType(type);
-		fragment.setIndex(index);
-		fragment.setTabPageIndicator(indicator);
-		fragment.setHandler(handler);
+		Bundle args = new BundleBuilder().putString(TITLE, title)
+				.putSerializable(TYPE, type).putInt(INDEX, index).build();
+		fragment.setArguments(args);
 		return fragment;
 	}
 
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();
 		unregisterReceiver(eventReceiver);
+		orderListFragments.clear();
+		orderListFragmentAdapter.notifyDataSetChanged();
+		super.onDestroy();
 	}
 
 	@Override
@@ -157,6 +170,14 @@ public class MainActivity extends BaseActivity implements Callback,
 	@Override
 	public void onBackPressed() {
 		finish();
+	}
+
+	public OrderTabPageIndicator getIndicator() {
+		return indicator;
+	}
+
+	public HerodHandler getHandler() {
+		return handler;
 	}
 
 	class OrderGroupAdapter extends FragmentPagerAdapter {
@@ -206,18 +227,6 @@ public class MainActivity extends BaseActivity implements Callback,
 		OrderListFragment currentFragment = (OrderListFragment) orderListFragmentAdapter
 				.getItem(currentFragmentIndex);
 		currentFragment.refreshOrderList();
-	}
-
-	private void registerEventReceiver() {
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(EventActionUtils.getEventAction(HEARTBEAT_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(SUBMIT_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(ACCEPT_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(COMPLETE_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(CANCEL_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(REJECT_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(UPDATE_COMMAND));
-		registerReceiver(eventReceiver, filter);
 	}
 
 	class EventReceiver extends BroadcastReceiver {

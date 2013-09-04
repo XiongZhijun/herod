@@ -6,6 +6,7 @@ package org.herod.buyer.phone.fragments;
 import static org.herod.buyer.phone.Constants.MESSAGE;
 
 import org.herod.buyer.phone.R;
+import org.herod.framework.BundleBuilder;
 import org.herod.framework.ci.InjectViewHelper;
 
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 /**
  * 
  * 
@@ -78,8 +80,7 @@ public class ConfirmDialogFragment extends DialogFragment implements
 	public static void showDialog(FragmentActivity activity, String message,
 			OnOkButtonClickListener onOkButtonClickListener) {
 		ConfirmDialogFragment fragment = new ConfirmDialogFragment();
-		Bundle args = new Bundle();
-		args.putString(MESSAGE, message);
+		Bundle args = BundleBuilder.create(MESSAGE, message);
 		fragment.setArguments(args);
 		fragment.onOkButtonClickListener = onOkButtonClickListener;
 		fragment.show(activity.getSupportFragmentManager(), null);

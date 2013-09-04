@@ -9,7 +9,6 @@ package org.herod.buyer.phone;
  * @email hust.xzj@gmail.com
  */
 public interface Constants extends org.herod.order.common.Constants {
-	String MESSAGE = "message";
 	String IMAGE_URL = "imageUrl";
 	String SHOP_TYPE_ID = "shopTypeId";
 	String GOODS_NAME = "goodsName";

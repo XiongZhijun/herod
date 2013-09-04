@@ -1,5 +1,9 @@
 package org.herod.worker.phone.fragment;
 
+import static org.herod.worker.phone.Constants.INDEX;
+import static org.herod.worker.phone.Constants.TITLE;
+import static org.herod.worker.phone.Constants.TYPE;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -14,6 +18,7 @@ import org.herod.framework.widget.XListView.IXListViewListener;
 import org.herod.order.common.RefreshButtonHelper;
 import org.herod.order.common.model.Order;
 import org.herod.worker.phone.AgentWorkerRepeatedlyTask;
+import org.herod.worker.phone.MainActivity;
 import org.herod.worker.phone.R;
 import org.herod.worker.phone.WorkerContext;
 import org.herod.worker.phone.handler.HerodHandler;
@@ -23,19 +28,17 @@ import org.springframework.util.CollectionUtils;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class OrderListFragment extends BaseFragment implements ViewFindable,
 		AsyncTaskable<Object, List<Order>>, IXListViewListener {
+	
 	private static final String HH_MM_SS = "HH:mm:ss";
 	private DateFormat dateFormat = new SimpleDateFormat(HH_MM_SS);
 	private XListView ordersListView;
-	private String title;
-	private FragmentType type;
-	private int index = 0;
-	private OrderTabPageIndicator indicator;
 	private Handler handler;
 	private OrderListAdapter orderListAdapter;
 	private RefreshButtonHelper refreshButtonHelper;
@@ -44,6 +47,9 @@ public class OrderListFragment extends BaseFragment implements ViewFindable,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		loadOrdersTask = new AgentWorkerRepeatedlyTask<Object, List<Order>>(
+				this);
+		this.handler = new HerodHandler(getMainActivity().getHandler());
 	}
 
 	@Override
@@ -61,24 +67,27 @@ public class OrderListFragment extends BaseFragment implements ViewFindable,
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		loadOrdersTask = new AgentWorkerRepeatedlyTask<Object, List<Order>>(
-				this);
 		refreshButtonHelper = new RefreshButtonHelper(this, loadOrdersTask,
 				R.id.refreshButton, R.id.ordersListView);
-		refreshOrderList();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		refreshOrderList();
 	}
 
 	public void refreshOrderList() {
-		loadOrdersTask.execute(getActivity());
+		Log.d("TEST", "refreshOrderList");
+		if (loadOrdersTask != null) {
+			Log.d("TEST", "refreshOrderList done");
+			loadOrdersTask.execute(getActivity());
+		}
 	}
 
 	@Override
 	public List<Order> runOnBackground(Object... params) {
+		FragmentType type = getType();
 		switch (type) {
 		case WaitAccept:
 			return WorkerContext.getWorkerService().findWaitAcceptOrders();
@@ -99,7 +108,7 @@ public class OrderListFragment extends BaseFragment implements ViewFindable,
 		ordersListView.setVisibility(View.VISIBLE);
 		orderListAdapter = new OrderListAdapter(this, orders, handler);
 		ordersListView.setAdapter(orderListAdapter);
-		indicator.setTabQauntity(index, orders.size());
+		getIndicator().setTabQauntity(getIndex(), orders.size());
 		ordersListView.stopRefresh();
 		ordersListView.setRefreshTime(dateFormat.format(new Date()));
 	}
@@ -120,28 +129,27 @@ public class OrderListFragment extends BaseFragment implements ViewFindable,
 	public void onLoadMore() {
 	}
 
-	public void setTabPageIndicator(OrderTabPageIndicator indicator) {
-		this.indicator = indicator;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
+	private int getIndex() {
+		return getArguments().getInt(INDEX);
 	}
 
 	public String getTitle() {
-		return title;
+		return getArguments().getString(TITLE);
 	}
 
-	public void setType(FragmentType type) {
-		this.type = type;
+	private FragmentType getType() {
+		FragmentType type = (FragmentType) getArguments().getSerializable(
+				TYPE);
+		return type;
 	}
 
-	public void setIndex(int index) {
-		this.index = index;
+	protected OrderTabPageIndicator getIndicator() {
+		MainActivity activity = getMainActivity();
+		return activity.getIndicator();
 	}
 
-	public void setHandler(Handler handler) {
-		this.handler = new HerodHandler(handler);
+	private MainActivity getMainActivity() {
+		return (MainActivity) getActivity();
 	}
 
 	public static enum FragmentType {

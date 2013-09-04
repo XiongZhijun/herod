@@ -3,6 +3,7 @@
  */
 package org.herod.worker.phone.fragment;
 
+import org.herod.framework.BundleBuilder;
 import org.herod.framework.HerodTask.BackgroudRunnable;
 import org.herod.framework.HerodTask.PostExecutor;
 import org.herod.framework.utils.ToastUtils;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
+import static org.herod.worker.phone.Constants.*;
 
 /**
  * 
@@ -23,8 +25,8 @@ import android.widget.Toast;
  */
 public class AsyncTaskConfirmDialogFragment extends ConfirmDialogFragment
 		implements OnOkButtonClickListener, PostExecutor<Result> {
-	private String successMessage;
-	private String failedMessage;
+	private static final String FAILED_MESSAGE = "failedMessage";
+	private static final String SUCCESS_MESSAGE = "successMessage";
 	private Handler handler;
 	private BackgroudRunnable<Object, Result> backgroundRunnable;
 
@@ -49,9 +51,9 @@ public class AsyncTaskConfirmDialogFragment extends ConfirmDialogFragment
 		if (result != null && result.isSuccess()) {
 			handler.sendMessage(handler
 					.obtainMessage(MainActivity.MESSAGE_KEY_REFRESH_ORDER_LIST));
-			message = successMessage;
+			message = getSuccessMessage();
 		} else {
-			message = failedMessage;
+			message = getFailedMessage();
 		}
 		ToastUtils.showToast(message, Toast.LENGTH_SHORT);
 	}
@@ -62,12 +64,23 @@ public class AsyncTaskConfirmDialogFragment extends ConfirmDialogFragment
 		AsyncTaskConfirmDialogFragment fragment = new AsyncTaskConfirmDialogFragment();
 		fragment.handler = handler;
 		fragment.backgroundRunnable = backgroundRunnable;
+		BundleBuilder bundleBuilder = new BundleBuilder();
 		if (messages.length > 0)
-			fragment.setMessage(messages[0]);
+			bundleBuilder.putString(MESSAGE, messages[0]);
 		if (messages.length > 1)
-			fragment.successMessage = messages[1];
+			bundleBuilder.putString(SUCCESS_MESSAGE, messages[1]);
 		if (messages.length > 2)
-			fragment.failedMessage = messages[2];
+			bundleBuilder.putString(FAILED_MESSAGE, messages[2]);
+		fragment.setArguments(bundleBuilder.build());
 		fragment.show(activity.getSupportFragmentManager(), null);
 	}
+
+	private String getSuccessMessage() {
+		return getArguments().getString(SUCCESS_MESSAGE);
+	}
+
+	private String getFailedMessage() {
+		return getArguments().getString(FAILED_MESSAGE);
+	}
+
 }

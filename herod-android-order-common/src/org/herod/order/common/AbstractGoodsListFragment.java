@@ -41,9 +41,8 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 		IXListViewListener, ViewBinder {
 	protected XListView goodsListView;
 	protected SimpleAdapter adapter;
-	private boolean isFirstLoad = true;
 	private int begin = 0;
-	private int count = 30;
+	private int count = 20;
 	private RefreshButtonHelper refreshButtonHelper;
 	private RepeatedlyTask<Object, List<MapWrapper<String, Object>>> loadGoodsTask;
 
@@ -75,7 +74,6 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 	public void onResume() {
 		super.onResume();
 		begin = 0;
-		isFirstLoad = true;
 		if (isLoadOnResume()) {
 			loadGoods();
 		}
@@ -100,17 +98,14 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 			return;
 		}
 		if (data.size() == 0) {
-			if (!isFirstLoad) {
-				ToastUtils.showToast("没有更多商品了！", Toast.LENGTH_SHORT);
-			}
+			ToastUtils.showToast("没有更多商品了！", Toast.LENGTH_SHORT);
 			goodsListView.stopLoadMore();
-			goodsListView.setPullLoadEnable(false);
 		} else {
 			adapter.addData(data);
 			begin += data.size();
 			goodsListView.stopLoadMore();
 		}
-		isFirstLoad = false;
+		goodsListView.setPullLoadEnable(data.size() >= count);
 	}
 
 	@Override

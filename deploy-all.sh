@@ -1,5 +1,5 @@
 #!/bin/bash
-base_dir=`pwd`
+base_dir=$ZRH_HEROD_HOME
 echo ${base_dir}
 
 projects=(herod-common herod-communication-common herod-communication-server herod-event herod-order herod-order-web)
@@ -12,3 +12,5 @@ done
 
 cd ${base_dir}/${ci}
 ant deploy-all
+
+cp -R ~/configs/** $base_dir/runtime/server/bear-appserver/

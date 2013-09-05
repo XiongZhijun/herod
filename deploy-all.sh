@@ -1,5 +1,17 @@
 #!/bin/bash
-base_dir=$ZRH_HEROD_HOME
+PRG="$0"
+while [ -h "$PRG" ] ; do
+  ls=`ls -ld "$PRG"`
+  link=`expr "$ls" : '.*-> \(.*\)$'`
+  if expr "$link" : '/.*' > /dev/null; then
+    PRG="$link"
+  else
+    PRG=`dirname "$PRG"`/"$link"
+  fi
+done
+
+PRGDIR=`dirname "$PRG"`
+base_dir=$PRGDIR
 echo ${base_dir}
 
 projects=(herod-common herod-communication-common herod-communication-server herod-event herod-order herod-order-web)

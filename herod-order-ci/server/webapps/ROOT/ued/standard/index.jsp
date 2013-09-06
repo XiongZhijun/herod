@@ -78,7 +78,7 @@
 					</c:if>
 				</ul>
 			</div>
-			<div class="footer_right">聚光科技(杭州)股份有限公司 版权所有</div>
+			<div class="footer_right">宅人汇 版权所有</div>
 		</div>
 	</body>
 </html>

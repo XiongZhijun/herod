@@ -10,7 +10,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>登录-聚光科技污染源在线监控系统</title>
+<title>系统选择-宅人汇后台管理系统</title>
 <link type="text/css" href="style.css" rel="stylesheet" />
 </head>
 

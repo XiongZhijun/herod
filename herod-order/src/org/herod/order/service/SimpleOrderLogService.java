@@ -27,8 +27,8 @@ public class SimpleOrderLogService implements OrderLogService {
 	private OrderCenter orderCenter;
 
 	@Override
-	public void agentWorkerlog(long workerId, String orderSerialNumber,
-			Operation operation, String reason) {
+	public void agentWorkerlog(long agentId, long workerId,
+			String orderSerialNumber, Operation operation, String reason) {
 		OrderLog log = new OrderLog();
 		log.setOrderSerialNumber(orderSerialNumber);
 		log.setOperation(operation);
@@ -36,26 +36,26 @@ public class SimpleOrderLogService implements OrderLogService {
 		log.setOperatorType(OperatorType.AgentWorker);
 		log.setReason(reason);
 		logDas.addLog(log);
-		notifyOrderCenter(workerId, orderSerialNumber, operation);
+		notifyOrderCenter(agentId, workerId, orderSerialNumber, operation);
 	}
 
-	private void notifyOrderCenter(long workerId, String orderSerialNumber,
-			Operation operation) {
+	private void notifyOrderCenter(long agentId, long workerId,
+			String orderSerialNumber, Operation operation) {
 		switch (operation) {
 		case Accept:
-			orderCenter.acceptOrder(workerId, orderSerialNumber);
+			orderCenter.acceptOrder(agentId, workerId, orderSerialNumber);
 			break;
 		case Cancel:
-			orderCenter.cancelOrder(workerId, orderSerialNumber);
+			orderCenter.cancelOrder(agentId, workerId, orderSerialNumber);
 			break;
 		case Submit:
-			orderCenter.submitOrder(workerId, orderSerialNumber);
+			orderCenter.submitOrder(agentId, workerId, orderSerialNumber);
 			break;
 		case Reject:
-			orderCenter.rejectOrder(workerId, orderSerialNumber);
+			orderCenter.rejectOrder(agentId, workerId, orderSerialNumber);
 			break;
 		case Complete:
-			orderCenter.completeOrder(workerId, orderSerialNumber);
+			orderCenter.completeOrder(agentId, workerId, orderSerialNumber);
 			break;
 		case Update:
 			// TODO
@@ -75,8 +75,8 @@ public class SimpleOrderLogService implements OrderLogService {
 			log.setOperator(order.getBuyerPhone());
 			log.setOperatorType(OperatorType.Buyer);
 			logs.add(log);
-			notifyOrderCenter(order.getWorkerId(), order.getSerialNumber(),
-					Operation.Submit);
+			notifyOrderCenter(order.getAgentId(), order.getWorkerId(),
+					order.getSerialNumber(), Operation.Submit);
 		}
 		logDas.addLogs(logs);
 	}

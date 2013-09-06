@@ -3,12 +3,8 @@
  */
 package org.herod.order.event;
 
-import static org.herod.order.model.OrderStatus.Acceptted;
-import static org.herod.order.model.OrderStatus.Submitted;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,8 +14,9 @@ import org.apache.commons.logging.LogFactory;
 import org.herod.event.Event;
 import org.herod.event.EventCodes;
 import org.herod.event.EventFields;
-import org.herod.order.model.OrderStatus;
 import org.herod.order.order.OrderCenter;
+import org.herod.order.order.OrderCenter.WorkerOrdersCount;
+import org.herod.order.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -32,14 +29,17 @@ public class HeartbeatScheduledService implements Runnable {
 	private EventCenter eventCenter;
 	@Autowired
 	private OrderCenter orderEventCenter;
+	@Autowired
+	private LoginService loginService;
 	private ExecutorService executorService = Executors.newFixedThreadPool(2);
 
 	@Override
 	public void run() {
 		List<Callable<Object>> tasks = new ArrayList<Callable<Object>>();
 		for (long workerId : eventCenter.getAllConnectedWorkers()) {
-			Map<OrderStatus, Integer> ordersCount = orderEventCenter
-					.getOrdersCount(workerId);
+			long workerAgentId = loginService.getWorkerAgentId(workerId);
+			WorkerOrdersCount ordersCount = orderEventCenter.getOrdersCount(
+					workerAgentId, workerId);
 			HeartbeatCallable heartbeatServer = new HeartbeatCallable(workerId,
 					ordersCount);
 			tasks.add(heartbeatServer);
@@ -65,10 +65,9 @@ public class HeartbeatScheduledService implements Runnable {
 
 	class HeartbeatCallable implements Callable<Object> {
 		private long workerId;
-		private Map<OrderStatus, Integer> ordersCount;
+		private WorkerOrdersCount ordersCount;
 
-		public HeartbeatCallable(long workerId,
-				Map<OrderStatus, Integer> ordersCount) {
+		public HeartbeatCallable(long workerId, WorkerOrdersCount ordersCount) {
 			super();
 			this.workerId = workerId;
 			this.ordersCount = ordersCount;
@@ -76,10 +75,8 @@ public class HeartbeatScheduledService implements Runnable {
 
 		@Override
 		public Object call() throws Exception {
-			int acceptted = ordersCount.containsKey(Acceptted) ? ordersCount
-					.get(Acceptted) : 0;
-			int submitted = ordersCount.containsKey(Submitted) ? ordersCount
-					.get(Submitted) : 0;
+			int acceptted = ordersCount.acceptted;
+			int submitted = ordersCount.submitted;
 			Event event = new Event();
 			event.setCode(EventCodes.HEARTBEAT_COMMAND);
 			event.put(EventFields.ACCEPTTED_COUNT, acceptted);
@@ -87,7 +84,6 @@ public class HeartbeatScheduledService implements Runnable {
 			eventCenter.sendEvent(workerId, event);
 			return null;
 		}
-
 	}
 
 	private static final Log _log = LogFactory

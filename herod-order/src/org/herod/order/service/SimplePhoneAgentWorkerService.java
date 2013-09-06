@@ -46,7 +46,8 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 	@Override
 	public List<Order> findWaitAcceptOrders(String token, String imei) {
 		long workerId = loginService.getWorkerId(token, imei);
-		return orderQueryService.findWaitAcceptOrders(workerId);
+		long workerAgentId = loginService.getWorkerAgentId(token, imei);
+		return orderQueryService.findWaitAcceptOrders(workerId, workerAgentId);
 	}
 
 	@Override
@@ -78,9 +79,10 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 					ResultCode.CurrentStatusCanNotDoSuchOperate, serialNumber);
 		}
 		long workerId = loginService.getWorkerId(token, imei);
+		long agentId = loginService.getWorkerAgentId(token, imei);
 		orderStatusUpdateService.updateOrderStatusAndWorker(serialNumber,
 				workerId, OrderStatus.Acceptted);
-		orderLogService.agentWorkerlog(workerId, serialNumber,
+		orderLogService.agentWorkerlog(agentId, workerId, serialNumber,
 				Operation.Accept, null);
 		return Result.SUCCESS;
 	}
@@ -105,7 +107,8 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 		orderItemUpdateService.changeOrderItemQuantity(quantityChangeMap);
 
 		long workerId = loginService.getWorkerId(token, imei);
-		orderLogService.agentWorkerlog(workerId, serialNumber,
+		long agentId = loginService.getWorkerAgentId(token, imei);
+		orderLogService.agentWorkerlog(agentId, workerId, serialNumber,
 				Operation.Update, null);
 		return Result.SUCCESS;
 	}
@@ -121,9 +124,9 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 		orderStatusUpdateService.updateOrderStatus(serialNumber,
 				OrderStatus.Rejected);
 		long workerId = loginService.getWorkerId(token, imei);
-		orderLogService.agentWorkerlog(workerId, serialNumber,
+		long agentId = loginService.getWorkerAgentId(token, imei);
+		orderLogService.agentWorkerlog(agentId, workerId, serialNumber,
 				Operation.Reject, reason);
-		// TODO 这个地方还需要重新分配worker
 		return Result.SUCCESS;
 	}
 
@@ -138,7 +141,8 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 		orderStatusUpdateService.updateOrderStatus(serialNumber,
 				OrderStatus.Cancelled);
 		long workerId = loginService.getWorkerId(token, imei);
-		orderLogService.agentWorkerlog(workerId, serialNumber,
+		long agentId = loginService.getWorkerAgentId(token, imei);
+		orderLogService.agentWorkerlog(agentId, workerId, serialNumber,
 				Operation.Cancel, reason);
 		return Result.SUCCESS;
 	}
@@ -153,7 +157,8 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 		orderStatusUpdateService.updateOrderStatusAndCompleteTime(serialNumber,
 				OrderStatus.Completed, new Date());
 		long workerId = loginService.getWorkerId(token, imei);
-		orderLogService.agentWorkerlog(workerId, serialNumber,
+		long agentId = loginService.getWorkerAgentId(token, imei);
+		orderLogService.agentWorkerlog(agentId, workerId, serialNumber,
 				Operation.Complete, null);
 		return Result.SUCCESS;
 	}
@@ -189,7 +194,7 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 	}
 
 	public static interface OrderQueryService {
-		List<Order> findWaitAcceptOrders(long workerId);
+		List<Order> findWaitAcceptOrders(long workerId, long workerAgentId);
 
 		List<Order> findOrdersByWorkerAndStatus(long workerId,
 				OrderStatus status);

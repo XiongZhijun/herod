@@ -16,6 +16,8 @@ public interface LoginService {
 
 	long getWorkerAgentId(String token, String imei);
 
+	long getWorkerAgentId(long workerId);
+
 	long getWorkerId(String token, String imei);
 
 	boolean isUserValid(String token, String imei);

@@ -3,10 +3,8 @@
  */
 package org.herod.order.order;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -32,7 +30,7 @@ public class SimpleOrderCenter implements OrderCenter {
 	private ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 	private Lock readLock = readWriteLock.readLock();
 	private Lock writeLock = readWriteLock.writeLock();
-	private Map<Long, Set<OrderInfo>> workerOrdersMap = new HashMap<Long, Set<OrderInfo>>();
+	private Set<OrderInfo> workerOrders = new HashSet<OrderInfo>();
 	@Autowired
 	private HerodJdbcTemplate herodJdbcTemplate;
 	@Autowired
@@ -42,101 +40,105 @@ public class SimpleOrderCenter implements OrderCenter {
 	public void init() {
 		writeLock.lock();
 		try {
-			workerOrdersMap.clear();
+			workerOrders.clear();
 			RowMapper<OrderInfo> rm = new HerodBeanPropertyRowMapper<OrderInfo>(
 					OrderInfo.class);
 			List<OrderInfo> orderInfos = herodJdbcTemplate
-					.query("SELECT SERIAL_NUMBER SN, STATUS, DELIVERY_WORKER_ID WORKER_ID FROM ZRH_ORDER WHERE STATUS = 'Acceptted' OR STATUS = 'Submitted' OR STATUS = 'Rejected'",
+					.query("SELECT SERIAL_NUMBER SN, STATUS,AGENT_ID, DELIVERY_WORKER_ID WORKER_ID FROM ZRH_ORDER WHERE STATUS = 'Acceptted' OR STATUS = 'Submitted' OR STATUS = 'Rejected'",
 							rm);
-			for (OrderInfo info : orderInfos) {
-				getOrderInfos(info.workerId).add(info);
-			}
+			this.workerOrders.addAll(orderInfos);
 		} finally {
 			writeLock.unlock();
 		}
 	}
 
 	@Override
-	public void submitOrder(long workerId, String orderSN) {
-		addToWorkerSet(workerId, orderSN, OrderStatus.Submitted);
+	public void submitOrder(long agentId, long workerId, String orderSN) {
+		addToWorkerSet(agentId, workerId, orderSN, OrderStatus.Submitted);
 	}
 
 	@Override
-	public void acceptOrder(long workerId, String orderSN) {
-		addToWorkerSet(workerId, orderSN, OrderStatus.Acceptted);
+	public void acceptOrder(long agentId, long workerId, String orderSN) {
+		addToWorkerSet(agentId, workerId, orderSN, OrderStatus.Acceptted);
 	}
 
 	@Override
-	public void rejectOrder(long workerId, String orderSN) {
-		addToWorkerSet(workerId, orderSN, OrderStatus.Rejected);
+	public void rejectOrder(long agentId, long workerId, String orderSN) {
+		addToWorkerSet(agentId, workerId, orderSN, OrderStatus.Rejected);
 	}
 
 	@Override
-	public void cancelOrder(long workerId, String orderSN) {
-		removeFromWorkerSet(workerId, orderSN, OrderStatus.Cancelled);
+	public void cancelOrder(long agentId, long workerId, String orderSN) {
+		removeFromWorkerSet(agentId, workerId, orderSN, OrderStatus.Cancelled);
 	}
 
 	@Override
-	public void completeOrder(long workerId, String orderSN) {
-		removeFromWorkerSet(workerId, orderSN, OrderStatus.Completed);
+	public void completeOrder(long agentId, long workerId, String orderSN) {
+		removeFromWorkerSet(agentId, workerId, orderSN, OrderStatus.Completed);
 	}
 
 	@Override
-	public Map<OrderStatus, Integer> getOrdersCount(long workerId) {
-		Map<OrderStatus, Integer> results = new HashMap<OrderStatus, Integer>();
+	public WorkerOrdersCount getOrdersCount(long agentId, long workerId) {
+		WorkerOrdersCount counts = new WorkerOrdersCount();
 		readLock.lock();
 		try {
-			Set<OrderInfo> orderInfos = getOrderInfos(workerId);
-			for (OrderInfo info : orderInfos) {
-				OrderStatus status = info.status;
-				if (!results.containsKey(status)) {
-					results.put(status, 1);
-				} else {
-					int count = results.get(status);
-					results.put(status, count + 1);
+			for (OrderInfo info : workerOrders) {
+				if (info.agentId != agentId) {
+					continue;
+				}
+				switch (info.getStatus()) {
+				case Submitted:
+				case Rejected:
+					counts.submitted++;
+					break;
+				case Acceptted:
+					if (info.workerId == workerId) {
+						counts.acceptted++;
+					}
+					break;
+				default:
+					break;
 				}
 			}
 		} finally {
 			readLock.unlock();
 		}
-		return results;
+		return counts;
 	}
 
-	private void removeFromWorkerSet(long workerId, String orderSN,
-			OrderStatus status) {
+	private void removeFromWorkerSet(long agentId, long workerId,
+			String orderSN, OrderStatus status) {
 		writeLock.lock();
 		try {
-			getOrderInfos(workerId).remove(new OrderInfo(orderSN));
-			Event event = buildEvent(workerId, status);
+			workerOrders.remove(new OrderInfo(orderSN));
+			Event event = buildEvent(agentId, workerId, status);
 			eventCenter.sendEvent(workerId, event);
 		} finally {
 			writeLock.unlock();
 		}
 	}
 
-	private void addToWorkerSet(long workerId, String orderSN,
+	private void addToWorkerSet(long agentId, long workerId, String orderSN,
 			OrderStatus status) {
 		writeLock.lock();
 		try {
-			OrderInfo orderInfo = new OrderInfo(orderSN, status);
-			Set<OrderInfo> orderInfos = getOrderInfos(workerId);
-			orderInfos.remove(orderInfo);
-			orderInfos.add(orderInfo);
+			OrderInfo orderInfo = new OrderInfo(agentId, workerId, orderSN,
+					status);
+			workerOrders.remove(orderInfo);
+			workerOrders.add(orderInfo);
 		} finally {
 			writeLock.unlock();
 		}
-		Event event = buildEvent(workerId, status);
+		Event event = buildEvent(agentId, workerId, status);
 		eventCenter.sendEvent(workerId, event);
 	}
 
-	private Event buildEvent(long workerId, OrderStatus status) {
+	private Event buildEvent(long agentId, long workerId, OrderStatus status) {
 		Event event = new Event();
 		event.setCode(getEventCode(status));
-		Map<OrderStatus, Integer> ordersCountMap = getOrdersCount(workerId);
-		event.put(EventFields.ACCEPTTED_COUNT,
-				ordersCountMap.get(OrderStatus.Acceptted));
-		event.put(EventFields.SUBMITTED_COUNT,
-				ordersCountMap.get(OrderStatus.Submitted));
+		WorkerOrdersCount ordersCount = getOrdersCount(agentId, workerId);
+		event.put(EventFields.ACCEPTTED_COUNT, ordersCount.acceptted);
+		event.put(EventFields.SUBMITTED_COUNT, ordersCount.submitted);
 		return event;
 	}
 
@@ -157,15 +159,6 @@ public class SimpleOrderCenter implements OrderCenter {
 		}
 	}
 
-	protected Set<OrderInfo> getOrderInfos(long workerId) {
-		Set<OrderInfo> set = workerOrdersMap.get(workerId);
-		if (set == null) {
-			set = new HashSet<OrderInfo>();
-			workerOrdersMap.put(workerId, set);
-		}
-		return set;
-	}
-
 	public void setHerodJdbcTemplate(HerodJdbcTemplate herodJdbcTemplate) {
 		this.herodJdbcTemplate = herodJdbcTemplate;
 	}
@@ -175,6 +168,7 @@ public class SimpleOrderCenter implements OrderCenter {
 	}
 
 	public static class OrderInfo {
+		private long agentId;
 		private long workerId;
 		private String sn;
 		private OrderStatus status;
@@ -188,8 +182,11 @@ public class SimpleOrderCenter implements OrderCenter {
 			this.sn = sn;
 		}
 
-		public OrderInfo(String sn, OrderStatus status) {
+		public OrderInfo(long agentId, long workerId, String sn,
+				OrderStatus status) {
 			super();
+			this.agentId = agentId;
+			this.workerId = workerId;
 			this.sn = sn;
 			this.status = status;
 		}
@@ -217,6 +214,14 @@ public class SimpleOrderCenter implements OrderCenter {
 			} else if (!sn.equals(other.sn))
 				return false;
 			return true;
+		}
+
+		public long getAgentId() {
+			return agentId;
+		}
+
+		public void setAgentId(long agentId) {
+			this.agentId = agentId;
 		}
 
 		public long getWorkerId() {

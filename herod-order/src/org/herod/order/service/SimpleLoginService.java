@@ -66,6 +66,16 @@ public class SimpleLoginService implements LoginService {
 	}
 
 	@Override
+	public long getWorkerAgentId(long workerId) {
+		for (WorkerLoginInfo loginInfo : this.loginInfoSet) {
+			if (loginInfo.workerId == workerId) {
+				return loginInfo.agentId;
+			}
+		}
+		return 0;
+	}
+
+	@Override
 	public long getWorkerId(String token, String imei) {
 		WorkerLoginInfo workerLoginInfo = getWorkerLoginInfo(token, imei);
 		return workerLoginInfo == null ? 0 : workerLoginInfo.workerId;

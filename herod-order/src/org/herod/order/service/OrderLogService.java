@@ -26,7 +26,7 @@ public interface OrderLogService {
 	 * @param operation
 	 * @param reason
 	 */
-	void agentWorkerlog(long workerId, String orderSerialNumber,
+	void agentWorkerlog(long agentId, long workerId, String orderSerialNumber,
 			Operation operation, String reason);
 
 	/**

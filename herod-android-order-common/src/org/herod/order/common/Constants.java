@@ -13,10 +13,8 @@ package org.herod.order.common;
 public interface Constants extends org.herod.framework.Constants {
 	String MIN_CHARGE_FOR_FREE_DELIVERY = "minChargeForFreeDelivery";
 
-	String COST_OF_RUN_ERRANDS = "costOfRunErrands";
-
 	String SHOP_NAME = "shopName";
-
+	String SHOP_PHONE = "shopPhone";
 	String SHOP_ID = "shopId";
 
 	String GOODS_TYPE_ID = "goodsTypeId";
@@ -37,4 +35,14 @@ public interface Constants extends org.herod.framework.Constants {
 	String TEL = "tel:";
 	String CODE = "code";
 	String MESSAGE = "message";
+
+	String MM_DD_HH_MM = "MM-dd HH:mm";
+	String TOTAL_AMOUNT_WITH_COST_OF_RUN_ERRANDS = "totalAmountWithCostOfRunErrands";
+	String TOTAL_QUANTITY = "totalQuantity";
+	String COST_OF_RUN_ERRANDS = "costOfRunErrands";
+	String SHOP_TIPS = "shopTips";
+	String SUBMIT_TIME = "submitTime";
+	String STATUS = "status";
+	String SERIAL_NUMBER = "serialNumber";
+	String COMMENT = "comment";
 }

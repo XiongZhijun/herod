@@ -3,7 +3,26 @@
  */
 package org.herod.buyer.phone.view;
 
+import static org.herod.buyer.phone.R.id.comment;
+import static org.herod.buyer.phone.R.id.costOfRunErrands;
+import static org.herod.buyer.phone.R.id.serialNumber;
+import static org.herod.buyer.phone.R.id.shopName;
+import static org.herod.buyer.phone.R.id.shopPhone;
+import static org.herod.buyer.phone.R.id.shopTips;
+import static org.herod.buyer.phone.R.id.status;
+import static org.herod.buyer.phone.R.id.submitTime;
+import static org.herod.buyer.phone.R.id.totalWithCostOfRunErrands;
+import static org.herod.order.common.Constants.COMMENT;
+import static org.herod.order.common.Constants.COST_OF_RUN_ERRANDS;
+import static org.herod.order.common.Constants.MM_DD_HH_MM;
+import static org.herod.order.common.Constants.SERIAL_NUMBER;
+import static org.herod.order.common.Constants.SHOP_NAME;
+import static org.herod.order.common.Constants.SHOP_PHONE;
+import static org.herod.order.common.Constants.SHOP_TIPS;
+import static org.herod.order.common.Constants.STATUS;
+import static org.herod.order.common.Constants.SUBMIT_TIME;
 import static org.herod.order.common.Constants.TEL;
+import static org.herod.order.common.Constants.TOTAL_AMOUNT_WITH_COST_OF_RUN_ERRANDS;
 
 import org.herod.buyer.phone.AbstractOrdersActivity;
 import org.herod.buyer.phone.R;
@@ -14,8 +33,8 @@ import org.herod.buyer.phone.view.OrderItemView.GoodsQuantityChangedListener;
 import org.herod.framework.ViewFindable;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
-import org.herod.framework.utils.DateUtils;
-import org.herod.framework.utils.ResourcesUtils;
+import org.herod.framework.form.FormHelper;
+import org.herod.framework.form.FormHelper.FormHelperBuilder;
 import org.herod.framework.utils.TextViewUtils;
 import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderItem;
@@ -28,7 +47,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 /**
  * 
@@ -39,30 +57,19 @@ import android.widget.TextView;
  */
 public class OrderView extends LinearLayout implements
 		GoodsQuantityChangedListener, ViewFindable {
-	/**  */
-	private static final String MM_DD_HH_MM = "MM-dd HH:mm";
-	@InjectView(R.id.shopName)
-	private TextView shopNameView;
-	@InjectView(R.id.shopPhone)
-	private TextView shopPhoneView;
-	@InjectView(R.id.shopTips)
-	private TextView shopTipsView;
+	private static final String[] FORM_FROM = new String[] { SHOP_NAME,
+			SHOP_PHONE, SHOP_TIPS, STATUS, SERIAL_NUMBER, SUBMIT_TIME, COMMENT,
+			COST_OF_RUN_ERRANDS, TOTAL_AMOUNT_WITH_COST_OF_RUN_ERRANDS };
+	private static final int[] FORM_TO = new int[] { shopName, shopPhone,
+			shopTips, status, serialNumber, submitTime, comment,
+			costOfRunErrands, totalWithCostOfRunErrands };
+	private static FormHelper formHelper = new FormHelperBuilder(FORM_FROM,
+			FORM_TO, Order.class).addDateSerializer(MM_DD_HH_MM).build();
+
 	@InjectView(R.id.orderItemsListView)
 	private LinearLayout orderItemsContainer;
-	@InjectView(R.id.costOfRunErrands)
-	private TextView costOfRunErrandsView;
-	@InjectView(R.id.totalWithCostOfRunErrands)
-	private TextView totalWithCostOfRunErrandsView;
-
-	@InjectView(R.id.serialNumber)
-	private TextView serialNumberView;
-	@InjectView(R.id.status)
-	private TextView statusView;
-	@InjectView(R.id.submitTime)
-	private TextView submitTimeView;
 
 	private Order order;
-	private OrderItemView summationView;
 	private AbstractOrdersActivity activity;
 
 	public OrderView(Context context, AttributeSet attrs, int defStyle) {
@@ -89,7 +96,7 @@ public class OrderView extends LinearLayout implements
 		new InjectViewHelper().injectViews(this);
 		findViewById(R.id.cancelOrderButton).setOnClickListener(
 				new CancelOrderListener());
-		shopPhoneView.setOnClickListener(new CallPhoneListener());
+		findViewById(shopPhone).setOnClickListener(new CallPhoneListener());
 	}
 
 	@Override
@@ -101,62 +108,32 @@ public class OrderView extends LinearLayout implements
 		this.order = order;
 		if (order.getStatus() == OrderStatus.Unsubmit) {
 			findViewById(R.id.cancelOrderButton).setVisibility(View.VISIBLE);
-			findViewById(R.id.historyInfo).setVisibility(View.GONE);
 		} else {
-			findViewById(R.id.historyInfo).setVisibility(View.VISIBLE);
 			findViewById(R.id.cancelOrderButton).setVisibility(View.INVISIBLE);
-			setText(statusView,
-					ResourcesUtils.getEnumShowName(order.getStatus()));
-			setText(serialNumberView, order.getSerialNumber());
-			setText(submitTimeView,
-					DateUtils.format(MM_DD_HH_MM, order.getSubmitTime()));
 		}
-		orderItemsContainer.removeAllViews();
-		setText(shopNameView, order.getShopName());
-		setText(shopPhoneView, order.getShopPhone());
-		setText(shopTipsView, createShopTips(order));
-		TextViewUtils.setText(this, R.id.status, order.getStatus());
-		summationView = new OrderItemView(getContext());
-		summationView.disableButtons();
-		summationView.setGoodsName("合计");
+		formHelper.setValues(order, this);
+
 		updateOrderSummationInfo();
+		orderItemsContainer.removeAllViews();
 
 		for (OrderItem item : order.getOrderItems()) {
 			addLineToOrderItemListView(orderItemsContainer);
-			OrderItemView child = new OrderItemView(getContext());
-			child.setOrderAndOrderItem(order, item);
-			child.setActivity(activity);
-			child.setGoodsQuantityChangedListener(this);
+			OrderItemView child = creasteOrderItemView(order, item);
 			LayoutParams param = new LayoutParams(LayoutParams.MATCH_PARENT,
 					LayoutParams.WRAP_CONTENT);
 			orderItemsContainer.addView(child, param);
 		}
-		addLineToOrderItemListView(orderItemsContainer);
-		LayoutParams param = new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.WRAP_CONTENT);
-		orderItemsContainer.addView(summationView, param);
 	}
 
-	private String createShopTips(Order order) {
-		StringBuilder sb = new StringBuilder();
-		double charge = order.getShopMinChargeForFreeDelivery();
-		if (charge > 0) {
-			sb.append("消费满").append(charge).append("免配送费");
-		} else {
-			sb.append("免配送费");
-		}
-		return sb.toString();
+	private OrderItemView creasteOrderItemView(Order order, OrderItem item) {
+		OrderItemView child = new OrderItemView(getContext());
+		child.setOrderAndOrderItem(order, item);
+		child.setActivity(activity);
+		child.setGoodsQuantityChangedListener(this);
+		return child;
 	}
 
 	private void updateOrderSummationInfo() {
-		if (summationView != null && order != null) {
-			summationView.setQuantity(order.getTotalQuantity());
-			summationView.setUnitPrice(order.getTotalAmount());
-			showOrderTotalInfo();
-		}
-	}
-
-	private void showOrderTotalInfo() {
 		double costOfRunErrands = order.getShopCostOfRunErrands();
 		double minChargeForFreeDelivery = order
 				.getShopMinChargeForFreeDelivery();
@@ -165,9 +142,10 @@ public class OrderView extends LinearLayout implements
 		} else {
 			order.setCostOfRunErrands(0);
 		}
-		setText(costOfRunErrandsView, order.getCostOfRunErrands());
-		totalWithCostOfRunErrandsView.setText(Double.toString(order
-				.getTotalAmountWithCostOfRunErrands()));
+		TextViewUtils.setText(this, R.id.costOfRunErrands,
+				order.getCostOfRunErrands());
+		TextViewUtils.setText(this, R.id.totalWithCostOfRunErrands,
+				order.getTotalAmountWithCostOfRunErrands());
 	}
 
 	private void addLineToOrderItemListView(LinearLayout orderItemsListView) {
@@ -175,12 +153,6 @@ public class OrderView extends LinearLayout implements
 		line.setBackgroundColor(0xFFE5E5E5);
 		orderItemsListView.addView(line, new LayoutParams(
 				LayoutParams.MATCH_PARENT, 1));
-	}
-
-	private void setText(View view, Object data) {
-		if (data != null) {
-			((TextView) view).setText(data.toString());
-		}
 	}
 
 	private class CancelOrderListener implements OnClickListener {

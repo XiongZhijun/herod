@@ -10,6 +10,7 @@ import org.herod.order.common.model.Order;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -24,7 +25,11 @@ public class ShoppingCartActivity extends AbstractOrdersActivity {
 		setTitle("购物车");
 
 		orderListView = (ListView) findViewById(R.id.ordersListView);
-
+		findViewById(R.id.emptyTips).setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				finish();
+			}
+		});
 		refreshOrders();
 	}
 

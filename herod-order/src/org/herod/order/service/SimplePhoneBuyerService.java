@@ -6,7 +6,6 @@ package org.herod.order.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,18 +18,13 @@ import org.herod.common.das.HerodColumnMapRowMapper;
 import org.herod.common.das.SqlUtils;
 import org.herod.order.model.Address;
 import org.herod.order.model.AgentWorker;
-import org.herod.order.model.Location;
 import org.herod.order.model.Order;
 import org.herod.order.model.OrderItem;
-import org.herod.order.model.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 /**
  * 
@@ -59,49 +53,19 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 	@Override
 	public Result submitOrders(String ordersJson, double latitude,
 			double longitude) {
-		List<Order> orders = new Gson().fromJson(ordersJson,
-				new TypeToken<List<Order>>() {
-				}.getType());
-		if (CollectionUtils.isEmpty(orders)) {
+		OrderList orderList = OrderList.convertToOrderList(ordersJson,
+				longitude, latitude);
+		if (orderList.isEmpty()) {
 			return new SimpleResult(ResultCode.NoOrderSubmitted);
 		}
-		Set<String> serialNumbers = getSerialNumbers(orders);
-		if (orderDas.isOrderExists(serialNumbers)) {
+		if (orderDas.isOrderExists(orderList.getSerialNumbers())) {
 			return new SimpleResult(ResultCode.SomeOrderIsExists);
 		}
-		List<OrderItem> orderItems = new ArrayList<OrderItem>();
-		Map<String, AgentWorker> deliveryWorkersMap = deliveryWorkerAllocationStrategy
-				.allocate(orders);
-		for (Order order : orders) {
-			Address deliveryAddress = order.getDeliveryAddress();
-			if (deliveryAddress == null) {
-				deliveryAddress = new Address();
-			}
-			deliveryAddress.setLocation(new Location(longitude, latitude));
-			order.setSubmitTime(new Date());
-			order.initOrderItemProperties();
-			order.setStatus(OrderStatus.Submitted);
-			AgentWorker agentWorker = deliveryWorkersMap.get(order
-					.getSerialNumber());
-			if (agentWorker != null) {
-				order.setWorkerId(agentWorker.getId());
-				order.setWorkerName(agentWorker.getName());
-				order.setWorkerPhone(agentWorker.getPhone());
-			}
-			orderItems.addAll(order.getOrderItems());
-		}
+		List<Order> orders = orderList.getOrders();
 		orderDas.addOrders(orders);
-		orderItemDas.addOrderItems(orderItems);
+		orderItemDas.addOrderItems(orderList.getOrderItems());
 		orderLogService.buyerSubmitLog(orders);
 		return Result.SUCCESS;
-	}
-
-	private Set<String> getSerialNumbers(List<Order> orders) {
-		Set<String> serialNumbers = new HashSet<String>();
-		for (Order order : orders) {
-			serialNumbers.add(order.getSerialNumber());
-		}
-		return serialNumbers;
 	}
 
 	@Override

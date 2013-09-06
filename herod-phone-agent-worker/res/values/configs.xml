@@ -4,12 +4,12 @@
     <!-- Bai Du -->
     <string name="BaiDuMapKey">F5451f7dee03f65b9d1f7f6812a69e12</string>
     <!-- Server -->
-    <string name="RestServerHost">121.199.54.83</string>
+    <string name="RestServerHost">172.19.33.88</string>
     <string name="RestServerPort">9191</string>
-    <string name="ImageServerHost">121.199.54.83</string>
+    <string name="ImageServerHost">172.19.33.88</string>
     <string name="ImageServerPort">9191</string>
     <!-- Event Server -->
-    <string name="TcpServerHost">121.199.54.83</string>
+    <string name="TcpServerHost">172.19.33.88</string>
     <string name="TcpServerPort">19991</string>
     <string name="TcpServerReconnectDelay">1000</string>
 

@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/dialing"
+        android:icon="@android:drawable/stat_sys_phone_call"
+        android:showAsAction="ifRoom"
+        android:title="拨打电话"/>
+
+</menu>

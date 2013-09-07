@@ -14,20 +14,11 @@
 
         <TextView
             android:id="@+id/shopName"
+            style="@style/ButtonStyle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/shopPhone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:background="@drawable/can_click_text_view_button"
-            android:drawableLeft="@android:drawable/stat_sys_phone_call"
-            android:gravity="bottom"
-            android:textColor="#888"
-            android:textSize="16sp" />
+            android:gravity="center_vertical"
+            android:paddingLeft="5dip"
+            android:paddingRight="5dip" />
 
         <View
             android:layout_width="0dip"
@@ -67,7 +58,6 @@
         android:background="#E5E5E5" />
 
     <LinearLayout
-        android:id="@+id/totalInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
@@ -93,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="（其中包含配送费：" />
+            android:text="（其中配送费：" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -112,6 +102,23 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="）" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="商品数量：" />
+
+        <TextView
+            android:id="@+id/totalQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#F00" />
     </LinearLayout>
 
     <TextView

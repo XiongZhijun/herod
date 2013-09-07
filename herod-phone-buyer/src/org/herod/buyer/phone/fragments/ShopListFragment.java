@@ -3,12 +3,12 @@
  */
 package org.herod.buyer.phone.fragments;
 
+import static org.herod.buyer.phone.Constants.CONTACT_NUMBER;
 import static org.herod.buyer.phone.Constants.IMAGE_URL;
 import static org.herod.buyer.phone.Constants.SHOP_TYPE_ID;
 import static org.herod.order.common.Constants.ID;
 import static org.herod.order.common.Constants.NAME;
-import static org.herod.order.common.Constants.SHOP_ID;
-import static org.herod.order.common.Constants.SHOP_NAME;
+import static org.herod.order.common.Constants.TIMESTAMP;
 
 import java.util.List;
 
@@ -20,11 +20,9 @@ import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.RepeatedlyTask;
 import org.herod.framework.ViewFindable;
-import org.herod.order.common.Constants;
 import org.herod.order.common.ImageLoaderAdapter;
 import org.herod.order.common.RefreshButtonHelper;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,13 +96,11 @@ public class ShopListFragment extends BaseFragment implements ViewFindable,
 	@Override
 	public void onItemClick(AdapterView<?> adapterView, View arg1,
 			int position, long arg3) {
-		Intent intent = new Intent(getActivity(), GoodsListActivity.class);
 		MapWrapper<String, Object> item = (MapWrapper<String, Object>) adapterView
 				.getItemAtPosition(position);
-		intent.putExtra(SHOP_ID, item.getLong(ID));
-		intent.putExtra(SHOP_NAME, item.getString(NAME));
-		intent.putExtra(Constants.TIMESTAMP, item.getLong(Constants.TIMESTAMP));
-		startActivity(intent);
+		GoodsListActivity.start(getActivity(), item.getLong(ID),
+				item.getString(NAME), item.getString(CONTACT_NUMBER),
+				item.getLong(TIMESTAMP), false);
 	}
 
 }

@@ -3,18 +3,25 @@
  */
 package org.herod.buyer.phone;
 
+import static org.herod.order.common.Constants.SHOP_ID;
+import static org.herod.order.common.Constants.SHOP_NAME;
+import static org.herod.order.common.Constants.SHOP_PHONE;
+import static org.herod.order.common.Constants.TEL;
+import static org.herod.order.common.Constants.TIMESTAMP;
+
 import java.util.List;
 
 import org.herod.framework.MapWrapper;
 import org.herod.order.common.AbstractGoodsListActivity;
-import org.herod.order.common.Constants;
 import org.herod.order.common.AbstractGoodsListFragment.QuantityChangedListener;
 import org.herod.order.common.AbstractGoodsTypeGoodsListFragment;
+import org.herod.order.common.Constants;
 
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +38,8 @@ import android.widget.TextView;
  */
 public class GoodsListActivity extends AbstractGoodsListActivity implements
 		QuantityChangedListener {
+	/**  */
+	private static final String FROM_SHOPPING_CART = "fromShoppingCart";
 	private Menu menu;
 	protected SearchView searchview;
 
@@ -77,6 +86,12 @@ public class GoodsListActivity extends AbstractGoodsListActivity implements
 			return true;
 		case R.id.shoppingCart:
 			showShoppingCart(item);
+			return true;
+		case R.id.dialing:
+			String phone = getIntent().getStringExtra(SHOP_PHONE);
+			Uri uri = Uri.parse(TEL + phone);
+			Intent it = new Intent(Intent.ACTION_DIAL, uri);
+			startActivity(it);
 			return true;
 		default:
 			return false;
@@ -127,7 +142,13 @@ public class GoodsListActivity extends AbstractGoodsListActivity implements
 	}
 
 	protected int getMenuConfigResource() {
-		return R.menu.home;
+		boolean isFromShoppingCart = getIntent().getBooleanExtra(
+				FROM_SHOPPING_CART, false);
+		if (isFromShoppingCart) {
+			return R.menu.shop_goods_activity_menu;
+		} else {
+			return R.menu.home;
+		}
 	}
 
 	public void updateTotalQuantity() {
@@ -173,6 +194,18 @@ public class GoodsListActivity extends AbstractGoodsListActivity implements
 		return true;
 	}
 
+	public static void start(Context context, long shopId, String shopName,
+			String shopPhone, long shopTimestamp, boolean fromShoppingCart) {
+		Intent intent = new Intent(context, GoodsListActivity.class);
+		intent.putExtra(SHOP_ID, shopId);
+		intent.putExtra(SHOP_NAME, shopName);
+		intent.putExtra(SHOP_PHONE, shopPhone);
+		intent.putExtra(TIMESTAMP, shopTimestamp);
+		intent.putExtra(FROM_SHOPPING_CART, fromShoppingCart);
+
+		context.startActivity(intent);
+	}
+
 	public static class GoodsListFragment extends
 			AbstractGoodsTypeGoodsListFragment {
 		@Override
@@ -187,4 +220,5 @@ public class GoodsListActivity extends AbstractGoodsListActivity implements
 			return ShoppingCartCache.getInstance();
 		}
 	}
+
 }

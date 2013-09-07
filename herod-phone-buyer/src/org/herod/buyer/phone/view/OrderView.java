@@ -7,29 +7,32 @@ import static org.herod.buyer.phone.R.id.comment;
 import static org.herod.buyer.phone.R.id.costOfRunErrands;
 import static org.herod.buyer.phone.R.id.serialNumber;
 import static org.herod.buyer.phone.R.id.shopName;
-import static org.herod.buyer.phone.R.id.shopPhone;
 import static org.herod.buyer.phone.R.id.shopTips;
 import static org.herod.buyer.phone.R.id.status;
 import static org.herod.buyer.phone.R.id.submitTime;
+import static org.herod.buyer.phone.R.id.totalQuantity;
 import static org.herod.buyer.phone.R.id.totalWithCostOfRunErrands;
 import static org.herod.order.common.Constants.COMMENT;
 import static org.herod.order.common.Constants.COST_OF_RUN_ERRANDS;
 import static org.herod.order.common.Constants.MM_DD_HH_MM;
 import static org.herod.order.common.Constants.SERIAL_NUMBER;
 import static org.herod.order.common.Constants.SHOP_NAME;
-import static org.herod.order.common.Constants.SHOP_PHONE;
 import static org.herod.order.common.Constants.SHOP_TIPS;
 import static org.herod.order.common.Constants.STATUS;
 import static org.herod.order.common.Constants.SUBMIT_TIME;
-import static org.herod.order.common.Constants.TEL;
+import static org.herod.order.common.Constants.TIMESTAMP;
 import static org.herod.order.common.Constants.TOTAL_AMOUNT_WITH_COST_OF_RUN_ERRANDS;
+import static org.herod.order.common.Constants.TOTAL_QUANTITY;
 
 import org.herod.buyer.phone.AbstractOrdersActivity;
+import org.herod.buyer.phone.BuyerContext;
+import org.herod.buyer.phone.GoodsListActivity;
 import org.herod.buyer.phone.R;
 import org.herod.buyer.phone.ShoppingCartCache;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
 import org.herod.buyer.phone.view.OrderItemView.GoodsQuantityChangedListener;
+import org.herod.framework.MapWrapper;
 import org.herod.framework.ViewFindable;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
@@ -41,9 +44,6 @@ import org.herod.order.common.model.OrderItem;
 import org.herod.order.common.model.OrderStatus;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -58,11 +58,12 @@ import android.widget.LinearLayout;
 public class OrderView extends LinearLayout implements
 		GoodsQuantityChangedListener, ViewFindable {
 	private static final String[] FORM_FROM = new String[] { SHOP_NAME,
-			SHOP_PHONE, SHOP_TIPS, STATUS, SERIAL_NUMBER, SUBMIT_TIME, COMMENT,
-			COST_OF_RUN_ERRANDS, TOTAL_AMOUNT_WITH_COST_OF_RUN_ERRANDS };
-	private static final int[] FORM_TO = new int[] { shopName, shopPhone,
-			shopTips, status, serialNumber, submitTime, comment,
-			costOfRunErrands, totalWithCostOfRunErrands };
+			SHOP_TIPS, STATUS, SERIAL_NUMBER, SUBMIT_TIME, COMMENT,
+			COST_OF_RUN_ERRANDS, TOTAL_AMOUNT_WITH_COST_OF_RUN_ERRANDS,
+			TOTAL_QUANTITY };
+	private static final int[] FORM_TO = new int[] { shopName, shopTips,
+			status, serialNumber, submitTime, comment, costOfRunErrands,
+			totalWithCostOfRunErrands, totalQuantity };
 	private static FormHelper formHelper = new FormHelperBuilder(FORM_FROM,
 			FORM_TO, Order.class).addDateSerializer(MM_DD_HH_MM).build();
 
@@ -71,16 +72,6 @@ public class OrderView extends LinearLayout implements
 
 	private Order order;
 	private AbstractOrdersActivity activity;
-
-	public OrderView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-		initView(context);
-	}
-
-	public OrderView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		initView(context);
-	}
 
 	public OrderView(Context context) {
 		super(context);
@@ -96,7 +87,15 @@ public class OrderView extends LinearLayout implements
 		new InjectViewHelper().injectViews(this);
 		findViewById(R.id.cancelOrderButton).setOnClickListener(
 				new CancelOrderListener());
-		findViewById(shopPhone).setOnClickListener(new CallPhoneListener());
+		findViewById(R.id.shopName).setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				long shopId = order.getShopId();
+				MapWrapper<String, Object> shop = BuyerContext.getShopService()
+						.findShopById(shopId);
+				GoodsListActivity.start(activity, shopId, order.getShopName(),
+						order.getShopPhone(), shop.getLong(TIMESTAMP), true);
+			}
+		});
 	}
 
 	@Override
@@ -146,6 +145,8 @@ public class OrderView extends LinearLayout implements
 				order.getCostOfRunErrands());
 		TextViewUtils.setText(this, R.id.totalWithCostOfRunErrands,
 				order.getTotalAmountWithCostOfRunErrands());
+		TextViewUtils.setText(this, R.id.totalQuantity,
+				order.getTotalQuantity());
 	}
 
 	private void addLineToOrderItemListView(LinearLayout orderItemsListView) {
@@ -172,16 +173,6 @@ public class OrderView extends LinearLayout implements
 				activity.refreshOrders();
 			}
 		}
-	}
-
-	private class CallPhoneListener implements OnClickListener {
-		public void onClick(View v) {
-			String phone = order.getShopPhone();
-			Uri uri = Uri.parse(TEL + phone);
-			Intent it = new Intent(Intent.ACTION_DIAL, uri);
-			activity.startActivity(it);
-		}
-
 	}
 
 }

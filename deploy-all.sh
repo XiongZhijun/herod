@@ -14,7 +14,7 @@ PRGDIR=`dirname "$PRG"`
 base_dir=$PRGDIR
 echo ${base_dir}
 
-projects=(herod-common herod-communication-common herod-communication-server herod-event herod-order herod-order-web)
+projects=(herod-common herod-communication-common herod-communication-server herod-event herod-order herod-order-web herod-mobile)
 ci=herod-order-ci
 for project in ${projects[*]}
 do

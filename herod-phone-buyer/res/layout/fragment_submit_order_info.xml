@@ -10,7 +10,7 @@
 
     <TextView
         style="@style/TextViewStyle1"
-        android:text="提交订单"
+        android:text="@string/text_submit_order"
         android:textSize="20sp" />
 
     <View style="@style/LineStyle" />
@@ -23,7 +23,7 @@
         <TextView
             style="@style/TextViewStyle2"
             android:gravity="right"
-            android:text="选购商品数量："
+            android:text="@string/label_goodses_total_quantity"
             android:textSize="14sp"
             android:textStyle="normal" />
 
@@ -36,13 +36,13 @@
             style="@style/TextViewStyle2"
             android:layout_marginLeft="15dip"
             android:gravity="right"
-            android:text="应付总额："
+            android:text="@string/label_total_amount"
             android:textSize="14sp"
             android:textStyle="normal" />
 
         <TextView
             style="@style/TextViewStyle2"
-            android:text="￥"
+            android:text="@string/text_rmb"
             android:textColor="#F00" />
 
         <TextView
@@ -65,7 +65,7 @@
 
             <TextView
                 style="@style/TextViewStyle2"
-                android:text="送货地址：" />
+                android:text="@string/label_delivery_address" />
 
             <EditText
                 android:id="@+id/buyerAddress"
@@ -74,11 +74,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dip"
                 android:ems="10"
-                android:hint="例如：某某小区3栋2单元" />
+                android:hint="@string/hint_buyer_address" />
 
             <TextView
                 style="@style/TextViewStyle2"
-                android:text="联系电话：" />
+                android:text="@string/label_contact_number" />
 
             <EditText
                 android:id="@+id/buyerPhone"
@@ -87,13 +87,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dip"
                 android:ems="10"
-                android:hint="请输入手机号码"
+                android:hint="@string/hint_phone"
                 android:inputType="phone"
                 android:singleLine="true" />
 
             <TextView
                 style="@style/TextViewStyle2"
-                android:text="联系人姓名：" />
+                android:text="@string/label_linkman" />
 
             <EditText
                 android:id="@+id/buyerName"
@@ -102,12 +102,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dip"
                 android:ems="10"
-                android:hint="例如：张三、郑先生、王小姐"
+                android:hint="@string/hint_linkman"
                 android:singleLine="true" />
 
             <TextView
                 style="@style/TextViewStyle2"
-                android:text="订单备注：" />
+                android:text="@string/label_order_comment" />
 
             <EditText
                 android:id="@+id/comment"
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dip"
                 android:ems="10"
-                android:hint="例如：加糖、重辣" />
+                android:hint="@string/hint_order_comment" />
         </LinearLayout>
     </ScrollView>
 
@@ -132,13 +132,13 @@
             android:id="@+id/submitOrdersButton"
             style="@style/ButtonStyle"
             android:layout_marginRight="10dip"
-            android:text="提交订单" />
+            android:text="@string/text_submit_order" />
 
         <Button
             android:id="@+id/cancelButton"
             style="@style/ButtonStyle"
             android:layout_marginLeft="10dip"
-            android:text="返回" />
+            android:text="@string/text_return_back" />
     </LinearLayout>
 
 </LinearLayout>

@@ -9,8 +9,7 @@
         android:id="@+id/image"
         android:layout_width="fill_parent"
         android:layout_height="200dip"
-        android:contentDescription="@null"
-        android:src="@drawable/test_image_take_out" />
+        android:contentDescription="@null" />
 
     <TextView
         android:id="@+id/name"
@@ -18,7 +17,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dip"
         android:gravity="center"
-        android:text="外卖"
         android:textSize="25sp" />
 
 </LinearLayout>

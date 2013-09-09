@@ -8,7 +8,7 @@
 
     <TextView
         style="@style/TextViewStyle1"
-        android:text="提醒" />
+        android:text="@string/text_alert" />
 
     <View
         style="@style/LineStyle"
@@ -32,13 +32,13 @@
             android:id="@+id/okButton"
             style="@style/ButtonStyle"
             android:layout_marginRight="10dip"
-            android:text="确定" />
+            android:text="@string/text_ok" />
 
         <Button
             android:id="@+id/cancelButton"
             style="@style/ButtonStyle"
             android:layout_marginLeft="10dip"
-            android:text="取消" />
+            android:text="@string/text_cancel" />
     </LinearLayout>
 
 </LinearLayout>

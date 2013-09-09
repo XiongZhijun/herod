@@ -21,6 +21,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dip"
         android:onClick="clearHistoryOrders"
-        android:text="清空历史记录" />
+        android:text="@string/text_clear_history_records" />
 
 </LinearLayout>

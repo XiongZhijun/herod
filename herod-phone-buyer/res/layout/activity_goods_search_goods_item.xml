@@ -13,8 +13,7 @@
         android:layout_height="80dip"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:contentDescription="@null"
-        android:src="@drawable/test_goods" />
+        android:contentDescription="@null" />
 
     <TextView
         android:id="@+id/quantity"
@@ -25,7 +24,6 @@
         android:layout_gravity="center"
         android:background="@drawable/quantity_background"
         android:gravity="center"
-        android:text="2"
         android:textColor="#F00" />
 
     <LinearLayout
@@ -60,7 +58,6 @@
         android:layout_toLeftOf="@+id/reduceButton"
         android:layout_toRightOf="@+id/image"
         android:singleLine="true"
-        android:text="农夫山泉"
         android:textSize="16sp" />
 
     <TextView
@@ -74,7 +71,6 @@
         android:layout_toLeftOf="@+id/reduceButton"
         android:layout_toRightOf="@+id/image"
         android:singleLine="true"
-        android:text="世纪联华"
         android:textColor="#666"
         android:textSize="12sp" />
 
@@ -92,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
-            android:text="￥"
+            android:text="@string/text_rmb"
             android:textColor="#F00"
             android:textSize="14sp" />
 
@@ -101,7 +97,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
-            android:text="20.0"
             android:textColor="#F00"
             android:textSize="14sp" />
 
@@ -109,7 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
-            android:text="/"
+            android:text="@string/text_forward_slash"
             android:textColor="#F00"
             android:textSize="14sp" />
 
@@ -118,7 +113,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
-            android:text="瓶"
             android:textColor="#F00"
             android:textSize="14sp" />
     </LinearLayout>

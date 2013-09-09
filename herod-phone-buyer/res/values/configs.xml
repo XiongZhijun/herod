@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="RestServerHost">192.168.100.102</string>
+    <string name="RestServerHost">172.19.33.88</string>
     <string name="RestServerPort">9191</string>
-    <string name="ImageServerHost">192.168.100.102</string>
+    <string name="ImageServerHost">172.19.33.88</string>
     <string name="ImageServerPort">9191</string>
 
 </resources>

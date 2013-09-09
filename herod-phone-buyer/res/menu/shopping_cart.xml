@@ -5,6 +5,6 @@
         android:icon="@drawable/history_orders"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
-        android:title="历史订单"/>
+        android:title="@string/menu_history_orders"/>
 
 </menu>

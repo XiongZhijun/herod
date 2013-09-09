@@ -10,5 +10,41 @@
     <string name="OrderStatus_Completed">已完成</string>
     <string name="OrderStatus_Rejected">已拒绝</string>
     <string name="OrderStatus_Cancelled">已取消</string>
+    <!-- layout -->
+    <string name="text_submit">下单</string>
+    <string name="text_clear_shopping_cart">清空购物车</string>
+    <string name="label_click_to_go_on">点击继续逛逛</string>
+    <string name="label_empty_shopping_cart_alert">您的购物车暂时没有商品</string>
+    <string name="text_rmb">￥</string>
+    <string name="text_forward_slash">/</string>
+    <string name="text_clear_history_records">清空历史记录</string>
+    <string name="text_alert">提醒</string>
+    <string name="text_ok">确定</string>
+    <string name="text_cancel">取消</string>
+    <string name="text_submit_order">提交订单</string>
+    <string name="label_goodses_total_quantity">选购商品数量：</string>
+    <string name="label_total_amount">消费总计：</string>
+    <string name="label_delivery_address">送货地址：</string>
+    <string name="hint_buyer_address">例如：某某小区3栋2单元</string>
+    <string name="label_contact_number">联系电话：</string>
+    <string name="hint_phone">请输入手机号码</string>
+    <string name="label_linkman">联系人姓名：</string>
+    <string name="hint_linkman">例如：张三、郑先生、王小姐</string>
+    <string name="label_order_comment">订单备注：</string>
+    <string name="hint_order_comment">例如：加糖、重辣</string>
+    <string name="text_return_back">返回</string>
+    <string name="text_goods">商品</string>
+    <string name="text_price">单价</string>
+    <string name="text_quantity">数量</string>
+    <string name="label_shopping_cart_order_1">（其中配送费：</string>
+    <string name="label_shopping_cart_order_2">）</string>
+    <string name="label_goods_quantity">商品数量：</string>
+    <string name="text_order_sn">订单号：</string>
+    <string name="label_order_status">订单状态：</string>
+    <string name="label_submit_time">提交时间：</string>
+    <string name="menu_goods_search">商品搜索</string>
+    <string name="menu_history_orders">历史订单</string>
+    <string name="menu_shopping_cart">购物车</string>
+    <string name="menu_dialing">拨打电话</string>
 
 </resources>

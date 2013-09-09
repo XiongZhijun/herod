@@ -65,12 +65,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="消费总计：" />
+            android:text="@string/label_total_amount" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="￥"
+            android:text="@string/text_rmb"
             android:textColor="#F00" />
 
         <TextView
@@ -83,12 +83,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="（其中配送费：" />
+            android:text="@string/label_shopping_cart_order_1" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="￥"
+            android:text="@string/text_rmb"
             android:textColor="#F00" />
 
         <TextView
@@ -101,7 +101,7 @@
             android:layout_width="20dip"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="）" />
+            android:text="@string/label_shopping_cart_order_2" />
     </LinearLayout>
 
     <LinearLayout
@@ -112,7 +112,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="商品数量：" />
+            android:text="@string/label_goods_quantity" />
 
         <TextView
             android:id="@+id/totalQuantity"
@@ -148,7 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text="订单号："
+                android:text="@string/text_order_sn"
                 android:textColor="#888"
                 android:textSize="14sp" />
 
@@ -169,7 +169,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text="订单状态："
+                android:text="@string/label_order_status"
                 android:textColor="#888"
                 android:textSize="14sp" />
 
@@ -190,7 +190,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text="提交时间："
+                android:text="@string/label_submit_time"
                 android:textColor="#888"
                 android:textSize="14sp" />
 
@@ -210,7 +210,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text="订单备注："
+                android:text="@string/label_order_comment"
                 android:textColor="#888"
                 android:textSize="14sp" />
 

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <issue id="SimpleDateFormat" severity="ignore" />
+    <issue id="UseCompoundDrawables">
+        <ignore path="res/layout/fragment_shop_list_shop_item.xml" />
+    </issue>
 </lint>

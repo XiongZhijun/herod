@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:herod="http://schemas.android.com/apk/res/org.herod.buyer.phone"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    style="@style/ActivityTheme" >
 
     <org.herod.framework.widget.TitlePageIndicator
         android:id="@+id/indicator"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dip"
-        android:textColor="#000"
-        herod:selectedColor="#000" />
+        style="@style/TitlePageIndicatorStyle" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
@@ -19,19 +12,13 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/indicator" />
 
-    <LinearLayout
+    <ImageView
         android:id="@+id/refreshButton"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#F0F0F0"
-        android:gravity="center" >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/base_empty_view_bg"
-            android:contentDescription="@null"
-            android:src="@drawable/base_empty_view" />
-    </LinearLayout>
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/base_empty_view_bg"
+        android:contentDescription="@null"
+        android:scaleType="center"
+        android:src="@drawable/base_empty_view" />
 
 </RelativeLayout>

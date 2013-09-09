@@ -6,10 +6,15 @@
         <item name="android:windowActionBar">true</item>
         <item name="android:actionBarStyle">@style/ActionBarStyle</item>
         <item name="android:actionButtonStyle">@style/ActionButtonStyle</item>
+        <item name="android:buttonStyle">@style/ButtonStyle</item>
+        <item name="android:borderlessButtonStyle">@style/ButtonStyle</item>
     </style>
 
     <style name="ActivityTheme">
         <item name="android:background">#E5E5E5</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
     </style>
 
 </resources>

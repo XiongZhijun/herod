@@ -21,7 +21,7 @@
         android:orientation="horizontal" >
 
         <TextView
-            style="@style/TextViewStyle2"
+            style="@style/FormLabelStyle"
             android:gravity="right"
             android:text="@string/label_goodses_total_quantity"
             android:textSize="14sp"
@@ -29,11 +29,11 @@
 
         <TextView
             android:id="@+id/totalQuantity"
-            style="@style/TextViewStyle2"
+            style="@style/FormLabelStyle"
             android:textColor="#F00" />
 
         <TextView
-            style="@style/TextViewStyle2"
+            style="@style/FormLabelStyle"
             android:layout_marginLeft="15dip"
             android:gravity="right"
             android:text="@string/label_total_amount"
@@ -41,13 +41,13 @@
             android:textStyle="normal" />
 
         <TextView
-            style="@style/TextViewStyle2"
+            style="@style/FormLabelStyle"
             android:text="@string/text_rmb"
             android:textColor="#F00" />
 
         <TextView
             android:id="@+id/totalAmount"
-            style="@style/TextViewStyle2"
+            style="@style/FormLabelStyle"
             android:textColor="#F00" />
     </LinearLayout>
 
@@ -64,58 +64,42 @@
             android:orientation="vertical" >
 
             <TextView
-                style="@style/TextViewStyle2"
+                style="@style/FormLabelStyle"
                 android:text="@string/label_delivery_address" />
 
             <EditText
                 android:id="@+id/buyerAddress"
-                style="@style/TextViewStyle2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dip"
-                android:ems="10"
+                style="@style/FormEditTextStyle"
                 android:hint="@string/hint_buyer_address" />
 
             <TextView
-                style="@style/TextViewStyle2"
+                style="@style/FormLabelStyle"
                 android:text="@string/label_contact_number" />
 
             <EditText
                 android:id="@+id/buyerPhone"
-                style="@style/TextViewStyle2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dip"
-                android:ems="10"
+                style="@style/FormEditTextStyle"
                 android:hint="@string/hint_phone"
                 android:inputType="phone"
                 android:singleLine="true" />
 
             <TextView
-                style="@style/TextViewStyle2"
+                style="@style/FormLabelStyle"
                 android:text="@string/label_linkman" />
 
             <EditText
                 android:id="@+id/buyerName"
-                style="@style/TextViewStyle2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dip"
-                android:ems="10"
+                style="@style/FormEditTextStyle"
                 android:hint="@string/hint_linkman"
                 android:singleLine="true" />
 
             <TextView
-                style="@style/TextViewStyle2"
+                style="@style/FormLabelStyle"
                 android:text="@string/label_order_comment" />
 
             <EditText
                 android:id="@+id/comment"
-                style="@style/TextViewStyle2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dip"
-                android:ems="10"
+                style="@style/FormEditTextStyle"
                 android:hint="@string/hint_order_comment" />
         </LinearLayout>
     </ScrollView>

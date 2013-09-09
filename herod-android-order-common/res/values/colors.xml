@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="base_empty_view_bg">#F0F0F0</color>
     <color name="base_empty_view_bg_pressed">#99ff99</color>
 
 </resources>

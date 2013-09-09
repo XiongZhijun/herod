@@ -14,19 +14,13 @@
         android:dividerHeight="10dip" >
     </org.herod.framework.widget.XListView>
 
-    <LinearLayout
+   <ImageView
         android:id="@+id/refreshButton"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#F0F0F0"
-        android:gravity="center" >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/base_empty_view_bg"
-            android:contentDescription="@null"
-            android:src="@drawable/base_empty_view" />
-    </LinearLayout>
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/base_empty_view_bg"
+        android:contentDescription="@null"
+        android:scaleType="center"
+        android:src="@drawable/base_empty_view" />
 
 </RelativeLayout>

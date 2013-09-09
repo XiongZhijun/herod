@@ -12,11 +12,11 @@
         android:gravity="bottom"
         android:orientation="horizontal" >
 
-        <TextView
+        <Button
             android:id="@+id/shopName"
             style="@style/ButtonStyle"
             android:layout_width="wrap_content"
-            android:gravity="center_vertical"
+            android:layout_height="32dip"
             android:paddingLeft="5dip"
             android:paddingRight="5dip" />
 
@@ -27,11 +27,11 @@
 
         <ImageButton
             android:id="@+id/cancelOrderButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
+            android:layout_width="32dip"
+            android:layout_height="32dip"
+            android:background="@drawable/actionbar_btn"
             android:contentDescription="@null"
-            android:src="@drawable/delete_order" />
+            android:src="@drawable/icon_delete" />
     </LinearLayout>
 
     <View

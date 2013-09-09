@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/dialing"
+        android:icon="@drawable/icon_voip"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_dialing"/>
+    <item
+        android:id="@+id/search"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@android:drawable/ic_menu_search"
+        android:showAsAction="always"
+        android:title="@string/menu_goods_search"/>
+    <item
+        android:id="@+id/historyOrders"
+        android:icon="@drawable/history_orders"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_history_orders"/>
+    <item
+        android:id="@+id/shoppingCart"
+        android:actionProviderClass="org.herod.buyer.phone.view.ShoppingCartActionBarActionProvider"
+        android:showAsAction="always"
+        android:title="@string/menu_shopping_cart"/>
+
+</menu>

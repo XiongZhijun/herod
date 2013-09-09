@@ -145,9 +145,9 @@ public class GoodsListActivity extends AbstractGoodsListActivity implements
 		boolean isFromShoppingCart = getIntent().getBooleanExtra(
 				FROM_SHOPPING_CART, false);
 		if (isFromShoppingCart) {
-			return R.menu.shop_goods_activity_menu;
+			return R.menu.shop_goods_activity_menu1;
 		} else {
-			return R.menu.home;
+			return R.menu.shop_goods_activity_menu2;
 		}
 	}
 

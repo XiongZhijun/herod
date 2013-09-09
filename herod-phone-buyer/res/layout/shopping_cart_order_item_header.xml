@@ -5,7 +5,7 @@
     android:layout_marginBottom="5dip"
     android:layout_marginLeft="10dip"
     android:layout_marginRight="10dip"
-    android:background="#FFF"
+    android:background="@color/white"
     android:gravity="center_vertical"
     android:orientation="horizontal" >
 

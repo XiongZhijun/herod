@@ -11,6 +11,7 @@
     </style>
 
     <style name="ActivityTheme">
+        <item name="android:padding">10dip</item>
         <item name="android:background">#E5E5E5</item>
         <item name="android:orientation">vertical</item>
         <item name="android:layout_width">fill_parent</item>

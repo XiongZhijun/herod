@@ -14,7 +14,7 @@
         android:layout_marginBottom="15dip"
         android:drawableLeft="@android:drawable/stat_sys_phone_call"
         android:drawablePadding="5dip"
-        android:textColor="#000" />
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/location"
@@ -23,6 +23,6 @@
         android:layout_height="32dip"
         android:drawableLeft="@drawable/location"
         android:drawablePadding="5dip"
-        android:textColor="#000" />
+        android:textColor="@color/black" />
 
 </LinearLayout>

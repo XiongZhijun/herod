@@ -4,12 +4,12 @@
     android:layout_height="wrap_content"
     android:minWidth="400dip"
     android:orientation="vertical"
-    android:padding="20dip" >
+    android:padding="10dip" >
 
     <TextView
         android:id="@+id/title"
         style="@style/TextViewStyle1"
-        android:text="完成订单" />
+        android:text="修改订单" />
 
     <View
         style="@style/LineStyle"
@@ -26,13 +26,11 @@
 
     <TextView
         style="@style/FormLabelStyle"
-        android:layout_marginTop="5dip"
         android:text="更改原因：" />
 
     <EditText
         android:id="@+id/reason"
         style="@style/FormEditTextStyle"
-        android:layout_width="match_parent"
         android:hint="请输入订单变更原因！" />
 
     <LinearLayout

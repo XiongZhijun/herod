@@ -17,7 +17,6 @@
     <style name="TitlePageIndicatorStyle">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">10dip</item>
         <item name="android:textColor">@color/black</item>
         <item name="selectedColor">@color/black</item>
     </style>

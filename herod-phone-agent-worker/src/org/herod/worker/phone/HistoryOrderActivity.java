@@ -19,7 +19,6 @@ import android.os.Handler.Callback;
 import android.os.Message;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 
 /**
  * 
@@ -27,14 +26,13 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
  * @email hust.xzj@gmail.com
  */
 public class HistoryOrderActivity extends BaseActivity implements Callback,
-		OnPageChangeListener, Handlerable {
+		Handlerable {
 	public static final int MESSAGE_KEY_REFRESH_ORDER_LIST = 1;
 	private List<OrderListFragment> orderListFragments;
 	private HerodHandler handler;
 	private ViewPager orderListFragmentPager;
 	private FragmentPagerAdapter orderListFragmentAdapter;
 	private TabPageIndicator indicator;
-	private int currentFragmentIndex = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +46,6 @@ public class HistoryOrderActivity extends BaseActivity implements Callback,
 				getSupportFragmentManager(), orderListFragments);
 		orderListFragmentPager.setAdapter(orderListFragmentAdapter);
 		indicator.setViewPager(orderListFragmentPager);
-		indicator.setOnPageChangeListener(this);
 		setTitle("历史订单");
 	}
 
@@ -81,33 +78,7 @@ public class HistoryOrderActivity extends BaseActivity implements Callback,
 
 	@Override
 	public boolean handleMessage(Message msg) {
-		switch (msg.what) {
-		case MESSAGE_KEY_REFRESH_ORDER_LIST:
-			refreshCurrentFragment();
-			return true;
-		default:
-			return false;
-		}
-	}
-
-	private void refreshCurrentFragment() {
-		OrderListFragment currentFragment = (OrderListFragment) orderListFragmentAdapter
-				.getItem(currentFragmentIndex);
-		currentFragment.refreshOrderList();
-	}
-
-	@Override
-	public void onPageSelected(int index) {
-		this.currentFragmentIndex = index;
-		refreshCurrentFragment();
-	}
-
-	@Override
-	public void onPageScrollStateChanged(int arg0) {
-	}
-
-	@Override
-	public void onPageScrolled(int arg0, float arg1, int arg2) {
+		return false;
 	}
 
 }

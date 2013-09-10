@@ -38,15 +38,17 @@ public class OrderViewButtonsTools {
 				view.enableEditButtons();
 			}
 		} else {
-			if (order.getStatus() == OrderStatus.Submitted) {
-				showButtons.add(R.id.acceptOrderButton);
-			} else if (order.getStatus() == OrderStatus.Acceptted) {
-				showButtons.add(R.id.completeOrderButton);
-			}
-			showButtons.add(R.id.editOrderButton);
-			showButtons.add(R.id.cancelOrderButton);
 			for (OrderItemView view : orderItemViews) {
 				view.disableEditButtons();
+			}
+			if (order.getStatus() == OrderStatus.Submitted) {
+				showButtons.add(R.id.acceptOrderButton);
+				showButtons.add(R.id.editOrderButton);
+				showButtons.add(R.id.cancelOrderButton);
+			} else if (order.getStatus() == OrderStatus.Acceptted) {
+				showButtons.add(R.id.completeOrderButton);
+				showButtons.add(R.id.editOrderButton);
+				showButtons.add(R.id.cancelOrderButton);
 			}
 		}
 		for (int buttonId : ALL_BUTTONS) {

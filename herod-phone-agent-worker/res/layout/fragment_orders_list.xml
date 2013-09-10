@@ -9,12 +9,11 @@
         android:id="@+id/ordersListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dip"
         android:divider="#E5E5E5"
         android:dividerHeight="10dip" >
     </org.herod.framework.widget.XListView>
 
-   <ImageView
+    <ImageView
         android:id="@+id/refreshButton"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

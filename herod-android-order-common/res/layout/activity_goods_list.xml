@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:herod="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#E5E5E5"
-    android:orientation="vertical" >
+    style="@style/ActivityTheme" >
 
     <org.herod.framework.widget.TabPageIndicator
         android:id="@+id/indicator"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
-        android:textColor="#000"
-        herod:selectedColor="#000" />
+        style="@style/TitlePageIndicatorStyle" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"

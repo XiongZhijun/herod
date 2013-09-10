@@ -17,7 +17,7 @@
 
     <EditText
         android:id="@+id/reason"
-        style="@style/TextViewStyle2"
+        style="@style/FormEditTextStyle"
         android:hint="请输入取消订单原因！" />
 
     <LinearLayout

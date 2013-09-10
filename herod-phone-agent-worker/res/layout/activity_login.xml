@@ -6,33 +6,22 @@
     android:padding="10dip" >
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_PhoneNumber"
-        android:textColor="#000000"
-        android:textSize="18sp" />
+        style="@style/FormLabelStyle"
+        android:text="@string/label_PhoneNumber" />
 
     <EditText
         android:id="@+id/userName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
+        style="@style/FormEditTextStyle"
         android:hint="@string/hint_PleaseInputPhoneNumber"
         android:inputType="phone" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/label_Password"
-        android:textColor="#000000"
-        android:textSize="18sp" />
+        style="@style/FormLabelStyle"
+        android:text="@string/label_Password" />
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
+        style="@style/FormEditTextStyle"
         android:hint="@string/hint_PleaseInputPassword"
         android:imeOptions="actionGo"
         android:inputType="textPassword" />
@@ -40,22 +29,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dip"
+        android:layout_marginTop="5dip"
         android:gravity="center"
         android:orientation="horizontal" >
 
         <Button
             android:id="@+id/loginButton"
             style="@style/ButtonStyle"
-            android:layout_width="140dip"
-            android:layout_height="wrap_content"
             android:text="@string/text_Login" />
 
         <Button
             android:id="@+id/cancelButton"
             style="@style/ButtonStyle"
-            android:layout_width="140dip"
-            android:layout_height="wrap_content"
             android:layout_marginLeft="10dip"
             android:text="@string/text_Cancel" />
     </LinearLayout>

@@ -16,22 +16,22 @@
         android:background="#E5E5E5" />
 
     <TextView
-        style="@style/TextViewStyle2"
+        style="@style/FormLabelStyle"
         android:text="订单备注：" />
 
     <EditText
         android:id="@+id/comment"
-        style="@style/TextViewStyle2"
+        style="@style/FormEditTextStyle"
         android:layout_width="match_parent" />
 
     <TextView
-        style="@style/TextViewStyle2"
+        style="@style/FormLabelStyle"
         android:layout_marginTop="5dip"
         android:text="更改原因：" />
 
     <EditText
         android:id="@+id/reason"
-        style="@style/TextViewStyle2"
+        style="@style/FormEditTextStyle"
         android:layout_width="match_parent"
         android:hint="请输入订单变更原因！" />
 

@@ -1,24 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:herod="http://schemas.android.com/apk/res/org.herod.worker.phone"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#E5E5E5"
-    android:orientation="vertical" >
+    style="@style/ActivityTheme" >
 
     <org.herod.worker.phone.view.OrderTabPageIndicator
         android:id="@+id/indicator"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
-        android:textColor="#000"
-        herod:selectedColor="#000" />
+        style="@style/TitlePageIndicatorStyle" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip" />
 
 </LinearLayout>

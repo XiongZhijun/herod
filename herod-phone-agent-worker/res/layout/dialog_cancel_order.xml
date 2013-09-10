@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/title"
         style="@style/TextViewStyle1"
-        android:text="完成订单" />
+        android:text="@string/label_cancel_order" />
 
     <View
         style="@style/LineStyle"
@@ -18,7 +18,7 @@
     <EditText
         android:id="@+id/reason"
         style="@style/FormEditTextStyle"
-        android:hint="请输入取消订单原因！" />
+        android:hint="@string/hint_canel_order_reason" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/title"
         style="@style/TextViewStyle1"
-        android:text="修改订单" />
+        android:text="@string/label_update_order" />
 
     <View
         style="@style/LineStyle"
@@ -17,7 +17,7 @@
 
     <TextView
         style="@style/FormLabelStyle"
-        android:text="订单备注：" />
+        android:text="@string/label_order_comment" />
 
     <EditText
         android:id="@+id/comment"
@@ -26,12 +26,12 @@
 
     <TextView
         style="@style/FormLabelStyle"
-        android:text="更改原因：" />
+        android:text="@string/label_update_reason" />
 
     <EditText
         android:id="@+id/reason"
         style="@style/FormEditTextStyle"
-        android:hint="请输入订单变更原因！" />
+        android:hint="@string/hint_update_reason" />
 
     <LinearLayout
         android:layout_width="match_parent"

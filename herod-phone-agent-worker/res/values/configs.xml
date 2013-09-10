@@ -11,6 +11,6 @@
     <!-- Event Server -->
     <string name="TcpServerHost">172.19.33.88</string>
     <string name="TcpServerPort">19991</string>
-    <string name="TcpServerReconnectDelay">1000</string>
+    <string name="TcpServerReconnectDelay">15000</string>
 
 </resources>

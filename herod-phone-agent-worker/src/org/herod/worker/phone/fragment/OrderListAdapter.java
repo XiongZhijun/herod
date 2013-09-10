@@ -9,6 +9,7 @@ import java.util.List;
 import org.herod.order.common.model.Order;
 import org.herod.worker.phone.handler.HerodHandler;
 import org.herod.worker.phone.view.OrderView;
+import org.springframework.util.CollectionUtils;
 
 import android.content.Context;
 import android.os.Handler;
@@ -49,6 +50,14 @@ public class OrderListAdapter extends BaseAdapter {
 	@Override
 	public long getItemId(int position) {
 		return position;
+	}
+
+	public void addOrders(List<Order> orders) {
+		if (CollectionUtils.isEmpty(orders)) {
+			return;
+		}
+		this.orders.addAll(orders);
+		notifyDataSetChanged();
 	}
 
 	@Override

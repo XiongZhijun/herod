@@ -39,5 +39,7 @@
     <string name="map_activity_label_1">：</string>
     <string name="map_activity_label_2">分钟/</string>
     <string name="map_activity_label_3">米</string>
+    <string name="menu_history_orders">历史订单</string>
+    <string name="menu_logout">注销</string>
 
 </resources>

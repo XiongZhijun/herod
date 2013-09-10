@@ -24,9 +24,9 @@ public interface WorkerService {
 
 	List<Order> findWaitCompleteOrders();
 
-	List<Order> findCompletedOrders();
+	List<Order> findCompletedOrders(int begin, int count);
 
-	List<Order> findCanceledOrders();
+	List<Order> findCanceledOrders(int begin, int count);
 
 	/**
 	 * 受理订单

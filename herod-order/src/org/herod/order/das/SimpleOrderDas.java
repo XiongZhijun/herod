@@ -4,7 +4,6 @@
 package org.herod.order.das;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -123,28 +122,23 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 	@Override
 	public List<Order> findWaitAcceptOrders(long workerId, long workerAgentId) {
 		return queryOrders(
-				" WHERE O.AGENT_ID = ? AND (O.STATUS = ? OR O.STATUS = ?)",
+				" WHERE O.AGENT_ID = ? AND (O.STATUS = ? OR O.STATUS = ?) ORDER BY SUBMIT_TIME ",
 				workerAgentId, OrderStatus.Submitted, OrderStatus.Rejected);
 	}
 
 	@Override
-	public List<Order> findOrdersByWorkerAndStatus(long workerId,
-			OrderStatus status) {
-		return queryOrders(" WHERE DELIVERY_WORKER_ID = ? AND STATUS = ?",
+	public List<Order> findWaitCompleteOrders(long workerId) {
+		return queryOrders(
+				" WHERE DELIVERY_WORKER_ID = ? AND STATUS = ? ORDER BY SUBMIT_TIME DESC",
 				workerId, OrderStatus.Acceptted);
-
 	}
 
 	@Override
-	public List<Order> findOrdersByWorkerAndStatusWithOneDay(long workerId,
-			OrderStatus status) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
-		calendar.add(Calendar.DAY_OF_MONTH, -1);
-		Date now = calendar.getTime();
+	public List<Order> findHistoryOrdersByWorkerAndStatus(long workerId,
+			OrderStatus status, int begin, int count) {
 		return queryOrders(
-				" WHERE SUBMIT_TIME > ? AND DELIVERY_WORKER_ID = ? AND STATUS = ?",
-				now, workerId, OrderStatus.Acceptted);
+				" WHERE DELIVERY_WORKER_ID = ? AND STATUS = ? ORDER BY COMPLETE_TIME DESC LIMIT ?, ?",
+				workerId, status, begin, count);
 	}
 
 	protected List<Order> queryOrders(String whereConditionSql, Object... args) {

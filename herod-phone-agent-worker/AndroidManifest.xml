@@ -59,6 +59,11 @@
             android:theme="@style/Theme.PageIndicatorDefaults" >
         </activity>
         <activity
+            android:name="org.herod.worker.phone.HistoryOrderActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.PageIndicatorDefaults" >
+        </activity>
+        <activity
             android:name="org.herod.worker.phone.MapActivity"
             android:launchMode="singleTop" >
         </activity>

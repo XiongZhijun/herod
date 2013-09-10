@@ -63,17 +63,21 @@ public class RestWorkerService extends RestServiceSupport implements
 	}
 
 	@Override
-	public List<Order> findCompletedOrders() {
-		return getOrders("/herod/agentworker/orders/completed");
+	public List<Order> findCompletedOrders(int begin, int count) {
+		return getOrders(
+				"/herod/agentworker/orders/completed?begin={begin}&count={count}",
+				begin, count);
 	}
 
 	@Override
-	public List<Order> findCanceledOrders() {
-		return getOrders("/herod/agentworker/orders/canceled");
+	public List<Order> findCanceledOrders(int begin, int count) {
+		return getOrders(
+				"/herod/agentworker/orders/canceled?begin={begin}&count={count}",
+				begin, count);
 	}
 
-	private List<Order> getOrders(String url) {
-		String json = getForObject(url, String.class);
+	private List<Order> getOrders(String url, Object... args) {
+		String json = getForObject(url, String.class, args);
 		return toOrderList(json);
 	}
 

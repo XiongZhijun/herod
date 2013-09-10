@@ -45,4 +45,5 @@ public interface Constants extends org.herod.framework.Constants {
 	String STATUS = "status";
 	String SERIAL_NUMBER = "serialNumber";
 	String COMMENT = "comment";
+	String HH_MM_SS = "HH:mm:ss";
 }

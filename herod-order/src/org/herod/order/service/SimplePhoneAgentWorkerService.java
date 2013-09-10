@@ -53,22 +53,23 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 	@Override
 	public List<Order> findWaitCompleteOrders(String token, String imei) {
 		long workerId = loginService.getWorkerId(token, imei);
-		return orderQueryService.findOrdersByWorkerAndStatus(workerId,
-				OrderStatus.Acceptted);
+		return orderQueryService.findWaitCompleteOrders(workerId);
 	}
 
 	@Override
-	public List<Order> findCompletedOrders(String token, String imei) {
+	public List<Order> findCompletedOrders(String token, String imei,
+			int begin, int count) {
 		long workerId = loginService.getWorkerId(token, imei);
-		return orderQueryService.findOrdersByWorkerAndStatusWithOneDay(
-				workerId, OrderStatus.Completed);
+		return orderQueryService.findHistoryOrdersByWorkerAndStatus(workerId,
+				OrderStatus.Completed, begin, count);
 	}
 
 	@Override
-	public List<Order> findCanceledOrders(String token, String imei) {
+	public List<Order> findCanceledOrders(String token, String imei, int begin,
+			int count) {
 		long workerId = loginService.getWorkerId(token, imei);
-		return orderQueryService.findOrdersByWorkerAndStatusWithOneDay(
-				workerId, OrderStatus.Cancelled);
+		return orderQueryService.findHistoryOrdersByWorkerAndStatus(workerId,
+				OrderStatus.Cancelled, begin, count);
 	}
 
 	@Override
@@ -138,8 +139,8 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 			return new SimpleResult(
 					ResultCode.CurrentStatusCanNotDoSuchOperate, serialNumber);
 		}
-		orderStatusUpdateService.updateOrderStatus(serialNumber,
-				OrderStatus.Cancelled);
+		orderStatusUpdateService.updateOrderStatusAndCompleteTime(serialNumber,
+				OrderStatus.Cancelled, new Date());
 		long workerId = loginService.getWorkerId(token, imei);
 		long agentId = loginService.getWorkerAgentId(token, imei);
 		orderLogService.agentWorkerlog(agentId, workerId, serialNumber,
@@ -196,11 +197,10 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 	public static interface OrderQueryService {
 		List<Order> findWaitAcceptOrders(long workerId, long workerAgentId);
 
-		List<Order> findOrdersByWorkerAndStatus(long workerId,
-				OrderStatus status);
+		List<Order> findWaitCompleteOrders(long workerId);
 
-		List<Order> findOrdersByWorkerAndStatusWithOneDay(long workerId,
-				OrderStatus status);
+		List<Order> findHistoryOrdersByWorkerAndStatus(long workerId,
+				OrderStatus status, int begin, int count);
 
 	}
 

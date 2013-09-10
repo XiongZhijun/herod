@@ -62,13 +62,15 @@ public interface PhoneAgentWorkerService {
 	@Path("orders/completed")
 	@Produces(DEFAULT_MEDIA_TYPE)
 	List<Order> findCompletedOrders(@QueryParam("token") String token,
-			@QueryParam("imei") String imei);
+			@QueryParam("imei") String imei, @QueryParam("begin") int begin,
+			@QueryParam("count") int count);
 
 	@GET
 	@Path("orders/canceled")
 	@Produces(DEFAULT_MEDIA_TYPE)
 	List<Order> findCanceledOrders(@QueryParam("token") String token,
-			@QueryParam("imei") String imei);
+			@QueryParam("imei") String imei, @QueryParam("begin") int begin,
+			@QueryParam("count") int count);
 
 	/**
 	 * 受理订单

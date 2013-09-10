@@ -9,9 +9,8 @@ import static org.herod.event.EventCodes.SUBMIT_COMMAND;
 import static org.herod.event.EventCodes.UPDATE_COMMAND;
 import static org.herod.event.EventFields.ACCEPTTED_COUNT;
 import static org.herod.event.EventFields.SUBMITTED_COUNT;
-import static org.herod.worker.phone.Constants.INDEX;
-import static org.herod.worker.phone.Constants.TITLE;
-import static org.herod.worker.phone.Constants.TYPE;
+import static org.herod.worker.phone.fragment.OrderListFragment.createWaitAcceptOrderListFragment;
+import static org.herod.worker.phone.fragment.OrderListFragment.createWaitCompleteOrderListFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +18,6 @@ import java.util.List;
 
 import org.herod.android.communication.TcpClientService.LocalBinder;
 import org.herod.event.Event;
-import org.herod.framework.BundleBuilder;
 import org.herod.framework.lbs.LocationManager;
 import org.herod.framework.lbs.SimpleLocationPlan;
 import org.herod.framework.lbs.SimpleLocationPlan.OnLocationSuccessListener;
@@ -27,7 +25,6 @@ import org.herod.order.common.BaseActivity;
 import org.herod.worker.phone.event.EventActionUtils;
 import org.herod.worker.phone.event.EventClientService;
 import org.herod.worker.phone.fragment.OrderListFragment;
-import org.herod.worker.phone.fragment.OrderListFragment.FragmentType;
 import org.herod.worker.phone.handler.HerodHandler;
 import org.herod.worker.phone.view.OrderTabPageIndicator;
 
@@ -41,8 +38,6 @@ import android.os.Bundle;
 import android.os.Handler.Callback;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -53,7 +48,8 @@ import com.baidu.location.BDLocation;
 import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
 
 public class MainActivity extends BaseActivity implements Callback,
-		OnLocationSuccessListener, OnPageChangeListener {
+		OnLocationSuccessListener, OnPageChangeListener, Handlerable,
+		TabPageIndicatorable {
 	public static final int MESSAGE_KEY_REFRESH_ORDER_LIST = 1;
 	private List<OrderListFragment> orderListFragments;
 	private HerodHandler handler;
@@ -97,7 +93,7 @@ public class MainActivity extends BaseActivity implements Callback,
 		orderListFragmentPager = (ViewPager) findViewById(R.id.pager);
 		orderListFragments = createOrderListFragments();
 		orderListFragmentAdapter = new OrderGroupAdapter(
-				getSupportFragmentManager());
+				getSupportFragmentManager(), orderListFragments);
 		orderListFragmentPager.setAdapter(orderListFragmentAdapter);
 		indicator.setViewPager(orderListFragmentPager);
 		indicator.setOnPageChangeListener(this);
@@ -122,18 +118,9 @@ public class MainActivity extends BaseActivity implements Callback,
 
 	protected List<OrderListFragment> createOrderListFragments() {
 		List<OrderListFragment> fragments = new ArrayList<OrderListFragment>();
-		fragments.add(createFragment("待受理订单", FragmentType.WaitAccept, 0));
-		fragments.add(createFragment("待完成订单", FragmentType.WaitComplete, 1));
+		fragments.add(createWaitAcceptOrderListFragment(0));
+		fragments.add(createWaitCompleteOrderListFragment(1));
 		return fragments;
-	}
-
-	private OrderListFragment createFragment(String title, FragmentType type,
-			int index) {
-		OrderListFragment fragment = new OrderListFragment();
-		Bundle args = new BundleBuilder().putString(TITLE, title)
-				.putSerializable(TYPE, type).putInt(INDEX, index).build();
-		fragment.setArguments(args);
-		return fragment;
 	}
 
 	@Override
@@ -159,6 +146,8 @@ public class MainActivity extends BaseActivity implements Callback,
 			startActivity(new Intent(this, LoginActivity.class));
 			finish();
 			return true;
+		} else if (item.getItemId() == R.id.historyOrders) {
+			startActivity(new Intent(this, HistoryOrderActivity.class));
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -178,27 +167,6 @@ public class MainActivity extends BaseActivity implements Callback,
 
 	public HerodHandler getHandler() {
 		return handler;
-	}
-
-	class OrderGroupAdapter extends FragmentPagerAdapter {
-		public OrderGroupAdapter(FragmentManager fm) {
-			super(fm);
-		}
-
-		@Override
-		public Fragment getItem(int position) {
-			return orderListFragments.get(position);
-		}
-
-		@Override
-		public CharSequence getPageTitle(int position) {
-			return orderListFragments.get(position).getTitle();
-		}
-
-		@Override
-		public int getCount() {
-			return orderListFragments.size();
-		}
 	}
 
 	@Override
@@ -229,6 +197,20 @@ public class MainActivity extends BaseActivity implements Callback,
 		currentFragment.refreshOrderList();
 	}
 
+	@Override
+	public void onPageSelected(int index) {
+		this.currentFragmentIndex = index;
+		refreshCurrentFragment();
+	}
+
+	@Override
+	public void onPageScrollStateChanged(int arg0) {
+	}
+
+	@Override
+	public void onPageScrolled(int arg0, float arg1, int arg2) {
+	}
+
 	class EventReceiver extends BroadcastReceiver {
 
 		@Override
@@ -250,20 +232,6 @@ public class MainActivity extends BaseActivity implements Callback,
 					|| currentFragmentIndex == 1
 					&& WAIT_COMPLETE_TYPE_MUST_REFRESH_COMMANDS.contains(code);
 		}
-	}
-
-	@Override
-	public void onPageScrollStateChanged(int arg0) {
-	}
-
-	@Override
-	public void onPageScrolled(int arg0, float arg1, int arg2) {
-	}
-
-	@Override
-	public void onPageSelected(int index) {
-		this.currentFragmentIndex = index;
-		refreshCurrentFragment();
 	}
 
 	private static final List<String> WAIT_ACCEPT_TYPE_MUST_REFRESH_COMMANDS = Arrays

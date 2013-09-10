@@ -1,9 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
+        android:id="@+id/historyOrders"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/menu_history_orders"/>
+    <item
         android:id="@+id/logout"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="注销"/>
+        android:title="@string/menu_logout"/>
 
 </menu>

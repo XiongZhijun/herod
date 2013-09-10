@@ -12,7 +12,7 @@
 
     <View
         style="@style/LineStyle"
-        android:background="#E5E5E5" />
+        android:background="@color/ActivityBackground" />
 
     <TextView
         android:id="@+id/message"

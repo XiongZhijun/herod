@@ -8,17 +8,13 @@
         android:id="@+id/goodsListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#E5E5E5"
+        android:divider="@color/ActivityBackground"
         android:dividerHeight="10dip" >
     </org.herod.framework.widget.XListView>
 
     <ImageView
         android:id="@+id/refreshButton"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@drawable/base_empty_view_bg"
-        android:contentDescription="@null"
-        android:scaleType="center"
-        android:src="@drawable/base_empty_view" />
+        style="@style/RefreshButtonStyle"
+        android:contentDescription="@null" />
 
 </RelativeLayout>

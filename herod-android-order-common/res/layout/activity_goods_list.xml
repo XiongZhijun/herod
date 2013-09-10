@@ -15,11 +15,7 @@
 
     <ImageView
         android:id="@+id/refreshButton"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@drawable/base_empty_view_bg"
-        android:contentDescription="@null"
-        android:scaleType="center"
-        android:src="@drawable/base_empty_view" />
+        style="@style/RefreshButtonStyle"
+        android:contentDescription="@null" />
 
 </RelativeLayout>

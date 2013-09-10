@@ -89,7 +89,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dip"
         android:layout_marginBottom="5dip"
-        android:background="#E5E5E5" />
+        android:background="@color/ActivityBackground" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -130,7 +130,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dip"
         android:layout_marginBottom="5dip"
-        android:background="#E5E5E5" />
+        android:background="@color/ActivityBackground" />
 
     <include layout="@layout/order_item_header" />
 
@@ -147,7 +147,7 @@
         android:layout_height="1dip"
         android:layout_marginBottom="5dip"
         android:layout_marginTop="5dip"
-        android:background="#E5E5E5" />
+        android:background="@color/ActivityBackground" />
 
     <LinearLayout
         android:id="@+id/totalInfo"
@@ -203,7 +203,7 @@
         android:layout_height="1dip"
         android:layout_marginBottom="5dip"
         android:layout_marginTop="5dip"
-        android:background="#E5E5E5" />
+        android:background="@color/ActivityBackground" />
 
     <TableLayout
         android:layout_width="match_parent"

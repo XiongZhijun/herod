@@ -27,7 +27,7 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">0dip</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:divider">#E5E5E5</item>
+        <item name="android:divider">@color/ActivityBackground</item>
         <item name="android:dividerHeight">10dip</item>
         <item name="android:layout_marginBottom">10dip</item>
     </style>
@@ -70,6 +70,14 @@
         <item name="android:background">#F3F3F3</item>
         <item name="android:layout_marginTop">10dip</item>
         <item name="android:layout_marginBottom">10dip</item>
+    </style>
+    
+    <style name="RefreshButtonStyle">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">@drawable/base_empty_view_bg</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:src">@drawable/base_empty_view</item>
     </style>
 
 </resources>

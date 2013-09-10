@@ -1,5 +1,7 @@
 package org.herod.worker.phone;
 
+import org.herod.framework.HerodTask;
+import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
 import org.herod.framework.utils.DeviceUtils;
@@ -11,7 +13,6 @@ import org.herod.worker.phone.model.Token;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -77,7 +78,8 @@ public class LoginActivity extends Activity implements OnEditorActionListener,
 		if (invalid) {
 			return;
 		}
-		new LoginAsyncTask(userName, password).execute();
+		new HerodTask<Object, Token>(new LoginAsyncTask(userName, password))
+				.execute();
 	}
 
 	private void reset() {
@@ -89,7 +91,7 @@ public class LoginActivity extends Activity implements OnEditorActionListener,
 		finish();
 	}
 
-	class LoginAsyncTask extends AsyncTask<Object, Object, Token> {
+	class LoginAsyncTask implements AsyncTaskable<Object, Token> {
 		String userName;
 		String password;
 
@@ -99,8 +101,7 @@ public class LoginActivity extends Activity implements OnEditorActionListener,
 			this.password = password;
 		}
 
-		@Override
-		protected void onPostExecute(Token token) {
+		public void onPostExecute(Token token) {
 			Context context = LoginActivity.this;
 			if (token == null || StringUtils.isBlank(token.getTokenString())) {
 				ToastUtils.showToast("登录失败，手机号或者密码错误！", Toast.LENGTH_LONG);
@@ -114,10 +115,8 @@ public class LoginActivity extends Activity implements OnEditorActionListener,
 		}
 
 		@Override
-		protected Token doInBackground(Object... params) {
+		public Token runOnBackground(Object... params) {
 			return WorkerContext.getWorkerService().login(userName, password);
 		}
-
 	}
-
 }

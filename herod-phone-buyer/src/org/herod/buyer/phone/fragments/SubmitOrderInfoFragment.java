@@ -146,7 +146,8 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 			if (progressDialog != null && progressDialog.isShowing()) {
 				progressDialog.dismiss();
 			}
-			progressDialog = ProgressDialog.show(getActivity(), "订单", "提交订单……");
+			progressDialog = ProgressDialog
+					.show(getActivity(), "订单", "提交订单中……");
 		}
 
 		protected Result doInBackground(Object... params) {
@@ -163,7 +164,11 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 				order.setSerialNumber(SerialNumberUtils.buildOrderSerialNumber(
 						transactionSN, order.getShopId()));
 			}
-			return BuyerContext.getBuyerService().submitOrders(orders);
+			try {
+				return BuyerContext.getBuyerService().submitOrders(orders);
+			} catch (Exception e) {
+				return null;
+			}
 		}
 
 		protected String getTransactionSerialNumber() {

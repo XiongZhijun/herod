@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/ActivityTheme"
-    android:orientation="vertical" >
+    style="@style/ActivityTheme" >
 
     <ListView
         android:id="@+id/ordersListView"
@@ -36,8 +35,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingBottom="10dip" >
+        android:gravity="center" >
 
         <Button
             android:id="@+id/submitButton"

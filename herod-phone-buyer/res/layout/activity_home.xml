@@ -6,13 +6,12 @@
         android:id="@+id/shopTypesGrid"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_margin="10dip"
-        android:horizontalSpacing="13dip"
+        android:horizontalSpacing="10dip"
         android:numColumns="2"
-        android:verticalSpacing="13dip" >
+        android:verticalSpacing="10dip" >
     </GridView>
 
-   <ImageView
+    <ImageView
         android:id="@+id/refreshButton"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

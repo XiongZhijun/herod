@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:minWidth="400dip"
     android:orientation="vertical"
-    android:padding="20dip" >
+    android:padding="10dip" >
 
     <TextView
         style="@style/TextViewStyle1"

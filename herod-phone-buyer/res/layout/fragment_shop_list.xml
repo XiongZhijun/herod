@@ -8,13 +8,13 @@
         android:id="@+id/shopsGridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dip"
-        android:horizontalSpacing="13dip"
+        android:layout_marginTop="10dip"
+        android:horizontalSpacing="10dip"
         android:numColumns="2"
-        android:verticalSpacing="13dip" >
+        android:verticalSpacing="10dip" >
     </GridView>
 
-   <ImageView
+    <ImageView
         android:id="@+id/refreshButton"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

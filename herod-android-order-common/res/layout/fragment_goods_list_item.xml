@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="100dip"
-    android:background="#FFF"
+    android:background="@color/white"
     android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal"
     android:paddingLeft="5dip" >
@@ -25,7 +25,7 @@
         android:background="@drawable/quantity_background"
         android:gravity="center"
         android:text="2"
-        android:textColor="#FFF" />
+        android:textColor="@color/white" />
 
     <LinearLayout
         android:id="@+id/addButton"
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
             android:text="￥"
-            android:textColor="#F00"
+            android:textColor="@color/red"
             android:textSize="20sp" />
 
         <TextView
@@ -84,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
-            android:textColor="#F00"
+            android:textColor="@color/red"
             android:textSize="20sp" />
 
         <TextView
@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
             android:text="/"
-            android:textColor="#F00"
+            android:textColor="@color/red"
             android:textSize="20sp" />
 
         <TextView
@@ -100,7 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
-            android:textColor="#F00"
+            android:textColor="@color/red"
             android:textSize="20sp" />
     </LinearLayout>
 

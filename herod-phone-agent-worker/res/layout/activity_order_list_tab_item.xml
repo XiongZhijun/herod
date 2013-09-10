@@ -20,7 +20,7 @@
         android:background="@drawable/quantity_background"
         android:focusable="false"
         android:gravity="center"
-        android:textColor="#FFF"
+        android:textColor="@color/white"
         android:textSize="12sp"
         android:textStyle="bold" />
 

@@ -30,7 +30,7 @@
         <TextView
             android:id="@+id/totalQuantity"
             style="@style/FormLabelStyle"
-            android:textColor="#F00" />
+            android:textColor="@color/red" />
 
         <TextView
             style="@style/FormLabelStyle"
@@ -43,12 +43,12 @@
         <TextView
             style="@style/FormLabelStyle"
             android:text="@string/text_rmb"
-            android:textColor="#F00" />
+            android:textColor="@color/red" />
 
         <TextView
             android:id="@+id/totalAmount"
             style="@style/FormLabelStyle"
-            android:textColor="#F00" />
+            android:textColor="@color/red" />
     </LinearLayout>
 
     <View style="@style/LineStyle" />

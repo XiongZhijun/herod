@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="#F00" />
+            android:textColor="@color/red" />
 
         <ImageView
             android:id="@+id/reduceButton"
@@ -63,7 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dip"
         android:layout_centerVertical="true"
-        android:background="#F00"
+        android:background="@color/red"
         android:visibility="invisible" />
 
 </RelativeLayout>

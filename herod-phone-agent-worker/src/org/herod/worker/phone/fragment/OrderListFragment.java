@@ -78,9 +78,7 @@ public class OrderListFragment extends BaseFragment implements ViewFindable,
 	}
 
 	public void refreshOrderList() {
-		Log.d("TEST", "refreshOrderList");
 		if (loadOrdersTask != null) {
-			Log.d("TEST", "refreshOrderList done");
 			loadOrdersTask.execute(getActivity());
 		}
 	}

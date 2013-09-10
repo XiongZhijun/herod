@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.herod.framework.lbs.Location;
 import org.herod.framework.lbs.LocationManager;
-import org.herod.order.common.model.Address;
+import org.herod.worker.phone.model.MapAddress;
 import org.springframework.util.CollectionUtils;
 
 import android.content.Context;
@@ -35,8 +35,8 @@ public class MKSearchHelper {
 	}
 
 	public void doSearchFromCurrentLocation(Context context,
-			MKSearchListener listener, Address endAddress,
-			List<Address> wpAddresses) {
+			MKSearchListener listener, MapAddress endAddress,
+			List<MapAddress> wpAddresses) {
 		Location currentLocation = LocationManager.getInstance(context)
 				.getLatestLocation();
 		MKSearch mMKSearch = new MKSearch();
@@ -49,12 +49,12 @@ public class MKSearchHelper {
 		mMKSearch.drivingSearch(null, start, null, end, wpNodes);
 	}
 
-	private List<MKWpNode> createWpNodes(List<Address> wpAddresses) {
+	private List<MKWpNode> createWpNodes(List<MapAddress> wpAddresses) {
 		if (CollectionUtils.isEmpty(wpAddresses)) {
 			return Collections.emptyList();
 		}
 		List<MKWpNode> nodes = new ArrayList<MKWpNode>();
-		for (Address address : wpAddresses) {
+		for (MapAddress address : wpAddresses) {
 			MKWpNode node = LocationUtils.createMKWpNode(address);
 			nodes.add(node);
 		}

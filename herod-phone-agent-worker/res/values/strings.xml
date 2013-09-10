@@ -36,5 +36,8 @@
     <string name="label_order_comment">订单备注：</string>
     <string name="label_update_reason">更改原因：</string>
     <string name="hint_update_reason">请输入订单变更原因！</string>
+    <string name="map_activity_label_1">：</string>
+    <string name="map_activity_label_2">分钟/</string>
+    <string name="map_activity_label_3">米</string>
 
 </resources>

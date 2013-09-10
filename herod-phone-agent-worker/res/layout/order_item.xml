@@ -29,11 +29,8 @@
 
         <ImageView
             android:id="@+id/reduceButton"
-            style="@style/OrderButtonStyle"
-            android:layout_width="42dip"
-            android:layout_height="42dip"
+            style="@style/OrderItemButtonStyle"
             android:contentDescription="@null"
-            android:scaleType="center"
             android:src="@drawable/reduce"
             android:visibility="invisible" />
 
@@ -46,11 +43,8 @@
 
         <ImageView
             android:id="@+id/addButton"
-            style="@style/OrderButtonStyle"
-            android:layout_width="42dip"
-            android:layout_height="42dip"
+            style="@style/OrderItemButtonStyle"
             android:contentDescription="@null"
-            android:scaleType="center"
             android:src="@drawable/add"
             android:visibility="invisible" />
     </LinearLayout>

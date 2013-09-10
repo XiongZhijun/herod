@@ -15,45 +15,31 @@
         <ImageButton
             android:id="@+id/acceptOrderButton"
             style="@style/OrderButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dip"
             android:contentDescription="@null"
             android:src="@drawable/accept" />
 
         <ImageButton
             android:id="@+id/completeOrderButton"
             style="@style/OrderButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dip"
             android:contentDescription="@null"
-            android:src="@drawable/accept"
+            android:src="@drawable/ic_pay_ok"
             android:visibility="gone" />
 
         <ImageButton
             android:id="@+id/editOrderButton"
             style="@style/OrderButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dip"
             android:contentDescription="@null"
             android:src="@android:drawable/ic_menu_edit" />
 
         <ImageButton
             android:id="@+id/cancelOrderButton"
             style="@style/OrderButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dip"
             android:contentDescription="@null"
-            android:src="@android:drawable/ic_menu_delete" />
+            android:src="@drawable/ticket_btn_delete" />
 
         <ImageButton
             android:id="@+id/cancelEditButton"
             style="@style/OrderButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginRight="10dip"
             android:contentDescription="@null"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
@@ -67,9 +53,6 @@
         <ImageButton
             android:id="@+id/addNewItemButton"
             style="@style/OrderButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dip"
             android:contentDescription="@null"
             android:src="@drawable/ic_menu_add_item"
             android:visibility="gone" />
@@ -77,9 +60,6 @@
         <ImageButton
             android:id="@+id/confirmEditButton"
             style="@style/OrderButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dip"
             android:contentDescription="@null"
             android:src="@drawable/ic_checkmark_holo_light"
             android:visibility="gone" />

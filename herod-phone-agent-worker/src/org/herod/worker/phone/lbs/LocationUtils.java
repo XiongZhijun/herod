@@ -5,6 +5,7 @@ package org.herod.worker.phone.lbs;
 
 import org.herod.framework.lbs.Location;
 import org.herod.order.common.model.Address;
+import org.herod.worker.phone.model.MapAddress;
 
 import com.baidu.mapapi.search.MKPlanNode;
 import com.baidu.mapapi.search.MKWpNode;
@@ -32,10 +33,19 @@ public class LocationUtils {
 		return node;
 	}
 
+	public static MKPlanNode createMKPlanNode(MapAddress address) {
+		return createMKPlanNode(address.getAddress());
+	}
+
 	public static MKPlanNode createMKPlanNode(Address address) {
 		MKPlanNode node = createMKPlanNode(address.getLocation());
 		node.name = address.getAddress();
 		return node;
+	}
+
+	public static MKWpNode createMKWpNode(MapAddress address) {
+		return createMKWpNode(address.getAddress());
+
 	}
 
 	public static MKWpNode createMKWpNode(Address address) {

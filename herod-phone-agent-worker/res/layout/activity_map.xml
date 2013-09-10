@@ -12,27 +12,29 @@
 
     <ImageButton
         android:id="@+id/location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dip"
+        android:layout_height="60dip"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="25dp"
         android:layout_marginTop="60dip"
-        android:background="@null"
+        android:background="@drawable/order_btn"
         android:contentDescription="@null"
+        android:scaleType="center"
         android:src="@drawable/custom_loc" />
 
     <ImageButton
         android:id="@+id/route"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dip"
+        android:layout_height="60dip"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="25dp"
         android:layout_marginTop="120dip"
-        android:background="@null"
+        android:background="@drawable/order_btn"
         android:contentDescription="@null"
-        android:src="@drawable/route" />
+        android:scaleType="center"
+        android:src="@drawable/icon_route" />
 
     <LinearLayout
         android:id="@+id/routeInfo"
@@ -50,12 +52,14 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:textSize="14sp" />
-    <TextView
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="："
+            android:text="@string/map_activity_label_1"
             android:textColor="@color/white"
             android:textSize="14sp" />
+
         <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
@@ -66,7 +70,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="分钟/"
+            android:text="@string/map_activity_label_2"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
@@ -80,7 +84,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="米"
+            android:text="@string/map_activity_label_3"
             android:textColor="@color/white"
             android:textSize="14sp" />
     </LinearLayout>

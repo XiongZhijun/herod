@@ -5,18 +5,18 @@ package org.herod.worker.phone.view;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static org.herod.order.common.Constants.COMMENT;
+import static org.herod.order.common.Constants.COST_OF_RUN_ERRANDS;
+import static org.herod.order.common.Constants.MM_DD_HH_MM;
+import static org.herod.order.common.Constants.SERIAL_NUMBER;
+import static org.herod.order.common.Constants.SHOP_NAME;
+import static org.herod.order.common.Constants.SHOP_TIPS;
+import static org.herod.order.common.Constants.STATUS;
+import static org.herod.order.common.Constants.SUBMIT_TIME;
+import static org.herod.order.common.Constants.TOTAL_AMOUNT_WITH_COST_OF_RUN_ERRANDS;
+import static org.herod.order.common.Constants.TOTAL_QUANTITY;
 import static org.herod.worker.phone.Constants.BUYER_NAME;
-import static org.herod.worker.phone.Constants.COMMENT;
-import static org.herod.worker.phone.Constants.COST_OF_RUN_ERRANDS;
 import static org.herod.worker.phone.Constants.DEST_ADDRESS;
-import static org.herod.worker.phone.Constants.MM_DD_HH_MM;
-import static org.herod.worker.phone.Constants.SERIAL_NUMBER;
-import static org.herod.worker.phone.Constants.SHOP_NAME;
-import static org.herod.worker.phone.Constants.SHOP_TIPS;
-import static org.herod.worker.phone.Constants.STATUS;
-import static org.herod.worker.phone.Constants.SUBMIT_TIME;
-import static org.herod.worker.phone.Constants.TOTAL_AMOUNT_WITH_COST_OF_RUN_ERRANDS;
-import static org.herod.worker.phone.Constants.TOTAL_QUANTITY;
 import static org.herod.worker.phone.Constants.WP_ADDRESSES;
 import static org.herod.worker.phone.R.id.acceptOrderButton;
 import static org.herod.worker.phone.R.id.addNewItemButton;
@@ -49,7 +49,6 @@ import org.herod.framework.form.FormHelper.FormHelperBuilder;
 import org.herod.framework.utils.TextViewUtils;
 import org.herod.framework.utils.ToastUtils;
 import org.herod.framework.utils.ViewUtils;
-import org.herod.order.common.model.Address;
 import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderItem;
 import org.herod.order.common.model.Result;
@@ -61,8 +60,11 @@ import org.herod.worker.phone.fragment.AsyncTaskConfirmDialogFragment;
 import org.herod.worker.phone.fragment.CancelOrderDialogFragment;
 import org.herod.worker.phone.fragment.OrderListFragment;
 import org.herod.worker.phone.fragment.PlaceInfoDialogFragment;
+import org.herod.worker.phone.fragment.PlaceInfoDialogFragment.Type;
 import org.herod.worker.phone.fragment.UpdateOrderDialogFragment;
 import org.herod.worker.phone.handler.HerodHandler;
+import org.herod.worker.phone.model.MapAddress;
+import org.herod.worker.phone.model.MapAddress.AddressType;
 import org.herod.worker.phone.view.OrderItemView.GoodsQuantityChangedListener;
 
 import android.content.Context;
@@ -75,6 +77,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
 /**
  * 
  * 
@@ -84,7 +87,7 @@ import android.widget.Toast;
  */
 public class OrderView extends LinearLayout implements
 		GoodsQuantityChangedListener, OnClickListener, ViewFindable {
-	
+
 	private static final int[] FORM_TO = new int[] { serialNumber, submitTime,
 			shopName, buyerName, comment, status, shopTips, costOfRunErrands,
 			totalWithCostOfRunErrands, totalQuantity };
@@ -200,9 +203,12 @@ public class OrderView extends LinearLayout implements
 			onCompleteOrderButtonClick();
 		} else if (v.getId() == R.id.route) {
 			Intent intent = new Intent(getContext(), MapActivity.class);
-			intent.putExtra(DEST_ADDRESS, order.getDeliveryAddress());
-			ArrayList<Address> wpAddresses = new ArrayList<Address>();
-			wpAddresses.add(order.getShopAddress());
+			MapAddress deliveryAddress = new MapAddress(
+					order.getDeliveryAddress(), AddressType.Buyer);
+			intent.putExtra(DEST_ADDRESS, deliveryAddress);
+			ArrayList<MapAddress> wpAddresses = new ArrayList<MapAddress>();
+			wpAddresses.add(new MapAddress(order.getShopAddress(),
+					AddressType.Shop));
 			intent.putExtra(WP_ADDRESSES, wpAddresses);
 			getContext().startActivity(intent);
 		}
@@ -210,12 +216,12 @@ public class OrderView extends LinearLayout implements
 
 	private void onBuyerNameClickListener() {
 		PlaceInfoDialogFragment.showFragment(activity,
-				order.getDeliveryAddress(), order.getBuyerPhone());
+				order.getDeliveryAddress(), order.getBuyerPhone(), Type.Buyer);
 	}
 
 	private void onShopNameClickListener() {
 		PlaceInfoDialogFragment.showFragment(activity, order.getShopAddress(),
-				order.getShopPhone());
+				order.getShopPhone(), Type.Shop);
 	}
 
 	private void onCancelOrderButtonClick() {

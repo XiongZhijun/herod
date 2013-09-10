@@ -3,6 +3,9 @@
  */
 package org.herod.worker.phone;
 
+import static org.herod.worker.phone.Constants.DEST_ADDRESS;
+import static org.herod.worker.phone.Constants.WP_ADDRESSES;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,12 +14,12 @@ import org.herod.framework.lbs.Location;
 import org.herod.framework.lbs.LocationManager;
 import org.herod.framework.utils.TextViewUtils;
 import org.herod.order.common.BaseActivity;
-import org.herod.order.common.model.Address;
 import org.herod.worker.phone.lbs.LocationItem;
 import org.herod.worker.phone.lbs.LocationOverlay;
 import org.herod.worker.phone.lbs.LocationUtils;
 import org.herod.worker.phone.lbs.MKSearchHelper;
 import org.herod.worker.phone.lbs.MKSearchListenerWrapper;
+import org.herod.worker.phone.model.MapAddress;
 
 import android.os.Bundle;
 import android.view.View;
@@ -29,7 +32,7 @@ import com.baidu.mapapi.map.RouteOverlay;
 import com.baidu.mapapi.search.MKDrivingRouteResult;
 import com.baidu.mapapi.search.MKRoutePlan;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
-import static org.herod.worker.phone.Constants.*;
+
 /**
  * 
  * @author Xiong Zhijun
@@ -39,8 +42,8 @@ public class MapActivity extends BaseActivity implements OnClickListener,
 		ViewFindable {
 	BMapManager mBMapMan = null;
 	MapView mMapView = null;
-	private Address destAddress;
-	private List<Address> wpAddresses;
+	private MapAddress destAddress;
+	private List<MapAddress> wpAddresses;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,21 +68,23 @@ public class MapActivity extends BaseActivity implements OnClickListener,
 		super.onResume();
 		Location currentLocation = LocationManager.getInstance(this)
 				.getLatestLocation();
-		setCenter(currentLocation);
+		// setCenter(currentLocation);
 
 		Bundle extras = getIntent().getExtras();
-		destAddress = (Address) extras.getSerializable(DEST_ADDRESS);
-		wpAddresses = (List<Address>) extras.getSerializable(WP_ADDRESSES);
-
+		destAddress = (MapAddress) extras.getSerializable(DEST_ADDRESS);
+		wpAddresses = (List<MapAddress>) extras.getSerializable(WP_ADDRESSES);
+		if (destAddress != null) {
+			setCenter(destAddress.getAddress().getLocation());
+		} else {
+			setCenter(currentLocation);
+		}
 		List<LocationItem> locationItems = new ArrayList<LocationItem>();
-		locationItems.add(new LocationItem(this, new Address("我的位置",
-				currentLocation), R.drawable.location_current));
-		locationItems.add(new LocationItem(this, destAddress,
-				R.drawable.location_dest));
+		locationItems.add(new LocationItem(this, new MapAddress("我的位置",
+				currentLocation)));
+		locationItems.add(new LocationItem(this, destAddress));
 		if (wpAddresses != null) {
-			for (Address address : wpAddresses) {
-				locationItems.add(new LocationItem(this, address,
-						R.drawable.location_wp));
+			for (MapAddress address : wpAddresses) {
+				locationItems.add(new LocationItem(this, address));
 			}
 		}
 		showLocation(locationItems);

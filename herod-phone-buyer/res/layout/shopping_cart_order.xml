@@ -30,7 +30,7 @@
             android:layout_height="32dip"
             android:background="@drawable/actionbar_btn"
             android:contentDescription="@null"
-            android:src="@drawable/icon_delete" />
+            android:src="@drawable/ticket_btn_delete" />
     </LinearLayout>
 
     <View

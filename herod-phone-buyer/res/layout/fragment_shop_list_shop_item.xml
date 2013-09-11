@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -14,7 +14,61 @@
         android:id="@+id/name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/image"
         android:gravity="center"
         android:textSize="25sp" />
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/noServicePanel"
+        android:layout_width="fill_parent"
+        android:layout_height="150dip"
+        android:background="#CC7C7C7C"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dip"
+            android:text="@string/label_warm_remind"
+            android:textColor="#FFFC01"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="5dip"
+            android:text="@string/label_shop_business_hours"
+            android:textColor="#FFF"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/serviceTime1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dip"
+            android:textColor="#FFF"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/serviceTime2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="2dip"
+            android:textColor="#FFF"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/serviceTime3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="2dip"
+            android:textColor="#FFF"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+</RelativeLayout>

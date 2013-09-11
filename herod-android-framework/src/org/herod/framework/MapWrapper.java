@@ -4,6 +4,7 @@
 package org.herod.framework;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.herod.framework.utils.MapUtils;
@@ -17,11 +18,11 @@ import org.herod.framework.utils.MapUtils;
  */
 public class MapWrapper<K, V> implements Serializable {
 	private static final long serialVersionUID = -5747357541078088745L;
-	private Map<K, V> map;
+	private HashMap<K, V> map = new HashMap<K, V>();
 
 	public MapWrapper(Map<K, V> map) {
 		super();
-		this.map = map;
+		this.map.putAll(map);
 	}
 
 	public long getLong(K key) {

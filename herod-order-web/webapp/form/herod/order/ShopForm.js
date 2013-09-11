@@ -178,6 +178,14 @@ Ext.define('form.herod.order.ShopForm', {
 				value : 255,
 				minValue : 1
 			}, {
+				id : 'SERVICE_TIMES',
+				name : 'SERVICE_TIMES',
+				xtype : 'textareafield',
+				fieldLabel : '服务时间',
+				width : 500,
+				colspan : 2,
+				allowBlank : true
+			}, {
 				id : 'COMMENT',
 				name : 'COMMENT',
 				xtype : 'textareafield',

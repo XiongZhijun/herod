@@ -17,4 +17,5 @@ public interface Constants extends org.herod.order.common.Constants {
 
 	String POSITION = "position";
 	String CONTACT_NUMBER = "contactNumber";
+	String SERVICE_TIMES = "serviceTimes";
 }

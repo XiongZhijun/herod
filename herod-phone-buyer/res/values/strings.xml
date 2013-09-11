@@ -46,5 +46,7 @@
     <string name="menu_history_orders">历史订单</string>
     <string name="menu_shopping_cart">购物车</string>
     <string name="menu_dialing">拨打电话</string>
+    <string name="label_warm_remind">温馨提醒</string>
+    <string name="label_shop_business_hours">商店营业时间：</string>
 
 </resources>

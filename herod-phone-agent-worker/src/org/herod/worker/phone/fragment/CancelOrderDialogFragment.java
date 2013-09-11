@@ -76,6 +76,7 @@ public class CancelOrderDialogFragment extends FormFragment implements
 			handler.sendMessage(handler
 					.obtainMessage(MainActivity.MESSAGE_KEY_REFRESH_ORDER_LIST));
 			message = "取消订单成功！";
+			dismiss();
 		} else {
 			message = "取消订单失败，请重试！";
 		}
@@ -90,4 +91,5 @@ public class CancelOrderDialogFragment extends FormFragment implements
 		fragment.serialNumber = serialNumber;
 		fragment.show(activity.getSupportFragmentManager(), null);
 	}
+
 }

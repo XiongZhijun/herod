@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import org.herod.framework.ViewFindable;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
+import org.herod.framework.widget.VerifyEditText;
 import org.herod.worker.phone.R;
 
 import android.os.Bundle;
@@ -92,14 +93,33 @@ public abstract class FormFragment extends DialogFragment implements
 	public void onClick(View v) {
 		if (v.getId() == R.id.okButton) {
 			if (onOkButtonClickListener != null) {
-				onOkButtonClickListener.onOk(getFormInputDatas());
+				if (verifyInputDatas()) {
+					onOkButtonClickListener.onOk(getFormInputDatas());
+				}
+			} else {
+				dismiss();
 			}
 		} else if (v.getId() == R.id.cancelButton) {
 			if (onCancelButtonClickListener != null) {
 				onCancelButtonClickListener.onCancel();
+			} else {
+				dismiss();
 			}
 		}
-		dismiss();
+
+	}
+
+	protected boolean verifyInputDatas() {
+		Map<Integer, String> fromToMap = getFormInputShowFromToMap();
+		boolean valid = true;
+		for (int id : fromToMap.keySet()) {
+			View view = findViewById(id);
+			if (view instanceof VerifyEditText
+					&& ((VerifyEditText) view).isInvalid()) {
+				valid = false;
+			}
+		}
+		return valid;
 	}
 
 	@Override

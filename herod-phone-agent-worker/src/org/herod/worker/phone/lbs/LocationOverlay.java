@@ -62,7 +62,6 @@ public class LocationOverlay extends ItemizedOverlay<OverlayItem> implements
 
 	@Override
 	public void onClickedPopup(int arg0) {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -3,7 +3,7 @@
  */
 package org.herod.worker.phone.fragment;
 
-import static org.herod.worker.phone.Constants.COMMENT;
+import static org.herod.order.common.Constants.COMMENT;
 import static org.herod.worker.phone.Constants.REASON;
 
 import java.util.Collections;
@@ -18,7 +18,6 @@ import org.herod.worker.phone.AgentWorkerTask;
 import org.herod.worker.phone.MainActivity;
 import org.herod.worker.phone.R;
 import org.herod.worker.phone.WorkerContext;
-import org.herod.worker.phone.fragment.FormFragment.OnCancelButtonClickListener;
 import org.herod.worker.phone.fragment.FormFragment.OnOkButtonClickListener;
 import org.herod.worker.phone.model.OrderUpdateInfo;
 import org.herod.worker.phone.view.OrderEditor;
@@ -38,8 +37,7 @@ import android.widget.Toast;
  * 
  */
 public class UpdateOrderDialogFragment extends FormFragment implements
-		OnOkButtonClickListener, OnCancelButtonClickListener,
-		AsyncTaskable<Map<String, String>, Result> {
+		OnOkButtonClickListener, AsyncTaskable<Map<String, String>, Result> {
 
 	private Handler handler;
 
@@ -47,7 +45,6 @@ public class UpdateOrderDialogFragment extends FormFragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setOnOkButtonClickListener(this);
-		setOnCancelButtonClickListener(this);
 	}
 
 	@Override
@@ -67,10 +64,6 @@ public class UpdateOrderDialogFragment extends FormFragment implements
 		fromToMap.put(R.id.comment, COMMENT);
 		fromToMap.put(R.id.reason, REASON);
 		return fromToMap;
-	}
-
-	@Override
-	public void onCancel() {
 	}
 
 	@SuppressWarnings("unchecked")
@@ -100,6 +93,7 @@ public class UpdateOrderDialogFragment extends FormFragment implements
 			handler.sendMessage(handler
 					.obtainMessage(MainActivity.MESSAGE_KEY_REFRESH_ORDER_LIST));
 			message = "修改订单成功！";
+			dismiss();
 		} else {
 			message = "修改订单失败，请重试！";
 		}

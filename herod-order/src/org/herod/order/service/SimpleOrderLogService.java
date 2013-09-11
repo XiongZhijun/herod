@@ -58,7 +58,7 @@ public class SimpleOrderLogService implements OrderLogService {
 			orderCenter.completeOrder(agentId, workerId, orderSerialNumber);
 			break;
 		case Update:
-			// TODO
+			// TODO 更新事件
 			break;
 		default:
 			break;

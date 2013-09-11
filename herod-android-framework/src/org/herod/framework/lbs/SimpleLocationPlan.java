@@ -64,7 +64,6 @@ public class SimpleLocationPlan implements LocationPlan, BDLocationListener,
 
 	@Override
 	public void onReceivePoi(BDLocation location) {
-		// TODO Auto-generated method stub
 
 	}
 

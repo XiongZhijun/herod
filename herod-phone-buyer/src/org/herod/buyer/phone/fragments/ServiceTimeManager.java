@@ -11,7 +11,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.herod.buyer.phone.Constants;
 import org.herod.buyer.phone.R;
+import org.herod.framework.MapWrapper;
 import org.herod.framework.ViewFindable.ViewWrapper;
 import org.herod.framework.utils.StringUtils;
 import org.herod.framework.utils.TextViewUtils;
@@ -35,6 +37,10 @@ public class ServiceTimeManager {
 	private static DateFormat dateFormat = new SimpleDateFormat("HH:mm");
 	private List<ServiceTime> serviceTimes = new ArrayList<ServiceTime>();
 
+	public ServiceTimeManager(MapWrapper<String, Object> shop) {
+		this(shop.getString(Constants.SERVICE_TIMES));
+	}
+
 	public ServiceTimeManager(String serviceTimes) {
 		if (StringUtils.isBlank(serviceTimes)) {
 			return;
@@ -51,6 +57,10 @@ public class ServiceTimeManager {
 		} catch (Exception e) {
 			Log.w(TAG, e.getMessage());
 		}
+	}
+
+	public boolean isNotInServiceNow() {
+		return !isInServiceNow();
 	}
 
 	public boolean isInServiceNow() {
@@ -119,4 +129,5 @@ public class ServiceTimeManager {
 			return start + " - " + end;
 		}
 	}
+
 }

@@ -23,6 +23,7 @@ import org.herod.order.common.model.OrderItem;
 public class ShoppingCartCache implements IShoppingCartCache {
 
 	private static ShoppingCartCache instance = new ShoppingCartCache();
+	private Map<Long, MapWrapper<String, Object>> shopsMap = new HashMap<Long, MapWrapper<String, Object>>();
 	private Map<Long, Order> orderCaches = new HashMap<Long, Order>();
 	private List<GoodsQuantityChangedListener> listeners = new ArrayList<ShoppingCartCache.GoodsQuantityChangedListener>();
 	private ShopService shopService = BuyerContext.getShopService();
@@ -95,6 +96,7 @@ public class ShoppingCartCache implements IShoppingCartCache {
 		if (order == null) {
 			MapWrapper<String, Object> shop = shopService.findShopById(shopId);
 			order = OrderUtils.createOrder(shop);
+			shopsMap.put(shopId, shop);
 			orderCaches.put(shopId, order);
 		}
 		return order;
@@ -128,6 +130,7 @@ public class ShoppingCartCache implements IShoppingCartCache {
 
 	public void removeOrder(long shopId) {
 		orderCaches.remove(shopId);
+		shopsMap.remove(shopId);
 	}
 
 	public void removeOrderItem(long shopId, long goodsId) {
@@ -137,7 +140,7 @@ public class ShoppingCartCache implements IShoppingCartCache {
 		}
 		order.removeOrderItemByGoodsId(goodsId);
 		if (order.getOrderItems().size() == 0) {
-			orderCaches.remove(shopId);
+			removeOrder(shopId);
 		}
 	}
 
@@ -155,8 +158,9 @@ public class ShoppingCartCache implements IShoppingCartCache {
 
 	public void clearOrders() {
 		orderCaches.clear();
+		shopsMap.clear();
 	}
-
+	
 	private void notifyQuantityChanged(long shopId, long goodsId,
 			int newQuantity) {
 		for (GoodsQuantityChangedListener listener : listeners) {

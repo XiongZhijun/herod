@@ -148,12 +148,22 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 	@Override
 	public List<Map<String, Object>> searchGoodses(String goodsName, int begin,
 			int count, double latitude, double longitude) {
-		return queryForList(
+		List<Map<String, Object>> allGoodses = queryForList(
 				"SELECT G.ID, G.NAME, G.CODE, G.ALIAS, G.SUPPLY_PRICE, "
 						+ "G.SELLING_PRICE, G.UNIT, G.COMMENT, G.LARGE_IMAGE, G.THUMBNAIL, "
-						+ "G.CATEGORY_ID, G.SHOP_ID, G.AGENT_ID, S.NAME AS SHOP_NAME FROM ZRH_GOODS G "
+						+ "G.CATEGORY_ID, G.SHOP_ID, G.AGENT_ID, S.NAME AS SHOP_NAME, S.SERVICE_TIMES FROM ZRH_GOODS G "
 						+ "LEFT JOIN ZRH_SHOP S ON G.SHOP_ID = S.ID WHERE G.NAME LIKE ?  ORDER BY G.SORT LIMIT ?, ?",
 				"%" + goodsName + "%", begin, count);
+		List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
+		for (Map<String, Object> goods : allGoodses) {
+			String serviceTimes = (String) goods.get("serviceTimes");
+			ServiceTimeManager serviceTimeManager = new ServiceTimeManager(
+					serviceTimes);
+			if (serviceTimeManager.isInServiceNow()) {
+				results.add(goods);
+			}
+		}
+		return results;
 	}
 
 	private List<Map<String, Object>> queryForList(String sql, Object... args) {

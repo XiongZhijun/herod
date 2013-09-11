@@ -59,6 +59,7 @@ public class SimpleAdapter extends BaseAdapter {
 
 	public void updateData(List<MapWrapper<String, Object>> data) {
 		this.mData.clear();
+		this.mData.removeAll(data);
 		this.mData.addAll(data);
 		notifyDataSetChanged();
 	}

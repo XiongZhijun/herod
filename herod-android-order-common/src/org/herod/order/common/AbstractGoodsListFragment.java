@@ -41,7 +41,6 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 		IXListViewListener, ViewBinder {
 	protected XListView goodsListView;
 	protected SimpleAdapter adapter;
-	private int begin = 0;
 	private int count = 20;
 	private RefreshButtonHelper refreshButtonHelper;
 	private RepeatedlyTask<Object, List<MapWrapper<String, Object>>> loadGoodsTask;
@@ -58,6 +57,8 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 		adapter = createAdapter(getActivity());
 		adapter.setViewBinder(this);
 		goodsListView.setAdapter(adapter);
+		View emptyView = view.findViewById(R.id.emptyView);
+		goodsListView.setEmptyView(emptyView);
 		return view;
 	}
 
@@ -73,7 +74,6 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		begin = 0;
 		if (isLoadOnResume()) {
 			loadGoods();
 		}
@@ -83,6 +83,7 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 
 	@Override
 	public List<MapWrapper<String, Object>> runOnBackground(Object... params) {
+		int begin = adapter != null ? adapter.getCount() : 0;
 		return findPageGoods(begin, count);
 	}
 
@@ -94,7 +95,6 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 	@Override
 	public void onPostExecute(List<MapWrapper<String, Object>> data) {
 		if (refreshButtonHelper.checkNullResult(data)) {
-			begin = 0;
 			return;
 		}
 		if (data.size() == 0) {
@@ -102,7 +102,6 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 			goodsListView.stopLoadMore();
 		} else {
 			adapter.addData(data);
-			begin += data.size();
 			goodsListView.stopLoadMore();
 		}
 		goodsListView.setPullLoadEnable(data.size() >= count);
@@ -181,7 +180,6 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 	public void clear() {
 		if (adapter != null)
 			adapter.clear();
-		begin = 0;
 	}
 
 	@Override

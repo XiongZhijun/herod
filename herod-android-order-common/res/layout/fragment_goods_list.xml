@@ -17,4 +17,14 @@
         style="@style/RefreshButtonStyle"
         android:contentDescription="@null" />
 
+    <TextView
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/label_goods_list_empty_view"
+        android:textColor="#888888"
+        android:textSize="20sp" >
+    </TextView>
+
 </RelativeLayout>

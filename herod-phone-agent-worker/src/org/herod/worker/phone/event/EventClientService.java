@@ -25,7 +25,7 @@ import android.content.Intent;
  * 
  */
 public class EventClientService extends TcpClientService {
-	private static final String DEFAULT_RING = "ding.wav";
+	private static final String DEFAULT_RING = "ding.mp3";
 
 	private EventHeadTailHandler eventHeadTailHandler = new EventHeadTailHandler();
 
@@ -61,7 +61,6 @@ public class EventClientService extends TcpClientService {
 		if (EventCodes.SUBMIT_COMMAND.equals(event.getCode())
 				|| EventCodes.REJECT_COMMAND.equals(event.getCode())) {
 			MediaPlayerService.playMedia(this, DEFAULT_RING);
-			;
 		}
 	}
 }

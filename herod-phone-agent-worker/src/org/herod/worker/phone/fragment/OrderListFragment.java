@@ -195,8 +195,8 @@ public abstract class OrderListFragment extends BaseFragment implements
 	public static class CompletedOrderListFragment extends
 			HistoryOrderListFragment {
 		public List<Order> runOnBackground(Object... params) {
-			return WorkerContext.getWorkerService().findCompletedOrders(begin,
-					PAGE_COUNT);
+			return WorkerContext.getWorkerService().findCompletedOrders(
+					getBegin(), PAGE_COUNT);
 		}
 
 		public String getTitle() {
@@ -207,8 +207,8 @@ public abstract class OrderListFragment extends BaseFragment implements
 	public static class CanceledOrderListFragment extends
 			HistoryOrderListFragment {
 		public List<Order> runOnBackground(Object... params) {
-			return WorkerContext.getWorkerService().findCanceledOrders(begin,
-					PAGE_COUNT);
+			return WorkerContext.getWorkerService().findCanceledOrders(
+					getBegin(), PAGE_COUNT);
 		}
 
 		public String getTitle() {
@@ -218,7 +218,6 @@ public abstract class OrderListFragment extends BaseFragment implements
 
 	public static abstract class HistoryOrderListFragment extends
 			OrderListFragment {
-		int begin = 0;
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -230,7 +229,6 @@ public abstract class OrderListFragment extends BaseFragment implements
 		}
 
 		public void refreshOrderList() {
-			begin = 0;
 			super.refreshOrderList();
 		}
 
@@ -238,9 +236,14 @@ public abstract class OrderListFragment extends BaseFragment implements
 			if (orderListAdapter == null) {
 				return;
 			}
-			begin = orderListAdapter.getCount();
 			new AgentWorkerTask<Object, List<Order>>(getActivity(), this,
 					new LoadMoreTask()).execute();
+		}
+
+		protected int getBegin() {
+			int count = orderListAdapter != null ? orderListAdapter.getCount()
+					: 0;
+			return count;
 		}
 
 		protected void updateQuantity(List<Order> orders) {

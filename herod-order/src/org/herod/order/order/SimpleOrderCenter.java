@@ -130,7 +130,11 @@ public class SimpleOrderCenter implements OrderCenter {
 			writeLock.unlock();
 		}
 		Event event = buildEvent(agentId, workerId, status);
-		eventCenter.sendEvent(workerId, event);
+		if (workerId > 0) {
+			eventCenter.sendEvent(workerId, event);
+		} else {
+			eventCenter.sendEventByAgent(agentId, event);
+		}
 	}
 
 	private Event buildEvent(long agentId, long workerId, OrderStatus status) {

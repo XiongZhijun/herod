@@ -7,9 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import org.apache.mina.common.IoSession;
 import org.herod.event.Event;
+import org.herod.order.service.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 
@@ -21,6 +25,9 @@ import org.herod.event.Event;
 public class EventCenter {
 
 	private final Map<Long, IoSession> workerSessionMap = new HashMap<Long, IoSession>();
+	private Executor executor = Executors.newSingleThreadExecutor();
+	@Autowired
+	private LoginService loginService;
 
 	public IoSession regist(long workerId, IoSession session) {
 		return workerSessionMap.put(workerId, session);
@@ -51,9 +58,39 @@ public class EventCenter {
 
 	public void sendEvent(long workerId, Event event) {
 		IoSession session = workerSessionMap.get(workerId);
-		if (session != null && session.isConnected()) {
-			session.write(event);
+		if (session != null) {
+			executor.execute(new EventSender(session, event));
 		}
+	}
+
+	public void sendEventByAgent(long agentId, Event event) {
+		for (Entry<Long, IoSession> entry : workerSessionMap.entrySet()) {
+			long workerId = entry.getKey();
+			long workerAgentId = loginService.getWorkerAgentId(workerId);
+			if (workerAgentId == agentId) {
+				sendEvent(workerId, event);
+			}
+		}
+	}
+
+	class EventSender implements Runnable {
+
+		private IoSession session;
+		private Event event;
+
+		public EventSender(IoSession session, Event event) {
+			super();
+			this.session = session;
+			this.event = event;
+		}
+
+		@Override
+		public void run() {
+			if (session != null && session.isConnected()) {
+				session.write(event);
+			}
+		}
+
 	}
 
 }

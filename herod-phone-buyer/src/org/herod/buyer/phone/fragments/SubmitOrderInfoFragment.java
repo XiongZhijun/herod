@@ -50,6 +50,7 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 			"请输入送货地址！", "请输入正确的手机号！", "请输入联系人姓名！" };
 	private TextView commentView;
 	private AddressSelectService addressSelectService = new SimpleAddressSelectService();
+	private ProgressDialog progressDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -122,6 +123,14 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 				.execute();
 	}
 
+	@Override
+	public void onPause() {
+		if (progressDialog != null && progressDialog.isShowing()) {
+			progressDialog.dismiss();
+		}
+		super.onPause();
+	}
+
 	class SubmitOrdersTask extends AsyncTask<Object, Object, Result> {
 
 		private List<Order> orders;
@@ -129,7 +138,6 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 		private String buyerPhone;
 		private String buyerName;
 		private String comment;
-		private ProgressDialog progressDialog;
 
 		public SubmitOrdersTask(String buyerAddress, String buyerPhone,
 				String buyerName, String comment) {

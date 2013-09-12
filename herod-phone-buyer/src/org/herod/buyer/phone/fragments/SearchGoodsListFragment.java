@@ -54,7 +54,7 @@ public class SearchGoodsListFragment extends AbstractGoodsListFragment {
 	}
 
 	@Override
-	protected boolean isLoadOnResume() {
+	protected boolean isLoadOnViewCreated() {
 		return false;
 	}
 

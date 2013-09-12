@@ -69,14 +69,15 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 				this);
 		refreshButtonHelper = new RefreshButtonHelper(this, loadGoodsTask,
 				R.id.refreshButton, R.id.goodsListView);
+		if (isLoadOnViewCreated()) {
+			goodsListView.startLoadMore();
+		}
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (isLoadOnResume()) {
-			goodsListView.startLoadMore();
-		}
+		adapter.notifyDataSetChanged();
 	}
 
 	protected abstract SimpleAdapter createAdapter(FragmentActivity activity);
@@ -90,7 +91,7 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 	protected abstract List<MapWrapper<String, Object>> findPageGoods(
 			int begin, int count);
 
-	protected abstract boolean isLoadOnResume();
+	protected abstract boolean isLoadOnViewCreated();
 
 	@Override
 	public void onPostExecute(List<MapWrapper<String, Object>> data) {

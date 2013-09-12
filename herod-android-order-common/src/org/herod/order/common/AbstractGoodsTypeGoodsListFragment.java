@@ -45,7 +45,7 @@ public abstract class AbstractGoodsTypeGoodsListFragment extends
 	}
 
 	@Override
-	protected boolean isLoadOnResume() {
+	protected boolean isLoadOnViewCreated() {
 		return true;
 	}
 

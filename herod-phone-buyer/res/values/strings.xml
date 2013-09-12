@@ -48,5 +48,6 @@
     <string name="menu_dialing">拨打电话</string>
     <string name="label_warm_remind">温馨提醒</string>
     <string name="label_shop_business_hours">商店营业时间：</string>
+    <string name="label_data_in_loading">数据加载中……</string>
 
 </resources>

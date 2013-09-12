@@ -1,5 +1,6 @@
 <resources>
 
     <string name="label_goods_list_empty_view">对不起，没有符合条件的商品！</string>
+    <string name="label_data_in_loading">数据加载中……</string>
 
 </resources>

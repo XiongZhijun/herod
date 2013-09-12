@@ -7,8 +7,8 @@ import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.HerodTask.BackgroudRunnable;
 import org.herod.framework.HerodTask.PostExecutor;
 
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.view.View;
 
 /**
  * 
@@ -20,19 +20,11 @@ public class RepeatedlyTask<Params, Result> {
 	protected BackgroudRunnable<Params, Result> runnable;
 	protected PostExecutor<Result> postExecutor;
 	protected ParamsLoader<Params> paramsLoader;
-	private ProgressDialog dialog;
-	private boolean showProgressDialog = true;
+	private View progressBar;
 
 	public RepeatedlyTask(AsyncTaskable<Params, Result> asyncTaskable,
 			Params... params) {
 		this(asyncTaskable, asyncTaskable, params);
-	}
-
-	@SuppressWarnings("unchecked")
-	public RepeatedlyTask(AsyncTaskable<Params, Result> asyncTaskable,
-			boolean showProgressDialog) {
-		this(asyncTaskable, asyncTaskable);
-		this.showProgressDialog = showProgressDialog;
 	}
 
 	RepeatedlyTask(BackgroudRunnable<Params, Result> runnable,
@@ -51,7 +43,9 @@ public class RepeatedlyTask<Params, Result> {
 		this.runnable = runnable;
 		this.postExecutor = new PostExecutor<Result>() {
 			public void onPostExecute(Result result) {
-				dismissDialog();
+				if (progressBar != null) {
+					progressBar.setVisibility(View.GONE);
+				}
 				postExecutor.onPostExecute(result);
 			}
 
@@ -59,26 +53,16 @@ public class RepeatedlyTask<Params, Result> {
 		this.paramsLoader = paramsLoader;
 	}
 
+	public void setProgressBar(View progressBar) {
+		this.progressBar = progressBar;
+	}
+
 	public void execute(Context context) {
-		showDialog(context);
 		new HerodTask<Params, Result>(runnable, postExecutor)
 				.execute(paramsLoader.getParams());
-	}
-
-	private void dismissDialog() {
-		if (dialog != null && dialog.isShowing()) {
-			dialog.dismiss();
+		if (progressBar != null) {
+			progressBar.setVisibility(View.VISIBLE);
 		}
-	}
-
-	private void showDialog(Context context) {
-		if (!showProgressDialog) {
-			return;
-		}
-		if (dialog != null && dialog.isShowing()) {
-			dialog.dismiss();
-		}
-		dialog = ProgressDialog.show(context, "提示", "数据读取中……");
 	}
 
 	public static interface ParamsLoader<Params> {

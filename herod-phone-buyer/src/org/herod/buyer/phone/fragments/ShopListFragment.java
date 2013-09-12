@@ -68,15 +68,15 @@ public class ShopListFragment extends BaseFragment implements ViewFindable,
 		super.onViewCreated(view, savedInstanceState);
 		loadShopsTask = new RepeatedlyTask<Object, List<MapWrapper<String, Object>>>(
 				this);
+		loadShopsTask.setProgressBar(view.findViewById(R.id.progressBar));
 		refreshButtonHelper = new RefreshButtonHelper(this, loadShopsTask,
 				R.id.refreshButton, R.id.shopsGridView);
+		loadShopsTask.execute(getActivity());
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		shopStatusMap.clear();
-		loadShopsTask.execute(getActivity());
 	}
 
 	@Override
@@ -90,6 +90,7 @@ public class ShopListFragment extends BaseFragment implements ViewFindable,
 		if (refreshButtonHelper.checkNullResult(shops)) {
 			return;
 		}
+		shopStatusMap.clear();
 		ImageLoaderAdapter adapter = new ImageLoaderAdapter(getActivity(),
 				shops, R.layout.fragment_shop_list_shop_item, new String[] {
 						NAME, IMAGE_URL, SERVICE_TIMES }, new int[] {

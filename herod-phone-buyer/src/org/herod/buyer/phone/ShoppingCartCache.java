@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.herod.buyer.phone.fragments.ServiceTimeManager;
 import org.herod.framework.MapWrapper;
 import org.herod.order.common.AbstractGoodsListFragment.IShoppingCartCache;
 import org.herod.order.common.model.Order;
@@ -156,11 +157,29 @@ public class ShoppingCartCache implements IShoppingCartCache {
 		return 0;
 	}
 
+	public List<Order> getOutOfServiceTimeOrders() {
+		List<Order> outOfServiceTimeOrders = new ArrayList<Order>();
+		for (Order order : orderCaches.values()) {
+			MapWrapper<String, Object> shop = shopsMap.get(order.getShopId());
+			ServiceTimeManager serviceTimeManager = new ServiceTimeManager(shop);
+			if (serviceTimeManager.isNotInServiceNow()) {
+				outOfServiceTimeOrders.add(order);
+			}
+		}
+		return outOfServiceTimeOrders;
+	}
+
+	public void removeOrders(List<Order> orders) {
+		for (Order order : orders) {
+			removeOrder(order.getShopId());
+		}
+	}
+
 	public void clearOrders() {
 		orderCaches.clear();
 		shopsMap.clear();
 	}
-	
+
 	private void notifyQuantityChanged(long shopId, long goodsId,
 			int newQuantity) {
 		for (GoodsQuantityChangedListener listener : listeners) {

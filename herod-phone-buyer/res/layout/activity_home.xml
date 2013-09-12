@@ -14,6 +14,11 @@
     <ImageView
         android:id="@+id/refreshButton"
         style="@style/RefreshButtonStyle"
-        android:contentDescription="@null" />
+        android:contentDescription="@null"
+        android:visibility="gone" />
+
+    <include
+        layout="@layout/progressbar"
+        android:visibility="gone" />
 
 </RelativeLayout>

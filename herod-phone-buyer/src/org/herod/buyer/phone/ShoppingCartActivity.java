@@ -7,6 +7,7 @@ import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
 import org.herod.buyer.phone.fragments.SubmitOrderInfoFragment;
 import org.herod.order.common.model.Order;
+import org.springframework.util.CollectionUtils;
 
 import android.os.Bundle;
 import android.view.View;
@@ -33,9 +34,34 @@ public class ShoppingCartActivity extends AbstractOrdersActivity {
 		refreshOrders();
 	}
 
-	public void submitOrders(View v) {
-		SubmitOrderInfoFragment fragment = new SubmitOrderInfoFragment();
-		fragment.show(getSupportFragmentManager(), null);
+	public void submitOrders(final View v) {
+		final ShoppingCartCache cache = ShoppingCartCache.getInstance();
+		final List<Order> outOfServiceTimeOrders = cache
+				.getOutOfServiceTimeOrders();
+		if (CollectionUtils.isEmpty(outOfServiceTimeOrders)) {
+			SubmitOrderInfoFragment fragment = new SubmitOrderInfoFragment();
+			fragment.show(getSupportFragmentManager(), null);
+			return;
+		}
+		StringBuilder message = new StringBuilder();
+		for (int i = 0; i < outOfServiceTimeOrders.size(); i++) {
+			if (i > 0) {
+				message.append("，");
+			}
+			message.append("“")
+					.append(outOfServiceTimeOrders.get(i).getShopName())
+					.append("”");
+		}
+		message.append("等商店不在服务时间范围内，删除这些订单后才能提交，是否删除这些订单！");
+		ConfirmDialogFragment.showDialog(this, message.toString(),
+				new OnOkButtonClickListener() {
+					public void onOk() {
+						cache.removeOrders(outOfServiceTimeOrders);
+						refreshOrders();
+						submitOrders(v);
+					}
+				});
+
 	}
 
 	public void clearShoppingCart(View v) {

@@ -48,7 +48,7 @@ public class XListView extends ListView implements OnScrollListener {
 	private boolean mEnablePullLoad;
 	private boolean mPullLoading;
 	private boolean mIsFooterReady = false;
-	
+
 	// total list items, used to detect is at the bottom of listview.
 	private int mTotalItemCount;
 
@@ -243,7 +243,7 @@ public class XListView extends ListView implements OnScrollListener {
 		}
 		mFooterView.setBottomMargin(height);
 
-//		setSelection(mTotalItemCount - 1); // scroll to bottom
+		// setSelection(mTotalItemCount - 1); // scroll to bottom
 	}
 
 	private void resetFooterHeight() {
@@ -256,7 +256,7 @@ public class XListView extends ListView implements OnScrollListener {
 		}
 	}
 
-	private void startLoadMore() {
+	public void startLoadMore() {
 		mPullLoading = true;
 		mFooterView.setState(XListViewFooter.STATE_LOADING);
 		if (mListViewListener != null) {

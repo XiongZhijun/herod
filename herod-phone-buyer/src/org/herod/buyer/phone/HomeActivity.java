@@ -59,6 +59,7 @@ public class HomeActivity extends BuyerBaseActivity implements
 
 		loadShopTypesTask = new RepeatedlyTask<Object, List<MapWrapper<String, Object>>>(
 				this);
+		loadShopTypesTask.setProgressBar(findViewById(R.id.progressBar));
 
 		refreshButtonHelper = new RefreshButtonHelper(this, loadShopTypesTask,
 				R.id.refreshButton, R.id.shopTypesGrid);

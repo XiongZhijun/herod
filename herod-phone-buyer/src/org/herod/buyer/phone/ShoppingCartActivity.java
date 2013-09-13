@@ -15,7 +15,8 @@ import android.view.View.OnClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-public class ShoppingCartActivity extends AbstractOrdersActivity {
+public class ShoppingCartActivity extends BuyerBaseActivity implements
+		OrderRefreshable {
 	private ListView orderListView;
 
 	@Override

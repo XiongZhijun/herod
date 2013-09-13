@@ -6,8 +6,8 @@ package org.herod.buyer.phone.fragments;
 import java.util.Date;
 import java.util.List;
 
-import org.herod.buyer.phone.AbstractOrdersActivity;
 import org.herod.buyer.phone.BuyerContext;
+import org.herod.buyer.phone.OrderRefreshable;
 import org.herod.buyer.phone.R;
 import org.herod.buyer.phone.ShoppingCartCache;
 import org.herod.buyer.phone.db.LocalAddress;
@@ -205,8 +205,8 @@ public class SubmitOrderInfoFragment extends DialogFragment implements
 			ToastUtils.showToast("下单成功", Toast.LENGTH_SHORT);
 			ShoppingCartCache.getInstance().clearOrders();
 			dismiss();
-			if (activity instanceof AbstractOrdersActivity) {
-				((AbstractOrdersActivity) activity).refreshOrders();
+			if (activity instanceof OrderRefreshable) {
+				((OrderRefreshable) activity).refreshOrders();
 			}
 			addressSelectService.addCurrentAddress(activity, buyerName,
 					buyerPhone, buyerAddress);

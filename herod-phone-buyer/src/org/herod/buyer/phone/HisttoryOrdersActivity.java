@@ -29,8 +29,8 @@ import android.widget.ListView;
  * @email hust.xzj@gmail.com
  * 
  */
-public class HisttoryOrdersActivity extends AbstractOrdersActivity implements
-		AsyncTaskable<Object, List<Order>> {
+public class HisttoryOrdersActivity extends BuyerBaseActivity implements
+		OrderRefreshable, AsyncTaskable<Object, List<Order>> {
 	private ListView orderListView;
 
 	@Override

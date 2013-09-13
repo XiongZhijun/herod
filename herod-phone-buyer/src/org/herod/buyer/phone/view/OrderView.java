@@ -24,9 +24,10 @@ import static org.herod.order.common.Constants.TIMESTAMP;
 import static org.herod.order.common.Constants.TOTAL_AMOUNT_WITH_COST_OF_RUN_ERRANDS;
 import static org.herod.order.common.Constants.TOTAL_QUANTITY;
 
-import org.herod.buyer.phone.AbstractOrdersActivity;
+import org.herod.buyer.phone.BuyerBaseActivity;
 import org.herod.buyer.phone.BuyerContext;
 import org.herod.buyer.phone.GoodsListActivity;
+import org.herod.buyer.phone.OrderRefreshable;
 import org.herod.buyer.phone.R;
 import org.herod.buyer.phone.ShoppingCartCache;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
@@ -71,7 +72,7 @@ public class OrderView extends LinearLayout implements
 	private LinearLayout orderItemsContainer;
 
 	private Order order;
-	private AbstractOrdersActivity activity;
+	private BuyerBaseActivity activity;
 
 	public OrderView(Context context) {
 		super(context);
@@ -79,8 +80,8 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void initView(Context context) {
-		if (context instanceof AbstractOrdersActivity) {
-			this.activity = (AbstractOrdersActivity) context;
+		if (context instanceof BuyerBaseActivity) {
+			this.activity = (BuyerBaseActivity) context;
 		}
 		LayoutInflater.from(getContext()).inflate(R.layout.shopping_cart_order,
 				this);
@@ -169,8 +170,8 @@ public class OrderView extends LinearLayout implements
 		@Override
 		public void onOk() {
 			ShoppingCartCache.getInstance().removeOrder(order.getShopId());
-			if (activity != null) {
-				activity.refreshOrders();
+			if (activity != null && activity instanceof OrderRefreshable) {
+				((OrderRefreshable) activity).refreshOrders();
 			}
 		}
 	}

@@ -15,6 +15,7 @@ import org.herod.framework.db.DatabaseAccessSupport;
 import org.herod.framework.db.DatabaseUtils;
 import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderItem;
+import org.herod.order.common.model.OrderStatus;
 import org.springframework.util.CollectionUtils;
 
 import android.content.ContentValues;
@@ -53,8 +54,8 @@ public class OrderDao extends DatabaseAccessSupport {
 		executeWrite(new RemoveOrdersWithSerialNumberWriter(serialNumbers));
 	}
 
-	public List<Order> getAllOrders() {
-		List<Order> orders = executeRead(new QueryAllOrdersReader());
+	public List<Order> getAllOrders(OrderStatus... statuses) {
+		List<Order> orders = executeRead(new QueryAllOrdersReader(statuses));
 		Collections.sort(orders, new OrderComparator());
 		return orders;
 	}
@@ -152,9 +153,23 @@ public class OrderDao extends DatabaseAccessSupport {
 	}
 
 	class QueryAllOrdersReader implements Reader<List<Order>> {
+		private OrderStatus[] statuses;
+
+		public QueryAllOrdersReader(OrderStatus[] statuses) {
+			this.statuses = statuses;
+		}
+
 		public List<Order> read(SQLiteDatabase db) {
-			Cursor orderCursor = db.query(ORDERS, null, null, null, null, null,
-					"SERIAL_NUMBER DESC");
+			StringBuilder selection = new StringBuilder();
+			for (OrderStatus status : statuses) {
+				if (selection.length() > 0) {
+					selection.append(" OR ");
+				}
+				selection.append(" STATUS = '").append(status.name())
+						.append("' ");
+			}
+			Cursor orderCursor = db.query(ORDERS, null, selection.toString(),
+					null, null, null, "SERIAL_NUMBER DESC");
 			Cursor itemsCursor = db.query(ORDER_ITEMS, null, null, null, null,
 					null, null);
 			List<Order> orders = DatabaseUtils.toList(orderCursor, -1, -1,

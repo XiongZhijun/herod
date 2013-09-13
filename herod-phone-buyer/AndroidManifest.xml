@@ -48,8 +48,9 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="org.herod.buyer.phone.HisttoryOrdersActivity"
-            android:screenOrientation="portrait" >
+            android:name="org.herod.buyer.phone.HistoryOrdersActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.PageIndicatorDefaults" >
         </activity>
         <activity
             android:name="org.herod.buyer.phone.StoresActivity"

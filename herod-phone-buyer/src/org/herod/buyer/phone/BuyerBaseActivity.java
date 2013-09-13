@@ -39,7 +39,7 @@ public abstract class BuyerBaseActivity extends BaseActivity implements
 	}
 
 	public void showHistoryOrders(MenuItem item) {
-		startActivity(new Intent(this, HisttoryOrdersActivity.class));
+		startActivity(new Intent(this, HistoryOrdersActivity.class));
 	}
 
 	public void showShoppingCart(MenuItem item) {

@@ -24,7 +24,6 @@ import static org.herod.order.common.Constants.TIMESTAMP;
 import static org.herod.order.common.Constants.TOTAL_AMOUNT_WITH_COST_OF_RUN_ERRANDS;
 import static org.herod.order.common.Constants.TOTAL_QUANTITY;
 
-import org.herod.buyer.phone.BuyerBaseActivity;
 import org.herod.buyer.phone.BuyerContext;
 import org.herod.buyer.phone.GoodsListActivity;
 import org.herod.buyer.phone.OrderRefreshable;
@@ -45,6 +44,7 @@ import org.herod.order.common.model.OrderItem;
 import org.herod.order.common.model.OrderStatus;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -72,7 +72,7 @@ public class OrderView extends LinearLayout implements
 	private LinearLayout orderItemsContainer;
 
 	private Order order;
-	private BuyerBaseActivity activity;
+	private FragmentActivity activity;
 
 	public OrderView(Context context) {
 		super(context);
@@ -80,8 +80,8 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void initView(Context context) {
-		if (context instanceof BuyerBaseActivity) {
-			this.activity = (BuyerBaseActivity) context;
+		if (context instanceof FragmentActivity) {
+			this.activity = (FragmentActivity) context;
 		}
 		LayoutInflater.from(getContext()).inflate(R.layout.shopping_cart_order,
 				this);

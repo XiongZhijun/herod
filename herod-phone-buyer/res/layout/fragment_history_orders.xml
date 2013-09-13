@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/clearButton"
+        style="@style/ButtonStyle"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="clearHistoryOrders"
+        android:text="@string/text_clear_history_records" />
+
+    <ListView
+        android:id="@+id/ordersListView"
+        style="@style/OrderListViewStyle"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/clearButton" >
+    </ListView>
+
+    <ImageView
+        android:id="@+id/refreshButton"
+        style="@style/RefreshButtonStyle"
+        android:contentDescription="@null"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/label_no_such_orders"
+        android:textColor="#888888"
+        android:textSize="20sp"
+        android:visibility="gone" >
+    </TextView>
+
+</RelativeLayout>

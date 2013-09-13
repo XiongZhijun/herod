@@ -50,7 +50,7 @@ public class SearchGoodsListFragment extends AbstractGoodsListFragment {
 	public void query(String query) {
 		goodsName = query;
 		clear();
-		loadGoods();
+		loadDataFromRemote();
 	}
 
 	@Override

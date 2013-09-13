@@ -5,28 +5,23 @@
     android:orientation="vertical" >
 
     <org.herod.framework.widget.XListView
-        android:id="@+id/goodsListView"
+        android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@color/ActivityBackground"
         android:dividerHeight="10dip" >
     </org.herod.framework.widget.XListView>
 
-    <ImageView
-        android:id="@+id/refreshButton"
-        style="@style/RefreshButtonStyle"
-        android:contentDescription="@null"
+    <include
+        layout="@layout/refreshbutton"
         android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/emptyView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/label_goods_list_empty_view"
-        android:textColor="#888888"
-        android:textSize="20sp"
-        android:visibility="gone" >
-    </TextView>
+    <include
+        layout="@layout/emptyview"
+        android:visibility="gone" />
+
+    <include
+        layout="@layout/progressbar"
+        android:visibility="gone" />
 
 </RelativeLayout>

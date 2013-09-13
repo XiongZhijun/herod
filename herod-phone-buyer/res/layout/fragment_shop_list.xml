@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <GridView
-        android:id="@+id/shopsGridView"
+        android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dip"
@@ -14,10 +14,12 @@
         android:verticalSpacing="10dip" >
     </GridView>
 
-    <ImageView
-        android:id="@+id/refreshButton"
-        style="@style/RefreshButtonStyle"
-        android:contentDescription="@null"
+    <include
+        layout="@layout/refreshbutton"
+        android:visibility="gone" />
+
+    <include
+        layout="@layout/emptyview"
         android:visibility="gone" />
 
     <include

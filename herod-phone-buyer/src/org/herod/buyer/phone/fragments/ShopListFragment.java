@@ -18,19 +18,16 @@ import java.util.Map;
 import org.herod.buyer.phone.BuyerContext;
 import org.herod.buyer.phone.GoodsListActivity;
 import org.herod.buyer.phone.R;
-import org.herod.framework.BaseFragment;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.RepeatedlyTask;
 import org.herod.framework.ViewFindable;
 import org.herod.framework.adapter.SimpleAdapter.ViewBinder;
 import org.herod.order.common.ImageLoaderAdapter;
-import org.herod.order.common.RefreshButtonHelper;
+import org.herod.order.common.ListViewFragment;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
@@ -45,33 +42,47 @@ import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
  * @email hust.xzj@gmail.com
  * 
  */
-public class ShopListFragment extends BaseFragment implements ViewFindable,
-		AsyncTaskable<Object, List<MapWrapper<String, Object>>>,
-		OnItemClickListener {
-	private GridView shopsGridView;
-	private RefreshButtonHelper refreshButtonHelper;
-	private RepeatedlyTask<Object, List<MapWrapper<String, Object>>> loadShopsTask;
+public class ShopListFragment extends
+		ListViewFragment<GridView, Object, List<MapWrapper<String, Object>>>
+		implements ViewFindable, OnItemClickListener {
 	private Map<Long, Boolean> shopStatusMap = new HashMap<Long, Boolean>();
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_shop_list, container,
-				false);
-		shopsGridView = (GridView) view.findViewById(R.id.shopsGridView);
-		shopsGridView.setOnItemClickListener(this);
-		return view;
+	protected int getLayoutResources() {
+		return R.layout.fragment_shop_list;
+	}
+
+	@Override
+	protected void initListView(GridView listView) {
+		listView.setOnItemClickListener(this);
+		listView.setOnScrollListener(new PauseOnScrollListener(ImageLoaderUtils
+				.getImageLoader(), false, true));
+	}
+
+	@Override
+	protected RepeatedlyTask<Object, List<MapWrapper<String, Object>>> createRepeatedlyTask(
+			AsyncTaskable<Object, List<MapWrapper<String, Object>>> asyncTaskable) {
+		return new RepeatedlyTask<Object, List<MapWrapper<String, Object>>>(
+				asyncTaskable);
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		loadShopsTask = new RepeatedlyTask<Object, List<MapWrapper<String, Object>>>(
-				this);
-		loadShopsTask.setProgressBar(view.findViewById(R.id.progressBar));
-		refreshButtonHelper = new RefreshButtonHelper(this, loadShopsTask,
-				R.id.refreshButton, R.id.shopsGridView);
-		loadShopsTask.execute(getActivity());
+		loadDataFromRemote();
+	}
+
+	@Override
+	protected void onPostExecute0(List<MapWrapper<String, Object>> shops) {
+		shopStatusMap.clear();
+		ImageLoaderAdapter adapter = new ImageLoaderAdapter(getActivity(),
+				shops, R.layout.fragment_shop_list_shop_item, new String[] {
+						NAME, IMAGE_URL, SERVICE_TIMES }, new int[] {
+						R.id.name, R.id.image, R.id.noServicePanel });
+		ViewBinder viewBinder = new ShopViewBinder();
+		adapter.setViewBinder(viewBinder);
+		getListView().setAdapter(adapter);
+
 	}
 
 	@Override
@@ -83,23 +94,6 @@ public class ShopListFragment extends BaseFragment implements ViewFindable,
 	public List<MapWrapper<String, Object>> runOnBackground(Object... params) {
 		long shopTypeId = getArguments().getLong(SHOP_TYPE_ID);
 		return BuyerContext.getBuyerService().findShopesByType(shopTypeId);
-	}
-
-	@Override
-	public void onPostExecute(List<MapWrapper<String, Object>> shops) {
-		if (refreshButtonHelper.checkNullResult(shops)) {
-			return;
-		}
-		shopStatusMap.clear();
-		ImageLoaderAdapter adapter = new ImageLoaderAdapter(getActivity(),
-				shops, R.layout.fragment_shop_list_shop_item, new String[] {
-						NAME, IMAGE_URL, SERVICE_TIMES }, new int[] {
-						R.id.name, R.id.image, R.id.noServicePanel });
-		ViewBinder viewBinder = new ShopViewBinder();
-		adapter.setViewBinder(viewBinder);
-		shopsGridView.setAdapter(adapter);
-		shopsGridView.setOnScrollListener(new PauseOnScrollListener(
-				ImageLoaderUtils.getImageLoader(), false, true));
 	}
 
 	@SuppressWarnings("unchecked")

@@ -13,21 +13,18 @@ import org.herod.buyer.phone.R;
 import org.herod.buyer.phone.adapter.OrderListAdapter;
 import org.herod.buyer.phone.db.OrderDao;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
-import org.herod.framework.BaseFragment;
 import org.herod.framework.BundleBuilder;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.RepeatedlyTask;
 import org.herod.framework.db.DatabaseOpenHelper;
-import org.herod.order.common.RefreshButtonHelper;
+import org.herod.order.common.ListViewFragment;
 import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderStatus;
 
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -36,38 +33,33 @@ import android.widget.ListView;
  * @author Xiong Zhijun
  * @email hust.xzj@gmail.com
  */
-public class HistoryOrdersFragment extends BaseFragment implements
-		AsyncTaskable<Object, List<Order>>, OnClickListener {
+public class HistoryOrdersFragment extends
+		ListViewFragment<ListView, Object, List<Order>> implements
+		OnClickListener {
 
 	private static final String STATUSES = "statuses";
-	private ListView orderListView;
-	private RefreshButtonHelper refreshButtonHelper;
-	private RepeatedlyTask<Object, List<Order>> loadOrdersTask;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_history_orders,
-				container, false);
-		orderListView = (ListView) view.findViewById(R.id.ordersListView);
-		View clearButton = view.findViewById(R.id.clearButton);
-		clearButton.setOnClickListener(this);
-		return view;
+	protected int getLayoutResources() {
+		return R.layout.fragment_history_orders;
+	}
+
+	@Override
+	protected void initListView(ListView listView) {
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		loadOrdersTask = new RepeatedlyTask<Object, List<Order>>(this);
-		refreshButtonHelper = new RefreshButtonHelper(this, loadOrdersTask,
-				R.id.refreshButton, R.id.ordersListView);
-		View emptyView = view.findViewById(R.id.emptyView);
-		orderListView.setEmptyView(emptyView);
-		refreshOrders();
+		View clearButton = findViewById(R.id.clearButton);
+		clearButton.setOnClickListener(this);
+		loadDataFromRemote();
 	}
 
-	private void refreshOrders() {
-		loadOrdersTask.execute(getActivity());
+	@Override
+	protected RepeatedlyTask<Object, List<Order>> createRepeatedlyTask(
+			AsyncTaskable<Object, List<Order>> asyncTaskable) {
+		return new RepeatedlyTask<Object, List<Order>>(asyncTaskable);
 	}
 
 	@Override
@@ -84,6 +76,13 @@ public class HistoryOrdersFragment extends BaseFragment implements
 		return allOrders;
 	}
 
+	@Override
+	protected void onPostExecute0(List<Order> orders) {
+		ListAdapter adapter = new OrderListAdapter(getActivity(), orders);
+		getListView().setAdapter(adapter);
+		findViewById(R.id.clearButton).setEnabled(orders.size() > 0);
+	}
+
 	private boolean currentFragmentIsUncompleteOrders(OrderStatus[] statuses) {
 		List<OrderStatus> list = Arrays.asList(statuses);
 		return list.contains(OrderStatus.Submitted)
@@ -97,16 +96,6 @@ public class HistoryOrdersFragment extends BaseFragment implements
 				.findOrders(uncompleteOrders);
 		orderDao.deleteOrders(ordersMap.keySet());
 		orderDao.addOrders(ordersMap.values());
-	}
-
-	@Override
-	public void onPostExecute(List<Order> orders) {
-		if (refreshButtonHelper.checkNullResult(orders)) {
-			return;
-		}
-		ListAdapter adapter = new OrderListAdapter(getActivity(), orders);
-		orderListView.setAdapter(adapter);
-		findViewById(R.id.clearButton).setEnabled(orders.size() > 0);
 	}
 
 	@Override
@@ -133,7 +122,7 @@ public class HistoryOrdersFragment extends BaseFragment implements
 			OrderDao orderDao = new OrderDao(openHelper);
 			orderDao.deleteAllOrders();
 			openHelper.close();
-			refreshOrders();
+			loadDataFromRemote();
 		}
 
 	}
@@ -145,4 +134,5 @@ public class HistoryOrdersFragment extends BaseFragment implements
 		fragment.setArguments(args);
 		return fragment;
 	}
+
 }

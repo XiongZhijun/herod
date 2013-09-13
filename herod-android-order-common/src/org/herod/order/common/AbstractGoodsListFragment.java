@@ -8,12 +8,10 @@ import static org.herod.order.common.Constants.SHOP_ID;
 
 import java.util.List;
 
-import org.herod.framework.BaseFragment;
 import org.herod.framework.HerodTask;
+import org.herod.framework.RepeatedlyTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
-import org.herod.framework.RepeatedlyTask;
-import org.herod.framework.ViewFindable;
 import org.herod.framework.adapter.SimpleAdapter;
 import org.herod.framework.adapter.SimpleAdapter.ViewBinder;
 import org.herod.framework.utils.ToastUtils;
@@ -22,10 +20,8 @@ import org.herod.framework.widget.XListView.IXListViewListener;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,42 +32,35 @@ import android.widget.Toast;
  * @email hust.xzj@gmail.com
  * 
  */
-public abstract class AbstractGoodsListFragment extends BaseFragment implements
-		ViewFindable, AsyncTaskable<Object, List<MapWrapper<String, Object>>>,
-		IXListViewListener, ViewBinder {
-	protected XListView goodsListView;
+public abstract class AbstractGoodsListFragment extends
+		ListViewFragment<XListView, Object, List<MapWrapper<String, Object>>>
+		implements IXListViewListener, ViewBinder {
 	protected SimpleAdapter adapter;
 	private int count = 20;
-	private RefreshButtonHelper refreshButtonHelper;
-	private RepeatedlyTask<Object, List<MapWrapper<String, Object>>> loadGoodsTask;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_goods_list, container,
-				false);
-		goodsListView = (XListView) view.findViewById(R.id.goodsListView);
-		goodsListView.setPullRefreshEnable(false);
-		goodsListView.setPullLoadEnable(true);
-		goodsListView.setXListViewListener(this);
+	protected void initListView(XListView listView) {
+		listView.setPullRefreshEnable(false);
+		listView.setPullLoadEnable(true);
+		listView.setXListViewListener(this);
 		adapter = createAdapter(getActivity());
 		adapter.setViewBinder(this);
-		goodsListView.setAdapter(adapter);
-		View emptyView = view.findViewById(R.id.emptyView);
-		goodsListView.setEmptyView(emptyView);
-		return view;
+		listView.setAdapter(adapter);
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		loadGoodsTask = new RepeatedlyTask<Object, List<MapWrapper<String, Object>>>(
-				this);
-		refreshButtonHelper = new RefreshButtonHelper(this, loadGoodsTask,
-				R.id.refreshButton, R.id.goodsListView);
 		if (isLoadOnViewCreated()) {
-			goodsListView.startLoadMore();
+			getListView().startLoadMore();
 		}
+	}
+
+	@Override
+	protected RepeatedlyTask<Object, List<MapWrapper<String, Object>>> createRepeatedlyTask(
+			AsyncTaskable<Object, List<MapWrapper<String, Object>>> asyncTaskable) {
+		return new RepeatedlyTask<Object, List<MapWrapper<String, Object>>>(
+				asyncTaskable);
 	}
 
 	@Override
@@ -94,18 +83,15 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 	protected abstract boolean isLoadOnViewCreated();
 
 	@Override
-	public void onPostExecute(List<MapWrapper<String, Object>> data) {
-		if (refreshButtonHelper.checkNullResult(data)) {
-			return;
-		}
+	public void onPostExecute0(List<MapWrapper<String, Object>> data) {
 		if (data.size() == 0) {
 			ToastUtils.showToast("没有更多商品了！", Toast.LENGTH_SHORT);
-			goodsListView.stopLoadMore();
+			getListView().stopLoadMore();
 		} else {
 			adapter.addData(data);
-			goodsListView.stopLoadMore();
+			getListView().stopLoadMore();
 		}
-		goodsListView.setPullLoadEnable(data.size() >= count);
+		getListView().setPullLoadEnable(data.size() >= count);
 	}
 
 	@Override
@@ -189,11 +175,7 @@ public abstract class AbstractGoodsListFragment extends BaseFragment implements
 
 	@Override
 	public void onLoadMore() {
-		loadGoods();
-	}
-
-	public void loadGoods() {
-		loadGoodsTask.execute(getActivity());
+		loadDataFromRemote();
 	}
 
 	protected IShoppingCartCache getShoppingCartCache() {

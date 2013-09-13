@@ -13,7 +13,7 @@
         android:text="@string/text_clear_history_records" />
 
     <ListView
-        android:id="@+id/ordersListView"
+        android:id="@+id/listView"
         style="@style/OrderListViewStyle"
         android:layout_height="match_parent"
         android:layout_above="@+id/clearButton" >

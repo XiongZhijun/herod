@@ -13,6 +13,7 @@ import org.herod.event.Event;
 import org.herod.event.EventCodes;
 import org.herod.event.EventFields;
 import org.herod.event.EventHeadTailHandler;
+import org.herod.worker.phone.TipHelper;
 import org.herod.worker.phone.WorkerContext;
 
 import android.content.Intent;
@@ -60,6 +61,8 @@ public class EventClientService extends TcpClientService {
 		sendBroadcast(intent);
 		if (EventCodes.SUBMIT_COMMAND.equals(event.getCode())
 				|| EventCodes.REJECT_COMMAND.equals(event.getCode())) {
+			TipHelper.vibrate(this,
+					new long[] { 700, 500, 700, 500, 700, 500 }, false);
 			MediaPlayerService.playMedia(this, DEFAULT_RING);
 		}
 	}

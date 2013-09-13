@@ -4,13 +4,6 @@
     <string name="app_name">配送应用系统</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <!-- Order Status -->
-    <string name="OrderStatus_Unsubmit">待提交</string>
-    <string name="OrderStatus_Submitted">待受理</string>
-    <string name="OrderStatus_Acceptted">待完成</string>
-    <string name="OrderStatus_Completed">已完成</string>
-    <string name="OrderStatus_Rejected">被拒绝</string>
-    <string name="OrderStatus_Cancelled">已取消</string>
     <!-- layout -->
     <string name="label_PhoneNumber">手机号：</string>
     <string name="hint_PleaseInputPhoneNumber">请输入手机号</string>

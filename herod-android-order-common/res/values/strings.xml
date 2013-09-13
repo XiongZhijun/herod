@@ -3,4 +3,11 @@
     <string name="label_goods_list_empty_view">对不起，没有符合条件的商品！</string>
     <string name="label_data_in_loading">数据加载中……</string>
 
+    <!-- 订单状态 -->
+    <string name="OrderStatus_Unsubmit">未提交</string>
+    <string name="OrderStatus_Submitted">待受理</string>
+    <string name="OrderStatus_Acceptted">待完成</string>
+    <string name="OrderStatus_Completed">已完成</string>
+    <string name="OrderStatus_Rejected">待受理</string>
+    <string name="OrderStatus_Cancelled">已取消</string>
 </resources>

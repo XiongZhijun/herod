@@ -3,13 +3,6 @@
 
     <string name="app_name">宅人汇</string>
     <string name="search_hint">请输入商品名称</string>
-    <!-- 订单状态 -->
-    <string name="OrderStatus_Unsubmit">未提交</string>
-    <string name="OrderStatus_Submitted">待受理</string>
-    <string name="OrderStatus_Acceptted">待完成</string>
-    <string name="OrderStatus_Completed">已完成</string>
-    <string name="OrderStatus_Rejected">已拒绝</string>
-    <string name="OrderStatus_Cancelled">已取消</string>
     <!-- layout -->
     <string name="text_submit">下单</string>
     <string name="text_clear_shopping_cart">清空购物车</string>

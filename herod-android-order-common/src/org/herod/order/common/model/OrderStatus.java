@@ -11,16 +11,26 @@ package org.herod.order.common.model;
  * 
  */
 public enum OrderStatus {
+
 	/** 未提交 */
-	Unsubmit,
+	Unsubmit(0),
 	/** 已提交 */
-	Submitted,
+	Submitted(1),
 	/** 已受理 */
-	Acceptted,
+	Acceptted(3),
 	/** 已完成 */
-	Completed,
+	Completed(4),
 	/** 已拒绝 */
-	Rejected,
+	Rejected(2),
 	/** 已取消 */
-	Cancelled
+	Cancelled(5);
+	private int value;
+
+	private OrderStatus(int value) {
+		this.value = value;
+	}
+
+	public int getValue() {
+		return value;
+	}
 }

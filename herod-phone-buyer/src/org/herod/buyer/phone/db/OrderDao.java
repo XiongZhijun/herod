@@ -5,6 +5,8 @@ package org.herod.buyer.phone.db;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,7 +54,9 @@ public class OrderDao extends DatabaseAccessSupport {
 	}
 
 	public List<Order> getAllOrders() {
-		return executeRead(new QueryAllOrdersReader());
+		List<Order> orders = executeRead(new QueryAllOrdersReader());
+		Collections.sort(orders, new OrderComparator());
+		return orders;
 	}
 
 	public Set<String> findAllUncompleteOrders() {
@@ -176,6 +180,13 @@ public class OrderDao extends DatabaseAccessSupport {
 				}
 			}
 			return null;
+		}
+
+	}
+
+	class OrderComparator implements Comparator<Order> {
+		public int compare(Order lhs, Order rhs) {
+			return lhs.getStatus().getValue() - rhs.getStatus().getValue();
 		}
 
 	}

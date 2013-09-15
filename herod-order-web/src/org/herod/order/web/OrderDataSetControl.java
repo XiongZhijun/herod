@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.ArrayUtils;
 import org.herod.order.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 

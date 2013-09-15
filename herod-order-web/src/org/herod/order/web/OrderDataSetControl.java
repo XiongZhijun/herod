@@ -6,6 +6,8 @@ package org.herod.order.web;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.herod.order.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,7 +24,8 @@ import com.fpi.bear.sql.condition.ConditionDefinition;
 public class OrderDataSetControl extends DataSetControl {
 	private static final List<String> DEFAULT_AGENT_MANAGE_DATA_SET = Arrays
 			.asList("ZRH_SHOP", "ZRH_GOODS_CATEGORY", "ZRH_GOODS",
-					"ZRH_AGENT_DELIVERY_WORKER", "SHOP_VIEW");
+					"ZRH_AGENT_DELIVERY_WORKER", "SHOP_VIEW",
+					"AGENT_ORDER_MANGER_LIST_VIEW");
 	@Autowired
 	private UserService userService;
 	private List<String> agentManagerDataSet = DEFAULT_AGENT_MANAGE_DATA_SET;
@@ -34,7 +37,9 @@ public class OrderDataSetControl extends DataSetControl {
 		ConditionDefinition newConditionDefinition = new ConditionDefinition();
 		if (agentManagerDataSet.contains(dataSetCode.toUpperCase())) {
 			ConditionDefinition agentIdConditionDef = createAgentIdConditionDef();
-			if (conditionDef == null) {
+			if (conditionDef == null
+					|| (conditionDef.getOp().equalsIgnoreCase("and") && CollectionUtils
+							.isEmpty(conditionDef.getConditions()))) {
 				newConditionDefinition = agentIdConditionDef;
 			} else {
 				newConditionDefinition.setOp("and");
@@ -42,8 +47,13 @@ public class OrderDataSetControl extends DataSetControl {
 				newConditionDefinition.addSubCondition(conditionDef);
 			}
 		}
+		try {
 		return super.search(contextLocation, dataSetCode, selectFields,
 				newConditionDefinition, orders, begin, end);
+		} catch(RuntimeException e) {
+	e.printStackTrace();
+			throw e;
+		}
 	}
 
 	private ConditionDefinition createAgentIdConditionDef() {

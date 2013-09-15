@@ -24,6 +24,16 @@
 			<include method="getAllDataSetDefinition" />
 			<include method="getAllContextLocations" />
 		</create>
+		<create creator="spring" javascript="OrderAccessService">
+			<param name="beanName" value="OrderAccessService" />
+			<include method="findOrderBySerialNumber" />
+		</create>
+		<convert converter="bean" match="org.herod.order.model.Order" />
+		<convert converter="enum" match="org.herod.order.model.OrderStatus" />
+		<convert converter="bean" match="org.herod.order.model.OrderItem" />
+		<convert converter="bean" match="org.herod.order.model.Address" />
+		<convert converter="bean" match="org.herod.order.model.Location" />
+		<convert converter="enum" match="org.herod.order.model.OrderItemFlag" />
 	</allow>
 
 	<signatures>

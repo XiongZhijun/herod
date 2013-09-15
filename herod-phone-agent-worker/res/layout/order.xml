@@ -26,10 +26,17 @@
             android:visibility="gone" />
 
         <ImageButton
+            android:id="@+id/rejectOrderButton"
+            style="@style/OrderButtonStyle"
+            android:contentDescription="@null"
+            android:src="@drawable/return_back"
+            android:visibility="gone" />
+
+        <ImageButton
             android:id="@+id/editOrderButton"
             style="@style/OrderButtonStyle"
             android:contentDescription="@null"
-            android:src="@android:drawable/ic_menu_edit" />
+            android:src="@drawable/edit_order" />
 
         <ImageButton
             android:id="@+id/cancelOrderButton"

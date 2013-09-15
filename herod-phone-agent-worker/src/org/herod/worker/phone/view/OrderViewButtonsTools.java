@@ -23,7 +23,7 @@ public class OrderViewButtonsTools {
 			R.id.acceptOrderButton, R.id.completeOrderButton,
 			R.id.editOrderButton, R.id.cancelOrderButton,
 			R.id.cancelEditButton, R.id.confirmEditButton,
-			R.id.addNewItemButton };
+			R.id.addNewItemButton, R.id.rejectOrderButton };
 
 	public static void refreshButtonStatus(Order order, OrderView orderView,
 			List<OrderItemView> orderItemViews) {
@@ -41,7 +41,8 @@ public class OrderViewButtonsTools {
 			for (OrderItemView view : orderItemViews) {
 				view.disableEditButtons();
 			}
-			if (order.getStatus() == OrderStatus.Submitted) {
+			if (order.getStatus() == OrderStatus.Submitted
+					|| order.getStatus() == OrderStatus.Rejected) {
 				showButtons.add(R.id.acceptOrderButton);
 				showButtons.add(R.id.editOrderButton);
 				showButtons.add(R.id.cancelOrderButton);
@@ -49,6 +50,7 @@ public class OrderViewButtonsTools {
 				showButtons.add(R.id.completeOrderButton);
 				showButtons.add(R.id.editOrderButton);
 				showButtons.add(R.id.cancelOrderButton);
+				showButtons.add(R.id.rejectOrderButton);
 			}
 		}
 		for (int buttonId : ALL_BUTTONS) {

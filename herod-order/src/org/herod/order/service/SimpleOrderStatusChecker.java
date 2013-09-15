@@ -68,7 +68,7 @@ public class SimpleOrderStatusChecker implements OrderStatusChecker {
 	private static final Object[][] ORDER_STATUS_MACHINE = new Object[][] {
 			{ Unsubmit, Arrays.asList() },
 			{ Submitted, Arrays.asList(Unsubmit) },
-			{ Acceptted, Arrays.asList(Submitted) },
+			{ Acceptted, Arrays.asList(Submitted, Rejected) },
 			{ Completed, Arrays.asList(Acceptted) },
 			{ Cancelled, Arrays.asList(Unsubmit, Submitted, Acceptted) },
 			{ Rejected, Arrays.asList(Acceptted) } };

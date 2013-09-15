@@ -90,21 +90,22 @@ public abstract class OrderListFragment extends BaseFragment implements
 	public void onPostExecute(List<Order> orders) {
 		if (CollectionUtils.isEmpty(orders)) {
 			refreshButtonHelper.enableRefresh();
+			updateQuantity(0);
 			return;
 		}
 		refreshButtonHelper.disableRefresh();
 		ordersListView.setVisibility(View.VISIBLE);
 		orderListAdapter = new OrderListAdapter(this, orders, handler);
 		ordersListView.setAdapter(orderListAdapter);
-		updateQuantity(orders);
+		updateQuantity(orders.size());
 		ordersListView.stopRefresh();
 		ordersListView.setRefreshTime(dateFormat.format(new Date()));
 	}
 
-	protected void updateQuantity(List<Order> orders) {
+	protected void updateQuantity(int quantity) {
 		OrderTabPageIndicator indicator = getIndicator();
 		if (indicator != null) {
-			indicator.setTabQauntity(getIndex(), orders.size());
+			indicator.setTabQauntity(getIndex(), quantity);
 		}
 	}
 

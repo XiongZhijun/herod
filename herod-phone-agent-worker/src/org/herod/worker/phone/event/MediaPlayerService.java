@@ -30,7 +30,13 @@ public class MediaPlayerService extends Service implements
 	public static final String MEDIA_TYPE = "mediaType";
 	public static final String DEFAULT_TYPE = "local";
 	private static final String TAG = MediaPlayerService.class.getSimpleName();
-	public MediaPlayer mMediaPlayer = new MediaPlayer();
+	public MediaPlayer mMediaPlayer;
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		mMediaPlayer = new MediaPlayer();
+	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -52,6 +58,7 @@ public class MediaPlayerService extends Service implements
 	}
 
 	private void initMediaPlayer(String path, String type) throws IOException {
+		mMediaPlayer.reset();
 		if (DEFAULT_TYPE.equals(type)) {
 			AssetManager am = getAssets();
 			AssetFileDescriptor afd = am.openFd(path);
@@ -73,7 +80,7 @@ public class MediaPlayerService extends Service implements
 			if (mMediaPlayer.isPlaying()) {
 				mMediaPlayer.stop();
 			}
-			mMediaPlayer.reset();
+			mMediaPlayer.release();
 		}
 	}
 
@@ -86,7 +93,7 @@ public class MediaPlayerService extends Service implements
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		if (mp != null)
-			mp.release();
+			mp.reset();
 	}
 
 	public static void playMedia(Context context, String mediaPath) {

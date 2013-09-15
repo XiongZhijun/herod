@@ -28,6 +28,7 @@ import static org.herod.worker.phone.R.id.completeOrderButton;
 import static org.herod.worker.phone.R.id.confirmEditButton;
 import static org.herod.worker.phone.R.id.costOfRunErrands;
 import static org.herod.worker.phone.R.id.editOrderButton;
+import static org.herod.worker.phone.R.id.rejectOrderButton;
 import static org.herod.worker.phone.R.id.route;
 import static org.herod.worker.phone.R.id.serialNumber;
 import static org.herod.worker.phone.R.id.shopName;
@@ -46,6 +47,7 @@ import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
 import org.herod.framework.form.FormHelper;
 import org.herod.framework.form.FormHelper.FormHelperBuilder;
+import org.herod.framework.utils.StringUtils;
 import org.herod.framework.utils.TextViewUtils;
 import org.herod.framework.utils.ToastUtils;
 import org.herod.framework.utils.ViewUtils;
@@ -98,7 +100,7 @@ public class OrderView extends LinearLayout implements
 	private static final int[] NEED_SET_ON_CLICK_LISTENER_VIEW_IDS = new int[] {
 			editOrderButton, acceptOrderButton, completeOrderButton,
 			cancelOrderButton, cancelEditButton, confirmEditButton,
-			addNewItemButton, shopName, buyerName, route };
+			addNewItemButton, shopName, buyerName, route, rejectOrderButton };
 
 	private static FormHelper formHelper = new FormHelperBuilder(FORM_FROM,
 			FORM_TO, Order.class).addDateSerializer(MM_DD_HH_MM).build();
@@ -201,6 +203,8 @@ public class OrderView extends LinearLayout implements
 			onBuyerNameClickListener();
 		} else if (v.getId() == R.id.completeOrderButton) {
 			onCompleteOrderButtonClick();
+		} else if (v.getId() == R.id.rejectOrderButton) {
+			onRejectOrderButtonClick();
 		} else if (v.getId() == R.id.route) {
 			Intent intent = new Intent(getContext(), MapActivity.class);
 			MapAddress deliveryAddress = new MapAddress(
@@ -227,6 +231,16 @@ public class OrderView extends LinearLayout implements
 	private void onCancelOrderButtonClick() {
 		CancelOrderDialogFragment.showDialog(activity, handler,
 				order.getSerialNumber());
+	}
+
+	private void onRejectOrderButtonClick() {
+		AsyncTaskConfirmDialogFragment.show(activity, handler,
+				new BackgroudRunnable<Object, Result>() {
+					public Result runOnBackground(Object... params) {
+						return WorkerContext.getWorkerService().rejectOrder(
+								order.getSerialNumber(), StringUtils.EMPTY);
+					}
+				}, "确定拒绝并回退该订单？", "成功拒绝并回退订单！", "拒绝回退订单失败，请重试！");
 	}
 
 	private void onCompleteOrderButtonClick() {

@@ -24,7 +24,6 @@
         android:layout_gravity="center"
         android:background="@drawable/quantity_background"
         android:gravity="center"
-        android:text="2"
         android:textColor="@color/white" />
 
     <LinearLayout
@@ -75,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
-            android:text="￥"
+            android:text="@string/text_rmb"
             android:textColor="@color/red"
             android:textSize="20sp" />
 
@@ -91,7 +90,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
-            android:text="/"
+            android:text="@string/text_forward_slash"
             android:textColor="@color/red"
             android:textSize="20sp" />
 

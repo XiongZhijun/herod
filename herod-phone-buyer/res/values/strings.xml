@@ -8,8 +8,6 @@
     <string name="text_clear_shopping_cart">清空购物车</string>
     <string name="label_click_to_go_on">点击继续逛逛</string>
     <string name="label_empty_shopping_cart_alert">您的购物车暂时没有商品</string>
-    <string name="text_rmb">￥</string>
-    <string name="text_forward_slash">/</string>
     <string name="text_clear_history_records">清空历史记录</string>
     <string name="text_alert">提醒</string>
     <string name="text_ok">确定</string>

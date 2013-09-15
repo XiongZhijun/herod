@@ -51,6 +51,10 @@ public abstract class ListViewFragment<V extends AbsListView, P, Result>
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		setVisibility(emptyView, View.GONE);
+		setVisibility(refreshButton, View.GONE);
+		setVisibility(progressBar, View.GONE);
+		setVisibility(listView, View.GONE);
 		repeatedlyTask = createRepeatedlyTask(this);
 		refreshButtonHelper = new RefreshButtonHelper(this, repeatedlyTask,
 				R.id.refreshButton, R.id.listView);
@@ -69,6 +73,10 @@ public abstract class ListViewFragment<V extends AbsListView, P, Result>
 		setVisibility(refreshButton, View.GONE);
 		setVisibility(progressBar, View.VISIBLE);
 		setVisibility(listView, View.GONE);
+		executeLoadDataTask();
+	}
+
+	public void executeLoadDataTask() {
 		repeatedlyTask.execute(getActivity());
 	}
 

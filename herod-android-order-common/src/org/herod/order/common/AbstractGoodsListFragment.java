@@ -9,9 +9,9 @@ import static org.herod.order.common.Constants.SHOP_ID;
 import java.util.List;
 
 import org.herod.framework.HerodTask;
-import org.herod.framework.RepeatedlyTask;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
+import org.herod.framework.RepeatedlyTask;
 import org.herod.framework.adapter.SimpleAdapter;
 import org.herod.framework.adapter.SimpleAdapter.ViewBinder;
 import org.herod.framework.utils.ToastUtils;
@@ -43,17 +43,11 @@ public abstract class AbstractGoodsListFragment extends
 		listView.setPullRefreshEnable(false);
 		listView.setPullLoadEnable(true);
 		listView.setXListViewListener(this);
-		adapter = createAdapter(getActivity());
-		adapter.setViewBinder(this);
-		listView.setAdapter(adapter);
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		if (isLoadOnViewCreated()) {
-			getListView().startLoadMore();
-		}
 	}
 
 	@Override
@@ -64,9 +58,25 @@ public abstract class AbstractGoodsListFragment extends
 	}
 
 	@Override
+	public void onStart() {
+		super.onStart();
+		if (isLoadOnViewCreated()) {
+			loadDataFromRemote();
+		}
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		adapter = null;
+	}
+
+	@Override
 	public void onResume() {
 		super.onResume();
-		adapter.notifyDataSetChanged();
+		if (adapter != null) {
+			adapter.notifyDataSetChanged();
+		}
 	}
 
 	protected abstract SimpleAdapter createAdapter(FragmentActivity activity);
@@ -88,6 +98,11 @@ public abstract class AbstractGoodsListFragment extends
 			ToastUtils.showToast("没有更多商品了！", Toast.LENGTH_SHORT);
 			getListView().stopLoadMore();
 		} else {
+			if (adapter == null) {
+				adapter = createAdapter(getActivity());
+				adapter.setViewBinder(this);
+				getListView().setAdapter(adapter);
+			}
 			adapter.addData(data);
 			getListView().stopLoadMore();
 		}
@@ -175,7 +190,7 @@ public abstract class AbstractGoodsListFragment extends
 
 	@Override
 	public void onLoadMore() {
-		loadDataFromRemote();
+		executeLoadDataTask();
 	}
 
 	protected IShoppingCartCache getShoppingCartCache() {

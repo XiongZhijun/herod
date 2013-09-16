@@ -18,12 +18,22 @@ http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 		<property name="versionType" value="PLATFORM_DB_VERSION" />
 		<property name="order" value="0" />
 	</bean>
+	
+	<bean class="com.fpi.bear.tools.db.DatabaseInitToolBeanPostProcessor"
+		lazy-init="false">
+		<property name="serverType" value="info" />
+		<property name="dataSourceBeanName" value="dataSource" />
+		<property name="root" value="/WEB-INF/sqls" />
+		<property name="group" value="herod" />
+		<property name="versionType" value="HEROD_ORDER_DB_VERSION" />
+		<property name="order" value="1" />
+	</bean>
 
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
 		<property name="jdbcUrl"
-			value="jdbc:mysql://172.16.254.15:3306/herod-order?useUnicode=true&amp;characterEncoding=utf-8&amp;allowMultiQueries=true" />
+			value="jdbc:mysql://172.16.254.15:3306/herod-order-release?useUnicode=true&amp;characterEncoding=utf-8&amp;allowMultiQueries=true" />
 		<property name="user" value="root" />
 		<property name="password" value="123456" />
 		<property name="maxIdleTime" value="28000" />

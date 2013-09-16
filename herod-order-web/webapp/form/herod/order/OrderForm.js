@@ -81,6 +81,7 @@ Ext.define('form.herod.order.OrderForm', {
 				xtype : 'textareafield',
 				fieldLabel : '备注',
 				width : 500,
+				height : 50,
 				colspan : 2,
 				allowBlank : true
 			}, {
@@ -114,20 +115,19 @@ Ext.define('form.herod.order.OrderForm', {
 				},
 				columns : [ {
 					header : '商品',
-					dataIndex : 'goodsName'
+					dataIndex : 'goodsName',
+					flex : 1
 				}, {
 					header : '销售单价',
-					dataIndex : 'sellingPrice',
-					flex : 1
+					dataIndex : 'sellingPrice'
 				}, {
 					header : '供货价',
-					dataIndex : 'supplyPrice',
-					flex : 1
+					dataIndex : 'supplyPrice'
 				}, {
 					header : '数量',
 					dataIndex : 'quantity'
 				} ],
-				height : 100,
+				height : 150,
 				width : 500,
 			} ]
 		});

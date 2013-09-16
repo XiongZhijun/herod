@@ -1,0 +1,332 @@
+DROP TABLE IF EXISTS `ZRH_AGENT`;
+
+CREATE TABLE `ZRH_AGENT` (
+  `ID` bigint(19) NOT NULL auto_increment,
+  `NAME` varchar(255) NOT NULL,
+  `LEGAL_REPRESENTATIVE` varchar(255) default NULL,
+  `LINKMAN` varchar(255) default NULL,
+  `CONTACT_NUMBER` varchar(255) default NULL,
+  `CONTACT_ADDRESS` varchar(255) default NULL,
+  `BANK_NAME` varchar(255) default NULL,
+  `BANK_ACCOUNT` varchar(255) default NULL,
+  `ORGANIZATION_CODE` varchar(255) default NULL,
+  `BUSINESS_LICENSE` varchar(255) default NULL,
+  `ADMIN_ACCOUNT` varchar(255) default NULL,
+  `PINYIN` varchar(255) default NULL,
+  `TIMESTAMP` datetime default NULL,
+  PRIMARY KEY  (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `ZRH_AGENT_DELIVERY_WORKER`;
+
+CREATE TABLE `ZRH_AGENT_DELIVERY_WORKER` (
+  `ID` bigint(19) NOT NULL auto_increment,
+  `NAME` varchar(255) NOT NULL,
+  `PHONE` varchar(255) NOT NULL,
+  `PASSWORD` varchar(255) NOT NULL,
+  `AGENT_ID` bigint(19) NOT NULL,
+  `FLAG` int(11) NOT NULL default '1',
+  `PINYIN` varchar(255) default NULL,
+  `ID_NUMBER` varchar(255) NOT NULL,
+  `TIMESTAMP` datetime default NULL,
+  PRIMARY KEY  (`ID`),
+  KEY `FK_ZRH_AGENT_DELIVERY_WORKER_AGENT_ID` (`AGENT_ID`),
+  CONSTRAINT `FK_ZRH_AGENT_DELIVERY_WORKER_AGENT_ID` FOREIGN KEY (`AGENT_ID`) REFERENCES `zrh_agent` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `ZRH_SHOP_TYPE`;
+
+CREATE TABLE `ZRH_SHOP_TYPE` (
+  `ID` bigint(19) NOT NULL auto_increment,
+  `NAME` varchar(255) NOT NULL,
+  `IMAGE_URL` varchar(255) default NULL,
+  `PINYIN` varchar(255) default NULL,
+  `COMMENT` varchar(2048) default NULL,
+  `SORT` int(11) default '1',
+  `TIMESTAMP` datetime default NULL,
+  PRIMARY KEY  (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ZRH_SHOP`;
+
+CREATE TABLE `ZRH_SHOP` (
+  `ID` bigint(19) NOT NULL auto_increment,
+  `NAME` varchar(255) NOT NULL,
+  `SHOP_TYPE_ID` bigint(19) default NULL,
+  `AGENT_ID` bigint(19) default NULL,
+  `ADDRESS` varchar(255) default NULL,
+  `CONTACT_NUMBER` varchar(255) default NULL,
+  `LONGITUDE` double default NULL,
+  `LATITUDE` double default NULL,
+  `SERVICE_RADIUS` int(11) default NULL,
+  `IMAGE_URL` varchar(255) default NULL,
+  `BANK_NAME` varchar(255) default NULL,
+  `BANK_ACCOUNT` varchar(255) default NULL,
+  `ORGANIZATION_CODE` varchar(255) default NULL,
+  `BUSINESS_LICENSE` varchar(255) default NULL,
+  `PINYIN` varchar(255) default NULL,
+  `LINKMAN` varchar(255) default NULL,
+  `COMMENT` varchar(255) default NULL,
+  `COST_OF_RUN_ERRANDS` double default '0',
+  `MIN_CHARGE_FOR_FREE_DELIVERY` double default '0',
+  `SORT` int(11) default '1',
+  `TIMESTAMP` datetime default NULL,
+  `SERVICE_TIMES` varchar(255) default NULL,
+  PRIMARY KEY  (`ID`),
+  KEY `FK_ZRH_SHOP_SHOP_TYPE_ID` (`SHOP_TYPE_ID`),
+  KEY `FK_ZRH_SHOP_AGENT_ID` (`AGENT_ID`),
+  CONSTRAINT `FK_ZRH_SHOP_AGENT_ID` FOREIGN KEY (`AGENT_ID`) REFERENCES `zrh_agent` (`ID`),
+  CONSTRAINT `FK_ZRH_SHOP_SHOP_TYPE_ID` FOREIGN KEY (`SHOP_TYPE_ID`) REFERENCES `zrh_shop_type` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ZRH_GOODS_CATEGORY`;
+
+CREATE TABLE `ZRH_GOODS_CATEGORY` (
+  `ID` bigint(19) NOT NULL auto_increment,
+  `NAME` varchar(255) NOT NULL,
+  `ALIAS` varchar(255) default NULL,
+  `SHOP_ID` bigint(19) NOT NULL,
+  `PINYIN` varchar(255) default NULL,
+  `AGENT_ID` bigint(19) default NULL,
+  `SORT` int(11) default '1',
+  `TIMESTAMP` datetime default NULL,
+  PRIMARY KEY  (`ID`),
+  KEY `FK_ZRH_GOODS_CATEGORY_SHOP_ID` (`SHOP_ID`),
+  KEY `FK_ZRH_GOODS_CATEGORY_AGENT_ID` (`AGENT_ID`),
+  CONSTRAINT `FK_ZRH_GOODS_CATEGORY_AGENT_ID` FOREIGN KEY (`AGENT_ID`) REFERENCES `zrh_agent` (`ID`),
+  CONSTRAINT `FK_ZRH_GOODS_CATEGORY_SHOP_ID` FOREIGN KEY (`SHOP_ID`) REFERENCES `zrh_shop` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `ZRH_GOODS`;
+
+CREATE TABLE `ZRH_GOODS` (
+  `ID` bigint(19) NOT NULL auto_increment,
+  `NAME` varchar(255) NOT NULL,
+  `CODE` varchar(255) NOT NULL,
+  `ALIAS` varchar(255) default NULL,
+  `SUPPLY_PRICE` double NOT NULL default '0',
+  `SELLING_PRICE` double NOT NULL default '0',
+  `UNIT` varchar(255) default NULL,
+  `COMMENT` varchar(2048) default NULL,
+  `LARGE_IMAGE` varchar(255) default NULL,
+  `THUMBNAIL` varchar(255) default NULL,
+  `CATEGORY_ID` bigint(19) default NULL,
+  `SHOP_ID` bigint(19) default NULL,
+  `AGENT_ID` bigint(19) default NULL,
+  `PINYIN` varchar(255) default NULL,
+  `SORT` int(11) default '1',
+  `TIMESTAMP` datetime default NULL,
+  PRIMARY KEY  (`ID`),
+  KEY `FK_ZRH_GOODS_CATEGORY_ID` (`CATEGORY_ID`),
+  KEY `FK_ZRH_GOODS_SHOP_ID` (`SHOP_ID`),
+  KEY `FK_ZRH_GOODS_AGENT_ID` (`AGENT_ID`),
+  CONSTRAINT `FK_ZRH_GOODS_AGENT_ID` FOREIGN KEY (`AGENT_ID`) REFERENCES `zrh_agent` (`ID`),
+  CONSTRAINT `FK_ZRH_GOODS_CATEGORY_ID` FOREIGN KEY (`CATEGORY_ID`) REFERENCES `zrh_goods_category` (`ID`),
+  CONSTRAINT `FK_ZRH_GOODS_SHOP_ID` FOREIGN KEY (`SHOP_ID`) REFERENCES `zrh_shop` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+DROP TABLE IF EXISTS `ZRH_ORDER`;
+
+CREATE TABLE `ZRH_ORDER` (
+  `ID` bigint(19) NOT NULL auto_increment,
+  `SERIAL_NUMBER` varchar(255) NOT NULL,
+  `BUYER_PHONE` varchar(255) NOT NULL,
+  `BUYER_NAME` varchar(255) default NULL,
+  `AGENT_ID` bigint(19) NOT NULL,
+  `SHOP_ID` bigint(19) NOT NULL,
+  `DELIVERY_WORKER_ID` bigint(19) default '-1',
+  `STATUS` varchar(255) NOT NULL,
+  `SUBMIT_TIME` datetime default NULL,
+  `COMPLETE_TIME` datetime default NULL,
+  `PREPARE_TIME` int(11) default '0',
+  `DELIVERY_ADDRESS` varchar(255) NOT NULL,
+  `DELIVERY_LONGITUDE` double default '0',
+  `DELIVERY_LATITUDE` double default '0',
+  `COMMENT` varchar(2048) default NULL,
+  `COST_OF_RUN_ERRANDS` double default '0',
+  `SHOP_COST_OF_RUN_ERRANDS` double default '0',
+  `SHOP_MIN_CHARGE_FOR_FREE_DELIVERY` double default '0',
+  PRIMARY KEY  (`ID`),
+  KEY `FK_ZRH_ORDER_AGENT_ID` (`AGENT_ID`),
+  KEY `FK_ZRH_ORDER_SHOP_ID` (`SHOP_ID`),
+  CONSTRAINT `FK_ZRH_ORDER_AGENT_ID` FOREIGN KEY (`AGENT_ID`) REFERENCES `zrh_agent` (`ID`),
+  CONSTRAINT `FK_ZRH_ORDER_SHOP_ID` FOREIGN KEY (`SHOP_ID`) REFERENCES `zrh_shop` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `ZRH_ORDER_ITEM`;
+
+CREATE TABLE `ZRH_ORDER_ITEM` (
+  `ID` bigint(19) NOT NULL auto_increment,
+  `SERIAL_NUMBER` varchar(255) NOT NULL,
+  `ORDER_SERIAL_NUMBER` varchar(255) NOT NULL,
+  `GOODS_ID` bigint(19) NOT NULL,
+  `GOODS_CODE` varchar(255) NOT NULL,
+  `AGENT_ID` bigint(19) NOT NULL,
+  `SHOP_ID` bigint(19) NOT NULL,
+  `SELLING_PRICE` double NOT NULL default '0',
+  `SUPPLY_PRICE` double NOT NULL default '0',
+  `QUANTITY` int(11) NOT NULL default '0',
+  `FLAG` varchar(255) NOT NULL,
+  `ORIGINAL_QUANTITY` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`ID`),
+  KEY `FK_ZRH_ORDER_ITEM_GOODS_ID` (`GOODS_ID`),
+  KEY `FK_ZRH_ORDER_ITEM_AGENT_ID` (`AGENT_ID`),
+  KEY `FK_ZRH_ORDER_ITEM_SHOP_ID` (`SHOP_ID`),
+  CONSTRAINT `FK_ZRH_ORDER_ITEM_AGENT_ID` FOREIGN KEY (`AGENT_ID`) REFERENCES `zrh_agent` (`ID`),
+  CONSTRAINT `FK_ZRH_ORDER_ITEM_GOODS_ID` FOREIGN KEY (`GOODS_ID`) REFERENCES `zrh_goods` (`ID`),
+  CONSTRAINT `FK_ZRH_ORDER_ITEM_SHOP_ID` FOREIGN KEY (`SHOP_ID`) REFERENCES `zrh_shop` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `ZRH_ORDER_LOG`;
+
+CREATE TABLE `ZRH_ORDER_LOG` (
+  `ID` bigint(19) NOT NULL auto_increment,
+  `ORDER_SERIAL_NUMBER` varchar(255) NOT NULL,
+  `OPERATION` varchar(255) default NULL,
+  `REASON` varchar(255) default NULL,
+  `OPERATOR_TYPE` varchar(255) default NULL,
+  `OPERATOR` varchar(255) default NULL,
+  `OPERATE_TIME` datetime default NULL,
+  `COMMENT` varchar(255) default NULL,
+  PRIMARY KEY  (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+insert into `GROUP_` (`ID`, `NAME`, `POSITIONCODE`, `CHILDCOUNT`, `CATEGORYCODE`, `PARENTID`) values('10001','宅人汇','00000001','0','NodeTypeGroup','-1');
+
+insert into `NODETYPE` (`ID`, `CODE`, `NAME`, `PINYIN`, `GROUPID`, `CREATETIME`, `DESCRIPTION`, `TREESTRUCTURE`) values('10001','ZRH_SHOP_TYPE','商店类型','sdlx','10001',NULL,'','0');
+insert into `NODETYPE` (`ID`, `CODE`, `NAME`, `PINYIN`, `GROUPID`, `CREATETIME`, `DESCRIPTION`, `TREESTRUCTURE`) values('10002','ZRH_AGENT','代理商','dls','10001',NULL,'','0');
+insert into `NODETYPE` (`ID`, `CODE`, `NAME`, `PINYIN`, `GROUPID`, `CREATETIME`, `DESCRIPTION`, `TREESTRUCTURE`) values('10003','ZRH_AGENT_DELIVERY_WORKER','代理商配送人员','dlspsry','10001',NULL,'','0');
+insert into `NODETYPE` (`ID`, `CODE`, `NAME`, `PINYIN`, `GROUPID`, `CREATETIME`, `DESCRIPTION`, `TREESTRUCTURE`) values('10004','ZRH_SHOP','商店','sd','10001',NULL,'','0');
+insert into `NODETYPE` (`ID`, `CODE`, `NAME`, `PINYIN`, `GROUPID`, `CREATETIME`, `DESCRIPTION`, `TREESTRUCTURE`) values('10005','ZRH_GOODS_CATEGORY','商品分类','spfl','10001',NULL,'','0');
+insert into `NODETYPE` (`ID`, `CODE`, `NAME`, `PINYIN`, `GROUPID`, `CREATETIME`, `DESCRIPTION`, `TREESTRUCTURE`) values('10006','ZRH_GOODS','商品','sp','10001',NULL,'','0');
+insert into `NODETYPE` (`ID`, `CODE`, `NAME`, `PINYIN`, `GROUPID`, `CREATETIME`, `DESCRIPTION`, `TREESTRUCTURE`) values('10007','ZRH_ORDER','订单','dd','10001',NULL,'','0');
+insert into `NODETYPE` (`ID`, `CODE`, `NAME`, `PINYIN`, `GROUPID`, `CREATETIME`, `DESCRIPTION`, `TREESTRUCTURE`) values('10008','ZRH_ORDER_ITEM','订单项','ddx','10001',NULL,'','0');
+insert into `NODETYPE` (`ID`, `CODE`, `NAME`, `PINYIN`, `GROUPID`, `CREATETIME`, `DESCRIPTION`, `TREESTRUCTURE`) values('10009','ZRH_ORDER_LOG','订单操作日志','ddczrz','10001','2013-06-08 20:46:43','','0');
+
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_LOG',NULL,'订单操作日志');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_LOG','ID','主键');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_LOG','ORDER_SERIAL_NUMBER','订单流水号');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_LOG','OPERATION','操作');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_LOG','REASON','原因');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_LOG','OPERATOR_TYPE','操作者类型');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_LOG','OPERATOR','操作者');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_LOG','OPERATE_TIME','操作时间');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_LOG','COMMENT','备注');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS_CATEGORY',NULL,'商品分类');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS_CATEGORY','ID','主键');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS_CATEGORY','NAME','名称');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS_CATEGORY','ALIAS','别名');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS_CATEGORY','SHOP_ID','所属商店');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS_CATEGORY','AGENT_ID','所属代理商');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS_CATEGORY','SORT','排序');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS_CATEGORY','PINYIN','拼音');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS',NULL,'商品');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS','ID','主键');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS','NAME','名称');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS','CODE','商品编码');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS','ALIAS','别名');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS','SUPPLY_PRICE','商店供货价');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS','SELLING_PRICE','售价');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS','UNIT','计量单位');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS','COMMENT','商品备注');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS','LARGE_IMAGE','大图');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS','THUMBNAIL','缩略图');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS','CATEGORY_ID','所属商品分类');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS','SHOP_ID','所属商店');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS','AGENT_ID','所属代理商');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS','SORT','排序');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_GOODS','PINYIN','拼音');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP_TYPE',NULL,'商店类型');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP_TYPE','ID','主键');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP_TYPE','NAME','名称');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP_TYPE','IMAGE_URL','图片');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP_TYPE','COMMENT','备注');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP_TYPE','SORT','排序');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP_TYPE','PINYIN','拼音');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_ITEM',NULL,'订单项');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_ITEM','ID','主键');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_ITEM','SERIAL_NUMBER','流水号');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_ITEM','ORDER_SERIAL_NUMBER','所属订单流水号');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_ITEM','GOODS_ID','商品ID');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_ITEM','GOODS_CODE','商品编码');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_ITEM','AGENT_ID','所属代理商');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_ITEM','SHOP_ID','所属商店');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_ITEM','SELLING_PRICE','售价');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_ITEM','SUPPLY_PRICE','供货价');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_ITEM','QUANTITY','数量');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_ITEM','FLAG','标志');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER_ITEM','ORIGINAL_QUANTITY','原始的数量');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT',NULL,'代理商');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT','ID','主键');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT','NAME','名称');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT','LEGAL_REPRESENTATIVE','法人代表');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT','LINKMAN','联系人');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT','CONTACT_NUMBER','联系电话');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT','CONTACT_ADDRESS','联系地址');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT','BANK_NAME','开户行');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT','BANK_ACCOUNT','银行账号');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT','ORGANIZATION_CODE','组织机构代码');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT','BUSINESS_LICENSE','营业执照');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT','ADMIN_ACCOUNT','管理员账号');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT','TIMESTAMP','时间戳');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT','PINYIN','拼音');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT_DELIVERY_WORKER',NULL,'代理商配送人员');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT_DELIVERY_WORKER','ID','主键');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT_DELIVERY_WORKER','NAME','姓名');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT_DELIVERY_WORKER','PHONE','电话');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT_DELIVERY_WORKER','PASSWORD','密码');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT_DELIVERY_WORKER','AGENT_ID','所属代理商');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT_DELIVERY_WORKER','FLAG','状态标记');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT_DELIVERY_WORKER','ID_NUMBER','身份证号');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT_DELIVERY_WORKER','TIMESTAMP','时间戳');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_AGENT_DELIVERY_WORKER','PINYIN','拼音');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER',NULL,'订单');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','ID','主键');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','SERIAL_NUMBER','流水号');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','BUYER_PHONE','买家电话');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','BUYER_NAME','买家名称');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','AGENT_ID','所属代理商');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','SHOP_ID','所属商店');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','DELIVERY_WORKER_ID','配送人员');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','STATUS','状态');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','SUBMIT_TIME','提交时间');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','COMPLETE_TIME','完成时间');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','PREPARE_TIME','备货时间');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','DELIVERY_ADDRESS','配送地址');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','DELIVERY_LONGITUDE','配送地址经度');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','DELIVERY_LATITUDE','配送地址纬度');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','COMMENT','备注');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','COST_OF_RUN_ERRANDS','配送费');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','SHOP_COST_OF_RUN_ERRANDS','商店配送费');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_ORDER','SHOP_MIN_CHARGE_FOR_FREE_DELIVERY','商店免费起送额');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP',NULL,'商店');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','ID','主键');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','NAME','名称');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','SHOP_TYPE_ID','商店类型');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','AGENT_ID','所属代理商');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','ADDRESS','商店地址');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','CONTACT_NUMBER','联系电话');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','LONGITUDE','经度');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','LATITUDE','纬度');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','SERVICE_RADIUS','服务半径');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','IMAGE_URL','图片');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','BANK_NAME','开户行');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','BANK_ACCOUNT','银行账号');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','ORGANIZATION_CODE','组织机构代码');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','BUSINESS_LICENSE','营业执照');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','LINKMAN','联系人');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','COMMENT','备注');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','COST_OF_RUN_ERRANDS','配送费');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','MIN_CHARGE_FOR_FREE_DELIVERY','免配送费消费金额');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','SORT','排序');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','SERVICE_TIMES','服务时间');
+insert into `DATABASE_ALIAS` (`TABLE_NAME`, `COLUMN_NAME`, `ALIAS`) values('ZRH_SHOP','PINYIN','拼音');
+

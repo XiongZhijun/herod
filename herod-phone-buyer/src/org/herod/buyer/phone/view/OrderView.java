@@ -14,6 +14,7 @@ import static org.herod.buyer.phone.R.id.totalQuantity;
 import static org.herod.buyer.phone.R.id.totalWithCostOfRunErrands;
 import static org.herod.order.common.Constants.COMMENT;
 import static org.herod.order.common.Constants.COST_OF_RUN_ERRANDS;
+import static org.herod.order.common.Constants.ID;
 import static org.herod.order.common.Constants.MM_DD_HH_MM;
 import static org.herod.order.common.Constants.SERIAL_NUMBER;
 import static org.herod.order.common.Constants.SHOP_NAME;
@@ -32,6 +33,8 @@ import org.herod.buyer.phone.ShoppingCartCache;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment;
 import org.herod.buyer.phone.fragments.ConfirmDialogFragment.OnOkButtonClickListener;
 import org.herod.buyer.phone.view.OrderItemView.GoodsQuantityChangedListener;
+import org.herod.framework.HerodTask;
+import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.MapWrapper;
 import org.herod.framework.ViewFindable;
 import org.herod.framework.ci.InjectViewHelper;
@@ -91,10 +94,8 @@ public class OrderView extends LinearLayout implements
 		findViewById(R.id.shopName).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				long shopId = order.getShopId();
-				MapWrapper<String, Object> shop = BuyerContext.getShopService()
-						.findShopById(shopId);
-				GoodsListActivity.start(activity, shopId, order.getShopName(),
-						order.getShopPhone(), shop.getLong(TIMESTAMP), true);
+				new HerodTask<Long, MapWrapper<String, Object>>(
+						new ShowShopGoodsTask()).execute(shopId);
 			}
 		});
 	}
@@ -155,6 +156,24 @@ public class OrderView extends LinearLayout implements
 		line.setBackgroundColor(0xFFE5E5E5);
 		orderItemsListView.addView(line, new LayoutParams(
 				LayoutParams.MATCH_PARENT, 1));
+	}
+
+	private class ShowShopGoodsTask implements
+			AsyncTaskable<Long, MapWrapper<String, Object>> {
+
+		@Override
+		public MapWrapper<String, Object> runOnBackground(Long... params) {
+			long shopId = params[0];
+			return BuyerContext.getShopService().findShopById(shopId);
+		}
+
+		@Override
+		public void onPostExecute(MapWrapper<String, Object> shop) {
+			GoodsListActivity.start(activity, shop.getLong(ID),
+					order.getShopName(), order.getShopPhone(),
+					shop.getLong(TIMESTAMP), true);
+		}
+
 	}
 
 	private class CancelOrderListener implements OnClickListener {

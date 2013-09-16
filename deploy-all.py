@@ -12,3 +12,5 @@ for project in projects:
 
 ci_cmd = 'ant -buildfile ' + current_dir + os.sep +  ci_project + os.sep + 'build.xml deploy-all'
 os.system(ci_cmd)
+
+os.system('cp -R ~/configs/** ' + current_dir + '/runtime/server/bear-appserver/')

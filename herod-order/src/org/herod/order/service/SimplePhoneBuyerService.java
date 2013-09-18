@@ -15,7 +15,6 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.wink.common.annotations.Workspace;
 import org.herod.common.das.HerodColumnMapRowMapper;
-import org.herod.common.das.SqlUtils;
 import org.herod.order.model.Address;
 import org.herod.order.model.AgentWorker;
 import org.herod.order.model.Order;
@@ -97,8 +96,11 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 		if (CollectionUtils.isEmpty(shopTypeIds)) {
 			return Collections.emptyList();
 		}
-		return queryForList("SELECT ID,NAME,IMAGE_URL FROM ZRH_SHOP_TYPE WHERE ID IN "
-				+ SqlUtils.buildInSql(shopTypeIds) + "  ORDER BY SORT");
+		RowMapper<Map<String, Object>> rm = new HerodColumnMapRowMapper();
+		return simpleJdbcTemplate
+				.query("SELECT ID,NAME,IMAGE_URL FROM ZRH_SHOP_TYPE WHERE DELETE_FLAG = 0 AND ID IN (:shopTypeIds) ORDER BY SORT",
+						rm,
+						Collections.singletonMap("shopTypeIds", shopTypeIds));
 	}
 
 	@Override
@@ -130,7 +132,7 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 	public List<Map<String, Object>> findGoodsTypesByShop(long shopId,
 			double latitude, double longitude) {
 		return queryForList(
-				"SELECT ID,NAME,ALIAS,SHOP_ID,AGENT_ID, TIMESTAMP FROM ZRH_GOODS_CATEGORY WHERE SHOP_ID = ? ORDER BY SORT ",
+				"SELECT ID,NAME,ALIAS,SHOP_ID,AGENT_ID, TIMESTAMP FROM ZRH_GOODS_CATEGORY WHERE SHOP_ID = ? AND DELETE_FLAG = 0 ORDER BY SORT ",
 				shopId);
 	}
 
@@ -141,7 +143,7 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 				"SELECT G.ID, G.NAME, G.CODE, G.ALIAS, G.SUPPLY_PRICE, "
 						+ "G.SELLING_PRICE, G.UNIT, G.COMMENT, G.LARGE_IMAGE, G.THUMBNAIL, "
 						+ "G.CATEGORY_ID, G.SHOP_ID, G.AGENT_ID, G.TIMESTAMP, S.NAME AS SHOP_NAME FROM ZRH_GOODS G "
-						+ "LEFT JOIN ZRH_SHOP S ON G.SHOP_ID = S.ID WHERE G.CATEGORY_ID = ? ORDER BY G.SORT LIMIT ?, ?",
+						+ "LEFT JOIN ZRH_SHOP S ON G.SHOP_ID = S.ID WHERE G.CATEGORY_ID = ? AND G.DELETE_FLAG = 0 ORDER BY G.SORT LIMIT ?, ?",
 				goodsTypeId, begin, count);
 	}
 
@@ -152,7 +154,7 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 				"SELECT G.ID, G.NAME, G.CODE, G.ALIAS, G.SUPPLY_PRICE, "
 						+ "G.SELLING_PRICE, G.UNIT, G.COMMENT, G.LARGE_IMAGE, G.THUMBNAIL, "
 						+ "G.CATEGORY_ID, G.SHOP_ID, G.AGENT_ID, S.NAME AS SHOP_NAME, S.SERVICE_TIMES FROM ZRH_GOODS G "
-						+ "LEFT JOIN ZRH_SHOP S ON G.SHOP_ID = S.ID WHERE G.NAME LIKE ?  ORDER BY G.SORT LIMIT ?, ?",
+						+ "LEFT JOIN ZRH_SHOP S ON G.SHOP_ID = S.ID WHERE G.NAME LIKE ? AND G.DELETE_FLAG = 0 AND S.DELETE_FLAG = 0 ORDER BY G.SORT LIMIT ?, ?",
 				"%" + goodsName + "%", begin, count);
 		List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
 		for (Map<String, Object> goods : allGoodses) {
@@ -187,7 +189,7 @@ public class SimplePhoneBuyerService implements PhoneBuyerService {
 	}
 
 	private List<Map<String, Object>> getAllShops() {
-		return queryForList("SELECT ID, NAME, SHOP_TYPE_ID, AGENT_ID, ADDRESS, CONTACT_NUMBER, LONGITUDE, LATITUDE, SERVICE_RADIUS, IMAGE_URL, BANK_NAME, BANK_ACCOUNT, ORGANIZATION_CODE, BUSINESS_LICENSE, LINKMAN, COMMENT, COST_OF_RUN_ERRANDS, MIN_CHARGE_FOR_FREE_DELIVERY,SERVICE_TIMES, TIMESTAMP FROM ZRH_SHOP ORDER BY SORT");
+		return queryForList("SELECT ID, NAME, SHOP_TYPE_ID, AGENT_ID, ADDRESS, CONTACT_NUMBER, LONGITUDE, LATITUDE, SERVICE_RADIUS, IMAGE_URL, BANK_NAME, BANK_ACCOUNT, ORGANIZATION_CODE, BUSINESS_LICENSE, LINKMAN, COMMENT, COST_OF_RUN_ERRANDS, MIN_CHARGE_FOR_FREE_DELIVERY,SERVICE_TIMES, TIMESTAMP FROM ZRH_SHOP ORDER BY SORT WHERE DELETE_FLAG = 0");
 	}
 
 	public void setOrderDas(OrderDas orderDas) {

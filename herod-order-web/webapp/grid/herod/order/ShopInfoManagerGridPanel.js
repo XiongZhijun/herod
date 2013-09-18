@@ -13,14 +13,22 @@ Ext.require('bear.control.ux.DWRProxy');
 Ext.require('bear.module.datasource.Tools');
 
 Ext.define('grid.herod.order.ShopInfoManagerGridPanel', {
-	extend : 'bear.module.datasource.InfoManagerGridPanel',
+	extend : 'grid.InfoManagerGridPanel',
 	require : [ 'bear.module.datasource.SearchPanelControl',
 			'bear.module.datasource.InfoManagerGridPanelControl' ],
-
+	statics : {
+		confirmWin : Ext.create('Ext.window.MessageBox', {
+			buttonText : {
+				yes : "确定",
+				no : "取消",
+				ok : '确定'
+			}
+		})
+	},
 	constructor : function(config) {
 		var me = this;
 		config.gridPanelConfig.operationItems = [ {
-			icon : 'bear/module/datasource/images/edit.gif',
+			icon : 'grid/herod/order/goods_edit.png',
 			tooltip : '商品编辑',
 			handler : function(grid, rowIndex, colIndex) {
 				var record = grid.store.getAt(rowIndex).data;

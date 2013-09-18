@@ -23,6 +23,8 @@ import com.fpi.bear.db.impl.FormDataAccessServiceImpl;
 @Transactional
 public class OrderFormDataAccessService extends FormDataAccessServiceImpl {
 
+	/**  */
+	private static final String DELETE_FLAG = "DELETE_FLAG";
 	@Autowired
 	@Qualifier("simpleJdbcTemplate")
 	private SimpleJdbcTemplate simpleJdbcTemplate;
@@ -48,6 +50,16 @@ public class OrderFormDataAccessService extends FormDataAccessServiceImpl {
 		formData.addFieldData("TIMESTAMP", "date", new Date().getTime());
 		super.update(formData);
 		orderFormDataPostprocessor.postproccess(formData);
+	}
+
+	@Override
+	public void deleteById(String nodeTypeCode, long id) {
+		batchUpdateDeleteFlags(nodeTypeCode, DELETE_FLAG, new long[] { id });
+	}
+
+	@Override
+	public void deleteByIds(String nodeTypeCode, long[] ids) {
+		batchUpdateDeleteFlags(nodeTypeCode, DELETE_FLAG, ids);
 	}
 
 	public void batchUpdateDeleteFlags(String nodeTypeCode, String deleteFlag,

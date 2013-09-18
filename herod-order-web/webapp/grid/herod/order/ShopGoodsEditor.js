@@ -9,7 +9,7 @@ Ext.define('grid.herod.order.ShopGoodsEditor', {
 			items : [ {
 				id : 'categoryGrid',
 				region : 'west',
-				xtype : 'infomanagergridpanel',
+				xtype : 'zrhinfomanagergridpanel',
 				width : 200,
 				shopId : me.shopId,
 				basicCondition : {
@@ -58,7 +58,7 @@ Ext.define('grid.herod.order.ShopGoodsEditor', {
 			}, {
 				id : 'goodsGrid',
 				region : 'center',
-				xtype : 'infomanagergridpanel',
+				xtype : 'zrhinfomanagergridpanel',
 				shopId : me.shopId,
 				basicCondition : {
 					op : '=',

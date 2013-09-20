@@ -24,7 +24,7 @@ import android.support.v4.view.ViewPager;
  * 
  */
 public class HistoryOrdersActivity extends BuyerBaseActivity {
-	private static final String[] FRAGMENT_TITLES = new String[] { "未完成订单",
+	private static final String[] FRAGMENT_TITLES = new String[] { "待完成订单",
 			"已完成订单", "已取消订单" };
 	private static final OrderStatus[][] FRAGMENT_ORDER_STATUS = new OrderStatus[][] {
 			{ OrderStatus.Submitted, OrderStatus.Acceptted,

@@ -27,6 +27,7 @@ public abstract class ListViewFragment<V extends AbsListView, P, Result>
 	private RepeatedlyTask<P, Result> repeatedlyTask;
 	private RefreshButtonHelper refreshButtonHelper;
 	private View refreshButton;
+	private boolean isPaused = false;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -66,6 +67,18 @@ public abstract class ListViewFragment<V extends AbsListView, P, Result>
 	@Override
 	public void onResume() {
 		super.onResume();
+		isPaused = false;
+	}
+
+	@Override
+	public void onPause() {
+		isPaused = true;
+		super.onPause();
+	}
+
+	@Override
+	public Result runOnBackground(P... params) {
+		return null;
 	}
 
 	public void loadDataFromRemote() {
@@ -82,6 +95,9 @@ public abstract class ListViewFragment<V extends AbsListView, P, Result>
 
 	@Override
 	public void onPostExecute(Result data) {
+		if (isPaused) {
+			return;
+		}
 		setVisibility(progressBar, View.GONE);
 		if (refreshButtonHelper.checkNullResult(data)) {
 			return;

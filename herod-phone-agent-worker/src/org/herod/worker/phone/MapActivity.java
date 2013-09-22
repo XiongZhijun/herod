@@ -3,8 +3,8 @@
  */
 package org.herod.worker.phone;
 
-import static org.herod.worker.phone.Constants.DEST_ADDRESS;
-import static org.herod.worker.phone.Constants.WP_ADDRESSES;
+import static org.herod.worker.phone.Constants.ORDER;
+import static org.herod.worker.phone.Constants.TYPE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,17 +13,24 @@ import org.herod.framework.ViewFindable;
 import org.herod.framework.lbs.Location;
 import org.herod.framework.lbs.LocationManager;
 import org.herod.framework.utils.TextViewUtils;
+import org.herod.framework.utils.ToastUtils;
 import org.herod.order.common.BaseActivity;
+import org.herod.order.common.model.Order;
 import org.herod.worker.phone.lbs.LocationItem;
 import org.herod.worker.phone.lbs.LocationOverlay;
 import org.herod.worker.phone.lbs.LocationUtils;
 import org.herod.worker.phone.lbs.MKSearchHelper;
 import org.herod.worker.phone.lbs.MKSearchListenerWrapper;
 import org.herod.worker.phone.model.MapAddress;
+import org.herod.worker.phone.model.MapAddress.AddressType;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.map.MapController;
@@ -44,6 +51,8 @@ public class MapActivity extends BaseActivity implements OnClickListener,
 	MapView mMapView = null;
 	private MapAddress destAddress;
 	private List<MapAddress> wpAddresses;
+	private ProgressDialog routeProgressDialog;
+	private Order order;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,12 +62,13 @@ public class MapActivity extends BaseActivity implements OnClickListener,
 		setContentView(R.layout.activity_map);
 		mMapView = (MapView) findViewById(R.id.bmapsView);
 		mMapView.setBuiltInZoomControls(true);
-		findViewById(R.id.location).setOnClickListener(this);
+		findViewById(R.id.currentLocation).setOnClickListener(this);
+		findViewById(R.id.shopLocation).setOnClickListener(this);
+		findViewById(R.id.buyerLocation).setOnClickListener(this);
 		findViewById(R.id.route).setOnClickListener(this);
 		findViewById(R.id.routeInfo).setVisibility(View.GONE);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void onResume() {
 		mMapView.onResume();
@@ -71,8 +81,11 @@ public class MapActivity extends BaseActivity implements OnClickListener,
 		// setCenter(currentLocation);
 
 		Bundle extras = getIntent().getExtras();
-		destAddress = (MapAddress) extras.getSerializable(DEST_ADDRESS);
-		wpAddresses = (List<MapAddress>) extras.getSerializable(WP_ADDRESSES);
+		MapType type = (MapType) extras.getSerializable(TYPE);
+		order = (Order) extras.getSerializable(ORDER);
+		showButtons(type);
+		destAddress = getDestAddress(type, order);
+		wpAddresses = getWPAddresses(type, order);
 		if (destAddress != null) {
 			setCenter(destAddress.getAddress().getLocation());
 		} else {
@@ -89,6 +102,47 @@ public class MapActivity extends BaseActivity implements OnClickListener,
 		}
 		showLocation(locationItems);
 
+	}
+
+	private void showButtons(MapType type) {
+		findViewById(R.id.currentLocation).setVisibility(View.VISIBLE);
+		switch (type) {
+		case All:
+			findViewById(R.id.shopLocation).setVisibility(View.VISIBLE);
+			findViewById(R.id.buyerLocation).setVisibility(View.VISIBLE);
+			break;
+		case Shop:
+			findViewById(R.id.shopLocation).setVisibility(View.VISIBLE);
+			findViewById(R.id.buyerLocation).setVisibility(View.GONE);
+			break;
+		case Buyer:
+			findViewById(R.id.shopLocation).setVisibility(View.GONE);
+			findViewById(R.id.buyerLocation).setVisibility(View.VISIBLE);
+			break;
+		default:
+			break;
+		}
+	}
+
+	private List<MapAddress> getWPAddresses(MapType type, Order order) {
+		List<MapAddress> addresses = new ArrayList<MapAddress>();
+		if (type == MapType.All) {
+			addresses.add(new MapAddress(order.getShopAddress(),
+					AddressType.Shop));
+		}
+		return addresses;
+	}
+
+	private MapAddress getDestAddress(MapType type, Order order) {
+		switch (type) {
+		case All:
+		case Buyer:
+			return new MapAddress(order.getDeliveryAddress(), AddressType.Buyer);
+		case Shop:
+			return new MapAddress(order.getShopAddress(), AddressType.Shop);
+		default:
+			return null;
+		}
 	}
 
 	private void setCenter(Location center) {
@@ -119,17 +173,30 @@ public class MapActivity extends BaseActivity implements OnClickListener,
 
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.location) {
+		if (v.getId() == R.id.currentLocation) {
 			Location currentLocation = LocationManager.getInstance(this)
 					.getLatestLocation();
 			setCenter(currentLocation);
+		} else if (v.getId() == R.id.shopLocation) {
+			setCenter(order.getShopAddress().getLocation());
+		} else if (v.getId() == R.id.buyerLocation) {
+			setCenter(order.getDeliveryAddress().getLocation());
 		} else if (v.getId() == R.id.route) {
 			Location currentLocation = LocationManager.getInstance(this)
 					.getLatestLocation();
 			setCenter(currentLocation);
-
+			resetRouteProgressDialog();
+			routeProgressDialog = ProgressDialog.show(this, "提示", "路径规划中……",
+					false, true);
 			new MKSearchHelper(mBMapMan).doSearchFromCurrentLocation(this,
 					new MKSearchListener(), destAddress, wpAddresses);
+		}
+	}
+
+	private void resetRouteProgressDialog() {
+		if (routeProgressDialog != null && routeProgressDialog.isShowing()) {
+			routeProgressDialog.dismiss();
+			routeProgressDialog = null;
 		}
 	}
 
@@ -151,11 +218,25 @@ public class MapActivity extends BaseActivity implements OnClickListener,
 		TextViewUtils.setText(this, R.id.distance, plan.getDistance());
 	}
 
+	public static void showMapActivity(Context context, MapType type,
+			Order order) {
+		Intent intent = new Intent(context, MapActivity.class);
+		intent.putExtra(TYPE, type);
+		intent.putExtra(ORDER, order);
+		context.startActivity(intent);
+	}
+
+	public static void showMapActivity(Context context, Order order) {
+		showMapActivity(context, MapType.All, order);
+	}
+
 	class MKSearchListener extends MKSearchListenerWrapper {
 		@Override
 		public void onGetDrivingRouteResult(MKDrivingRouteResult result,
 				int iError) {
+			resetRouteProgressDialog();
 			if (result == null) {
+				ToastUtils.showToast("路径规划失败！", Toast.LENGTH_LONG);
 				return;
 			}
 			RouteOverlay routeOverlay = new RouteOverlay(MapActivity.this,
@@ -167,6 +248,10 @@ public class MapActivity extends BaseActivity implements OnClickListener,
 
 			showRouteInfo(plan, RouteType.Driving);
 		}
+	}
+
+	public static enum MapType {
+		Buyer, Shop, All
 	}
 
 	private enum RouteType {

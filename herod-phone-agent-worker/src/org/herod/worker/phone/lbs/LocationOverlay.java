@@ -39,6 +39,7 @@ public class LocationOverlay extends ItemizedOverlay<OverlayItem> implements
 	public boolean onTap(int index) {
 		OverlayItem item = getItem(index);
 		button.setText(item.getTitle());
+		button.setPadding(10, 5, 10, 5);
 		// 创建布局参数
 		LayoutParams layoutParam = new MapView.LayoutParams(
 		// 控件宽,继承自ViewGroup.LayoutParams

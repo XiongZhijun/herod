@@ -3,6 +3,7 @@
  */
 package org.herod.order.common.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,8 @@ import org.herod.order.common.SerialNumberUtils;
  * @email hust.xzj@gmail.com
  * 
  */
-public class Order {
+public class Order implements Serializable {
+	private static final long serialVersionUID = 7267487116986913573L;
 	/** 流水号 */
 	private String serialNumber;
 	/** 买家联系电话 */

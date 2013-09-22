@@ -24,4 +24,5 @@ public interface Constants extends org.herod.order.common.Constants {
 	String TYPE = "type";
 	String TITLE = "title";
 	String INDEX = "index";
+	String ORDER = "order";
 }

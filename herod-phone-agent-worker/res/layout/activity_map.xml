@@ -10,31 +10,52 @@
         android:layout_height="fill_parent"
         android:clickable="true" />
 
-    <ImageButton
-        android:id="@+id/location"
-        android:layout_width="60dip"
-        android:layout_height="60dip"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="60dip"
-        android:background="@drawable/order_btn"
-        android:contentDescription="@null"
-        android:scaleType="center"
-        android:src="@drawable/custom_loc" />
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="30dip"
+        android:background="#e0666666"
+        android:orientation="vertical" >
 
-    <ImageButton
-        android:id="@+id/route"
-        android:layout_width="60dip"
-        android:layout_height="60dip"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="120dip"
-        android:background="@drawable/order_btn"
-        android:contentDescription="@null"
-        android:scaleType="center"
-        android:src="@drawable/icon_route" />
+        <ImageButton
+            android:id="@+id/currentLocation"
+            android:layout_width="60dip"
+            android:layout_height="60dip"
+            android:background="@drawable/order_btn"
+            android:contentDescription="@null"
+            android:scaleType="center"
+            android:src="@drawable/location_current" />
+
+        <ImageButton
+            android:id="@+id/shopLocation"
+            android:layout_width="60dip"
+            android:layout_height="60dip"
+            android:background="@drawable/order_btn"
+            android:contentDescription="@null"
+            android:scaleType="center"
+            android:src="@drawable/ic_pin_shop" />
+
+        <ImageButton
+            android:id="@+id/buyerLocation"
+            android:layout_width="60dip"
+            android:layout_height="60dip"
+            android:background="@drawable/order_btn"
+            android:contentDescription="@null"
+            android:scaleType="center"
+            android:src="@drawable/ic_pin_buyer" />
+
+        <ImageButton
+            android:id="@+id/route"
+            android:layout_width="60dip"
+            android:layout_height="60dip"
+            android:background="@drawable/order_btn"
+            android:contentDescription="@null"
+            android:scaleType="center"
+            android:src="@drawable/icon_route" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/routeInfo"

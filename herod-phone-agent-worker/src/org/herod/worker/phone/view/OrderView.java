@@ -16,8 +16,6 @@ import static org.herod.order.common.Constants.SUBMIT_TIME;
 import static org.herod.order.common.Constants.TOTAL_AMOUNT_WITH_COST_OF_RUN_ERRANDS;
 import static org.herod.order.common.Constants.TOTAL_QUANTITY;
 import static org.herod.worker.phone.Constants.BUYER_NAME;
-import static org.herod.worker.phone.Constants.DEST_ADDRESS;
-import static org.herod.worker.phone.Constants.WP_ADDRESSES;
 import static org.herod.worker.phone.R.id.acceptOrderButton;
 import static org.herod.worker.phone.R.id.addNewItemButton;
 import static org.herod.worker.phone.R.id.buyerName;
@@ -56,21 +54,18 @@ import org.herod.order.common.model.OrderItem;
 import org.herod.order.common.model.Result;
 import org.herod.worker.phone.GoodsListActivity;
 import org.herod.worker.phone.MapActivity;
+import org.herod.worker.phone.MapActivity.MapType;
 import org.herod.worker.phone.R;
 import org.herod.worker.phone.WorkerContext;
 import org.herod.worker.phone.fragment.AsyncTaskConfirmDialogFragment;
 import org.herod.worker.phone.fragment.CancelOrderDialogFragment;
 import org.herod.worker.phone.fragment.OrderListFragment;
 import org.herod.worker.phone.fragment.PlaceInfoDialogFragment;
-import org.herod.worker.phone.fragment.PlaceInfoDialogFragment.Type;
 import org.herod.worker.phone.fragment.UpdateOrderDialogFragment;
 import org.herod.worker.phone.handler.HerodHandler;
-import org.herod.worker.phone.model.MapAddress;
-import org.herod.worker.phone.model.MapAddress.AddressType;
 import org.herod.worker.phone.view.OrderItemView.GoodsQuantityChangedListener;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
@@ -206,26 +201,19 @@ public class OrderView extends LinearLayout implements
 		} else if (v.getId() == R.id.rejectOrderButton) {
 			onRejectOrderButtonClick();
 		} else if (v.getId() == R.id.route) {
-			Intent intent = new Intent(getContext(), MapActivity.class);
-			MapAddress deliveryAddress = new MapAddress(
-					order.getDeliveryAddress(), AddressType.Buyer);
-			intent.putExtra(DEST_ADDRESS, deliveryAddress);
-			ArrayList<MapAddress> wpAddresses = new ArrayList<MapAddress>();
-			wpAddresses.add(new MapAddress(order.getShopAddress(),
-					AddressType.Shop));
-			intent.putExtra(WP_ADDRESSES, wpAddresses);
-			getContext().startActivity(intent);
+			MapActivity.showMapActivity(getContext(), order);
 		}
 	}
 
 	private void onBuyerNameClickListener() {
-		PlaceInfoDialogFragment.showFragment(activity,
-				order.getDeliveryAddress(), order.getBuyerPhone(), Type.Buyer);
+		PlaceInfoDialogFragment.showFragment(activity, order,
+				order.getDeliveryAddress(), order.getBuyerPhone(),
+				MapType.Buyer);
 	}
 
 	private void onShopNameClickListener() {
-		PlaceInfoDialogFragment.showFragment(activity, order.getShopAddress(),
-				order.getShopPhone(), Type.Shop);
+		PlaceInfoDialogFragment.showFragment(activity, order,
+				order.getShopAddress(), order.getShopPhone(), MapType.Shop);
 	}
 
 	private void onCancelOrderButtonClick() {

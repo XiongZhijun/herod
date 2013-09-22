@@ -178,14 +178,6 @@ Ext.define('form.herod.order.ShopForm', {
 				value : 255,
 				minValue : 1
 			}, {
-				id : 'SERVICE_TIMES',
-				name : 'SERVICE_TIMES',
-				xtype : 'textareafield',
-				fieldLabel : '服务时间',
-				width : 500,
-				colspan : 2,
-				allowBlank : true
-			}, {
 				id : 'COMMENT',
 				name : 'COMMENT',
 				xtype : 'textareafield',
@@ -193,6 +185,52 @@ Ext.define('form.herod.order.ShopForm', {
 				width : 500,
 				colspan : 2,
 				allowBlank : true
+			}, {
+				id : 'SERVICE_TIMES',
+				name : 'SERVICE_TIMES',
+				xtype : 'grid',
+				height : 150,
+				width : 500,
+				colspan : 2,
+				store : new Ext.data.JsonStore({
+					fields : [ 'start', 'end' ],
+					data : []
+				}),
+				viewConifg : {
+					stripeRows : true,
+					forceFir : true,
+				},
+				columnLines : true,
+				tbar : [ {
+					xtype : 'label',
+					text : '营业时间'
+				}, {
+					xtype : 'tbfill'
+				}, {
+					xtype : 'button',
+					text : '添加',
+					handler : Ext.Function.bind(me.addServiceTime, me)
+				} ],
+				columns : [ {
+					header : '开始时间',
+					dataIndex : 'start',
+					flex : 1
+				}, {
+					header : '结束时间',
+					dataIndex : 'end',
+					flex : 1
+				}, {
+					header : '操作',
+					flex : 1,
+					xtype : 'actioncolumn',
+					items : [ {
+						icon : 'bear/module/datasource/images/delete.gif',
+						text : '删除',
+						handler : function(grid, rowIndex, colIndex) {
+							grid.getStore().removeAt(rowIndex);
+						}
+					} ]
+				} ],
 			} ]
 		});
 
@@ -248,8 +286,29 @@ Ext.define('form.herod.order.ShopForm', {
 			name : 'BUSINESS_LICENSE',
 			value : Ext.getCmp("BUSINESS_LICENSE").src
 		});
+		formData.fields.push({
+			name : 'SERVICE_TIMES',
+			value : me.getServiceTimes()
+		});
 		return formData;
 	},
+
+	getServiceTimes : function() {
+		var serviceTimes = [];
+		var store = Ext.getCmp('SERVICE_TIMES').getStore();
+		if (store.getCount() < 1) {
+			return null;
+		}
+		for ( var i = 0; i < store.getCount(); i++) {
+			var record = store.getAt(i);
+			serviceTimes.push({
+				'start' : record.get('start'),
+				'end' : record.get('end'),
+			});
+		}
+		return JSON.stringify(serviceTimes);
+	},
+
 	afterLoad : function(fieldValueMap) {
 		var lon = fieldValueMap['LONGITUDE'];
 		var lat = fieldValueMap['LATITUDE'];
@@ -264,11 +323,73 @@ Ext.define('form.herod.order.ShopForm', {
 		Ext.getCmp("BUSINESS_LICENSE").setSrc(
 				fieldValueMap['BUSINESS_LICENSE'] == null ? ''
 						: fieldValueMap['BUSINESS_LICENSE']);
+
+		var serviceTime = JSON.parse(fieldValueMap['SERVICE_TIMES']);
+		for (index in serviceTime) {
+			Ext.getCmp('SERVICE_TIMES').getStore().add({
+				'start' : serviceTime[index]['start'],
+				'end' : serviceTime[index]['end']
+			});
+		}
 	},
 	clearValue : function() {
 		var me = this;
 		me.callParent();
 		Ext.getCmp("IMAGE_URL").setSrc('');
 		Ext.getCmp("BUSINESS_LICENSE").setSrc('');
+	},
+	addServiceTime : function() {
+		new Ext.Window({
+			title : '服务时间',
+			width : 300,
+			height : 150,
+			id : 'serviceTime',
+			layout : 'fit',
+			items : [ {
+				xtype : 'form',
+				frame : true,
+				bodyPadding : 10,
+				layout : 'anchor',
+				items : [ {
+					xtype : 'timefield',
+					name : 'opentime',
+					fieldLabel : '开始时间',
+					minValue : '0:00 AM',
+					maxValue : '11:50 PM',
+					increment : 10,
+					value : '8:00 AM',
+					format : 'H:i',
+					labelWidth : 65,
+					width : 175,
+					anchor : '100%'
+				}, {
+					xtype : 'timefield',
+					name : 'closetime',
+					fieldLabel : '结束时间',
+					minValue : '0:00 AM',
+					maxValue : '11:50 PM',
+					increment : 10,
+					value : '6:00 PM',
+					format : 'H:i',
+					labelWidth : 65,
+					width : 175,
+					anchor : '100%'
+				} ],
+				buttons : [ {
+					text : '确定',
+					handler : function() {
+						var form = this.up('form').getForm();
+						var starttime = form.findField('opentime').getValue();
+						var endtime = form.findField('closetime').getValue();
+						Ext.getCmp('SERVICE_TIMES').getStore().add({
+							'start' : Ext.Date.format(starttime, 'H:i'),
+							'end' : Ext.Date.format(endtime, 'H:i')
+						});
+						this.up('window').close();
+					}
+
+				} ]
+			} ]
+		}).show();
 	}
 });

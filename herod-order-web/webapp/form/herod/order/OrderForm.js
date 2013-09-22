@@ -90,6 +90,10 @@ Ext.define('form.herod.order.OrderForm', {
 				fieldLabel : '订单项',
 				xtype : 'grid',
 				colspan : 2,
+				tbar : [ {
+					xtype : 'label',
+					text : '订单项'
+				} ],
 				store : {
 					autolaod : true,
 					fields : [ {

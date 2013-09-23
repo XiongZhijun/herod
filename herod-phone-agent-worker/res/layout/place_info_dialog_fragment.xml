@@ -7,6 +7,16 @@
     android:padding="10dip" >
 
     <TextView
+        android:id="@+id/name"
+        style="@style/OrderItemButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="32dip"
+        android:layout_marginBottom="15dip"
+        android:drawablePadding="5dip"
+        android:gravity="center_vertical"
+        android:textColor="@color/black" />
+
+    <TextView
         android:id="@+id/phone"
         style="@style/OrderItemButtonStyle"
         android:layout_width="match_parent"
@@ -14,6 +24,7 @@
         android:layout_marginBottom="15dip"
         android:drawableLeft="@android:drawable/stat_sys_phone_call"
         android:drawablePadding="5dip"
+        android:gravity="center_vertical"
         android:textColor="@color/black" />
 
     <TextView
@@ -23,6 +34,7 @@
         android:layout_height="32dip"
         android:drawableLeft="@drawable/location"
         android:drawablePadding="5dip"
+        android:gravity="center_vertical"
         android:textColor="@color/black" />
 
 </LinearLayout>

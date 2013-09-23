@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.herod.framework.utils.StringUtils;
 import org.herod.order.common.SerialNumberUtils;
 
 /**
@@ -243,6 +244,11 @@ public class Order implements Serializable {
 
 	public void setCostOfRunErrands(double costOfRunErrands) {
 		this.costOfRunErrands = costOfRunErrands;
+	}
+
+	public String getBuyerAddress() {
+		return deliveryAddress != null ? deliveryAddress.getAddress()
+				: StringUtils.EMPTY;
 	}
 
 	public int getTotalQuantity() {

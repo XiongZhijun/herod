@@ -15,7 +15,7 @@ import static org.herod.order.common.Constants.STATUS;
 import static org.herod.order.common.Constants.SUBMIT_TIME;
 import static org.herod.order.common.Constants.TOTAL_AMOUNT_WITH_COST_OF_RUN_ERRANDS;
 import static org.herod.order.common.Constants.TOTAL_QUANTITY;
-import static org.herod.worker.phone.Constants.BUYER_NAME;
+import static org.herod.worker.phone.Constants.BUYER_ADDRESS;
 import static org.herod.worker.phone.R.id.acceptOrderButton;
 import static org.herod.worker.phone.R.id.addNewItemButton;
 import static org.herod.worker.phone.R.id.buyerName;
@@ -89,7 +89,7 @@ public class OrderView extends LinearLayout implements
 			shopName, buyerName, comment, status, shopTips, costOfRunErrands,
 			totalWithCostOfRunErrands, totalQuantity };
 	private static final String[] FORM_FROM = new String[] { SERIAL_NUMBER,
-			SUBMIT_TIME, SHOP_NAME, BUYER_NAME, COMMENT, STATUS, SHOP_TIPS,
+			SUBMIT_TIME, SHOP_NAME, BUYER_ADDRESS, COMMENT, STATUS, SHOP_TIPS,
 			COST_OF_RUN_ERRANDS, TOTAL_AMOUNT_WITH_COST_OF_RUN_ERRANDS,
 			TOTAL_QUANTITY };
 	private static final int[] NEED_SET_ON_CLICK_LISTENER_VIEW_IDS = new int[] {

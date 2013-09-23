@@ -20,6 +20,7 @@ public interface Constants extends org.herod.order.common.Constants {
 
 	String WP_ADDRESSES = "wpAddresses";
 	String BUYER_NAME = "buyerName";
+	String BUYER_ADDRESS = "buyerAddress";
 
 	String TYPE = "type";
 	String TITLE = "title";

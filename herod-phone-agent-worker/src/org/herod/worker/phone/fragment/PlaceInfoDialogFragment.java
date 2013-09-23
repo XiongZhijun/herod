@@ -3,21 +3,23 @@
  */
 package org.herod.worker.phone.fragment;
 
-import static org.herod.order.common.Constants.TEL;
+import static org.herod.order.common.Constants.NAME;
 import static org.herod.worker.phone.Constants.LOCATION_NAME;
 import static org.herod.worker.phone.Constants.ORDER;
 import static org.herod.worker.phone.Constants.PHONE;
 import static org.herod.worker.phone.Constants.TYPE;
 
 import org.herod.framework.BundleBuilder;
+import org.herod.framework.ViewFindable;
+import org.herod.framework.utils.DeviceUtils;
+import org.herod.framework.utils.StringUtils;
+import org.herod.framework.utils.TextViewUtils;
 import org.herod.order.common.model.Address;
 import org.herod.order.common.model.Order;
 import org.herod.worker.phone.MapActivity;
 import org.herod.worker.phone.MapActivity.MapType;
 import org.herod.worker.phone.R;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -25,7 +27,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 /**
  * @author Xiong Zhijun
@@ -33,11 +34,12 @@ import android.widget.TextView;
  * 
  */
 public class PlaceInfoDialogFragment extends DialogFragment implements
-		OnClickListener {
+		OnClickListener, ViewFindable {
 	private String phone;
 	private String locationName;
 	private MapType type;
 	private Order order;
+	private String name;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,12 +61,19 @@ public class PlaceInfoDialogFragment extends DialogFragment implements
 		view.findViewById(R.id.phone).setOnClickListener(this);
 		view.findViewById(R.id.location).setOnClickListener(this);
 		Bundle args = getArguments();
+		name = args.getString(NAME);
+		if (StringUtils.isBlank(name)) {
+			view.findViewById(R.id.name).setVisibility(View.GONE);
+		} else {
+			view.findViewById(R.id.name).setVisibility(View.VISIBLE);
+			TextViewUtils.setText(this, R.id.name, name);
+		}
 		phone = args.getString(PHONE);
 		locationName = args.getString(LOCATION_NAME);
 		order = (Order) args.getSerializable(ORDER);
 		type = (MapType) args.getSerializable(TYPE);
-		((TextView) view.findViewById(R.id.phone)).setText(phone);
-		((TextView) view.findViewById(R.id.location)).setText(locationName);
+		TextViewUtils.setText(this, R.id.phone, phone);
+		TextViewUtils.setText(this, R.id.location, locationName);
 	}
 
 	@Override
@@ -81,20 +90,27 @@ public class PlaceInfoDialogFragment extends DialogFragment implements
 	}
 
 	private void onPhoneClickListener() {
-		Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.parse(TEL
-				+ phone));
-		startActivity(phoneIntent);
+		DeviceUtils.dial(getActivity(), phone);
 	}
 
 	public static void showFragment(FragmentActivity activity, Order order,
 			Address address, String phone, MapType type) {
 		PlaceInfoDialogFragment fragment = new PlaceInfoDialogFragment();
-		Bundle args = new BundleBuilder().putString(PHONE, phone)
+		BundleBuilder bundleBuilder = new BundleBuilder();
+		bundleBuilder.putString(PHONE, phone)
 				.putString(LOCATION_NAME, address.getAddress())
-				.putSerializable(ORDER, order).putSerializable(TYPE, type)
-				.build();
+				.putSerializable(ORDER, order).putSerializable(TYPE, type);
+		if (type == MapType.Buyer) {
+			bundleBuilder.putString(NAME, order.getBuyerName());
+		}
+		Bundle args = bundleBuilder.build();
 		fragment.setArguments(args);
 		fragment.show(activity.getSupportFragmentManager(), null);
+	}
+
+	@Override
+	public View findViewById(int id) {
+		return getView().findViewById(id);
 	}
 
 }

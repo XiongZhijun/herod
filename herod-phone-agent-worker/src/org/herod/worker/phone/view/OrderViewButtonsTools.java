@@ -21,7 +21,7 @@ public class OrderViewButtonsTools {
 
 	private static final int[] ALL_BUTTONS = new int[] {
 			R.id.acceptOrderButton, R.id.completeOrderButton,
-			R.id.editOrderButton, R.id.cancelOrderButton,
+			R.id.editOrderButton, R.id.cancelOrderButton, R.id.route,
 			R.id.cancelEditButton, R.id.confirmEditButton,
 			R.id.addNewItemButton, R.id.rejectOrderButton };
 
@@ -41,6 +41,7 @@ public class OrderViewButtonsTools {
 			for (OrderItemView view : orderItemViews) {
 				view.disableEditButtons();
 			}
+			showButtons.add(R.id.route);
 			if (order.getStatus() == OrderStatus.Submitted
 					|| order.getStatus() == OrderStatus.Rejected) {
 				showButtons.add(R.id.acceptOrderButton);

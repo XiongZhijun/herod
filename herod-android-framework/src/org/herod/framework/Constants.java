@@ -30,4 +30,6 @@ public interface Constants {
 	String USER_NAME = "username";
 	String LONGITUDE = "longitude";
 	String LATITUDE = "latitude";
+	/*****/
+	String TEL = "tel:";
 }

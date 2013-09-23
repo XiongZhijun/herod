@@ -41,6 +41,7 @@ import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
 import org.herod.framework.form.FormHelper;
 import org.herod.framework.form.FormHelper.FormHelperBuilder;
+import org.herod.framework.utils.DeviceUtils;
 import org.herod.framework.utils.TextViewUtils;
 import org.herod.order.common.model.Order;
 import org.herod.order.common.model.OrderItem;
@@ -91,6 +92,12 @@ public class OrderView extends LinearLayout implements
 		new InjectViewHelper().injectViews(this);
 		findViewById(R.id.cancelOrderButton).setOnClickListener(
 				new CancelOrderListener());
+		findViewById(R.id.callShop).setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				String phone = order != null ? order.getShopPhone() : null;
+				DeviceUtils.dial(getContext(), phone);
+			}
+		});
 		findViewById(R.id.shopName).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				long shopId = order.getShopId();

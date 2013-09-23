@@ -6,12 +6,12 @@ package org.herod.buyer.phone;
 import static org.herod.order.common.Constants.SHOP_ID;
 import static org.herod.order.common.Constants.SHOP_NAME;
 import static org.herod.order.common.Constants.SHOP_PHONE;
-import static org.herod.order.common.Constants.TEL;
 import static org.herod.order.common.Constants.TIMESTAMP;
 
 import java.util.List;
 
 import org.herod.framework.MapWrapper;
+import org.herod.framework.utils.DeviceUtils;
 import org.herod.order.common.AbstractGoodsListActivity;
 import org.herod.order.common.AbstractGoodsListFragment.QuantityChangedListener;
 import org.herod.order.common.AbstractGoodsTypeGoodsListFragment;
@@ -21,7 +21,6 @@ import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -89,9 +88,7 @@ public class GoodsListActivity extends AbstractGoodsListActivity implements
 			return true;
 		case R.id.dialing:
 			String phone = getIntent().getStringExtra(SHOP_PHONE);
-			Uri uri = Uri.parse(TEL + phone);
-			Intent it = new Intent(Intent.ACTION_DIAL, uri);
-			startActivity(it);
+			DeviceUtils.dial(this, phone);
 			return true;
 		default:
 			return false;

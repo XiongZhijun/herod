@@ -32,7 +32,6 @@ public interface Constants extends org.herod.framework.Constants {
 	String TIMESTAMP = "timestamp";
 
 	String THUMBNAIL = "thumbnail";
-	String TEL = "tel:";
 	String CODE = "code";
 	String MESSAGE = "message";
 

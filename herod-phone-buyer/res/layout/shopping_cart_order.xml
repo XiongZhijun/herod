@@ -26,9 +26,18 @@
             android:layout_weight="1" />
 
         <ImageButton
+            android:id="@+id/callShop"
+            android:layout_width="32dip"
+            android:layout_height="32dip"
+            android:background="@drawable/actionbar_btn"
+            android:contentDescription="@null"
+            android:src="@drawable/dialing" />
+
+        <ImageButton
             android:id="@+id/cancelOrderButton"
             android:layout_width="32dip"
             android:layout_height="32dip"
+            android:layout_marginLeft="10dip"
             android:background="@drawable/actionbar_btn"
             android:contentDescription="@null"
             android:src="@drawable/ticket_btn_delete" />

@@ -3,9 +3,12 @@
  */
 package org.herod.framework.utils;
 
+import static org.herod.framework.Constants.TEL;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 
@@ -16,9 +19,6 @@ import android.telephony.TelephonyManager;
  */
 public abstract class DeviceUtils {
 
-	/**
-	 * 
-	 */
 	private static final String PHONE_NUMBER = "PHONE_NUMBER";
 	private static String imei;
 	private static String phoneNumber;
@@ -55,5 +55,14 @@ public abstract class DeviceUtils {
 		editor.putString(PHONE_NUMBER, phoneNumber);
 		editor.commit();
 		DeviceUtils.phoneNumber = phoneNumber;
+	}
+
+	public static void dial(Context context, String phone) {
+		if (StringUtils.isBlank(phone)) {
+			return;
+		}
+		Uri uri = Uri.parse(TEL + phone);
+		Intent it = new Intent(Intent.ACTION_DIAL, uri);
+		context.startActivity(it);
 	}
 }

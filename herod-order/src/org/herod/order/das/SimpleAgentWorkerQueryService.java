@@ -27,7 +27,7 @@ public class SimpleAgentWorkerQueryService implements AgentWorkerQueryService {
 			String password) {
 		List<Map<String, Object>> result = simpleJdbcTemplate.queryForList(
 				"SELECT ID, NAME, AGENT_ID FROM ZRH_AGENT_DELIVERY_WORKER "
-						+ "WHERE PHONE = ? AND PASSWORD = ? AND FLAG = 1",
+						+ "WHERE PHONE = ? AND PASSWORD = ? AND FLAG = 1 AND DELETE_FLAG = 0",
 				name, password);
 		if (CollectionUtils.isEmpty(result)) {
 			return null;

@@ -17,6 +17,8 @@ import org.herod.framework.MapWrapper;
 import org.herod.framework.ViewFindable.ViewWrapper;
 import org.herod.framework.utils.StringUtils;
 import org.herod.framework.utils.TextViewUtils;
+import org.herod.framework.utils.ViewUtils;
+import org.herod.order.common.model.ShopStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,17 +33,23 @@ import android.view.View;
  * @email hust.xzj@gmail.com
  */
 public class ServiceTimeManager {
+	private static final int[] SERVICE_TIME_VIEWS = new int[] {
+			R.id.serviceTime1, R.id.serviceTime2, R.id.serviceTime3,
+			R.id.serviceTimeTitle };
 	private static final int[] SERVICE_TIME_IDS = new int[] {
 			R.id.serviceTime1, R.id.serviceTime2, R.id.serviceTime3 };
 	private static final String TAG = ServiceTimeManager.class.getSimpleName();
 	private static DateFormat dateFormat = new SimpleDateFormat("HH:mm");
 	private List<ServiceTime> serviceTimes = new ArrayList<ServiceTime>();
+	private ShopStatus shopStatus;
 
 	public ServiceTimeManager(MapWrapper<String, Object> shop) {
-		this(shop.getString(Constants.SERVICE_TIMES));
+		this(shop.getString(Constants.SERVICE_TIMES), shop.getEnum(
+				ShopStatus.class, Constants.STATUS));
 	}
 
-	public ServiceTimeManager(String serviceTimes) {
+	private ServiceTimeManager(String serviceTimes, ShopStatus shopStatus) {
+		this.shopStatus = shopStatus;
 		if (StringUtils.isBlank(serviceTimes)) {
 			return;
 		}
@@ -64,6 +72,9 @@ public class ServiceTimeManager {
 	}
 
 	public boolean isInServiceNow() {
+		if (this.shopStatus != ShopStatus.OPEN) {
+			return false;
+		}
 		Date now = new Date();
 		if (CollectionUtils.isEmpty(serviceTimes)) {
 			return true;
@@ -78,6 +89,22 @@ public class ServiceTimeManager {
 
 	public void updateServiceTimeViews(View panel) {
 		ViewWrapper viewFindable = new ViewWrapper(panel);
+		int serviceTimeVisible = View.VISIBLE;
+		int shopNotOpenVisible = View.VISIBLE;
+
+		if (this.shopStatus == ShopStatus.OPEN) {
+			shopNotOpenVisible = View.GONE;
+		} else {
+			serviceTimeVisible = View.GONE;
+		}
+
+		ViewUtils.setVisibility(viewFindable, serviceTimeVisible,
+				SERVICE_TIME_VIEWS);
+		ViewUtils.setVisibility(viewFindable, shopNotOpenVisible,
+				R.id.shopNotOpenLabel);
+		if (shopNotOpenVisible == View.VISIBLE) {
+			return;
+		}
 		for (int i = 0; i < SERVICE_TIME_IDS.length && i < serviceTimes.size(); i++) {
 			TextViewUtils.setText(viewFindable, SERVICE_TIME_IDS[i],
 					serviceTimes.get(i));

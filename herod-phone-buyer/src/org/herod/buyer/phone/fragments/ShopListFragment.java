@@ -113,16 +113,14 @@ public class ShopListFragment extends
 
 	class ShopViewBinder implements ViewBinder {
 		public boolean setViewValue(View dataSetView,
-				MapWrapper<String, Object> dataSet, View view, String from,
+				MapWrapper<String, Object> shop, View view, String from,
 				int to, int position, Object data, String textRepresentation) {
 			if (to != R.id.noServicePanel) {
 				return false;
 			}
-			String serviceTimes = (String) data;
-			ServiceTimeManager serviceTimeManager = new ServiceTimeManager(
-					serviceTimes);
+			ServiceTimeManager serviceTimeManager = new ServiceTimeManager(shop);
 			boolean inServiceNow = serviceTimeManager.isInServiceNow();
-			shopStatusMap.put(dataSet.getLong(ID), inServiceNow);
+			shopStatusMap.put(shop.getLong(ID), inServiceNow);
 			if (inServiceNow) {
 				view.setVisibility(View.GONE);
 			} else {

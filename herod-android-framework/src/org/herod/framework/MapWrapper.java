@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.herod.framework.utils.MapUtils;
+import org.herod.framework.utils.StringUtils;
 
 /**
  * 
@@ -39,6 +40,14 @@ public class MapWrapper<K, V> implements Serializable {
 
 	public String getString(K key) {
 		return MapUtils.getString(map, key);
+	}
+
+	public <E extends Enum<E>> E getEnum(Class<E> clazz, K key) {
+		String str = getString(key);
+		if (StringUtils.isBlank(str)) {
+			return null;
+		}
+		return Enum.valueOf(clazz, str);
 	}
 
 	public V get(K key) {

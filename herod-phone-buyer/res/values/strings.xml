@@ -41,5 +41,6 @@
     <string name="label_shop_business_hours">商店营业时间：</string>
     <string name="label_data_in_loading">数据加载中……</string>
     <string name="label_no_such_orders">没有符合要求的订单……</string>
+    <string name="text_shop_not_open_info">对不起，本商店暂停服务，给您带来不便敬请谅解！</string>
 
 </resources>

@@ -12,9 +12,7 @@ def execCmd(cmd):
 
 output = execCmd('ps aux | grep java')
 print(output)
-pattern = re.compile(r'^\w+\s+(\d+)')
 
-search = pattern.search(output)
-for pid in search.groups():
-    print('kill ' + pid)
+for pid in re.findall(r'^\w+\s+(\d+)', output, re.M):
+    print(pid)
     print(execCmd('kill ' + pid))

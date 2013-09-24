@@ -65,7 +65,6 @@ Ext.define('form.herod.order.DeliveryWorkerForm', {
 	},
 	afterLoad : function(fieldValueMap) {
 		var me = this;
-		me.callParent();
 		if (fieldValueMap['FLAG'] == 1) {
 			var radio = Ext.getCmp('radio1');
 			radio.setValue(true);

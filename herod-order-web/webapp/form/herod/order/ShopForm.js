@@ -7,6 +7,10 @@
 Ext.ns('form.herod.order');
 Ext.define('form.herod.order.ShopForm', {
 	extend : 'form.Form',
+	layout : {
+		type : 'table',
+		columns : 3
+	},
 	defaults : {
 		labelAlign : 'right',
 		margin : '5 5 5 5',
@@ -23,16 +27,6 @@ Ext.define('form.herod.order.ShopForm', {
 				name : 'NAME',
 				fieldLabel : '商店名称',
 				msgTarget : 'side',
-			}, {
-				id : 'IMAGE_URL',
-				name : 'IMAGE_URL',
-				fieldLabel : '图片',
-				rowspan : 5,
-				width : 200,
-				height : 150,
-				src : '',
-				align : 'center',
-				xtype : 'image'
 			}, {
 				xtype : 'form',
 				border : false,
@@ -55,6 +49,16 @@ Ext.define('form.herod.order.ShopForm', {
 					}
 				} ]
 			}, {
+				id : 'IMAGE_URL',
+				name : 'IMAGE_URL',
+				fieldLabel : '图片',
+				rowspan : 4,
+				width : 200,
+				height : 150,
+				src : '',
+				align : 'center',
+				xtype : 'image'
+			}, {
 				id : 'SHOP_TYPE_ID',
 				name : 'SHOP_TYPE_ID',
 				xtype : 'datasetcombobox',
@@ -73,6 +77,16 @@ Ext.define('form.herod.order.ShopForm', {
 				fieldLabel : '组织机构代码',
 				msgTarget : 'side',
 				allowBlank : true
+			}, {
+				id : 'LINKMAN',
+				name : 'LINKMAN',
+				fieldLabel : '联系人',
+				msgTarget : 'side',
+			}, {
+				id : 'CONTACT_NUMBER',
+				name : 'CONTACT_NUMBER',
+				fieldLabel : '联系电话',
+				msgTarget : 'side',
 			}, {
 				xtype : 'form',
 				border : false,
@@ -96,26 +110,6 @@ Ext.define('form.herod.order.ShopForm', {
 					}
 				} ]
 			}, {
-				id : 'BUSINESS_LICENSE',
-				name : 'BUSINESS_LICENSE',
-				fieldLabel : '营业执照',
-				rowspan : 5,
-				width : 200,
-				height : 150,
-				src : '',
-				align : 'center',
-				xtype : 'image'
-			}, {
-				id : 'LINKMAN',
-				name : 'LINKMAN',
-				fieldLabel : '联系人',
-				msgTarget : 'side',
-			}, {
-				id : 'CONTACT_NUMBER',
-				name : 'CONTACT_NUMBER',
-				fieldLabel : '联系电话',
-				msgTarget : 'side',
-			}, {
 				id : 'BANK_NAME',
 				name : 'BANK_NAME',
 				fieldLabel : '开户行',
@@ -127,6 +121,16 @@ Ext.define('form.herod.order.ShopForm', {
 				fieldLabel : '银行账号',
 				msgTarget : 'side',
 				allowBlank : true
+			}, {
+				id : 'BUSINESS_LICENSE',
+				name : 'BUSINESS_LICENSE',
+				fieldLabel : '营业执照',
+				rowspan : 4,
+				width : 200,
+				height : 150,
+				src : '',
+				align : 'center',
+				xtype : 'image'
 			}, {
 				id : 'COST_OF_RUN_ERRANDS',
 				name : 'COST_OF_RUN_ERRANDS',
@@ -178,6 +182,12 @@ Ext.define('form.herod.order.ShopForm', {
 				value : 255,
 				minValue : 1
 			}, {
+				id : 'STATUS',
+				name : 'STATUS',
+				xtype : 'shopstatuscombobox',
+				fieldLabel : '商店状态',
+				msgTarget : 'side',
+			}, {
 				id : 'COMMENT',
 				name : 'COMMENT',
 				xtype : 'textareafield',
@@ -190,8 +200,7 @@ Ext.define('form.herod.order.ShopForm', {
 				name : 'SERVICE_TIMES',
 				xtype : 'grid',
 				height : 150,
-				width : 500,
-				colspan : 2,
+				colspan : 3,
 				store : new Ext.data.JsonStore({
 					fields : [ 'start', 'end' ],
 					data : []

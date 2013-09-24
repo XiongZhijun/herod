@@ -53,3 +53,5 @@
 <!--herod-->
 <script type="text/javascript" src="<%=request.getContextPath()%>/grid/OrderStatusColumn.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/grid/OrderStatusComboBox.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/form/herod/order/ShopStatusComboBox.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/form/herod/order/ShopStatusColumn.js"></script>

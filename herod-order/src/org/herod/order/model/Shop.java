@@ -36,6 +36,8 @@ public class Shop {
 	private int serviceArea;
 	/** 图片 */
 	private String imageUrl;
+	/** 店铺状态 */
+	private ShopStatus status = ShopStatus.OPEN;
 
 	public long getId() {
 		return id;
@@ -124,4 +126,13 @@ public class Shop {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
+
+	public ShopStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(ShopStatus status) {
+		this.status = status;
+	}
+
 }

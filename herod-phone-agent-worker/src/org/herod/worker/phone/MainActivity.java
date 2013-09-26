@@ -16,8 +16,6 @@ import org.herod.event.Event;
 import org.herod.framework.ci.InjectViewHelper;
 import org.herod.framework.ci.annotation.InjectView;
 import org.herod.framework.lbs.LocationManager;
-import org.herod.framework.lbs.SimpleLocationPlan;
-import org.herod.framework.lbs.SimpleLocationPlan.OnLocationSuccessListener;
 import org.herod.order.common.BaseActivity;
 import org.herod.worker.phone.event.EventActionUtils;
 import org.herod.worker.phone.event.EventClientService;
@@ -38,12 +36,10 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.baidu.location.BDLocation;
 import com.nostra13.universalimageloader.utils.ImageLoaderUtils;
 
 public class MainActivity extends BaseActivity implements Callback,
-		OnLocationSuccessListener, OnPageChangeListener, Handlerable,
-		TabPageIndicatorable {
+		OnPageChangeListener, Handlerable, TabPageIndicatorable {
 	public static final int MESSAGE_KEY_REFRESH_ORDER_LIST = 1;
 	private HerodHandler handler;
 	@InjectView(R.id.pager)
@@ -59,8 +55,8 @@ public class MainActivity extends BaseActivity implements Callback,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		ImageLoaderUtils.initImageLoader(this);
-		SimpleLocationPlan locationPlan = new SimpleLocationPlan(this);
-		LocationManager.getInstance(this).executeWithPlan(locationPlan);
+		// TODO 这里设置的定位策略有问题，因为配送员应该是一直移动的。
+		LocationManager.getInstance(this).executeWithSimplePlan();
 		new InjectViewHelper().injectViews(this);
 		handler = new HerodHandler(this);
 		orderListFragmentAdapter = new OrderGroupAdapter(
@@ -144,11 +140,6 @@ public class MainActivity extends BaseActivity implements Callback,
 		default:
 			return false;
 		}
-
-	}
-
-	@Override
-	public void onLocationSuccess(BDLocation location) {
 
 	}
 

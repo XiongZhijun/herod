@@ -30,7 +30,8 @@ public class SimpleLocationPlan implements LocationPlan, BDLocationListener,
 
 	public SimpleLocationPlan(OnLocationSuccessListener listener) {
 		super();
-		this.onLocationSuccessListener = listener;
+		this.onLocationSuccessListener = listener != null ? listener
+				: DEFAULT_LOCATION_SUCCESS_LISTENER;
 	}
 
 	@Override
@@ -85,5 +86,10 @@ public class SimpleLocationPlan implements LocationPlan, BDLocationListener,
 	public static interface OnLocationSuccessListener {
 		void onLocationSuccess(BDLocation location);
 	}
+
+	public static final OnLocationSuccessListener DEFAULT_LOCATION_SUCCESS_LISTENER = new OnLocationSuccessListener() {
+		public void onLocationSuccess(BDLocation location) {
+		}
+	};
 
 }

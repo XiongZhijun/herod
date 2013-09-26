@@ -3,6 +3,8 @@
  */
 package org.herod.framework.lbs;
 
+import org.herod.framework.lbs.SimpleLocationPlan.OnLocationSuccessListener;
+
 import android.content.Context;
 
 import com.baidu.location.BDLocation;
@@ -90,6 +92,14 @@ public class LocationManager implements BDLocationListener {
 		}
 		return new Location(latestLocation.getLongitude(),
 				latestLocation.getLatitude());
+	}
+
+	public void executeWithSimplePlan() {
+		executeWithSimplePlan(null);
+	}
+
+	public void executeWithSimplePlan(OnLocationSuccessListener listener) {
+		executeWithPlan(new SimpleLocationPlan(listener));
 	}
 
 	public void executeWithPlan(LocationPlan plan) {

@@ -129,7 +129,7 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 	@Override
 	public List<Order> findWaitCompleteOrders(long workerId) {
 		return queryOrders(
-				" WHERE DELIVERY_WORKER_ID = ? AND STATUS = ? ORDER BY SUBMIT_TIME DESC",
+				" WHERE DELIVERY_WORKER_ID = ? AND O.STATUS = ? ORDER BY SUBMIT_TIME DESC",
 				workerId, OrderStatus.Acceptted);
 	}
 
@@ -137,7 +137,7 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 	public List<Order> findHistoryOrdersByWorkerAndStatus(long workerId,
 			OrderStatus status, int begin, int count) {
 		return queryOrders(
-				" WHERE DELIVERY_WORKER_ID = ? AND STATUS = ? ORDER BY COMPLETE_TIME DESC LIMIT ?, ?",
+				" WHERE DELIVERY_WORKER_ID = ? AND O.STATUS = ? ORDER BY COMPLETE_TIME DESC LIMIT ?, ?",
 				workerId, status, begin, count);
 	}
 

@@ -16,6 +16,7 @@ import java.util.List;
 import org.herod.framework.BaseFragment;
 import org.herod.framework.BundleBuilder;
 import org.herod.framework.HerodTask.AsyncTaskable;
+import org.herod.framework.HerodTask.BackgroudRunnable;
 import org.herod.framework.HerodTask.PostExecutor;
 import org.herod.framework.ViewFindable;
 import org.herod.framework.utils.ToastUtils;
@@ -202,29 +203,28 @@ public abstract class OrderListFragment extends BaseFragment implements
 
 	public static class CompletedOrderListFragment extends
 			HistoryOrderListFragment {
-		public List<Order> runOnBackground(Object... params) {
-			return WorkerContext.getWorkerService().findCompletedOrders(
-					getBegin(), PAGE_COUNT);
-		}
-
 		public String getTitle() {
 			return "已完成订单";
+		}
+
+		protected List<Order> loadFromServer(int begin, int count) {
+			return WorkerContext.getWorkerService().findCompletedOrders(begin,
+					count);
 		}
 	}
 
 	public static class CanceledOrderListFragment extends
 			HistoryOrderListFragment {
-		public List<Order> runOnBackground(Object... params) {
-			return WorkerContext.getWorkerService().findCanceledOrders(
-					getBegin(), PAGE_COUNT);
-		}
-
 		public String getTitle() {
 			return "已取消订单";
 		}
+
+		protected List<Order> loadFromServer(int begin, int count) {
+			return WorkerContext.getWorkerService().findCanceledOrders(begin,
+					count);
+		}
 	}
 
-	// TODO 历史订单的刷新有问题
 	public static abstract class HistoryOrderListFragment extends
 			OrderListFragment {
 
@@ -245,9 +245,19 @@ public abstract class OrderListFragment extends BaseFragment implements
 			if (orderListAdapter == null) {
 				return;
 			}
-			new AgentWorkerTask<Object, List<Order>>(getActivity(), this,
-					new LoadMoreTask()).execute();
+			new AgentWorkerTask<Object, List<Order>>(getActivity(),
+					new BackgroudRunnable<Object, List<Order>>() {
+						public List<Order> runOnBackground(Object... params) {
+							return loadFromServer(getBegin(), PAGE_COUNT);
+						}
+					}, new LoadMoreTask()).execute();
 		}
+
+		public List<Order> runOnBackground(Object... params) {
+			return loadFromServer(0, PAGE_COUNT);
+		}
+
+		protected abstract List<Order> loadFromServer(int begin, int count);
 
 		protected int getBegin() {
 			int count = orderListAdapter != null ? orderListAdapter.getCount()

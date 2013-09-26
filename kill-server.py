@@ -10,9 +10,9 @@ def execCmd(cmd):
     r.close()
     return text
 
-output = execCmd('ps aux | grep java')
+output = execCmd('ps x | grep java')
 print(output)
 
-for pid in re.findall(r'^\w+\s+(\d+)', output, re.M):
+for pid in re.findall(r'^\s+(\d+)', output, re.M):
     print(pid)
     print(execCmd('kill ' + pid))

@@ -55,9 +55,9 @@ public class MainActivity extends BaseActivity implements Callback,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		ImageLoaderUtils.initImageLoader(this);
+		new InjectViewHelper().injectViews(this);
 		// TODO 这里设置的定位策略有问题，因为配送员应该是一直移动的。
 		LocationManager.getInstance(this).executeWithSimplePlan();
-		new InjectViewHelper().injectViews(this);
 		handler = new HerodHandler(this);
 		orderListFragmentAdapter = new OrderGroupAdapter(
 				getSupportFragmentManager(), createOrderListFragments());

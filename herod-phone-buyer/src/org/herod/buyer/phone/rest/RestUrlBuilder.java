@@ -3,16 +3,18 @@
  */
 package org.herod.buyer.phone.rest;
 
-import org.herod.buyer.phone.BuyerContext;
+import static org.herod.framework.Constants.LATITUDE;
+import static org.herod.framework.Constants.LONGITUDE;
+import static org.herod.framework.Constants.REST;
+
 import org.herod.framework.lbs.LocationManager;
 import org.herod.framework.rest.URLBuilder;
 import org.herod.framework.tools.HttpUrlBuilderSupport;
+import org.herod.order.common.OrderContext;
 
 import android.content.Context;
 
 import com.baidu.location.BDLocation;
-
-import static org.herod.buyer.phone.Constants.*;
 
 /**
  * 
@@ -46,12 +48,12 @@ public class RestUrlBuilder extends HttpUrlBuilderSupport implements URLBuilder 
 
 	@Override
 	protected String getHost() {
-		return BuyerContext.getRestServerHost();
+		return OrderContext.getRestServerHost();
 	}
 
 	@Override
 	protected int getPort() {
-		return BuyerContext.getRestServerPort();
+		return OrderContext.getRestServerPort();
 	}
 
 }

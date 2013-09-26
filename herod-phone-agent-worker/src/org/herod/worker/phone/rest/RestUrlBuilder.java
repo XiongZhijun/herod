@@ -10,6 +10,7 @@ import static org.herod.worker.phone.Constants.TOKEN;
 import org.herod.framework.rest.URLBuilder;
 import org.herod.framework.tools.HttpUrlBuilderSupport;
 import org.herod.framework.utils.DeviceUtils;
+import org.herod.order.common.OrderContext;
 import org.herod.worker.phone.WorkerContext;
 
 import android.content.Context;
@@ -41,12 +42,12 @@ public class RestUrlBuilder extends HttpUrlBuilderSupport implements URLBuilder 
 
 	@Override
 	protected String getHost() {
-		return WorkerContext.getRestServerHost();
+		return OrderContext.getRestServerHost();
 	}
 
 	@Override
 	protected int getPort() {
-		return WorkerContext.getRestServerPort();
+		return OrderContext.getRestServerPort();
 	}
 
 }

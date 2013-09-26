@@ -14,25 +14,14 @@ import android.content.Context;
  * 
  */
 public class BuyerContext {
-	private static String restServerHost;
-	private static int restServerPort;
-	private static String imageServerHost;
-	private static int imageServerPort;
+
 	private static BuyerServiceProxy buyerService;
 
 	public static void init(Context context) {
 		if (buyerService == null) {
 			buyerService = new BuyerServiceProxy(new RestBuyerService(context));
 		}
-		restServerHost = context.getString(R.string.RestServerHost);
-		restServerPort = Integer.parseInt(context
-				.getString(R.string.RestServerPort));
-		imageServerHost = context.getString(R.string.ImageServerHost);
-		imageServerPort = Integer.parseInt(context
-				.getString(R.string.ImageServerPort));
-
-		OrderContext.setImageServerHost(imageServerHost);
-		OrderContext.setImageServerPort(imageServerPort);
+		OrderContext.init(context);
 	}
 
 	public static BuyerService getBuyerService() {
@@ -42,21 +31,4 @@ public class BuyerContext {
 	public static ShopService getShopService() {
 		return buyerService;
 	}
-
-	public static String getRestServerHost() {
-		return restServerHost;
-	}
-
-	public static int getRestServerPort() {
-		return restServerPort;
-	}
-
-	public static String getImageServerHost() {
-		return imageServerHost;
-	}
-
-	public static int getImageServerPort() {
-		return imageServerPort;
-	}
-
 }

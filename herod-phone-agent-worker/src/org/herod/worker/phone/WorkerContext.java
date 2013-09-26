@@ -22,46 +22,18 @@ public abstract class WorkerContext {
 	private static final String WORKER_ID = "WORKER_ID";
 	private static final String TOKEN_STRING = "TOKEN_STRING";
 	private static WorkerService workerService;
-	private static String restServerHost;
-	private static int restServerPort;
-	private static String imageServerHost;
-	private static int imageServerPort;
 	private static SharedPreferences defaultSharedPreferences;
 	private static Token token;
 
 	public static void init(Context context) {
 		workerService = new RestWorkerService(context);
-		restServerHost = context.getString(R.string.RestServerHost);
-		restServerPort = Integer.parseInt(context
-				.getString(R.string.RestServerPort));
-		imageServerHost = context.getString(R.string.ImageServerHost);
-		imageServerPort = Integer.parseInt(context
-				.getString(R.string.ImageServerPort));
 		defaultSharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(context.getApplicationContext());
-
-		OrderContext.setImageServerHost(imageServerHost);
-		OrderContext.setImageServerPort(imageServerPort);
+		OrderContext.init(context);
 	}
 
 	public static WorkerService getWorkerService() {
 		return workerService;
-	}
-
-	public static String getRestServerHost() {
-		return restServerHost;
-	}
-
-	public static int getRestServerPort() {
-		return restServerPort;
-	}
-
-	public static String getImageServerHost() {
-		return imageServerHost;
-	}
-
-	public static int getImageServerPort() {
-		return imageServerPort;
 	}
 
 	public static void setLoginToken(Token token) {

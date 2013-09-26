@@ -70,7 +70,8 @@ public class SimpleOrderStatusChecker implements OrderStatusChecker {
 			{ Submitted, Arrays.asList(Unsubmit) },
 			{ Acceptted, Arrays.asList(Submitted, Rejected) },
 			{ Completed, Arrays.asList(Acceptted) },
-			{ Cancelled, Arrays.asList(Unsubmit, Submitted, Acceptted) },
+			{ Cancelled,
+					Arrays.asList(Unsubmit, Submitted, Acceptted, Rejected) },
 			{ Rejected, Arrays.asList(Acceptted) } };
 
 }

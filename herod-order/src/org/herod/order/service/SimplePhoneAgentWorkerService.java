@@ -139,9 +139,9 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 			return new SimpleResult(
 					ResultCode.CurrentStatusCanNotDoSuchOperate, serialNumber);
 		}
-		orderStatusUpdateService.updateOrderStatusAndCompleteTime(serialNumber,
-				OrderStatus.Cancelled, new Date());
 		long workerId = loginService.getWorkerId(token, imei);
+		orderStatusUpdateService.updateOrderStatusAndCompleteTime(workerId,
+				serialNumber, OrderStatus.Cancelled, new Date());
 		long agentId = loginService.getWorkerAgentId(token, imei);
 		orderLogService.agentWorkerlog(agentId, workerId, serialNumber,
 				Operation.Cancel, reason);
@@ -155,9 +155,9 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 			return new SimpleResult(
 					ResultCode.CurrentStatusCanNotDoSuchOperate, serialNumber);
 		}
-		orderStatusUpdateService.updateOrderStatusAndCompleteTime(serialNumber,
-				OrderStatus.Completed, new Date());
 		long workerId = loginService.getWorkerId(token, imei);
+		orderStatusUpdateService.updateOrderStatusAndCompleteTime(workerId,
+				serialNumber, OrderStatus.Completed, new Date());
 		long agentId = loginService.getWorkerAgentId(token, imei);
 		orderLogService.agentWorkerlog(agentId, workerId, serialNumber,
 				Operation.Complete, null);
@@ -223,8 +223,8 @@ public class SimplePhoneAgentWorkerService implements PhoneAgentWorkerService {
 		void updateOrderStatusAndWorker(String serialNumber, long agentWorker,
 				OrderStatus status);
 
-		void updateOrderStatusAndCompleteTime(String serialNumber,
-				OrderStatus status, Date completeTime);
+		void updateOrderStatusAndCompleteTime(long workerId,
+				String serialNumber, OrderStatus status, Date completeTime);
 	}
 
 }

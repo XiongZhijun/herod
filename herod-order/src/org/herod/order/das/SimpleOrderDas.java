@@ -43,7 +43,7 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 			+ "O.COST_OF_RUN_ERRANDS,O.SHOP_COST_OF_RUN_ERRANDS,O.SHOP_MIN_CHARGE_FOR_FREE_DELIVERY "
 			+ "FROM ZRH_ORDER O LEFT JOIN ZRH_SHOP S ON O.SHOP_ID = S.ID ";
 	private static final String UPDATE_ORDER_STATUS_AND_COMPLETE_TIME_SQL = "UPDATE ZRH_ORDER SET STATUS = ?, "
-			+ "COMPLETE_TIME = ? WHERE SERIAL_NUMBER = ?";
+			+ "COMPLETE_TIME = ?, DELIVERY_WORKER_ID = ? WHERE SERIAL_NUMBER = ?";
 	private static final String UPDATE_ORDER_STATUS_AND_WORKER_SQL = "UPDATE ZRH_ORDER SET STATUS = ?, "
 			+ "DELIVERY_WORKER_ID = ? WHERE SERIAL_NUMBER = ?";
 	private static final String UPDATE_ORDER_STATUS_SQL = "UPDATE ZRH_ORDER SET STATUS = ? WHERE SERIAL_NUMBER = ?";
@@ -104,10 +104,10 @@ public class SimpleOrderDas implements OrderStatusFinder, OrderQueryService,
 	}
 
 	@Override
-	public void updateOrderStatusAndCompleteTime(String serialNumber,
-			OrderStatus status, Date completeTime) {
+	public void updateOrderStatusAndCompleteTime(long workerId,
+			String serialNumber, OrderStatus status, Date completeTime) {
 		herodJdbcTemplate.update(UPDATE_ORDER_STATUS_AND_COMPLETE_TIME_SQL,
-				status, completeTime, serialNumber);
+				status, completeTime, workerId, serialNumber);
 	}
 
 	@Override

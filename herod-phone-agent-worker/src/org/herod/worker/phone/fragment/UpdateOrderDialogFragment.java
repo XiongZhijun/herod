@@ -5,6 +5,8 @@ package org.herod.worker.phone.fragment;
 
 import static org.herod.order.common.Constants.COMMENT;
 import static org.herod.worker.phone.Constants.REASON;
+import static org.herod.worker.phone.RequestCodes.REQUEST_UPDATE_ORDER;
+import static org.herod.worker.phone.RequestCodes.RESULT_SUCCESS;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -86,9 +88,8 @@ public class UpdateOrderDialogFragment extends FormFragment implements
 	public void onPostExecute(Result result) {
 		String message;
 		if (result != null && result.isSuccess()) {
-			getTargetFragment().onActivityResult(
-					OrderListFragment.REQUEST_UPDATE_ORDER,
-					OrderListFragment.RESULT_SUCCESS, null);
+			getTargetFragment().onActivityResult(REQUEST_UPDATE_ORDER,
+					RESULT_SUCCESS, null);
 			message = "修改订单成功！";
 			dismiss();
 		} else {
@@ -102,8 +103,7 @@ public class UpdateOrderDialogFragment extends FormFragment implements
 
 	public static void showDialog(Fragment targetFragment, String comment) {
 		UpdateOrderDialogFragment fragment = new UpdateOrderDialogFragment();
-		fragment.setTargetFragment(targetFragment,
-				OrderListFragment.REQUEST_UPDATE_ORDER);
+		fragment.setTargetFragment(targetFragment, REQUEST_UPDATE_ORDER);
 		Bundle args = BundleBuilder.create(COMMENT, comment);
 		fragment.setArguments(args);
 		fragment.show(targetFragment.getFragmentManager(), null);

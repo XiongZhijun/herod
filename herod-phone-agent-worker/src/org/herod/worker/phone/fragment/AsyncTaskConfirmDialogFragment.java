@@ -4,6 +4,8 @@
 package org.herod.worker.phone.fragment;
 
 import static org.herod.order.common.Constants.MESSAGE;
+import static org.herod.worker.phone.RequestCodes.REQUEST_ORDER_ASYNC_OPERATE;
+import static org.herod.worker.phone.RequestCodes.RESULT_SUCCESS;
 
 import org.herod.framework.BundleBuilder;
 import org.herod.framework.HerodTask.BackgroudRunnable;
@@ -47,9 +49,8 @@ public class AsyncTaskConfirmDialogFragment extends ConfirmDialogFragment
 	public void onPostExecute(Result result) {
 		String message;
 		if (result != null && result.isSuccess()) {
-			getTargetFragment().onActivityResult(
-					OrderListFragment.REQUEST_ORDER_ASYNC_OPERATE,
-					OrderListFragment.RESULT_SUCCESS, null);
+			getTargetFragment().onActivityResult(REQUEST_ORDER_ASYNC_OPERATE,
+					RESULT_SUCCESS, null);
 			message = getSuccessMessage();
 		} else {
 			message = getFailedMessage();
@@ -61,8 +62,7 @@ public class AsyncTaskConfirmDialogFragment extends ConfirmDialogFragment
 			BackgroudRunnable<Object, Result> backgroundRunnable,
 			String... messages) {
 		AsyncTaskConfirmDialogFragment fragment = new AsyncTaskConfirmDialogFragment();
-		fragment.setTargetFragment(targetFragment,
-				OrderListFragment.REQUEST_ORDER_ASYNC_OPERATE);
+		fragment.setTargetFragment(targetFragment, REQUEST_ORDER_ASYNC_OPERATE);
 		fragment.backgroundRunnable = backgroundRunnable;
 		BundleBuilder bundleBuilder = new BundleBuilder();
 		if (messages.length > 0)

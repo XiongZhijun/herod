@@ -5,6 +5,8 @@ package org.herod.worker.phone.fragment;
 
 import static org.herod.order.common.Constants.SERIAL_NUMBER;
 import static org.herod.worker.phone.Constants.REASON;
+import static org.herod.worker.phone.RequestCodes.REQUEST_CANCEL_ORDER;
+import static org.herod.worker.phone.RequestCodes.RESULT_SUCCESS;
 
 import java.util.Collections;
 import java.util.Map;
@@ -72,10 +74,8 @@ public class CancelOrderDialogFragment extends FormFragment implements
 		String message;
 		if (result != null && result.isSuccess()) {
 			message = "取消订单成功！";
-			getTargetFragment()
-					.onActivityResult(OrderListFragment.REQUEST_CANCEL_ORDER,
-							OrderListFragment.RESULT_SUCCESS,
-							getActivity().getIntent());
+			getTargetFragment().onActivityResult(REQUEST_CANCEL_ORDER,
+					RESULT_SUCCESS, null);
 			dismiss();
 		} else {
 			message = "取消订单失败，请重试！";
@@ -85,8 +85,7 @@ public class CancelOrderDialogFragment extends FormFragment implements
 
 	public static void showDialog(Fragment targetFragment, String serialNumber) {
 		CancelOrderDialogFragment fragment = new CancelOrderDialogFragment();
-		fragment.setTargetFragment(targetFragment,
-				OrderListFragment.REQUEST_CANCEL_ORDER);
+		fragment.setTargetFragment(targetFragment, REQUEST_CANCEL_ORDER);
 		Bundle args = BundleBuilder.create(SERIAL_NUMBER, serialNumber);
 		fragment.setArguments(args);
 		fragment.show(targetFragment.getFragmentManager(), null);

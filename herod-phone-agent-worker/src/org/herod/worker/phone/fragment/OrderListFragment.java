@@ -2,6 +2,11 @@ package org.herod.worker.phone.fragment;
 
 import static org.herod.order.common.Constants.HH_MM_SS;
 import static org.herod.worker.phone.Constants.INDEX;
+import static org.herod.worker.phone.RequestCodes.REQUEST_CANCEL_ORDER;
+import static org.herod.worker.phone.RequestCodes.REQUEST_NEW_ORDER_ITEMS;
+import static org.herod.worker.phone.RequestCodes.REQUEST_ORDER_ASYNC_OPERATE;
+import static org.herod.worker.phone.RequestCodes.REQUEST_UPDATE_ORDER;
+import static org.herod.worker.phone.RequestCodes.RESULT_SUCCESS;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -35,13 +40,6 @@ import android.widget.Toast;
 
 public abstract class OrderListFragment extends BaseFragment implements
 		ViewFindable, AsyncTaskable<Object, List<Order>>, IXListViewListener {
-	public static final int REQUEST_NEW_ORDER_ITEMS = 1;
-	public static final int REQUEST_CANCEL_ORDER = 2;
-	public static final int REQUEST_ORDER_ASYNC_OPERATE = 3;
-	public static final int REQUEST_UPDATE_ORDER = 4;
-
-	public static final int RESULT_SUCCESS = 1000;
-	public static final int RESULT_FAILED = 1001;
 
 	private DateFormat dateFormat = new SimpleDateFormat(HH_MM_SS);
 	protected XListView ordersListView;

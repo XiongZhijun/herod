@@ -1,12 +1,8 @@
 package org.herod.worker.phone;
 
-import static org.herod.event.EventCodes.ACCEPT_COMMAND;
-import static org.herod.event.EventCodes.CANCEL_COMMAND;
-import static org.herod.event.EventCodes.COMPLETE_COMMAND;
 import static org.herod.event.EventCodes.HEARTBEAT_COMMAND;
 import static org.herod.event.EventCodes.REJECT_COMMAND;
 import static org.herod.event.EventCodes.SUBMIT_COMMAND;
-import static org.herod.event.EventCodes.UPDATE_COMMAND;
 import static org.herod.event.EventFields.ACCEPTTED_COUNT;
 import static org.herod.event.EventFields.SUBMITTED_COUNT;
 import static org.herod.worker.phone.fragment.OrderListFragment.createWaitAcceptOrderListFragment;
@@ -16,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.herod.android.communication.TcpClientService.LocalBinder;
 import org.herod.event.Event;
 import org.herod.framework.lbs.LocationManager;
 import org.herod.framework.lbs.SimpleLocationPlan;
@@ -26,17 +21,15 @@ import org.herod.worker.phone.event.EventActionUtils;
 import org.herod.worker.phone.event.EventClientService;
 import org.herod.worker.phone.fragment.OrderListFragment;
 import org.herod.worker.phone.handler.HerodHandler;
+import org.herod.worker.phone.service.ReconnectServiceConnection;
+import org.herod.worker.phone.service.RegistServiceConnection;
 import org.herod.worker.phone.view.OrderTabPageIndicator;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler.Callback;
-import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -58,28 +51,6 @@ public class MainActivity extends BaseActivity implements Callback,
 	private OrderTabPageIndicator indicator;
 	private int currentFragmentIndex = 0;
 	private BroadcastReceiver eventReceiver = new EventReceiver();
-	private ServiceConnection registServiceConnection = new ServiceConnection() {
-		public void onServiceDisconnected(ComponentName name) {
-		}
-
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			EventClientService eventService = (EventClientService) ((LocalBinder) service)
-					.getService();
-			eventService.registToServer();
-			unbindService(registServiceConnection);
-		}
-	};
-	private ServiceConnection reconnectServiceConnection = new ServiceConnection() {
-		public void onServiceDisconnected(ComponentName name) {
-		}
-
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			EventClientService eventService = (EventClientService) ((LocalBinder) service)
-					.getService();
-			eventService.reconnect();
-			unbindService(reconnectServiceConnection);
-		}
-	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -98,22 +69,14 @@ public class MainActivity extends BaseActivity implements Callback,
 		indicator.setViewPager(orderListFragmentPager);
 		indicator.setOnPageChangeListener(this);
 
-		bindService(new Intent(this, EventClientService.class),
-				registServiceConnection, Context.BIND_AUTO_CREATE);
-
-		registerEventReceiver();
+		initAndConnectToEventServer();
 	}
 
-	private void registerEventReceiver() {
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(EventActionUtils.getEventAction(HEARTBEAT_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(SUBMIT_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(ACCEPT_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(COMPLETE_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(CANCEL_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(REJECT_COMMAND));
-		filter.addAction(EventActionUtils.getEventAction(UPDATE_COMMAND));
-		registerReceiver(eventReceiver, filter);
+	private void initAndConnectToEventServer() {
+		bindService(new Intent(this, EventClientService.class),
+				new RegistServiceConnection(this), Context.BIND_AUTO_CREATE);
+		registerReceiver(eventReceiver,
+				EventActionUtils.createEventIntentFilter());
 	}
 
 	protected List<OrderListFragment> createOrderListFragments() {
@@ -141,8 +104,7 @@ public class MainActivity extends BaseActivity implements Callback,
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.logout) {
 			WorkerContext.setLoginToken(null);
-			bindService(new Intent(this, EventClientService.class),
-					reconnectServiceConnection, BIND_AUTO_CREATE);
+			reconnectEventServer();
 			startActivity(new Intent(this, LoginActivity.class));
 			finish();
 			return true;
@@ -150,6 +112,11 @@ public class MainActivity extends BaseActivity implements Callback,
 			startActivity(new Intent(this, HistoryOrderActivity.class));
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void reconnectEventServer() {
+		bindService(new Intent(this, EventClientService.class),
+				new ReconnectServiceConnection(this), BIND_AUTO_CREATE);
 	}
 
 	protected boolean canBack() {

@@ -1,0 +1,20 @@
+update `SYSTEM` set `LOGO` = 'images/img01.jpg' where `ID` = '10000';
+update `SYSTEM` set `LOGO` = 'images/img04.jpg' where `ID` = '10001';
+update `SYSTEM` set `LOGO` = 'images/img01.jpg' where `ID` = '10002';
+update `SYSTEM` set `LOGO` = 'images/img02.jpg' where `ID` = '10003';
+
+update `MENU` set `ICON` = 'systemIcons/ec3e97731bc1400f927ae2e8e4f65ecb.png' where `ID` = '2';
+update `MENU` set `ICON` = 'systemIcons/45df63533b6b41b19cfbcfa9da4da946.png' where `ID` = '3';
+update `MENU` set `ICON` = 'systemIcons/8fcee8ae85134c5b94c50d1af7063287.png' where `ID` = '4';
+update `MENU` set `ICON` = '' where `ID` = '5';
+update `MENU` set `ICON` = '' where `ID` = '6';
+update `MENU` set `ICON` = 'systemIcons/3dc16fc45cc349579f4c3f298e687a66.png' where `ID` = '10000';
+update `MENU` set `ICON` = 'systemIcons/3a1f3404dd76439c981d50264608b39e.png' where `ID` = '10001';
+update `MENU` set `ICON` = 'systemIcons/94a92a2a806f494498f930bab4670ea3.png' where `ID` = '10002';
+update `MENU` set `ICON` = 'systemIcons/62b851bbfd4348f8909edbe2d718c4fc.png' where `ID` = '10003';
+update `MENU` set `ICON` = 'systemIcons/e6be2e1ddccf4dae937c1300239eafc2.png' where `ID` = '10004';
+update `MENU` set `ICON` = 'systemIcons/5498d36aad2d4d5daf80758761a6b3f0.png' where `ID` = '10005';
+update `MENU` set `ICON` = 'systemIcons/1dee258230d14bbdaa8e835dc0e6ca21.png' where `ID` = '10006';
+update `MENU` set `ICON` = 'systemIcons/b86fcae8ea2a4daa8927c73737228c2d.png' where `ID` = '10007';
+update `MENU` set `ICON` = 'systemIcons/221a6ed778a644c7be231b76337a2664.png' where `ID` = '10008';
+update `MENU` set `ICON` = 'systemIcons/15c6eba3da98445da2a913585b566770.png' where `ID` = '10009';

@@ -20,17 +20,13 @@ import org.herod.order.common.RefreshButtonHelper;
 import org.herod.order.common.model.Order;
 import org.herod.worker.phone.AgentWorkerRepeatedlyTask;
 import org.herod.worker.phone.AgentWorkerTask;
-import org.herod.worker.phone.Handlerable;
 import org.herod.worker.phone.R;
 import org.herod.worker.phone.TabPageIndicatorable;
 import org.herod.worker.phone.WorkerContext;
-import org.herod.worker.phone.handler.HerodHandler;
 import org.herod.worker.phone.view.OrderTabPageIndicator;
-import org.springframework.util.CollectionUtils;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,10 +35,16 @@ import android.widget.Toast;
 
 public abstract class OrderListFragment extends BaseFragment implements
 		ViewFindable, AsyncTaskable<Object, List<Order>>, IXListViewListener {
+	public static final int REQUEST_NEW_ORDER_ITEMS = 1;
+	public static final int REQUEST_CANCEL_ORDER = 2;
+	public static final int REQUEST_ORDER_ASYNC_OPERATE = 3;
+	public static final int REQUEST_UPDATE_ORDER = 4;
+
+	public static final int RESULT_SUCCESS = 1000;
+	public static final int RESULT_FAILED = 1001;
 
 	private DateFormat dateFormat = new SimpleDateFormat(HH_MM_SS);
 	protected XListView ordersListView;
-	private Handler handler;
 	protected OrderListAdapter orderListAdapter;
 	private RefreshButtonHelper refreshButtonHelper;
 	private AgentWorkerRepeatedlyTask<Object, List<Order>> loadOrdersTask;
@@ -52,7 +54,6 @@ public abstract class OrderListFragment extends BaseFragment implements
 		super.onCreate(savedInstanceState);
 		loadOrdersTask = new AgentWorkerRepeatedlyTask<Object, List<Order>>(
 				this);
-		this.handler = new HerodHandler(getActivityHandler());
 	}
 
 	@Override
@@ -88,14 +89,13 @@ public abstract class OrderListFragment extends BaseFragment implements
 
 	@Override
 	public void onPostExecute(List<Order> orders) {
-		if (CollectionUtils.isEmpty(orders)) {
-			refreshButtonHelper.enableRefresh();
+		if (refreshButtonHelper.checkNullResult(orders)) {
 			updateQuantity(0);
 			return;
 		}
 		refreshButtonHelper.disableRefresh();
 		ordersListView.setVisibility(View.VISIBLE);
-		orderListAdapter = new OrderListAdapter(this, orders, handler);
+		orderListAdapter = new OrderListAdapter(this, orders);
 		ordersListView.setAdapter(orderListAdapter);
 		updateQuantity(orders.size());
 		ordersListView.stopRefresh();
@@ -113,6 +113,19 @@ public abstract class OrderListFragment extends BaseFragment implements
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (orderListAdapter != null) {
 			orderListAdapter.notifyDataSetChanged();
+		}
+		switch (requestCode) {
+		case REQUEST_NEW_ORDER_ITEMS:
+			if (orderListAdapter != null)
+				orderListAdapter.notifyDataSetChanged();
+			return;
+		case REQUEST_CANCEL_ORDER:
+		case REQUEST_ORDER_ASYNC_OPERATE:
+		case REQUEST_UPDATE_ORDER:
+			if (resultCode == RESULT_SUCCESS) {
+				refreshOrderList();
+			}
+			break;
 		}
 	}
 
@@ -137,10 +150,6 @@ public abstract class OrderListFragment extends BaseFragment implements
 			return ((TabPageIndicatorable) activity).getIndicator();
 		}
 		return null;
-	}
-
-	private Handler getActivityHandler() {
-		return ((Handlerable) getActivity()).getHandler();
 	}
 
 	public static OrderListFragment createWaitAcceptOrderListFragment(int index) {
@@ -217,6 +226,7 @@ public abstract class OrderListFragment extends BaseFragment implements
 		}
 	}
 
+	// TODO 历史订单的刷新有问题
 	public static abstract class HistoryOrderListFragment extends
 			OrderListFragment {
 

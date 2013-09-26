@@ -7,12 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.herod.order.common.model.Order;
-import org.herod.worker.phone.handler.HerodHandler;
 import org.herod.worker.phone.view.OrderView;
 import org.springframework.util.CollectionUtils;
 
 import android.content.Context;
-import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -26,15 +24,12 @@ public class OrderListAdapter extends BaseAdapter {
 
 	private List<Order> orders = new ArrayList<Order>();
 	private Context context;
-	private Handler handler;
 	private OrderListFragment fragment;
 
-	public OrderListAdapter(OrderListFragment fragment, List<Order> orders,
-			Handler handler) {
+	public OrderListAdapter(OrderListFragment fragment, List<Order> orders) {
 		this.orders = orders;
 		this.context = fragment.getActivity();
 		this.fragment = fragment;
-		this.handler = new HerodHandler(handler);
 	}
 
 	@Override
@@ -66,7 +61,6 @@ public class OrderListAdapter extends BaseAdapter {
 		if (convertView == null) {
 			view = new OrderView(context);
 			view.setFragment(fragment);
-			view.setHandler(handler);
 		} else {
 			view = (OrderView) convertView;
 		}

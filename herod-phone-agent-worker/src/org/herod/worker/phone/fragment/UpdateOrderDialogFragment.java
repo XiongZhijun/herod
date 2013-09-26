@@ -15,7 +15,6 @@ import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.utils.ToastUtils;
 import org.herod.order.common.model.Result;
 import org.herod.worker.phone.AgentWorkerTask;
-import org.herod.worker.phone.MainActivity;
 import org.herod.worker.phone.R;
 import org.herod.worker.phone.WorkerContext;
 import org.herod.worker.phone.fragment.FormFragment.OnOkButtonClickListener;
@@ -25,8 +24,7 @@ import org.herod.worker.phone.view.OrderEditorManager;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 /**
@@ -38,8 +36,6 @@ import android.widget.Toast;
  */
 public class UpdateOrderDialogFragment extends FormFragment implements
 		OnOkButtonClickListener, AsyncTaskable<Map<String, String>, Result> {
-
-	private Handler handler;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -90,8 +86,9 @@ public class UpdateOrderDialogFragment extends FormFragment implements
 	public void onPostExecute(Result result) {
 		String message;
 		if (result != null && result.isSuccess()) {
-			handler.sendMessage(handler
-					.obtainMessage(MainActivity.MESSAGE_KEY_REFRESH_ORDER_LIST));
+			getTargetFragment().onActivityResult(
+					OrderListFragment.REQUEST_UPDATE_ORDER,
+					OrderListFragment.RESULT_SUCCESS, null);
 			message = "修改订单成功！";
 			dismiss();
 		} else {
@@ -103,13 +100,13 @@ public class UpdateOrderDialogFragment extends FormFragment implements
 		}
 	}
 
-	public static void showDialog(FragmentActivity activity, Handler handler,
-			String comment) {
+	public static void showDialog(Fragment targetFragment, String comment) {
 		UpdateOrderDialogFragment fragment = new UpdateOrderDialogFragment();
+		fragment.setTargetFragment(targetFragment,
+				OrderListFragment.REQUEST_UPDATE_ORDER);
 		Bundle args = BundleBuilder.create(COMMENT, comment);
 		fragment.setArguments(args);
-		fragment.handler = handler;
-		fragment.show(activity.getSupportFragmentManager(), null);
+		fragment.show(targetFragment.getFragmentManager(), null);
 	}
 
 }

@@ -3,23 +3,23 @@
  */
 package org.herod.worker.phone.fragment;
 
+import static org.herod.order.common.Constants.SERIAL_NUMBER;
 import static org.herod.worker.phone.Constants.REASON;
 
 import java.util.Collections;
 import java.util.Map;
 
+import org.herod.framework.BundleBuilder;
 import org.herod.framework.HerodTask.AsyncTaskable;
 import org.herod.framework.utils.ToastUtils;
 import org.herod.order.common.model.Result;
 import org.herod.worker.phone.AgentWorkerTask;
-import org.herod.worker.phone.MainActivity;
 import org.herod.worker.phone.R;
 import org.herod.worker.phone.WorkerContext;
 import org.herod.worker.phone.fragment.FormFragment.OnOkButtonClickListener;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 /**
@@ -31,9 +31,6 @@ import android.widget.Toast;
  */
 public class CancelOrderDialogFragment extends FormFragment implements
 		OnOkButtonClickListener, AsyncTaskable<String, Result> {
-
-	private String serialNumber;
-	private Handler handler;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,6 +62,7 @@ public class CancelOrderDialogFragment extends FormFragment implements
 
 	@Override
 	public Result runOnBackground(String... reasons) {
+		String serialNumber = getArguments().getString(SERIAL_NUMBER);
 		return WorkerContext.getWorkerService().cancelOrder(serialNumber,
 				reasons[0]);
 	}
@@ -73,9 +71,11 @@ public class CancelOrderDialogFragment extends FormFragment implements
 	public void onPostExecute(Result result) {
 		String message;
 		if (result != null && result.isSuccess()) {
-			handler.sendMessage(handler
-					.obtainMessage(MainActivity.MESSAGE_KEY_REFRESH_ORDER_LIST));
 			message = "取消订单成功！";
+			getTargetFragment()
+					.onActivityResult(OrderListFragment.REQUEST_CANCEL_ORDER,
+							OrderListFragment.RESULT_SUCCESS,
+							getActivity().getIntent());
 			dismiss();
 		} else {
 			message = "取消订单失败，请重试！";
@@ -83,13 +83,13 @@ public class CancelOrderDialogFragment extends FormFragment implements
 		ToastUtils.showToast(message, Toast.LENGTH_SHORT);
 	}
 
-	public static void showDialog(FragmentActivity activity, Handler handler,
-			String serialNumber) {
+	public static void showDialog(Fragment targetFragment, String serialNumber) {
 		CancelOrderDialogFragment fragment = new CancelOrderDialogFragment();
-		// TODO 存在这样类似handler的参数传递问题。
-		fragment.handler = handler;
-		fragment.serialNumber = serialNumber;
-		fragment.show(activity.getSupportFragmentManager(), null);
+		fragment.setTargetFragment(targetFragment,
+				OrderListFragment.REQUEST_CANCEL_ORDER);
+		Bundle args = BundleBuilder.create(SERIAL_NUMBER, serialNumber);
+		fragment.setArguments(args);
+		fragment.show(targetFragment.getFragmentManager(), null);
 	}
 
 }

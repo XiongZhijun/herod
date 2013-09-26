@@ -8,6 +8,7 @@ import java.util.List;
 import org.herod.framework.MapWrapper;
 import org.herod.order.common.AbstractGoodsListActivity;
 import org.herod.order.common.AbstractGoodsTypeGoodsListFragment;
+import org.herod.worker.phone.fragment.OrderListFragment;
 import org.herod.worker.phone.view.OrderEditorManager;
 
 import android.content.Intent;
@@ -21,7 +22,6 @@ import static org.herod.worker.phone.Constants.*;
  * @email hust.xzj@gmail.com
  */
 public class GoodsListActivity extends AbstractGoodsListActivity {
-	public static final int NEW_ORDER_ITEMS = 1;
 	private String serialNumber;
 
 	@Override
@@ -78,7 +78,7 @@ public class GoodsListActivity extends AbstractGoodsListActivity {
 	@Override
 	public void onBackPressed() {
 		Intent data = new Intent();
-		setResult(NEW_ORDER_ITEMS, data);
+		setResult(OrderListFragment.REQUEST_NEW_ORDER_ITEMS, data);
 		super.onBackPressed();
 	}
 
@@ -89,7 +89,8 @@ public class GoodsListActivity extends AbstractGoodsListActivity {
 		intent.putExtra(SHOP_ID, shopId);
 		intent.putExtra(SHOP_NAME, shopName);
 		intent.putExtra(SERIAL_NUMBER, serialNumber);
-		fragment.startActivityForResult(intent, NEW_ORDER_ITEMS);
+		fragment.startActivityForResult(intent,
+				OrderListFragment.REQUEST_NEW_ORDER_ITEMS);
 	}
 
 }

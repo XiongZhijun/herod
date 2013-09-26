@@ -3,20 +3,19 @@
  */
 package org.herod.worker.phone.fragment;
 
+import static org.herod.order.common.Constants.MESSAGE;
+
 import org.herod.framework.BundleBuilder;
 import org.herod.framework.HerodTask.BackgroudRunnable;
 import org.herod.framework.HerodTask.PostExecutor;
 import org.herod.framework.utils.ToastUtils;
 import org.herod.order.common.model.Result;
 import org.herod.worker.phone.AgentWorkerTask;
-import org.herod.worker.phone.MainActivity;
 import org.herod.worker.phone.fragment.ConfirmDialogFragment.OnOkButtonClickListener;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
 import android.widget.Toast;
-import static org.herod.worker.phone.Constants.*;
 
 /**
  * 
@@ -27,7 +26,6 @@ public class AsyncTaskConfirmDialogFragment extends ConfirmDialogFragment
 		implements OnOkButtonClickListener, PostExecutor<Result> {
 	private static final String FAILED_MESSAGE = "failedMessage";
 	private static final String SUCCESS_MESSAGE = "successMessage";
-	private Handler handler;
 	private BackgroudRunnable<Object, Result> backgroundRunnable;
 
 	public AsyncTaskConfirmDialogFragment() {
@@ -49,8 +47,9 @@ public class AsyncTaskConfirmDialogFragment extends ConfirmDialogFragment
 	public void onPostExecute(Result result) {
 		String message;
 		if (result != null && result.isSuccess()) {
-			handler.sendMessage(handler
-					.obtainMessage(MainActivity.MESSAGE_KEY_REFRESH_ORDER_LIST));
+			getTargetFragment().onActivityResult(
+					OrderListFragment.REQUEST_ORDER_ASYNC_OPERATE,
+					OrderListFragment.RESULT_SUCCESS, null);
 			message = getSuccessMessage();
 		} else {
 			message = getFailedMessage();
@@ -58,11 +57,12 @@ public class AsyncTaskConfirmDialogFragment extends ConfirmDialogFragment
 		ToastUtils.showToast(message, Toast.LENGTH_SHORT);
 	}
 
-	public static void show(FragmentActivity activity, Handler handler,
+	public static void show(Fragment targetFragment,
 			BackgroudRunnable<Object, Result> backgroundRunnable,
 			String... messages) {
 		AsyncTaskConfirmDialogFragment fragment = new AsyncTaskConfirmDialogFragment();
-		fragment.handler = handler;
+		fragment.setTargetFragment(targetFragment,
+				OrderListFragment.REQUEST_ORDER_ASYNC_OPERATE);
 		fragment.backgroundRunnable = backgroundRunnable;
 		BundleBuilder bundleBuilder = new BundleBuilder();
 		if (messages.length > 0)
@@ -72,7 +72,7 @@ public class AsyncTaskConfirmDialogFragment extends ConfirmDialogFragment
 		if (messages.length > 2)
 			bundleBuilder.putString(FAILED_MESSAGE, messages[2]);
 		fragment.setArguments(bundleBuilder.build());
-		fragment.show(activity.getSupportFragmentManager(), null);
+		fragment.show(targetFragment.getFragmentManager(), null);
 	}
 
 	private String getSuccessMessage() {

@@ -62,11 +62,9 @@ import org.herod.worker.phone.fragment.CancelOrderDialogFragment;
 import org.herod.worker.phone.fragment.OrderListFragment;
 import org.herod.worker.phone.fragment.PlaceInfoDialogFragment;
 import org.herod.worker.phone.fragment.UpdateOrderDialogFragment;
-import org.herod.worker.phone.handler.HerodHandler;
 import org.herod.worker.phone.view.OrderItemView.GoodsQuantityChangedListener;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -104,7 +102,6 @@ public class OrderView extends LinearLayout implements
 	private LinearLayout orderItemsContainer;
 	private FragmentActivity activity;
 	private OrderListFragment fragment;
-	private Handler handler;
 
 	private Order order;
 	private List<OrderItemView> orderItemViews = new ArrayList<OrderItemView>();
@@ -217,12 +214,11 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void onCancelOrderButtonClick() {
-		CancelOrderDialogFragment.showDialog(activity, handler,
-				order.getSerialNumber());
+		CancelOrderDialogFragment.showDialog(fragment, order.getSerialNumber());
 	}
 
 	private void onRejectOrderButtonClick() {
-		AsyncTaskConfirmDialogFragment.show(activity, handler,
+		AsyncTaskConfirmDialogFragment.show(fragment,
 				new BackgroudRunnable<Object, Result>() {
 					public Result runOnBackground(Object... params) {
 						return WorkerContext.getWorkerService().rejectOrder(
@@ -232,7 +228,7 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void onCompleteOrderButtonClick() {
-		AsyncTaskConfirmDialogFragment.show(activity, handler,
+		AsyncTaskConfirmDialogFragment.show(fragment,
 				new BackgroudRunnable<Object, Result>() {
 					public Result runOnBackground(Object... params) {
 						return WorkerContext.getWorkerService().completeOrder(
@@ -243,7 +239,7 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void onAcceptOrderButtonClick() {
-		AsyncTaskConfirmDialogFragment.show(activity, handler,
+		AsyncTaskConfirmDialogFragment.show(fragment,
 				new BackgroudRunnable<Object, Result>() {
 					public Result runOnBackground(Object... params) {
 						return WorkerContext.getWorkerService().acceptOrder(
@@ -253,8 +249,7 @@ public class OrderView extends LinearLayout implements
 	}
 
 	private void onConfirmEditButtonClick() {
-		UpdateOrderDialogFragment.showDialog(activity, handler,
-				order.getComment());
+		UpdateOrderDialogFragment.showDialog(fragment, order.getComment());
 	}
 
 	private void onCancelEditButtonClick() {
@@ -269,10 +264,6 @@ public class OrderView extends LinearLayout implements
 			return;
 		}
 		OrderViewButtonsTools.refreshButtonStatus(order, this, orderItemViews);
-	}
-
-	public void setHandler(Handler handler) {
-		this.handler = new HerodHandler(handler);
 	}
 
 	public void setFragment(OrderListFragment fragment) {

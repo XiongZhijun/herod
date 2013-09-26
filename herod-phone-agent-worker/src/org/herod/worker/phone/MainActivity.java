@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.herod.event.Event;
+import org.herod.framework.ci.InjectViewHelper;
+import org.herod.framework.ci.annotation.InjectView;
 import org.herod.framework.lbs.LocationManager;
 import org.herod.framework.lbs.SimpleLocationPlan;
 import org.herod.framework.lbs.SimpleLocationPlan.OnLocationSuccessListener;
@@ -31,7 +33,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler.Callback;
 import android.os.Message;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.Menu;
@@ -44,11 +45,12 @@ public class MainActivity extends BaseActivity implements Callback,
 		OnLocationSuccessListener, OnPageChangeListener, Handlerable,
 		TabPageIndicatorable {
 	public static final int MESSAGE_KEY_REFRESH_ORDER_LIST = 1;
-	private List<OrderListFragment> orderListFragments;
 	private HerodHandler handler;
+	@InjectView(R.id.pager)
 	private ViewPager orderListFragmentPager;
-	private FragmentPagerAdapter orderListFragmentAdapter;
+	@InjectView(R.id.indicator)
 	private OrderTabPageIndicator indicator;
+	private OrderGroupAdapter orderListFragmentAdapter;
 	private int currentFragmentIndex = 0;
 	private BroadcastReceiver eventReceiver = new EventReceiver();
 
@@ -59,12 +61,10 @@ public class MainActivity extends BaseActivity implements Callback,
 		ImageLoaderUtils.initImageLoader(this);
 		SimpleLocationPlan locationPlan = new SimpleLocationPlan(this);
 		LocationManager.getInstance(this).executeWithPlan(locationPlan);
+		new InjectViewHelper().injectViews(this);
 		handler = new HerodHandler(this);
-		indicator = (OrderTabPageIndicator) findViewById(R.id.indicator);
-		orderListFragmentPager = (ViewPager) findViewById(R.id.pager);
-		orderListFragments = createOrderListFragments();
 		orderListFragmentAdapter = new OrderGroupAdapter(
-				getSupportFragmentManager(), orderListFragments);
+				getSupportFragmentManager(), createOrderListFragments());
 		orderListFragmentPager.setAdapter(orderListFragmentAdapter);
 		indicator.setViewPager(orderListFragmentPager);
 		indicator.setOnPageChangeListener(this);
@@ -89,8 +89,7 @@ public class MainActivity extends BaseActivity implements Callback,
 	@Override
 	protected void onDestroy() {
 		unregisterReceiver(eventReceiver);
-		orderListFragments.clear();
-		orderListFragmentAdapter.notifyDataSetChanged();
+		orderListFragmentAdapter.clear();
 		super.onDestroy();
 	}
 

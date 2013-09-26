@@ -3,6 +3,7 @@
  */
 package org.herod.worker.phone;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.herod.worker.phone.fragment.OrderListFragment;
@@ -17,12 +18,14 @@ import android.support.v4.app.FragmentPagerAdapter;
  * @email hust.xzj@gmail.com
  */
 public class OrderGroupAdapter extends FragmentPagerAdapter {
-	private List<OrderListFragment> orderListFragments;
+	private List<OrderListFragment> orderListFragments = new ArrayList<OrderListFragment>();
 
 	public OrderGroupAdapter(FragmentManager fm,
 			List<OrderListFragment> orderListFragments) {
 		super(fm);
-		this.orderListFragments = orderListFragments;
+		if (orderListFragments != null) {
+			this.orderListFragments.addAll(orderListFragments);
+		}
 	}
 
 	@Override
@@ -38,5 +41,10 @@ public class OrderGroupAdapter extends FragmentPagerAdapter {
 	@Override
 	public int getCount() {
 		return orderListFragments.size();
+	}
+
+	public void clear() {
+		orderListFragments.clear();
+		notifyDataSetChanged();
 	}
 }

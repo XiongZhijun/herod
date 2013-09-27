@@ -13,7 +13,7 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClientOption;
 
 /**
- * 
+ * 定义了一种简单方式的定位计划，通过不同的时间间隔定位一定的次数来控制定位的频率。
  * 
  * @author Xiong Zhijun
  * @email hust.xzj@gmail.com
@@ -21,15 +21,42 @@ import com.baidu.location.LocationClientOption;
  */
 public class SimpleLocationPlan implements LocationPlan, BDLocationListener,
 		LocationClientOptionBuilder {
-	private int[] scanSpans = new int[] { 1000, 60 * 1000, 2 * 60 * 1000 };
-	private int[] locationCounts = new int[] { 10, 10, 30 };
+	public static final int[] DEFAULT_SCAN_SPANS = new int[] { 1000, 60 * 1000,
+			2 * 60 * 1000 };
+	public static final int[] DEFAULT_LOCATION_COUNTS = new int[] { 10, 10, 30 };
+	/** 定位时间间隔，配合{@link #locationCounts}使用 */
+	private int[] scanSpans = DEFAULT_SCAN_SPANS;
+	/**
+	 * 定位次数，配合{@link #scanSpans}使用，跟scanSpans为一一对应关系。 就默认设置
+	 * {@link #DEFAULT_SCAN_SPANS}和{@link #DEFAULT_LOCATION_COUNTS}来说就是：
+	 * <p>
+	 * <ul>
+	 * <li>
+	 * 每隔1秒钟读取一次位置，一共10次；
+	 * <li>
+	 * 然后每隔1分钟读取一次，一共10次；
+	 * <li>
+	 * 最后每隔2分钟读取一次，一共30次。
+	 */
+	private int[] locationCounts = DEFAULT_LOCATION_COUNTS;
+	/**
+	 * 就是{@link #scanSpans}和{@link #locationCounts}的索引，控制每一次定位计划的间隔和次数的。
+	 */
 	private int level = 0;
+	/** 控制每一个时间间隔里面的定位次数的 */
 	private int locationCount = 0;
 	private LocationManager locationManager;
 	private OnLocationSuccessListener onLocationSuccessListener;
 
 	public SimpleLocationPlan(OnLocationSuccessListener listener) {
+		this(DEFAULT_SCAN_SPANS, DEFAULT_LOCATION_COUNTS, listener);
+	}
+
+	public SimpleLocationPlan(int[] scanSpans, int[] locationCounts,
+			OnLocationSuccessListener listener) {
 		super();
+		this.scanSpans = scanSpans;
+		this.locationCounts = locationCounts;
 		this.onLocationSuccessListener = listener != null ? listener
 				: DEFAULT_LOCATION_SUCCESS_LISTENER;
 	}

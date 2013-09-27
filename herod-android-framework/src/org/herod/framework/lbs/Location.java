@@ -6,6 +6,8 @@ package org.herod.framework.lbs;
 import java.io.Serializable;
 
 /**
+ * 定义了一个经纬度定位模型
+ * 
  * @author Xiong Zhijun
  * @email hust.xzj@gmail.com
  * 

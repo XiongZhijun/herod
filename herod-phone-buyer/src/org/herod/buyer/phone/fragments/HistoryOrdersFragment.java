@@ -37,6 +37,8 @@ public class HistoryOrdersFragment extends
 		ListViewFragment<ListView, Object, List<Order>> implements
 		OnClickListener {
 
+	/**  */
+	private static final String CAN_CLEAR = "canClear";
 	private static final String STATUSES = "statuses";
 
 	@Override
@@ -51,8 +53,14 @@ public class HistoryOrdersFragment extends
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		boolean canClear = getArguments().getBoolean(CAN_CLEAR);
 		View clearButton = findViewById(R.id.clearButton);
-		clearButton.setOnClickListener(this);
+		if (canClear) {
+			clearButton.setVisibility(View.VISIBLE);
+			clearButton.setOnClickListener(this);
+		} else {
+			clearButton.setVisibility(View.GONE);
+		}
 		loadDataFromRemote();
 	}
 
@@ -127,10 +135,11 @@ public class HistoryOrdersFragment extends
 
 	}
 
-	public static HistoryOrdersFragment createFragment(OrderStatus[] statuses) {
+	public static HistoryOrdersFragment createFragment(OrderStatus[] statuses,
+			boolean canClear) {
 		HistoryOrdersFragment fragment = new HistoryOrdersFragment();
 		Bundle args = new BundleBuilder().putSerializable(STATUSES, statuses)
-				.build();
+				.putBoolean(CAN_CLEAR, canClear).build();
 		fragment.setArguments(args);
 		return fragment;
 	}

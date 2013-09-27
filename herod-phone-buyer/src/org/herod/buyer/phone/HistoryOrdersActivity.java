@@ -26,6 +26,8 @@ import android.support.v4.view.ViewPager;
 public class HistoryOrdersActivity extends BuyerBaseActivity {
 	private static final String[] FRAGMENT_TITLES = new String[] { "待完成订单",
 			"已完成订单", "已取消订单" };
+	private static final boolean[] CAN_CLEARS = new boolean[] { false, true,
+			true };
 	private static final OrderStatus[][] FRAGMENT_ORDER_STATUS = new OrderStatus[][] {
 			{ OrderStatus.Submitted, OrderStatus.Acceptted,
 					OrderStatus.Rejected }, { OrderStatus.Completed },
@@ -51,8 +53,8 @@ public class HistoryOrdersActivity extends BuyerBaseActivity {
 	private List<Fragment> createFragments() {
 		List<Fragment> fragments = new ArrayList<Fragment>();
 		for (int i = 0; i < FRAGMENT_TITLES.length; i++) {
-			fragments.add(HistoryOrdersFragment
-					.createFragment(FRAGMENT_ORDER_STATUS[i]));
+			fragments.add(HistoryOrdersFragment.createFragment(
+					FRAGMENT_ORDER_STATUS[i], CAN_CLEARS[i]));
 		}
 		return fragments;
 	}

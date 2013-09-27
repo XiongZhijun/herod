@@ -35,6 +35,11 @@ public class BundleBuilder {
 		return this;
 	}
 
+	public BundleBuilder putBoolean(String key, boolean value) {
+		bundle.putBoolean(key, value);
+		return this;
+	}
+
 	public BundleBuilder putSerializable(String key, Serializable value) {
 		bundle.putSerializable(key, value);
 		return this;

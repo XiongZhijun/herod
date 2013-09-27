@@ -12,6 +12,7 @@ import java.util.List;
 import org.herod.framework.ViewFindable;
 import org.herod.framework.lbs.Location;
 import org.herod.framework.lbs.LocationManager;
+import org.herod.framework.lbs.SimpleLocationPlan.OnLocationSuccessListener;
 import org.herod.framework.utils.TextViewUtils;
 import org.herod.framework.utils.ToastUtils;
 import org.herod.order.common.BaseActivity;
@@ -32,6 +33,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.map.MapController;
 import com.baidu.mapapi.map.MapView;
@@ -46,13 +48,15 @@ import com.baidu.platform.comapi.basestruct.GeoPoint;
  * @email hust.xzj@gmail.com
  */
 public class MapActivity extends BaseActivity implements OnClickListener,
-		ViewFindable {
+		ViewFindable, OnLocationSuccessListener {
 	BMapManager mBMapMan = null;
 	MapView mMapView = null;
 	private MapAddress destAddress;
 	private List<MapAddress> wpAddresses;
 	private ProgressDialog routeProgressDialog;
 	private Order order;
+	private ProgressDialog progressDialog;
+	private boolean locationSuccess = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -76,9 +80,6 @@ public class MapActivity extends BaseActivity implements OnClickListener,
 			mBMapMan.start();
 		}
 		super.onResume();
-		Location currentLocation = LocationManager.getInstance(this)
-				.getLatestLocation();
-		// setCenter(currentLocation);
 
 		Bundle extras = getIntent().getExtras();
 		MapType type = (MapType) extras.getSerializable(TYPE);
@@ -86,22 +87,9 @@ public class MapActivity extends BaseActivity implements OnClickListener,
 		showButtons(type);
 		destAddress = getDestAddress(type, order);
 		wpAddresses = getWPAddresses(type, order);
-		if (destAddress != null) {
-			setCenter(destAddress.getAddress().getLocation());
-		} else {
-			setCenter(currentLocation);
-		}
-		List<LocationItem> locationItems = new ArrayList<LocationItem>();
-		locationItems.add(new LocationItem(this, new MapAddress("我的位置",
-				currentLocation)));
-		locationItems.add(new LocationItem(this, destAddress));
-		if (wpAddresses != null) {
-			for (MapAddress address : wpAddresses) {
-				locationItems.add(new LocationItem(this, address));
-			}
-		}
-		showLocation(locationItems);
-
+		progressDialog = ProgressDialog.show(this, "提示", "定位中……", false, true);
+		locationSuccess = false;
+		LocationManager.getInstance(this).executeWithSimplePlan(this);
 	}
 
 	private void showButtons(MapType type) {
@@ -168,6 +156,7 @@ public class MapActivity extends BaseActivity implements OnClickListener,
 			mBMapMan.destroy();
 			mBMapMan = null;
 		}
+		LocationManager.getInstance(this).stop();
 		super.onDestroy();
 	}
 
@@ -265,6 +254,33 @@ public class MapActivity extends BaseActivity implements OnClickListener,
 		private String getName() {
 			return name;
 		}
+	}
+
+	@Override
+	public void onLocationSuccess(BDLocation location) {
+		if (locationSuccess || this.isFinishing()) {
+			return;
+		}
+		locationSuccess = true;
+		if (progressDialog != null)
+			progressDialog.dismiss();
+		Location currentLocation = LocationManager.getInstance(this)
+				.getLatestLocation();
+		if (destAddress != null) {
+			setCenter(destAddress.getAddress().getLocation());
+		} else {
+			setCenter(currentLocation);
+		}
+		List<LocationItem> locationItems = new ArrayList<LocationItem>();
+		locationItems.add(new LocationItem(this, new MapAddress("我的位置",
+				currentLocation)));
+		locationItems.add(new LocationItem(this, destAddress));
+		if (wpAddresses != null) {
+			for (MapAddress address : wpAddresses) {
+				locationItems.add(new LocationItem(this, address));
+			}
+		}
+		showLocation(locationItems);
 	}
 
 }

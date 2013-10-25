@@ -1,0 +1,18 @@
+@CHARSET "UTF-8";
+
+div p em {
+	color: red
+}
+
+ul li {
+	padding: 12px 12px;
+}
+
+[class=ui-grid-b] {
+	height: 60px;
+}
+
+.ui-block-a div {
+	margin: 0 0;
+	width: 80px;
+}

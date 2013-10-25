@@ -13,7 +13,7 @@ $goodsTypeName = $_GET ['goodsTypeName'];
 $title = $shopName . " / " . $goodsTypeName;
 ?>
 <title><?php echo $title?></title>
-
+<script type="text/javascript" src="js/orders.js"></script>
 <script type="text/javascript">
 	var goodses = <?php echo json_encode($goodses); ?>;
 
@@ -27,6 +27,12 @@ $title = $shopName . " / " . $goodsTypeName;
 	    $(window).resize(function() {
 	        initLayout();
 	    });
+	    $('button[data-icon="minus"]').click(function (event) {
+		    alert(event);
+	    } );
+	    $('button[data-icon="plus"]').click(function (event) {
+		    alert(event);
+	    } );
 	});
 	function initLayout() {
 		$('.ui-block-c').width($('.ui-block-c > fieldset').width()+20);
@@ -74,9 +80,9 @@ $title = $shopName . " / " . $goodsTypeName;
 							<fieldset data-role="controlgroup" data-type="horizontal"
 								data-mini="true"
 								style="float: right; height: 100%; padding: 10px 0px">
-								<button data-icon="minus" data-iconpos="notext">减少</button>
+								<button data-icon="minus" data-iconpos="notext" goodsId="{{goods.ID}}">减少</button>
 								<button disabled="disabled">0</button>
-								<button data-icon="plus" data-iconpos="notext">增加</button>
+								<button data-icon="plus" data-iconpos="notext" goodsId="{{goods.ID}}">增加</button>
 							</fieldset>
 
 						</div>

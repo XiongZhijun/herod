@@ -1,11 +1,11 @@
 <?php
-$db_server_host = "172.16.254.15";
+$db_server_host = "localhost";
 
 $db_server_name = "root";
 
 $db_server_password = "123456";
 
-$db_db_name = "herod-order-release";
+$db_db_name = "herod-order";
 
 // sqls
 

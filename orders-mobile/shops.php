@@ -5,7 +5,7 @@
 
 <?php
 include_once 'includes.php';
-$shops = query_goods_infos ( $query_shops_sql, array () );
+$shops = query_all_shops ();
 ?>
 <script type="text/javascript">
 	var shops = <?php echo json_encode($shops); ?>;

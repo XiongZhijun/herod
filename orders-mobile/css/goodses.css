@@ -1,18 +1,22 @@
 @CHARSET "UTF-8";
 
 div p em {
-	color: red
+    color: red
 }
 
 ul li {
-	padding: 12px 12px;
+    padding: 12px 12px;
 }
 
 [class=ui-grid-b] {
-	height: 60px;
+    height: 60px;
 }
 
 .ui-block-a div {
-	margin: 0 0;
-	width: 80px;
+    margin: 0 0;
+    width: 80px;
+}
+
+[ng-model=quantity] {
+    color: red;
 }

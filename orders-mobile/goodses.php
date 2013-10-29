@@ -13,34 +13,43 @@ $title = $shopName . "——" . $goodsTypeName;
 <title><?php echo $title?></title>
 <script type="text/javascript" src="js/orders.js"></script>
 <script type="text/javascript">
-	var goodses = <?php echo json_encode($goodses); ?>;
+    var goodses = <?php echo json_encode($goodses); ?>;
+    order_cache.load();
+    function goodsListCtrl($scope) {
+         $scope.orderProp = 'PINYIN';
+         $scope.goodses = goodses;
+         $scope.totalQuantity = order_cache.findTotalCount();
+    }
 
-	function goodsListCtrl($scope) {
-		 $scope.orderProp = 'PINYIN';
-    		 return $scope.goodses = goodses;
-	}
+    function goodsController($scope, $element) {
+        $scope.quantity = order_cache.findGoodsCount($scope.goods.ID);
+        $scope.decreaseGoods = function(goods){
+            order_cache.decreaseGoods(goods);
+            $scope.quantity = order_cache.findGoodsCount(goods.ID);
+            $scope.$parent.$parent.totalQuantity = order_cache.findTotalCount();
+        }
+        $scope.increaseGoods = function(goods) {
+            order_cache.increaseGoods(goods);
+            $scope.quantity = order_cache.findGoodsCount(goods.ID);
+            $scope.$parent.$parent.totalQuantity = order_cache.findTotalCount();
+        }
+    }
 
-	$(document).ready(function() {
-	    initLayout();
-	    $(window).resize(function() {
-	        initLayout();
-	    });
-	    $('button[data-icon="minus"]').click(function (event) {
-		    alert(event);
-	    } );
-	    $('button[data-icon="plus"]').click(function (event) {
-		    alert(event);
-	    } );
-	});
-	function initLayout() {
-		$('.ui-block-c').width($('.ui-block-c > fieldset').width()+20);
-		$('.ui-block-a').width($('.ui-block-a > div').width()+5);
-	    var w = $('li').width() - $(".ui-block-a").width() - $(".ui-block-c").width();
-	    $('.ui-block-b').width(w);
-	    $('.ui-block-a').height($('li').height());
-	    $('.ui-block-b').height($('li').height());
-	    $('.ui-block-c').height($('li').height());
-	}
+    $(document).ready(function() {
+        initLayout();
+        $(window).resize(function() {
+            initLayout();
+        });
+    });
+    function initLayout() {
+        $('.ui-block-c').width($('.ui-block-c > fieldset').width()+20);
+        $('.ui-block-a').width($('.ui-block-a > div').width()+5);
+        var w = $('li').width() - $(".ui-block-a").width() - $(".ui-block-c").width();
+        $('.ui-block-b').width(w);
+        $('.ui-block-a').height($('li').height());
+        $('.ui-block-b').height($('li').height());
+        $('.ui-block-c').height($('li').height());
+    }
 
 </script>
 
@@ -52,20 +61,20 @@ $title = $shopName . "——" . $goodsTypeName;
             <a data-rel="back" data-icon="arrow-l" href="#">返回</a>
             <h1><?php echo $title ?></h1>
             <a href="#">购物车 <span
-                class="ui-li-count ui-btn-up-c ui-btn-corner-all">10</span></a>
+                class="ui-li-count ui-btn-up-c ui-btn-corner-all"
+                ng-model="totalQuantity">{{totalQuantity}}</span></a>
         </div>
         <div data-role="content">
             <ul data-role="listview" data-filter="true"
                 data-filter-placeholder="搜索">
-                <li
+                <li ng-controller="goodsController"
                     ng-repeat="goods in goodses | filter:query | orderBy:orderProp">
 
                     <div class="ui-grid-b">
                         <div class="ui-block-a">
                             <div data-mini="true"
                                 data-role="controlgroup">
-                                <img
-                                    src="{{goods.THUMBNAIL}}" />
+                                <img src="{{goods.THUMBNAIL}}" />
                             </div>
                         </div>
                         <div class="ui-block-b" style="">
@@ -73,26 +82,27 @@ $title = $shopName . "——" . $goodsTypeName;
                                 style="margin: 0 0">
                                 <h2>{{goods.NAME}}</h2>
                                 <p>
-                                    单价 : <em>￥{{
-                                        goods.SELLING_PRICE}}/{{goods.UNIT}}</em>
+                                    单价 : <em>￥{{goods.SELLING_PRICE}}/{{goods.UNIT}}</em>
                                 </p>
                             </div>
-
                         </div>
                         <div class="ui-block-c"
                             style="float: right; height: 100%;">
                             <fieldset data-role="controlgroup"
                                 data-type="horizontal" data-mini="true"
                                 style="float: right; height: 100%; padding: 10px 0px">
-                                <button data-icon="minus"
+                                <a data-role="button" data-icon="minus"
                                     data-iconpos="notext"
-                                    goodsId="{{goods.ID}}">减少</button>
-                                <button disabled="disabled">0</button>
-                                <button data-icon="plus"
+                                    goodsId="{{goods.ID}}"
+                                    ng-click="decreaseGoods(goods)">减少</a>
+                                <a data-role="button"><span
+                                    disabled="disabled"
+                                    ng-model="quantity">{{quantity}}</span></a>
+                                <a data-role="button" data-icon="plus"
                                     data-iconpos="notext"
-                                    goodsId="{{goods.ID}}">增加</button>
+                                    goodsId="{{goods.ID}}"
+                                    ng-click="increaseGoods(goods)">增加</a>
                             </fieldset>
-
                         </div>
                     </div>
                 </li>

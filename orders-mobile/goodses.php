@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="css/goodses.css" />
 <?php
 include "includes.php";
+$shopId = $_GET ['shopId'];
 $goodses = query_goodses_by_goods_type ( $_GET ['goodsTypeId'] );
 $shopName = $_GET ['shopName'];
 $goodsTypeName = $_GET ['goodsTypeName'];
@@ -14,24 +15,24 @@ $title = $shopName . "——" . $goodsTypeName;
 <script type="text/javascript" src="js/orders.js"></script>
 <script type="text/javascript">
     var goodses = <?php echo json_encode($goodses); ?>;
-    order_cache.load();
+    order_cache.load(<?php echo $shopId?>);
     function goodsListCtrl($scope) {
          $scope.orderProp = 'PINYIN';
          $scope.goodses = goodses;
-         $scope.totalQuantity = order_cache.findTotalCount();
+         $scope.totalQuantity = order_cache.getTotalCount();
     }
 
     function goodsController($scope, $element) {
-        $scope.quantity = order_cache.findGoodsCount($scope.goods.ID);
+        $scope.quantity = order_cache.getGoodsCount($scope.goods.ID);
         $scope.decreaseGoods = function(goods){
             order_cache.decreaseGoods(goods);
-            $scope.quantity = order_cache.findGoodsCount(goods.ID);
-            $scope.$parent.$parent.totalQuantity = order_cache.findTotalCount();
+            $scope.quantity = order_cache.getGoodsCount(goods.ID);
+            $scope.$parent.$parent.totalQuantity = order_cache.getTotalCount();
         }
         $scope.increaseGoods = function(goods) {
             order_cache.increaseGoods(goods);
-            $scope.quantity = order_cache.findGoodsCount(goods.ID);
-            $scope.$parent.$parent.totalQuantity = order_cache.findTotalCount();
+            $scope.quantity = order_cache.getGoodsCount(goods.ID);
+            $scope.$parent.$parent.totalQuantity = order_cache.getTotalCount();
         }
     }
 
@@ -60,9 +61,11 @@ $title = $shopName . "——" . $goodsTypeName;
         <div data-role="header" data-position="fixed">
             <a data-rel="back" data-icon="arrow-l" href="#">返回</a>
             <h1><?php echo $title ?></h1>
-            <a href="#">购物车 <span
-                class="ui-li-count ui-btn-up-c ui-btn-corner-all"
-                ng-model="totalQuantity">{{totalQuantity}}</span></a>
+            <a rel="external"
+                href="shopping_cart.php?shopId=<?php echo $shopId?>&shopName=<?php echo $shopName?>">购物车
+                <span class="ui-li-count ui-btn-up-c ui-btn-corner-all"
+                ng-model="totalQuantity">{{totalQuantity}}</span>
+            </a>
         </div>
         <div data-role="content">
             <ul data-role="listview" data-filter="true"
